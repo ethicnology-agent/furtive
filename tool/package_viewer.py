@@ -28,6 +28,18 @@ CSP_IMG_DIRECTIVE = "img-src 'self' data:"
 
 DEFAULT_TILE_URL = "/tiles/{z}/{x}/{y}.png"
 
+# Tile hosts whose usage policy requires a Referer from a website, keyed to the
+# referrer policy index.html must therefore carry.
+#
+# The OSM Foundation's policy says outright: "for websites, ensure the Referer
+# header is present and accurate". It enforces that by serving a 6987-byte
+# "access denied" PNG under **HTTP 200** — measured, not assumed. Leaflet would
+# paint it, fire `tileload`, and the viewer would hide its spinner over a map of
+# refusal tiles with nothing in the code able to tell. Reverting index.html to
+# `no-referrer` must therefore break the build, not the deployment.
+REFERER_REQUIRING_TILE_HOSTS = frozenset({"tile.openstreetmap.org"})
+REFERRER_META = '<meta name="referrer" content="strict-origin">'
+
 
 def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
@@ -51,6 +63,24 @@ def tile_origin(tile_url: str) -> str | None:
     if "{" in parts.netloc:
         raise RuntimeError(f"tile host must be literal, not templated: {parts.netloc}")
     return f"https://{parts.netloc}"
+
+
+def require_referer(tile_url: str, index_html: str) -> None:
+    """Refuse a basemap that needs a Referer against an index.html that sends none.
+
+    The failure this prevents is silent on both sides: the tile host answers 200
+    and the viewer renders what it is given, so neither a build log nor a browser
+    console would show anything wrong.
+    """
+    host = urlsplit(tile_url).netloc
+    if host not in REFERER_REQUIRING_TILE_HOSTS:
+        return
+    if REFERRER_META not in index_html:
+        raise RuntimeError(
+            f"{host} requires a Referer from a website and answers a blocked "
+            f"tile under HTTP 200 without one, so index.html must carry "
+            f"{REFERRER_META!r}"
+        )
 
 
 def write_atomic(path: Path, data: bytes) -> None:
@@ -112,6 +142,7 @@ def main() -> int:
         if CSP_IMG_DIRECTIVE not in index:
             raise RuntimeError("index.html no longer carries the expected img-src")
         index = index.replace(CSP_IMG_DIRECTIVE, f"{CSP_IMG_DIRECTIVE} {origin}")
+    require_referer(args.tile_url, index)
     write_atomic(output / "index.html", index.encode("utf-8"))
 
     vendor = output / "vendor"

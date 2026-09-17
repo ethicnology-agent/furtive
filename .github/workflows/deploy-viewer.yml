@@ -58,13 +58,25 @@ jobs:
         run: dart pub get --directory packages/furtive_share --enforce-lockfile
 
       # Pages is static and cannot proxy tiles, so this deployment cannot honour
-      # the same-origin basemap the self-hosted contract assumes. It loads
-      # CARTO's public basemap instead, which means every visitor discloses the
-      # area they look at to CARTO. Stated plainly in docs/SHARE-TRACKING.md;
-      # the packager grants exactly this origin in the CSP and nothing wider.
+      # the same-origin basemap the self-hosted contract assumes. It loads the
+      # OpenStreetMap standard basemap instead, which means every visitor
+      # discloses the area they look at to the OSM Foundation. Stated plainly in
+      # docs/SHARE-TRACKING.md; the packager grants exactly this origin in the
+      # CSP and nothing wider.
+      #
+      # Keyless is the requirement, not a preference: a key in a public JS
+      # bundle is extracted in minutes, and when it lapses every link already
+      # handed out loses its map. CARTO was dropped for exactly that — its
+      # basemaps now require an API key, quota and all, however long the CDN
+      # keeps answering anonymous requests.
+      #
+      # The OSM tile policy requires a Referer from a website, and enforces it
+      # by serving an "access denied" PNG under HTTP 200. index.html therefore
+      # carries `referrer: strict-origin`, and tool/package_viewer.py fails the
+      # build if that pairing is ever broken.
       - name: Compile and package the viewer
         env:
-          VIEWER_TILE_URL: https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png
+          VIEWER_TILE_URL: https://tile.openstreetmap.org/{z}/{x}/{y}.png
         run: |
           mkdir -p build/site/share
           dart compile js -O4 -DTILE_URL="$VIEWER_TILE_URL" \

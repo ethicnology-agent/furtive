@@ -20,6 +20,12 @@ const _maxRelayFrameCharacters = 64 * 1024;
 /// privacy trade — tile requests disclose the area being watched to whoever
 /// serves them — and `tool/package_viewer.py` then has to widen `img-src` to
 /// match. See docs/SHARE-TRACKING.md.
+///
+/// Whatever it points at must be **keyless**. A key compiled into a viewer that
+/// anyone can open is not a key, it is a string in a public JS bundle — and one
+/// that expires takes every link already handed out down with it. That is what
+/// ruled out CARTO, whose basemaps now require an API key with a fair-use quota
+/// even though the CDN still answers unauthenticated requests today.
 const _tileUrlTemplate = String.fromEnvironment(
   'TILE_URL',
   defaultValue: '/tiles/{z}/{x}/{y}.png',
@@ -544,7 +550,7 @@ class LiveViewer {
         'maxZoom': 19,
         'keepBuffer': 1,
         'updateWhenIdle': true,
-        'attribution': 'OpenStreetMap contributors, CARTO',
+        'attribution': '© OpenStreetMap contributors',
       }.jsify()!,
     );
     var firstTile = true;
