@@ -444,12 +444,63 @@ no identity to authenticate with, so NIP-42 is not available to this feature.
   host. Production must provide that first-party endpoint or state the
   disclosure plainly. The observer can disable the basemap without affecting the
   encrypted route.
+- **A third-party basemap must be keyless, and that is a constraint, not a
+  preference.** The viewer is a public JS bundle; a key compiled into it is
+  extracted with `strings` the same way a mobile API key is, except that a
+  viewer key also has a second failure mode the app does not: the viewer origin
+  is compiled into every APK and can never change, so a key that lapses or gets
+  revoked takes the basemap away from every link already handed out. The mobile
+  app's `PROTOMAPS_KEY` is a different situation and stays as it is — a keyed
+  app build is still reproducible by the key holder, and the FOSS path degrades
+  to a tile-less but functional map.
+
+  This is why CARTO was dropped. `carto.com/basemaps` now states that an API key
+  is required, free "up to a fair use limit of 5 million tile requests a month".
+  `basemaps.cartocdn.com/dark_all/…` still answers unauthenticated requests as
+  of 2026-09-17 — which is the trap, not the reassurance: it works until it does
+  not, and the day it stops, nothing in this repository can fix the links
+  already sent.
 - **The GitHub Pages deployment takes the second option, and this is the plain
-  statement.** A static host cannot proxy tiles, so that build loads CARTO's
-  public basemap: every visitor discloses the area they are watching to CARTO,
-  which the same-origin default exists to avoid. The route itself stays
-  end-to-end encrypted — CARTO sees tile coordinates, never a position. The
-  packager grants exactly that one origin in `img-src`, never a wildcard.
+  statement.** A static host cannot proxy tiles, so that build loads the
+  OpenStreetMap standard basemap
+  (`https://tile.openstreetmap.org/{z}/{x}/{y}.png`): every visitor discloses
+  the area they are watching to the OSM Foundation, which the same-origin
+  default exists to avoid. The route itself stays end-to-end encrypted — OSM
+  sees tile coordinates, never a position. The packager grants exactly that one
+  origin in `img-src`, never a wildcard.
+- **OSM tiles cost the viewer its `no-referrer` policy, and the trade is worth
+  stating exactly.** The OSM tile usage policy requires that "for websites, [you]
+  ensure the `Referer` header is present and accurate", and it enforces that in
+  the worst possible way for a client: measured on 2026-09-17, a request with a
+  browser `User-Agent` but no `Referer` returns **HTTP 200** carrying a
+  6987-byte "access denied" PNG and an `x-blocked` header, where a real tile is
+  ~30 KB. Leaflet paints it, fires `tileload`, and the viewer hides its spinner
+  over a map of refusal tiles with nothing in the code able to tell.
+
+  `viewer/web/index.html` therefore carries `referrer: strict-origin` instead of
+  `no-referrer`. What that discloses is `https://furtive.ethicnology.com/` and
+  nothing else: no path, no query, no fragment. **The fragment is never placed
+  in a `Referer` under any policy** — that is a browser guarantee, and it is not
+  what the `no-referrer` meta was buying. The origin is already disclosed to the
+  tile host by the TLS handshake that fetches the tile, so the marginal
+  disclosure is zero; what is genuinely lost is a defence-in-depth margin
+  against a future bug that puts a secret in the path.
+
+  `tool/package_viewer.py` refuses to build a viewer that pairs an
+  OSM tile URL with a `no-referrer` index, so the pairing cannot be reintroduced
+  silently.
+- **The basemaps that were rejected, and why.** All measured 2026-09-17 against
+  a real request. `tiles.openfreemap.org` and Versatiles serve vector tiles only,
+  which needs WebGL — rejected on the same measurements that rejected MapLibre
+  for this viewer. `maps.wikimedia.org` answers `403` off-wiki.
+  `a.tile.openstreetmap.fr` and the OpenTopoMap mirrors need an `{s}` subdomain
+  placeholder, which `tool/package_viewer.py` refuses because it would require a
+  CSP wildcard. `tile.openstreetmap.de` does serve keyless and without a
+  `Referer`, and would have let the viewer keep `no-referrer` — it is volunteer
+  FOSSGIS infrastructure carrying German-style cartography with no published
+  policy inviting third-party embedding, so pointing an international viewer at
+  it is borrowing capacity nobody offered. Stadia requires a key (`401`). Esri's
+  imagery is keyless but is neither open data nor a street map.
 - **That deployment is for verification, not production, and the gap is wider
   than the CSP alone.** Measured on `https://furtive.ethicnology.com/share/`
   (2026-08-19), Pages returns `server`, `content-type`, `etag`, `cache-control`,

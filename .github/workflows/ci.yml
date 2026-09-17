@@ -75,6 +75,19 @@ jobs:
           dart compile js -O4 -o build/viewer/main.dart.js viewer/web/main.dart
           python3 tool/package_viewer.py build/viewer
 
+      # The step above packages the same-origin default, which exercises neither
+      # the CSP widening nor the Referer guard. Re-package the compiled bundle
+      # against the tile URL the deployment actually ships, so a regression on
+      # either surfaces on the pull request instead of at deploy time.
+      - name: Package the viewer against the deployed basemap
+        run: |
+          mkdir -p build/viewer-basemap
+          cp build/viewer/main.*.js build/viewer-basemap/main.dart.js
+          python3 tool/package_viewer.py build/viewer-basemap \
+            --tile-url 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+          grep -q "img-src 'self' data: https://tile.openstreetmap.org" \
+            build/viewer-basemap/index.html
+
       # Fails on an import that would drag Flutter, storage, or sensors into the
       # pure-Dart package shared with the web viewer.
       - name: Share-layer boundary

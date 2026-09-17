@@ -36,9 +36,17 @@ The fragment contains key material. It must never be moved to a query parameter,
 logged, sent in telemetry, or included in a referrer. Browsers do not send URL
 fragments in HTTP requests.
 
-The HTML carries a baseline CSP and `no-referrer` policy. The production server
-must additionally send `frame-ancestors 'none'`, `Permissions-Policy`, HSTS and
-the same CSP as headers; `frame-ancestors` is ignored in a meta element.
+The HTML carries a baseline CSP and a `strict-origin` referrer policy. The
+production server must additionally send `frame-ancestors 'none'`,
+`Permissions-Policy`, HSTS and the same CSP as headers; `frame-ancestors` is
+ignored in a meta element.
+
+`strict-origin` rather than `no-referrer` because the OSM tile policy requires a
+`Referer` from a website and enforces it by serving a blocked tile under HTTP
+200. It discloses the origin only — no path, no fragment, and the fragment is
+never in a `Referer` under any policy. A same-origin or otherwise
+Referer-tolerant basemap can use `no-referrer`; `tool/package_viewer.py` fails
+the build on the combination that does not work.
 
 The current Pages deployment sends none of them — measured, not assumed, in
 `docs/SHARE-TRACKING.md`. Enforcing HTTPS there yields the redirect but no HSTS
@@ -73,9 +81,14 @@ the paths filter is safe here: forcing a redeployment is a click, not a commit.
 
 It is not a production deployment, and it does not satisfy the contract above:
 
-- Pages cannot proxy tiles, so that build points at CARTO's public basemap.
-  Visitors disclose the area they watch to CARTO. The encrypted route is
-  unaffected.
+- Pages cannot proxy tiles, so that build points at the OpenStreetMap standard
+  basemap, `https://tile.openstreetmap.org/{z}/{x}/{y}.png`. Visitors disclose
+  the area they watch to the OSM Foundation. The encrypted route is unaffected.
+  The basemap has to be keyless: a key in a public JS bundle is extracted
+  trivially, and the viewer origin is compiled into every APK, so a lapsed key
+  would strip the map from links already handed out. CARTO was dropped when its
+  basemaps moved behind an API key — see docs/SHARE-TRACKING.md for the
+  measurements and for the alternatives that were rejected.
 - Pages sends no custom headers, so `frame-ancestors`, `Permissions-Policy` and
   a header-delivered CSP are unavailable; the `meta` CSP in `index.html` is all
   there is, and `frame-ancestors` does not work from a `meta` element.

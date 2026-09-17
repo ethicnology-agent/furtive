@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0d11">
   <meta name="description" content="View an end-to-end encrypted Furtive live track.">
-  <meta name="referrer" content="no-referrer">
+  <!-- strict-origin, not no-referrer: the OSM tile policy requires a Referer and
+       enforces it with an "access denied" PNG under HTTP 200, which no client can
+       detect. This sends the origin alone - never the path or the fragment, and
+       the fragment is never in a Referer under any policy anyway. Rationale and
+       measurements in docs/SHARE-TRACKING.md; tool/package_viewer.py fails the
+       build if this is paired with an OSM tile URL again. -->
+  <meta name="referrer" content="strict-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' wss:; base-uri 'none'; form-action 'none'">
   <title>Furtive Live</title>
   <link rel="stylesheet" href="vendor/leaflet.css">
@@ -79,7 +85,7 @@
       <div class="meta-row">
         <span id="activity-note" class="activity-note" hidden></span>
         <span id="privacy" class="privacy">End-to-end encrypted</span>
-        <span class="attribution">© OpenStreetMap · © CARTO</span>
+        <span class="attribution">© OpenStreetMap contributors</span>
       </div>
     </footer>
   </div>
