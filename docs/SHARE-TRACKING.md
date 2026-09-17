@@ -489,6 +489,15 @@ no identity to authenticate with, so NIP-42 is not available to this feature.
   `tool/package_viewer.py` refuses to build a viewer that pairs an
   OSM tile URL with a `no-referrer` index, so the pairing cannot be reintroduced
   silently.
+
+  Verified in a real browser rather than reasoned about. The viewer was built
+  against the OSM tile URL, served over HTTP, and opened on a live share
+  publishing to `nos.lol` and `relay.primal.net`; every tile request was read off
+  the wire through the DevTools protocol. 28 tile requests, **28 carrying
+  `Referer: http://localhost:8000/`** — the origin with a trailing slash, no
+  path and no fragment — **0 without**, and 28 responses of status 200 with real
+  tiles. Both relays connected, the snapshot bootstrapped the track, and the
+  basemap painted.
 - **The basemaps that were rejected, and why.** All measured 2026-09-17 against
   a real request. `tiles.openfreemap.org` and Versatiles serve vector tiles only,
   which needs WebGL — rejected on the same measurements that rejected MapLibre
