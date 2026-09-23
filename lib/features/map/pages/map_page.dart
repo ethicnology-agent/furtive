@@ -8,7 +8,6 @@ import 'package:furtive/core/map/maplibre_map_view.dart';
 import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/widgets/activity_stats_widget.dart';
 import 'package:furtive/core/widgets/activity_type_picker.dart';
-import 'package:furtive/core/widgets/hold_to_confirm_button.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
@@ -16,6 +15,7 @@ import 'package:furtive/features/map/bloc/map_state.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/map_navigation.dart';
 import 'package:furtive/features/map/pages/map_page_logic.dart';
+import 'package:furtive/features/map/pages/map_recording_controls.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:furtive/features/recording/bloc/recording_state.dart';
@@ -33,7 +33,10 @@ String _loadingMessage(AppLocalizations l10n, LoadingStatus status) =>
     };
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, this.selectedTab});
+  const MapPage({super.key, this.selectedTab, this.mapView});
+
+  /// Optional rendering port for embedding the recording UI without a native map.
+  final MapView? mapView;
 
   /// Selected page in BottomNavigationWidget's PageView. Null when MapPage is
   /// hosted standalone (tests or a future dedicated route), where it is visible.
@@ -44,8 +47,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
-  final MapView _mapView = MapLibreMapView();
-  static const _kFloatingActionButtonWidth = 115.0;
+  late final MapView _mapView = widget.mapView ?? MapLibreMapView();
 
   // Stay alive across BottomNavigation tab switches so the stop -> stats
   // listener keeps firing even when the user is on Activities or Settings.
@@ -121,9 +123,18 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
     try {
       final link =
           sharing.state.link ?? await sharing.start(password: password);
-      await SharePlus.instance.share(ShareParams(text: link));
+      final result = await SharePlus.instance.share(ShareParams(text: link));
+      if (context.mounted &&
+          result.status == ShareResultStatus.dismissed &&
+          sharing.state.isActive) {
+        _showShareStillActive(context, sharing);
+      }
     } catch (error) {
       if (!context.mounted) return;
+      if (sharing.state.isActive) {
+        _showShareStillActive(context, sharing);
+        return;
+      }
       _showSnackBar(
         context,
         SnackBar(
@@ -132,6 +143,21 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
         ),
       );
     }
+  }
+
+  void _showShareStillActive(BuildContext context, LiveShareCubit sharing) {
+    final l10n = AppLocalizations.of(context);
+    _showSnackBar(
+      context,
+      SnackBar(
+        content: Text(l10n.liveShareStillActive),
+        duration: const Duration(seconds: 10),
+        action: SnackBarAction(
+          label: l10n.btnStop,
+          onPressed: () => unawaited(sharing.stop()),
+        ),
+      ),
+    );
   }
 
   /// Shared by both layouts: the control is reachable whether or not a
@@ -146,20 +172,30 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
           onPressed: share.isStarting
               ? null
               : () => _showLiveShareActions(context, sharing),
-          backgroundColor: share.isActive
+          backgroundColor: share.isActive && share.connectedRelays > 0
               ? kMint
               : AppColors.secondary.background,
-          foregroundColor: share.isActive
+          foregroundColor: share.isActive && share.connectedRelays > 0
               ? Colors.black
               : AppColors.secondary.foreground,
-          icon: Icon(
-            share.isActive
-                ? Icons.share_location_rounded
-                : Icons.share_location_outlined,
-          ),
+          icon: share.isStarting
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Icon(
+                  share.isActive && share.connectedRelays > 0
+                      ? Icons.share_location_rounded
+                      : Icons.share_location_outlined,
+                ),
           label: Text(
-            share.isActive
-                ? '${share.connectedRelays}/${share.totalRelays}'
+            share.isStarting
+                ? l10n.liveSharePreparing
+                : share.isActive
+                ? share.connectedRelays > 0
+                      ? l10n.liveShareConnected
+                      : l10n.liveShareDisconnected
                 : l10n.liveShareButton,
             overflow: TextOverflow.ellipsis,
           ),
@@ -174,44 +210,59 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   ) async {
     final l10n = AppLocalizations.of(context);
     if (!sharing.state.isActive) {
-      final passwordController = TextEditingController();
+      var password = '';
+      var obscurePassword = true;
       final start = await showDialog<bool>(
         context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: Text(l10n.liveShareTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(l10n.liveSharePasswordHelp),
-              const SizedBox(height: 16),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                autocorrect: false,
-                enableSuggestions: false,
-                autofillHints: const [AutofillHints.newPassword],
-                decoration: InputDecoration(
-                  labelText: l10n.liveSharePassword,
-                  prefixIcon: const Icon(Icons.lock_outline_rounded),
+        builder: (dialogContext) => StatefulBuilder(
+          builder: (dialogContext, setDialogState) => AlertDialog(
+            scrollable: true,
+            title: Text(l10n.liveShareTitle),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.liveSharePasswordHelp),
+                const SizedBox(height: 16),
+                TextField(
+                  onChanged: (value) => password = value,
+                  obscureText: obscurePassword,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  autofillHints: const [AutofillHints.newPassword],
+                  decoration: InputDecoration(
+                    labelText: l10n.liveSharePassword,
+                    prefixIcon: const Icon(Icons.lock_outline_rounded),
+                    suffixIcon: IconButton(
+                      tooltip: obscurePassword
+                          ? l10n.showPassword
+                          : l10n.hidePassword,
+                      icon: Icon(
+                        obscurePassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                      ),
+                      onPressed: () => setDialogState(
+                        () => obscurePassword = !obscurePassword,
+                      ),
+                    ),
+                  ),
                 ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: Text(l10n.btnCancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: Text(l10n.shareTooltip),
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext, false),
-              child: Text(l10n.btnCancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(dialogContext, true),
-              child: Text(l10n.shareTooltip),
-            ),
-          ],
         ),
       );
-      final password = passwordController.text;
-      passwordController.dispose();
       if (!context.mounted || start != true) return;
       await _shareLiveLink(
         context,
@@ -269,21 +320,6 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
               ),
             );
             context.read<MapBloc>().add(const ClearError());
-          },
-        ),
-        BlocListener<RecordingBloc, RecordingState>(
-          listenWhen: (previous, current) => previous.error != current.error,
-          listener: (context, state) {
-            if (state.error == null) return;
-            _showSnackBar(
-              context,
-              SnackBar(
-                content: Text(state.error!.message),
-                backgroundColor: kDestructive,
-                duration: const Duration(seconds: 3),
-              ),
-            );
-            context.read<RecordingBloc>().add(const ClearRecordingError());
           },
         ),
         BlocListener<LiveShareCubit, LiveShareState>(
@@ -521,10 +557,58 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                       top: 50,
                       left: 0,
                       right: 0,
-                      child: ActivityStatsWidget(
-                        activity: rec.activity!,
-                        elapsedTime: rec.elapsedTime,
-                        opaqueBackground: true,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.sizeOf(context).height * 0.3,
+                        ),
+                        child: SingleChildScrollView(
+                          child: ActivityStatsWidget(
+                            activity: rec.activity!,
+                            elapsedTime: rec.elapsedTime,
+                            opaqueBackground: true,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<RecordingBloc, RecordingState>(
+                  buildWhen: (previous, current) =>
+                      previous.error != current.error ||
+                      previous.isRecording != current.isRecording ||
+                      previous.isPaused != current.isPaused,
+                  builder: (context, rec) {
+                    if (rec.error == null) return const SizedBox.shrink();
+                    final l10n = AppLocalizations.of(context);
+                    return Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: SafeArea(
+                        child: MaterialBanner(
+                          leading: const Icon(Icons.error_outline),
+                          content: Semantics(
+                            liveRegion: true,
+                            child: Text(
+                              '${l10n.mapRecordingProblem}\n'
+                              '${!rec.isRecording
+                                  ? l10n.mapRecordingStateIdle
+                                  : rec.isPaused
+                                  ? l10n.mapRecordingStatePaused
+                                  : l10n.mapRecordingStateActive}',
+                            ),
+                          ),
+                          actions: [
+                            IconButton(
+                              tooltip: MaterialLocalizations.of(
+                                context,
+                              ).closeButtonTooltip,
+                              onPressed: () =>
+                                  recording.add(const ClearRecordingError()),
+                              icon: const Icon(Icons.close),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -544,124 +628,35 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                   previous.isStarting != current.isStarting,
               builder: (context, rec) {
                 final l10n = AppLocalizations.of(context);
-                return SizedBox(
-                  width: _kFloatingActionButtonWidth,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (rec.isPaused && rec.isRecording) ...[
-                        HoldToConfirmButton(
-                          icon: Icons.stop_rounded,
-                          label: l10n.btnStop,
-                          shortTapHint: l10n.mapStopHint,
-                          backgroundColor: AppColors.destructive.background,
-                          foregroundColor: AppColors.destructive.foreground,
-                          onConfirmed: () =>
-                              recording.add(const StopRecording()),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                      FloatingActionButton.extended(
-                        onPressed: () {
-                          final current = map.state.userLocation;
-                          if (current == null) return;
-                          _mapView.moveTo(current, Global.maxZoom);
-                          map.add(const ToggleFollowUser());
-                        },
-                        backgroundColor: state.isFollowingUser
-                            ? AppColors.secondary.background
-                            : null,
-                        label: Text(l10n.btnFollow),
-                        icon: Icon(
-                          Icons.my_location_rounded,
-                          color: state.isFollowingUser
-                              ? AppColors.secondary.foreground
-                              : null,
-                        ),
-                      ),
-                      if (rec.isRecording) ...[
-                        const SizedBox(height: 16),
-                        FloatingActionButton.extended(
-                          heroTag: 'pause',
-                          onPressed: () =>
-                              recording.add(const PauseRecording()),
-                          backgroundColor: AppColors.primary.background,
-                          label: Text(
-                            rec.isPaused ? l10n.btnResume : l10n.btnPause,
-                          ),
-                          icon: Icon(
-                            rec.isPaused
-                                ? Icons.play_arrow_rounded
-                                : Icons.pause_rounded,
-                          ),
-                        ),
-                        if (context.read<LiveShareCubit>().isConfigured) ...[
-                          const SizedBox(height: 16),
-                          _liveShareFab(context, l10n),
-                        ],
-                      ],
-                      if (!rec.isRecording) ...[
-                        const SizedBox(height: 16),
-                        // What the next recording will be. Shown rather than
-                        // buried in settings because it changes how the GPS is
-                        // sampled and filtered, and because the choice is only
-                        // ever meaningful right before starting.
-                        FloatingActionButton.extended(
-                          heroTag: 'activity-type',
-                          backgroundColor: AppColors.tertiary.background,
-                          foregroundColor: AppColors.tertiary.foreground,
-                          onPressed: rec.isStarting
-                              ? null
-                              : () async {
-                                  final picked = await showActivityTypePicker(
-                                    context,
-                                    selected: state.selectedActivityType,
-                                  );
-                                  if (picked == null) return;
-                                  map.add(SelectActivityType(picked));
-                                },
-                          icon: Icon(
-                            activityTypeIcon(state.selectedActivityType),
-                          ),
-                          label: Text(
-                            activityTypeName(l10n, state.selectedActivityType),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        // Above Start, not below: a share can be armed before
-                        // the recording exists, but Start stays the last thing
-                        // under the thumb.
-                        if (context.read<LiveShareCubit>().isConfigured) ...[
-                          const SizedBox(height: 16),
-                          _liveShareFab(context, l10n),
-                        ],
-                        const SizedBox(height: 16),
-                        FloatingActionButton.extended(
-                          heroTag: 'start',
-                          onPressed: rec.isStarting
-                              ? null
-                              : () => recording.add(
-                                  StartRecording(
-                                    activityType: state.selectedActivityType,
-                                  ),
-                                ),
-                          label: Text(
-                            rec.isStarting ? l10n.btnStarting : l10n.btnStart,
-                          ),
-                          icon: rec.isStarting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Icon(Icons.play_arrow_rounded),
-                        ),
-                      ],
-                    ],
+                return MapRecordingControls(
+                  isRecording: rec.isRecording,
+                  isPaused: rec.isPaused,
+                  isStarting: rec.isStarting,
+                  isFollowing: state.isFollowingUser,
+                  hasLocation: loc != null,
+                  activityType: state.selectedActivityType,
+                  onFollow: () {
+                    if (loc == null) return;
+                    if (!state.isFollowingUser) {
+                      _mapView.moveTo(loc, Global.maxZoom);
+                    }
+                    map.add(const ToggleFollowUser());
+                  },
+                  onStart: () => recording.add(
+                    StartRecording(activityType: state.selectedActivityType),
                   ),
+                  onPause: () => recording.add(const PauseRecording()),
+                  onStop: () => recording.add(const StopRecording()),
+                  onPickType: () async {
+                    final picked = await showActivityTypePicker(
+                      context,
+                      selected: state.selectedActivityType,
+                    );
+                    if (picked != null) map.add(SelectActivityType(picked));
+                  },
+                  shareControl: context.read<LiveShareCubit>().isConfigured
+                      ? _liveShareFab(context, l10n)
+                      : null,
                 );
               },
             ),
