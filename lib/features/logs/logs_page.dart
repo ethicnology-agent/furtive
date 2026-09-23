@@ -140,7 +140,7 @@ class _LogsPageState extends State<LogsPage> {
     }
   }
 
-  Future<void> _shareLogs() async {
+  Future<void> _copyLogs() async {
     if (_filteredLogs.isEmpty) return;
 
     final logsToShare = _filteredLogs.join('\n');
@@ -195,9 +195,9 @@ class _LogsPageState extends State<LogsPage> {
               tooltip: l10n.logsTooltipClearFilter,
             ),
           IconButton(
-            icon: const Icon(Icons.share_rounded),
-            onPressed: _logs.isEmpty ? null : _shareLogs,
-            tooltip: l10n.logsTooltipShare,
+            icon: const Icon(Icons.copy_rounded),
+            onPressed: filteredLogs.isEmpty ? null : _copyLogs,
+            tooltip: l10n.btnCopy,
           ),
         ],
       ),
@@ -287,6 +287,7 @@ class _LogsPageState extends State<LogsPage> {
                                     .join(' | ');
 
                                 return GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
                                   onLongPress: () {
                                     Clipboard.setData(
                                       ClipboardData(text: logLine),
