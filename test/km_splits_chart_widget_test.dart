@@ -158,6 +158,24 @@ void main() {
     );
   });
 
+  testWidgets('ordinary bars remain visible on the statistics sheet surface', (
+    tester,
+  ) async {
+    await pump(tester, activityWithSplits([240, 480, 360]));
+    final bars = tester
+        .widgetList<Container>(find.byType(Container))
+        .where(
+          (widget) =>
+              widget.constraints?.maxHeight == 22 &&
+              widget.decoration is BoxDecoration,
+        );
+    final colors = bars.map(
+      (widget) => (widget.decoration! as BoxDecoration).color,
+    );
+    expect(colors, contains(kTextMuted));
+    expect(kTextMuted, isNot(AppColors.tertiary.background));
+  });
+
   testWidgets(
     'the fastest and slowest bars get distinct colours, and they SWAP when the '
     'metric flips — a smaller pace is fast, a smaller speed is slow',

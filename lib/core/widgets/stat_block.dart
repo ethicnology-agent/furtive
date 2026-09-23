@@ -36,9 +36,9 @@ class StatBlock extends StatelessWidget {
     super.key,
     required this.icon,
     required this.value,
+    this.label = '',
     this.emphasize = false,
-  }) : label = '',
-       compact = true;
+  }) : compact = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +46,26 @@ class StatBlock extends StatelessWidget {
     final valueColor = emphasize ? kMint : Colors.white;
 
     if (compact) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: emphasize ? kMint : kTextMuted),
-          const SizedBox(width: 4),
-          Text(
-            value,
-            style: textTheme.bodySmall?.copyWith(
-              color: valueColor,
-              fontWeight: emphasize ? FontWeight.w700 : FontWeight.w500,
-              fontFeatures: kTabularFigures,
+      return Semantics(
+        label: label.isEmpty ? value : '$label: $value',
+        excludeSemantics: true,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: emphasize ? kMint : kTextMuted),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                value,
+                style: textTheme.bodySmall?.copyWith(
+                  color: valueColor,
+                  fontWeight: emphasize ? FontWeight.w700 : FontWeight.w500,
+                  fontFeatures: kTabularFigures,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
 
@@ -69,18 +75,20 @@ class StatBlock extends StatelessWidget {
       children: [
         Icon(icon, size: 18, color: kTextMuted),
         const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label.toUpperCase(), style: textTheme.labelSmall),
-            Text(
-              value,
-              style: textTheme.titleLarge?.copyWith(
-                color: valueColor,
-                fontFeatures: kTabularFigures,
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label.toUpperCase(), style: textTheme.labelSmall),
+              Text(
+                value,
+                style: textTheme.titleLarge?.copyWith(
+                  color: valueColor,
+                  fontFeatures: kTabularFigures,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

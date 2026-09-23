@@ -100,8 +100,10 @@ class _KmSplitsChartState extends State<KmSplitsChart> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            spacing: 12,
+            runSpacing: 8,
             children: [
               Text(
                 l10n.splitsTitle,
@@ -111,20 +113,21 @@ class _KmSplitsChartState extends State<KmSplitsChart> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SegmentedButton<_Metric>(
-                segments: [
-                  ButtonSegment(
-                    value: _Metric.pace,
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ChoiceChip(
                     label: Text(l10n.metricPace),
+                    selected: _metric == _Metric.pace,
+                    onSelected: (_) => setState(() => _metric = _Metric.pace),
                   ),
-                  ButtonSegment(
-                    value: _Metric.speed,
+                  ChoiceChip(
                     label: Text(l10n.metricSpeed),
+                    selected: _metric == _Metric.speed,
+                    onSelected: (_) => setState(() => _metric = _Metric.speed),
                   ),
                 ],
-                selected: {_metric},
-                onSelectionChanged: (s) => setState(() => _metric = s.first),
-                showSelectedIcon: false,
               ),
             ],
           ),
@@ -163,14 +166,14 @@ class _KmSplitsChartState extends State<KmSplitsChart> {
   }
 
   Color _barColor(KmSplit s, {int? fastestIdx, int? slowestIdx}) {
-    if (s.isPartial) return AppColors.tertiary.background.withAlpha(120);
+    if (s.isPartial) return kTextMuted.withAlpha(160);
     if (fastestIdx != null && s.index == fastestIdx) {
       return AppColors.primary.background;
     }
     if (slowestIdx != null && s.index == slowestIdx) {
       return AppColors.destructive.background;
     }
-    return AppColors.tertiary.background;
+    return kTextMuted;
   }
 }
 
@@ -237,7 +240,7 @@ class _SplitRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           SizedBox(
-            width: 72,
+            width: 72 * MediaQuery.textScalerOf(context).scale(12) / 12,
             child: Text(
               label,
               textAlign: TextAlign.right,

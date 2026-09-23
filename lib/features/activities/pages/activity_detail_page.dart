@@ -21,7 +21,19 @@ import 'package:furtive/features/activities/bloc/activities_event.dart';
 class ActivityDetailPage extends StatefulWidget {
   final ActivityEntity activity;
 
-  const ActivityDetailPage({super.key, required this.activity});
+  const ActivityDetailPage({
+    super.key,
+    required this.activity,
+    this.mapView,
+    this.loadMapStyle,
+    this.exportActivity,
+    this.shareActivity,
+  });
+
+  final MapView? mapView;
+  final Future<String?> Function()? loadMapStyle;
+  final Future<void> Function(String)? exportActivity;
+  final Future<void> Function(BuildContext, ActivityEntity)? shareActivity;
 
   @override
   State<ActivityDetailPage> createState() => _ActivityDetailPageState();
@@ -48,10 +60,13 @@ PositionEntity _initialCenter(ActivityEntity activity) {
 }
 
 class _ActivityDetailPageState extends State<ActivityDetailPage> {
-  final MapView _mapView = MapLibreMapView();
-  final _getMapStyleUrlUseCase = GetMapStyleUrlUseCase();
-  final _exportActivityToGpxUseCase = ExportActivityToGpxUseCase();
-  final _shareActivityUseCase = ShareActivityUseCase();
+  late final MapView _mapView = widget.mapView ?? MapLibreMapView();
+  late final _getMapStyleUrlUseCase =
+      widget.loadMapStyle ?? GetMapStyleUrlUseCase().call;
+  late final _exportActivityToGpxUseCase =
+      widget.exportActivity ?? ExportActivityToGpxUseCase().call;
+  late final _shareActivityUseCase =
+      widget.shareActivity ?? ShareActivityUseCase().call;
   String? _mapStyleUrl;
   // _isMapStyleLoading covers ONLY the initial map-tile-style fetch.
   // Previously _isLoading was overloaded with export-in-progress as well,
@@ -107,10 +122,12 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_outlined),
+            tooltip: l10n.activityRenameTooltip,
             onPressed: _showRenameDialog,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline_rounded),
+            tooltip: l10n.activityDeleteTooltip,
             onPressed: _showDeleteDialog,
           ),
           IconButton(
@@ -129,6 +146,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
           ),
           IconButton(
             onPressed: (_isExporting || _isSharing) ? null : _exportToGpx,
+            tooltip: l10n.activityExportTooltip,
             icon: _isExporting
                 ? const SizedBox(
                     width: 24,
@@ -143,27 +161,35 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
           ? const Center(child: CircularProgressIndicator())
           : Stack(
               children: [
-                Container(
-                  color: AppColors.tertiary.background,
-                  // Always render the map so the recorded track is visible.
-                  // The tile layer is shown only when a style is available
-                  // (keyed build, online); on the keyless FOSS build or an
-                  // offline style fetch the polyline draws on a blank canvas
-                  // instead of an error.
-                  child: _mapView.build(
-                    styleUrl: _mapStyleUrl,
-                    track: widget.activity,
-                    initialCentre: _initialCenter(widget.activity),
-                    initialZoom: Global.maxZoom,
-                    maxZoom: Global.maxZoom,
-                    // A finished activity: no live position to show, and asking
-                    // for one would prompt for location permission on a page
-                    // that has no use for it.
-                    showUserLocation: false,
-                    // Nothing follows the user here, so a pan means nothing.
-                    onUserGesture: () {},
+                if (!widget.activity.points.any(
+                  (point) =>
+                      point.position.latitude.isFinite &&
+                      point.position.longitude.isFinite,
+                ))
+                  Center(child: Text(l10n.activityNoTrack))
+                else
+                  Container(
+                    color: AppColors.tertiary.background,
+                    // Always render the map so the recorded track is visible.
+                    // The tile layer is shown only when a style is available
+                    // (keyed build, online); on the keyless FOSS build or an
+                    // offline style fetch the polyline draws on a blank canvas
+                    // instead of an error.
+                    child: _mapView.build(
+                      styleUrl: _mapStyleUrl,
+                      track: widget.activity,
+                      fitTrackBounds: true,
+                      initialCentre: _initialCenter(widget.activity),
+                      initialZoom: Global.maxZoom,
+                      maxZoom: Global.maxZoom,
+                      // A finished activity: no live position to show, and asking
+                      // for one would prompt for location permission on a page
+                      // that has no use for it.
+                      showUserLocation: false,
+                      // Nothing follows the user here, so a pan means nothing.
+                      onUserGesture: () {},
+                    ),
                   ),
-                ),
                 Positioned(
                   bottom: context.screenPadding,
                   left: context.screenPadding,
@@ -304,7 +330,10 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
     if (_isSharing) return;
     setState(() => _isSharing = true);
     try {
-      await _shareActivityUseCase(context, widget.activity);
+      await _shareActivityUseCase(
+        context,
+        widget.activity.copyWith(name: _currentName),
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -321,40 +350,45 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
   }
 
   Future<void> _showRenameDialog() async {
-    // B36: dispose the controller in `finally` to avoid a leak per dialog open.
+    // A popped route remains mounted throughout its reverse animation.
+    // Keep the controller alive until its overlay entries have been removed.
     final textController = TextEditingController(text: _currentName);
-    try {
-      final result = await showDialog<String>(
-        context: context,
-        builder: (context) {
-          final l10n = AppLocalizations.of(context);
-          return AlertDialog(
-            title: Text(l10n.dlgRenameTitle),
-            content: TextField(
-              controller: textController,
-              decoration: InputDecoration(labelText: l10n.activityNameLabel),
-              autofocus: true,
-              style: TextStyle(color: AppColors.primary.foreground),
+    final route = DialogRoute<String>(
+      context: context,
+      builder: (context) {
+        final l10n = AppLocalizations.of(context);
+        return AlertDialog(
+          title: Text(l10n.dlgRenameTitle),
+          content: TextField(
+            controller: textController,
+            decoration: InputDecoration(labelText: l10n.activityNameLabel),
+            autofocus: true,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.tertiary.background,
+                foregroundColor: AppColors.tertiary.foreground,
+              ),
+              child: Text(l10n.btnCancel),
             ),
-            actionsAlignment: MainAxisAlignment.spaceAround,
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.tertiary.background,
-                  foregroundColor: AppColors.tertiary.foreground,
-                ),
-                child: Text(l10n.btnCancel),
-              ),
-              TextButton(
-                onPressed: () =>
-                    Navigator.pop(context, textController.text.trim()),
-                child: Text(l10n.btnRename),
-              ),
-            ],
-          );
-        },
-      );
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(context, textController.text.trim()),
+              child: Text(l10n.btnRename),
+            ),
+          ],
+        );
+      },
+    );
+    try {
+      final result = await Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(route);
 
       if (result != null && result.isNotEmpty && result != _currentName) {
         if (!mounted) return;
@@ -380,6 +414,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
         }
       }
     } finally {
+      await route.completed;
       textController.dispose();
     }
   }

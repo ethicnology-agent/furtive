@@ -78,6 +78,7 @@ abstract class MapView {
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
+    bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
   });

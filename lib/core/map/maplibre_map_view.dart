@@ -85,6 +85,7 @@ class MapLibreMapView implements MapView {
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
+    bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
   }) {
@@ -118,7 +119,34 @@ class MapLibreMapView implements MapView {
       gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
         Factory<OneSequenceGestureRecognizer>(EagerGestureRecognizer.new),
       },
-      onMapCreated: (controller) => _controller = controller,
+      onMapCreated: (controller) {
+        _controller = controller;
+        if (fitTrackBounds && track != null) {
+          final points = track.points
+              .where(
+                (p) =>
+                    p.position.latitude.isFinite &&
+                    p.position.longitude.isFinite,
+              )
+              .map(
+                (p) => ml.Geographic(
+                  lon: p.position.longitude,
+                  lat: p.position.latitude,
+                ),
+              )
+              .toList();
+          if (points.length > 1) {
+            unawaited(
+              controller.fitBounds(
+                bounds: ml.LngLatBounds.fromPoints(points),
+                padding: const EdgeInsets.fromLTRB(32, 32, 32, 112),
+                nativeDuration: const Duration(milliseconds: 1),
+                webMaxZoom: maxZoom,
+              ),
+            );
+          }
+        }
+      },
       // No enableLocation() any more, and that is the point. MapLibre's native
       // LocationComponent came with its own location engine: a second
       // PRIORITY_HIGH_ACCURACY request at a hardcoded 750 ms which, per
