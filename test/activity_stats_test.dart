@@ -139,10 +139,9 @@ void main() {
       'smooths + applies a hysteresis dead-band to register a genuine climb',
       () {
         // A clean 55 m ramp (100 -> 155 in 5 m steps). Worked out by hand: a
-        // 5-sample trailing moving average followed by a 10 m dead-band
-        // yields exactly 40 m (it inherently lags behind the moving average
-        // and drops the sub-threshold tail) — nowhere near the raw 55 m, but
-        // nowhere near the ~0 the flat-route case above gets either.
+        // The trailing five-sample mean ends at 145 m. Once a climb is
+        // confirmed, every new smoothed high counts: 45 m, not 40 m rounded
+        // down to another confirmation threshold.
         final points = [
           for (var i = 0; i < 12; i++)
             pt(
@@ -154,7 +153,7 @@ void main() {
             ),
         ];
         final a = act(points);
-        expect(a.activeElevationGain, closeTo(40, 0.001));
+        expect(a.activeElevationGain, closeTo(45, 0.001));
       },
     );
 
@@ -175,9 +174,107 @@ void main() {
         pt(0, 0.00027, ele: 500, sec: 27, verticalAccuracy: 999),
       ];
       final a = act(points);
-      // Same 40 m as the clean-ramp case above — the outlier is dropped
+      // Same 45 m as the clean-ramp case above — the outlier is dropped
       // before smoothing ever sees it, not merely capped.
-      expect(a.activeElevationGain, closeTo(40, 0.001));
+      expect(a.activeElevationGain, closeTo(45, 0.001));
+    });
+
+    // Five samples at each level let the causal mean reach the given
+    // altitude, isolating turning-point behavior from smoothing lag.
+    ActivityEntity levels(List<double> elevations) => act([
+      for (var i = 0; i < elevations.length * 5; i++)
+        pt(
+          0,
+          i * 0.00001,
+          ele: elevations[i ~/ 5],
+          sec: i,
+          verticalAccuracy: 5,
+        ),
+    ]);
+
+    test('waits for a ten-meter climb before counting its full gain', () {
+      expect(levels([100, 109]).activeElevationGain, 0);
+      expect(levels([100, 110]).activeElevationGain, closeTo(10, 0.001));
+      expect(levels([100, 110, 113]).activeElevationGain, closeTo(13, 0.001));
+    });
+
+    test('tracks the actual valley before confirming an initial climb', () {
+      // A six-meter descent must not leave the initial reference above
+      // the valley and hide the beginning of the subsequent 23 m ascent.
+      expect(levels([254, 248, 271]).activeElevationGain, closeTo(23, 0.001));
+    });
+
+    test('does not recount sub-threshold dips during a confirmed climb', () {
+      expect(
+        levels([100, 120, 114, 120, 114, 121]).activeElevationGain,
+        closeTo(21, 0.001),
+      );
+    });
+
+    test('starts a new climb from the valley after a confirmed descent', () {
+      expect(
+        levels([100, 120, 110, 108, 119]).activeElevationGain,
+        closeTo(31, 0.001),
+      );
+    });
+
+    test('does not accumulate repeated sub-threshold oscillations', () {
+      expect(levels([100, 109, 100, 109, 100, 109]).activeElevationGain, 0);
+    });
+
+    test('confirmed climb catches up when the summit stabilizes', () {
+      expect(levels([100, 155]).activeElevationGain, closeTo(55, 0.001));
+    });
+
+    test('does not bridge a pause or GPS outage when confirming a climb', () {
+      for (final boundary in [
+        ActivityPointStatusEntity.paused,
+        ActivityPointStatusEntity.signalLost,
+      ]) {
+        final points = [
+          for (var i = 0; i < 10; i++)
+            pt(
+              0,
+              i * 0.00001,
+              ele: 100 + i.toDouble(),
+              sec: i,
+              verticalAccuracy: 5,
+            ),
+          pt(
+            0,
+            0.001,
+            ele: 150,
+            sec: 10,
+            status: boundary,
+            verticalAccuracy: 5,
+          ),
+          for (var i = 0; i < 10; i++)
+            pt(
+              0,
+              0.002 + i * 0.00001,
+              ele: 200 + i.toDouble(),
+              sec: 11 + i,
+              verticalAccuracy: 5,
+            ),
+        ];
+        expect(act(points).activeElevationGain, 0);
+      }
+    });
+
+    test('a fully untrusted ascent remains excluded', () {
+      expect(
+        act([
+          for (var i = 0; i < 30; i++)
+            pt(
+              0,
+              i * 0.00001,
+              ele: 100 + i.toDouble(),
+              sec: i,
+              verticalAccuracy: 21,
+            ),
+        ]).activeElevationGain,
+        0,
+      );
     });
   });
 

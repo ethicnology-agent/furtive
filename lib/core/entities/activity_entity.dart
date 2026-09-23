@@ -302,8 +302,8 @@ extension ActivityStatisticsExtension on ActivityEntity {
   // ~5 s fix interval this app records at.
   static const _elevationSmoothingWindow = 5;
 
-  // A smoothed altitude must move away from its anchor by more than this
-  // before it counts as real elevation gain. GPS-only altitude (no
+  // A smoothed ascent or descent must reach this threshold to confirm a
+  // direction change. GPS-only altitude (no
   // barometer) is noisy enough that summing every raw delta wildly
   // overstates D+ on a perfectly flat route; this dead-band is the standard
   // fix (see e.g. Strava's own description of smoothing + a gain threshold
@@ -382,20 +382,32 @@ extension ActivityStatisticsExtension on ActivityEntity {
     return out;
   }
 
-  /// Dead-band elevation gain: only accumulate once the smoothed altitude
-  /// has moved away from the last anchor by more than [threshold] (whether
-  /// climbing or descending resets the anchor; only climbing accumulates).
+  /// Confirm climbs from a running valley, then count every new peak.
+  /// A descent of at least [threshold] ends the climb; smaller dips do not
+  /// count again on recovery. The threshold confirms direction changes,
+  /// rather than discarding the remainder of every ten-meter gain block.
   double _hysteresisGain(List<double> smoothed, double threshold) {
     if (smoothed.isEmpty) return 0;
     double gain = 0;
-    double anchor = smoothed.first;
+    double valley = smoothed.first;
+    double peak = smoothed.first;
+    bool climbing = false;
     for (final value in smoothed.skip(1)) {
-      final diff = value - anchor;
-      if (diff >= threshold) {
-        gain += diff;
-        anchor = value;
-      } else if (diff <= -threshold) {
-        anchor = value;
+      if (climbing) {
+        if (value > peak) {
+          gain += value - peak;
+          peak = value;
+        } else if (peak - value >= threshold) {
+          climbing = false;
+          valley = value;
+        }
+      } else {
+        if (value < valley) valley = value;
+        if (value - valley >= threshold) {
+          gain += value - valley;
+          peak = value;
+          climbing = true;
+        }
       }
     }
     return gain;
