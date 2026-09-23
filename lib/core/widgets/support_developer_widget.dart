@@ -47,7 +47,9 @@ class SupportDeveloperWidget extends StatelessWidget {
               children: [
                 const Icon(Icons.favorite_rounded, color: kMint, size: 22),
                 const SizedBox(width: 12),
-                Text(l10n.supportTitle, style: textTheme.titleMedium),
+                Expanded(
+                  child: Text(l10n.supportTitle, style: textTheme.titleMedium),
+                ),
               ],
             ),
             const SizedBox(height: 8),

@@ -83,6 +83,14 @@ class _OnboardingPageState extends State<OnboardingPage>
     }
   }
 
+  Future<void> _previous() async {
+    if (_saving || _currentStep == 0) return;
+    await _pageController.previousPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   Future<void> _finish() async {
     setState(() => _saving = true);
     try {
@@ -138,66 +146,95 @@ class _OnboardingPageState extends State<OnboardingPage>
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _permissionsBloc,
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              _ProgressIndicator(step: _currentStep, total: _stepCount),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (i) => setState(() => _currentStep = i),
-                  children: [
-                    _WelcomeStep(),
-                    _SettingsStep(
-                      theme: _theme,
-                      uiLocale: _uiLocale,
-                      onThemeChanged: (v) => setState(() => _theme = v),
-                      onUiLocaleChanged: (v) {
-                        setState(() => _uiLocale = v);
-                        // Preview locale change live so the wizard itself
-                        // immediately reflects the chosen language.
-                        getIt<LocaleCubit>().setLocale(v);
-                      },
-                    ),
-                    const _PermissionsStep(),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.screenPadding,
-                  vertical: MediaQuery.sizeOf(context).shortestSide * 0.1,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: BlocBuilder<PermissionsBloc, PermissionsState>(
-                    builder: (context, permissionsState) {
-                      final isLastStep = _currentStep == _stepCount - 1;
-                      final canFinish =
-                          !isLastStep || permissionsState.requiredGranted;
-                      return ElevatedButton(
-                        onPressed: (_saving || !canFinish) ? null : _next,
-                        child: _saving
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Text(
-                                isLastStep
-                                    ? AppLocalizations.of(context).btnFinish
-                                    : AppLocalizations.of(context).btnNext,
-                              ),
-                      );
-                    },
+      child: PopScope(
+        canPop: _currentStep == 0 && !_saving,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) _previous();
+        },
+        child: Scaffold(
+          body: SafeArea(
+            child: Column(
+              children: [
+                _ProgressIndicator(step: _currentStep, total: _stepCount),
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (i) => setState(() => _currentStep = i),
+                    children: [
+                      _WelcomeStep(),
+                      _SettingsStep(
+                        theme: _theme,
+                        uiLocale: _uiLocale,
+                        onThemeChanged: (v) => setState(() => _theme = v),
+                        onUiLocaleChanged: (v) {
+                          setState(() => _uiLocale = v);
+                          // Preview locale change live so the wizard itself
+                          // immediately reflects the chosen language.
+                          getIt<LocaleCubit>().setLocale(v);
+                        },
+                      ),
+                      const _PermissionsStep(),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.screenPadding,
+                    vertical: MediaQuery.sizeOf(context).shortestSide * 0.1,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: BlocBuilder<PermissionsBloc, PermissionsState>(
+                      builder: (context, permissionsState) {
+                        final isLastStep = _currentStep == _stepCount - 1;
+                        final canFinish =
+                            !isLastStep || permissionsState.requiredGranted;
+                        return Row(
+                          children: [
+                            if (_currentStep > 0) ...[
+                              Flexible(
+                                child: TextButton(
+                                  onPressed: _saving ? null : _previous,
+                                  child: Text(
+                                    AppLocalizations.of(context).btnBack,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                            ],
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: (_saving || !canFinish)
+                                    ? null
+                                    : _next,
+                                child: _saving
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : Text(
+                                        isLastStep
+                                            ? AppLocalizations.of(
+                                                context,
+                                              ).btnFinish
+                                            : AppLocalizations.of(
+                                                context,
+                                              ).btnNext,
+                                      ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

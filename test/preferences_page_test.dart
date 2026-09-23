@@ -35,6 +35,17 @@ class _FailingPreferencesRepository extends PreferencesRepository {
 /// be looked up directly instead of hardcoding display strings in the test.
 final enLocalizations = lookupAppLocalizations(const Locale('en'));
 
+class _FailOnceReadRepository extends PreferencesRepository {
+  _FailOnceReadRepository(LocalDatabase db)
+    : super(local: PreferencesLocalDataSource(db: db));
+  int reads = 0;
+  @override
+  Future<PreferencesEntity> fetch() async {
+    if (reads++ == 0) throw StateError('read failed');
+    return super.fetch();
+  }
+}
+
 void main() {
   late LocalDatabase db;
 
@@ -74,6 +85,25 @@ void main() {
     of: find.text(enLocalizations.prefShowOnLockScreen),
     matching: find.byType(SwitchListTile),
   );
+
+  testWidgets('failed initial load offers retry and recovers', (tester) async {
+    final repo = _FailOnceReadRepository(db);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: appTheme,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: PreferencesPage(repository: repo),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    await tester.tap(find.text(enLocalizations.btnRetry));
+    await tester.pumpAndSettle();
+    expect(find.byType(SwitchListTile), findsWidgets);
+    expect(repo.reads, 2);
+  });
 
   testWidgets('toggling a switch persists immediately, with no Apply button', (
     tester,

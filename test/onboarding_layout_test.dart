@@ -69,6 +69,16 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
 
+      expect(find.text('Back').hitTestable(), findsOneWidget);
+      await tester.tap(find.text('Back'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byType(LabeledDropdown<MapThemeEntity>).hitTestable(),
+        findsNothing,
+      );
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
       final verticalScrollable = find
           .byWidgetPredicate(
             (widget) =>

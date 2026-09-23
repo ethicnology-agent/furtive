@@ -15,70 +15,67 @@ class SettingsPage extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navSettings)),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.lock_outline_rounded),
-                    title: Text(l10n.menuPermissions),
-                    trailing: const Icon(
-                      Icons.chevron_right_rounded,
-                      color: kTextMuted,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const PermissionsPage(),
-                        ),
-                      );
-                    },
+        children: [
+          Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.lock_outline_rounded),
+                  title: Text(l10n.menuPermissions),
+                  trailing: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: kTextMuted,
                   ),
-                  const Divider(height: 1, indent: 16, endIndent: 16),
-                  ListTile(
-                    leading: const Icon(Icons.tune_rounded),
-                    title: Text(l10n.menuPreferences),
-                    trailing: const Icon(
-                      Icons.chevron_right_rounded,
-                      color: kTextMuted,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const PreferencesPage(),
-                        ),
-                      );
-                    },
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const PermissionsPage(returnToSettings: true),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                ListTile(
+                  leading: const Icon(Icons.tune_rounded),
+                  title: Text(l10n.menuPreferences),
+                  trailing: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: kTextMuted,
                   ),
-                  const Divider(height: 1, indent: 16, endIndent: 16),
-                  ListTile(
-                    leading: const Icon(Icons.description_outlined),
-                    title: Text(l10n.menuLogs),
-                    trailing: const Icon(
-                      Icons.chevron_right_rounded,
-                      color: kTextMuted,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LogsPage(),
-                        ),
-                      );
-                    },
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const PreferencesPage(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                ListTile(
+                  leading: const Icon(Icons.description_outlined),
+                  title: Text(l10n.menuLogs),
+                  trailing: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: kTextMuted,
                   ),
-                ],
-              ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const LogsPage()),
+                    );
+                  },
+                ),
+              ],
             ),
-            const Spacer(),
-            const SupportDeveloperWidget(),
-            const SizedBox(height: 12),
-            const AppVersionWidget(),
-          ],
-        ),
+          ),
+          const SizedBox(height: 24),
+          const SupportDeveloperWidget(),
+          const SizedBox(height: 12),
+          const AppVersionWidget(),
+        ],
       ),
     );
   }

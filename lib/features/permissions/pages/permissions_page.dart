@@ -35,7 +35,9 @@ String _localizedDescription(
 }
 
 class PermissionsPage extends StatefulWidget {
-  const PermissionsPage({super.key});
+  const PermissionsPage({super.key, this.returnToSettings = false});
+
+  final bool returnToSettings;
 
   @override
   State<PermissionsPage> createState() => _PermissionsPageState();
@@ -55,6 +57,10 @@ class _PermissionsPageState extends State<PermissionsPage>
   }
 
   Future<void> _onContinue() async {
+    if (widget.returnToSettings) {
+      Navigator.of(context).pop();
+      return;
+    }
     // B39: Continue must honor the onboarding flag — otherwise a fresh
     // install that lands on this page (because permissions were denied)
     // skips the wizard once permissions are granted.

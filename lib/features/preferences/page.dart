@@ -27,7 +27,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
   // B20: create the bloc once in initState. The previous StatelessWidget +
   // FutureBuilder pattern called PreferencesBloc.create() on every build,
   // spawning a new bloc each rebuild.
-  late final Future<PreferencesBloc> _blocFuture;
+  late Future<PreferencesBloc> _blocFuture;
   // B21: own the bloc lifecycle so it gets closed when the page is popped,
   // otherwise BlocProvider.value would leak it.
   PreferencesBloc? _bloc;
@@ -35,10 +35,18 @@ class _PreferencesPageState extends State<PreferencesPage> {
   @override
   void initState() {
     super.initState();
+    _load();
+  }
+
+  void _load() {
     _blocFuture = PreferencesBloc.create(repository: widget.repository).then((
       bloc,
     ) {
-      _bloc = bloc;
+      if (mounted) {
+        _bloc = bloc;
+      } else {
+        bloc.close();
+      }
       return bloc;
     });
   }
@@ -54,9 +62,34 @@ class _PreferencesPageState extends State<PreferencesPage> {
     return FutureBuilder<PreferencesBloc>(
       future: _blocFuture,
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          final l10n = AppLocalizations.of(context);
+          return Scaffold(
+            appBar: AppBar(title: Text(l10n.preferencesTitle)),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.prefLoadFailed, textAlign: TextAlign.center),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => setState(_load),
+                      child: Text(l10n.btnRetry),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
         if (!snapshot.hasData) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context).preferencesTitle),
+            ),
+            body: const Center(child: CircularProgressIndicator()),
           );
         }
 
