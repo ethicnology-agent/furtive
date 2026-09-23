@@ -166,7 +166,10 @@ class _OnboardingPageState extends State<OnboardingPage>
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(context.screenPadding),
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.screenPadding,
+                  vertical: MediaQuery.sizeOf(context).shortestSide * 0.1,
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   child: BlocBuilder<PermissionsBloc, PermissionsState>(
@@ -246,25 +249,33 @@ class _StepShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-              color: AppColors.tertiary.foreground,
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                    color: AppColors.tertiary.foreground,
+                  ),
+                ),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
-          const SizedBox(height: 24),
-          Expanded(child: child),
+          // Keep the welcome illustration centered on tall screens while
+          // allowing the entire step to scroll on short screens or large text.
+          SliverFillRemaining(hasScrollBody: false, child: child),
         ],
       ),
     );
@@ -308,43 +319,41 @@ class _SettingsStep extends StatelessWidget {
     return _StepShell(
       title: l10n.onboardSettingsTitle,
       subtitle: l10n.onboardSettingsSubtitle,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              l10n.settingsThemeLabel,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                fontWeight: FontWeight.w600,
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.settingsThemeLabel,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+              fontWeight: FontWeight.w600,
             ),
-            const SizedBox(height: 8),
-            LabeledDropdown<MapThemeEntity>(
-              value: theme,
-              items: MapThemeEntity.values,
-              labelFor: (t) => mapThemeName(AppLocalizations.of(context), t),
-              onChanged: onThemeChanged,
+          ),
+          const SizedBox(height: 8),
+          LabeledDropdown<MapThemeEntity>(
+            value: theme,
+            items: MapThemeEntity.values,
+            labelFor: (t) => mapThemeName(AppLocalizations.of(context), t),
+            onChanged: onThemeChanged,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            l10n.settingsUiLanguageLabel,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+              fontWeight: FontWeight.w600,
             ),
-            const SizedBox(height: 24),
-            Text(
-              l10n.settingsUiLanguageLabel,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            LabeledDropdown<String?>(
-              value: uiLocale,
-              items: uiLanguageOptions,
-              labelFor: (code) => code == null
-                  ? l10n.settingsUiLanguageSystem
-                  : (uiLanguageNativeNames[code] ?? code.toUpperCase()),
-              onChanged: onUiLocaleChanged,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          LabeledDropdown<String?>(
+            value: uiLocale,
+            items: uiLanguageOptions,
+            labelFor: (code) => code == null
+                ? l10n.settingsUiLanguageSystem
+                : (uiLanguageNativeNames[code] ?? code.toUpperCase()),
+            onChanged: onUiLocaleChanged,
+          ),
+        ],
       ),
     );
   }
@@ -378,12 +387,13 @@ class _PermissionsStep extends StatelessWidget {
           if (state.isLoading && state.permissions.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-          return ListView.separated(
-            itemCount: state.permissions.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              return _PermissionCard(permission: state.permissions[index]);
-            },
+          return Column(
+            children: [
+              for (var i = 0; i < state.permissions.length; i++) ...[
+                if (i > 0) const SizedBox(height: 12),
+                _PermissionCard(permission: state.permissions[i]),
+              ],
+            ],
           );
         },
       ),
