@@ -30,17 +30,23 @@ class StartRecording extends RecordingInitializationEvent {
   final ActivityTypeEntity activityType;
 }
 
-class StopRecording extends RecordingEvent {
+/// Writes to a live recording share a queue so a delayed GPS write cannot
+/// overtake a pause, resume or stop command.
+sealed class RecordingMutationEvent extends RecordingEvent {
+  const RecordingMutationEvent();
+}
+
+class StopRecording extends RecordingMutationEvent {
   const StopRecording();
 }
 
 /// Toggles pause/resume.
-class PauseRecording extends RecordingEvent {
+class PauseRecording extends RecordingMutationEvent {
   const PauseRecording();
 }
 
 /// A GPS fix to append to the running recording.
-class ScoreFix extends RecordingEvent {
+class ScoreFix extends RecordingMutationEvent {
   const ScoreFix({required this.position});
 
   final PositionEntity position;

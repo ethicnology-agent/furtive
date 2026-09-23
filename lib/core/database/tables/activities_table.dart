@@ -19,6 +19,11 @@ class Activities extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get startedAt => dateTime()();
   DateTimeColumn get stoppedAt => dateTime().nullable()();
+  // Recording commands are durable independently of GPS reception. NULL
+  // completed-pause time identifies legacy rows whose state must be inferred
+  // from points. Milliseconds preserve the pause instant across restarts.
+  IntColumn get recordingPausedAtMs => integer().nullable()();
+  IntColumn get recordingCompletedPauseMs => integer().nullable()();
   // Denormalised aggregates so the activities list can render distance/pace
   // without loading every point of every activity. -1 = not yet computed
   // (legacy rows backfilled lazily on first list fetch; live/in-progress rows

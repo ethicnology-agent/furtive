@@ -41,15 +41,13 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
     // different ongoing activity. Sequential also makes a fast second Start a
     // cheap no-op once the first handler has populated state.
     on<RecordingInitializationEvent>(_onInitialize, transformer: sequential());
-    on<StopRecording>(_onStop);
     // sequential(): the default transformer processes same-typed events
     // concurrently. At ~5 s per fix there is no throughput cost, but concurrency
     // here is harmful — two handlers in flight (e.g. the OS delivering a backlog
     // of buffered fixes after a resume) can both capture the same
     // `activity.points.last` for gap detection and each write their own
     // signalLost boundary pair, or clobber each other's in-memory append.
-    on<ScoreFix>(_onScoreFix, transformer: sequential());
-    on<PauseRecording>(_onPause);
+    on<RecordingMutationEvent>(_onMutation, transformer: sequential());
     on<TickElapsed>(_onTick);
     on<ClearRecordingError>((_, emit) => emit(state.copyWith(error: null)));
     on<ReportTrackingGap>(
@@ -100,6 +98,20 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
     }
   }
 
+  Future<void> _onMutation(
+    RecordingMutationEvent event,
+    Emitter<RecordingState> emit,
+  ) async {
+    switch (event) {
+      case ScoreFix():
+        await _onScoreFix(event, emit);
+      case PauseRecording():
+        await _onPause(event, emit);
+      case StopRecording():
+        await _onStop(event, emit);
+    }
+  }
+
   Future<void> _onResumeOngoing(
     ResumeOngoingRecording event,
     Emitter<RecordingState> emit,
@@ -116,8 +128,9 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
       _completedPauses = ongoing.pausedDuration;
       _pauseStartedAt = null;
 
-      // Resume in whatever state the activity was in when it died, read from the
-      // last recorded point. Staying paused keeps the dead gap out of active
+      // Prefer the durable pause/resume checkpoint. Legacy activities have no
+      // checkpoint yet and fall back to the last recorded point. Staying
+      // paused keeps the dead gap out of active
       // elapsed time; if it was active, the gap counts as elapsed (the run was
       // notionally still going, just with no GPS) which is the honest reading.
       //
@@ -136,7 +149,15 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
       final lastPoint = ongoing.points.isEmpty ? null : ongoing.points.last;
 
       final Duration elapsed;
-      if (lastPoint != null &&
+      final checkpoint = await _activities.fetchRecordingCheckpoint(ongoing.id);
+      if (checkpoint != null) {
+        _completedPauses = checkpoint.completedPauses;
+        _pauseStartedAt = checkpoint.pausedAt;
+        elapsed =
+            (checkpoint.pausedAt ?? _clock.nowUtc()).difference(_startedAt!) -
+            _completedPauses;
+        if (checkpoint.pausedAt == null) _startTicking();
+      } else if (lastPoint != null &&
           lastPoint.status == ActivityPointStatusEntity.paused) {
         // Continue the ongoing pause from the last fix. _completedPauses already
         // covers up to that fix, so resuming adds (now - lastFix) without double
@@ -289,10 +310,34 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
     }
   }
 
-  void _onPause(PauseRecording event, Emitter<RecordingState> emit) {
-    if (state.activity == null) return;
+  Future<void> _onPause(
+    PauseRecording event,
+    Emitter<RecordingState> emit,
+  ) async {
+    final activity = state.activity;
+    if (activity == null) return;
 
     final wasPaused = state.isPaused;
+    final now = _clock.nowUtc();
+    final completedPauses =
+        _completedPauses +
+        (wasPaused && _pauseStartedAt != null
+            ? now.difference(_pauseStartedAt!)
+            : Duration.zero);
+    final pausedAt = wasPaused ? null : now;
+    try {
+      await _activities.saveRecordingCheckpoint(
+        activity.id,
+        pausedAt: pausedAt,
+        completedPauses: completedPauses,
+      );
+    } catch (e, s) {
+      logs.severe('Persist recording pause', error: e, trace: s);
+      emit(state.copyWith(error: AppError(e.toString())));
+      return;
+    }
+    _completedPauses = completedPauses;
+    _pauseStartedAt = pausedAt;
     logs.info(
       'PauseRecording: activity ${state.activity!.id} '
       '${wasPaused ? 'resumed' : 'paused'} at elapsed '
@@ -300,17 +345,18 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
     );
 
     if (wasPaused) {
-      if (_pauseStartedAt != null) {
-        _completedPauses += _clock.nowUtc().difference(_pauseStartedAt!);
-        _pauseStartedAt = null;
-      }
       _startTicking();
     } else {
-      _pauseStartedAt = _clock.nowUtc();
       _elapsedTimer?.cancel();
     }
 
-    emit(state.copyWith(isPaused: !wasPaused));
+    final elapsed = now.difference(_startedAt!) - completedPauses;
+    emit(
+      state.copyWith(
+        isPaused: !wasPaused,
+        elapsedTime: elapsed.isNegative ? Duration.zero : elapsed,
+      ),
+    );
   }
 
   Future<void> _onStop(
@@ -348,7 +394,7 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
 
   void _onTick(TickElapsed event, Emitter<RecordingState> emit) {
     final startedAt = _startedAt;
-    if (startedAt == null) return;
+    if (startedAt == null || state.isPaused) return;
     final elapsed = _clock.nowUtc().difference(startedAt) - _completedPauses;
     emit(
       state.copyWith(elapsedTime: elapsed.isNegative ? Duration.zero : elapsed),

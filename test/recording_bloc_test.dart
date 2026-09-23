@@ -217,6 +217,152 @@ void main() {
   });
 
   group('resume after an OS kill', () {
+    for (final failWrite in [false, true]) {
+      test(
+        'pause is acknowledged only after durable storage (failure: $failWrite)',
+        () async {
+          final repo = _ControlledCheckpointRepository(
+            local: ActivityLocalDataSource(db: db, clock: clock),
+            clock: clock,
+            failWrite: failWrite,
+          );
+          final bloc = RecordingBloc(
+            activities: repo,
+            score: ScoreActivityUseCase(activities: repo, clock: clock),
+            ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
+              location: location,
+            ),
+            clock: clock,
+          );
+          addTearDown(bloc.close);
+          addTearDown(() {
+            if (!repo.release.isCompleted) repo.release.complete();
+          });
+          final started = bloc.stream.firstWhere((s) => s.isRecording);
+          bloc.add(const StartRecording());
+          await started.timeout(const Duration(seconds: 2));
+          clock.advance(const Duration(seconds: 10));
+          bloc.add(const PauseRecording());
+          await repo.entered.future.timeout(const Duration(seconds: 2));
+          expect(bloc.state.isPaused, isFalse);
+          expect(
+            await repo.fetchRecordingCheckpoint(bloc.state.activity!.id),
+            isNull,
+          );
+          final settled = bloc.stream.firstWhere(
+            (s) => s.isPaused || s.error != null,
+          );
+          repo.release.complete();
+          await settled.timeout(const Duration(seconds: 2));
+          expect(bloc.state.isPaused, !failWrite);
+          if (failWrite) {
+            expect(bloc.state.error, isNotNull);
+            expect(
+              await repo.fetchRecordingCheckpoint(bloc.state.activity!.id),
+              isNull,
+            );
+          } else {
+            expect(
+              (await repo.fetchRecordingCheckpoint(
+                bloc.state.activity!.id,
+              ))!.pausedAt,
+              clock.nowUtc(),
+            );
+            final frozen = bloc.state.elapsedTime;
+            clock.advance(const Duration(seconds: 5));
+            bloc.add(const TickElapsed());
+            final scored = bloc.stream.firstWhere(
+              (s) => s.activity!.points.isNotEmpty,
+            );
+            bloc.add(ScoreFix(position: fixAt(clock.nowUtc())));
+            await scored.timeout(const Duration(seconds: 2));
+            expect(
+              bloc.state.elapsedTime,
+              frozen,
+              reason: 'queued ticks cannot advance a paused recording',
+            );
+            expect(
+              bloc.state.activity!.points.single.status,
+              ActivityPointStatusEntity.paused,
+            );
+          }
+        },
+      );
+    }
+
+    for (final hasFix in [false, true]) {
+      test(
+        'pause survives restart without a new fix (hasFix: $hasFix)',
+        () async {
+          final before = buildBloc();
+          if (hasFix) {
+            await seedOngoing(id: 'checkpoint', startedAt: start);
+            final loaded = before.stream.firstWhere((s) => s.isRecording);
+            before.add(const ResumeOngoingRecording());
+            await loaded.timeout(const Duration(seconds: 2));
+          } else {
+            final started = before.stream.firstWhere((s) => s.isRecording);
+            before.add(const StartRecording());
+            await started.timeout(const Duration(seconds: 2));
+          }
+          final id = before.state.activity!.id;
+          clock.advance(const Duration(seconds: 10, milliseconds: 250));
+          final paused = before.stream.firstWhere((s) => s.isPaused);
+          before.add(const PauseRecording());
+          await paused.timeout(const Duration(seconds: 2));
+          await before.close();
+
+          clock.advance(const Duration(minutes: 2));
+          final after = buildBloc();
+          addTearDown(after.close);
+          final restored = after.stream.firstWhere((s) => s.isRecording);
+          after.add(const ResumeOngoingRecording());
+          await restored.timeout(const Duration(seconds: 2));
+          expect(after.state.activity!.id, id);
+          expect(after.state.isPaused, isTrue);
+          expect(
+            after.state.elapsedTime,
+            const Duration(seconds: 10, milliseconds: 250),
+          );
+        },
+      );
+    }
+
+    test(
+      'resume survives restart without another fix and retains pause time',
+      () async {
+        await seedOngoing(id: 'checkpoint', startedAt: start);
+        final before = buildBloc();
+        final loaded = before.stream.firstWhere((s) => s.isRecording);
+        before.add(const ResumeOngoingRecording());
+        await loaded.timeout(const Duration(seconds: 2));
+        clock.advance(const Duration(seconds: 10));
+        final paused = before.stream.firstWhere((s) => s.isPaused);
+        before.add(const PauseRecording());
+        await paused.timeout(const Duration(seconds: 2));
+        clock.advance(const Duration(seconds: 5));
+        final scored = before.stream.firstWhere(
+          (s) => s.activity!.points.length == 2,
+        );
+        before.add(ScoreFix(position: fixAt(clock.nowUtc())));
+        await scored.timeout(const Duration(seconds: 2));
+        clock.advance(const Duration(seconds: 15));
+        final resumed = before.stream.firstWhere((s) => !s.isPaused);
+        before.add(const PauseRecording());
+        await resumed.timeout(const Duration(seconds: 2));
+        await before.close();
+
+        clock.advance(const Duration(seconds: 5));
+        final after = buildBloc();
+        addTearDown(after.close);
+        final restored = after.stream.firstWhere((s) => s.isRecording);
+        after.add(const ResumeOngoingRecording());
+        await restored.timeout(const Duration(seconds: 2));
+        expect(after.state.isPaused, isFalse);
+        expect(after.state.elapsedTime, const Duration(seconds: 15));
+      },
+    );
+
     blocTest<RecordingBloc, RecordingState>(
       'an ongoing activity is rehydrated from storage',
       setUp: () => seedOngoing(
@@ -568,5 +714,33 @@ class _DelayedResumeRepository extends ActivityRepository {
     entered.complete();
     await release.future;
     return super.fetchOngoing();
+  }
+}
+
+class _ControlledCheckpointRepository extends ActivityRepository {
+  _ControlledCheckpointRepository({
+    required super.local,
+    required super.clock,
+    required this.failWrite,
+  });
+
+  final bool failWrite;
+  final entered = Completer<void>();
+  final release = Completer<void>();
+
+  @override
+  Future<void> saveRecordingCheckpoint(
+    String activityId, {
+    required DateTime? pausedAt,
+    required Duration completedPauses,
+  }) async {
+    entered.complete();
+    await release.future;
+    if (failWrite) throw StateError('checkpoint write failed');
+    await super.saveRecordingCheckpoint(
+      activityId,
+      pausedAt: pausedAt,
+      completedPauses: completedPauses,
+    );
   }
 }

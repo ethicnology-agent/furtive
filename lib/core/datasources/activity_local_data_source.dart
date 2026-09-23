@@ -19,6 +19,43 @@ class ActivityLocalDataSource {
   final LocalDatabase db;
   final Clock _clock;
 
+  Future<({DateTime? pausedAt, Duration completedPauses})?>
+  fetchRecordingCheckpoint(String activityId) async {
+    final row = await (db.select(
+      db.activities,
+    )..where((t) => t.id.equals(activityId))).getSingleOrNull();
+    final completed = row?.recordingCompletedPauseMs;
+    if (row == null || completed == null) return null;
+    return (
+      pausedAt: row.recordingPausedAtMs == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(
+              row.recordingPausedAtMs!,
+              isUtc: true,
+            ),
+      completedPauses: Duration(milliseconds: completed),
+    );
+  }
+
+  /// Atomically persist both sides of a pause/resume command before the UI
+  /// acknowledges it. Never revive an activity stopped by another writer.
+  Future<void> saveRecordingCheckpoint(
+    String activityId, {
+    required DateTime? pausedAt,
+    required Duration completedPauses,
+  }) async {
+    final updated =
+        await (db.update(
+          db.activities,
+        )..where((t) => t.id.equals(activityId) & t.stoppedAt.isNull())).write(
+          ActivitiesCompanion(
+            recordingPausedAtMs: Value(pausedAt?.millisecondsSinceEpoch),
+            recordingCompletedPauseMs: Value(completedPauses.inMilliseconds),
+          ),
+        );
+    if (updated != 1) throw AppError('Recording is no longer ongoing');
+  }
+
   // Compute the denormalised aggregates the way the entity does (active
   // segments only, non-finite points filtered), so the list's stored values
   // match the detail page's live computation exactly.

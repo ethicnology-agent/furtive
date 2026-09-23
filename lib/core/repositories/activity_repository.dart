@@ -23,6 +23,20 @@ class ActivityRepository {
   final ActivityLocalDataSource local;
   final Clock _clock;
 
+  Future<({DateTime? pausedAt, Duration completedPauses})?>
+  fetchRecordingCheckpoint(String activityId) =>
+      local.fetchRecordingCheckpoint(activityId);
+
+  Future<void> saveRecordingCheckpoint(
+    String activityId, {
+    required DateTime? pausedAt,
+    required Duration completedPauses,
+  }) => local.saveRecordingCheckpoint(
+    activityId,
+    pausedAt: pausedAt,
+    completedPauses: completedPauses,
+  );
+
   Future<void> store(ActivityEntity activity) async {
     await local.store(ActivityModel.fromEntity(activity));
   }

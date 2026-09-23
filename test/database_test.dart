@@ -14,6 +14,100 @@ import 'package:sqlite3/sqlite3.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  group('v9 recording checkpoint migration', () {
+    Database legacyDatabase() {
+      final raw = sqlite3.openInMemory();
+      raw.execute('''
+        CREATE TABLE activities (
+          id TEXT NOT NULL PRIMARY KEY,
+          name TEXT NOT NULL,
+          description TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          started_at INTEGER NOT NULL,
+          stopped_at INTEGER NULL,
+          distance_meters REAL NOT NULL DEFAULT -1,
+          active_duration_ms INTEGER NOT NULL DEFAULT -1,
+          activity_type TEXT NOT NULL DEFAULT 'unknown'
+        );
+        INSERT INTO activities VALUES
+          ('legacy', 'Track', '', 1000, 1000, NULL, 42, 15000, 'walk');
+        PRAGMA user_version = 9;
+      ''');
+      return raw;
+    }
+
+    test(
+      'preserves legacy activity and round-trips precise pause commands',
+      () async {
+        final raw = legacyDatabase();
+        final db = LocalDatabase.forTesting(NativeDatabase.opened(raw));
+        addTearDown(db.close);
+        final local = ActivityLocalDataSource(db: db);
+        expect(await local.fetchRecordingCheckpoint('legacy'), isNull);
+        final row = await db.select(db.activities).getSingle();
+        expect(row.name, 'Track');
+        expect(row.distanceMeters, 42);
+        expect(row.activeDurationMs, 15000);
+        expect(row.activityType, ActivityTypeColumn.walk);
+        expect(raw.select('PRAGMA user_version').single.values.single, 10);
+
+        final pausedAt = DateTime.utc(2026, 9, 22, 12, 0, 10, 250);
+        const completed = Duration(seconds: 8, milliseconds: 125);
+        await local.saveRecordingCheckpoint(
+          'legacy',
+          pausedAt: pausedAt,
+          completedPauses: completed,
+        );
+        expect(await local.fetchRecordingCheckpoint('legacy'), (
+          pausedAt: pausedAt,
+          completedPauses: completed,
+        ));
+        await local.saveRecordingCheckpoint(
+          'legacy',
+          pausedAt: null,
+          completedPauses: completed + const Duration(seconds: 20),
+        );
+        expect(await local.fetchRecordingCheckpoint('legacy'), (
+          pausedAt: null,
+          completedPauses: completed + const Duration(seconds: 20),
+        ));
+        raw.execute(
+          "UPDATE activities SET stopped_at = 2000 WHERE id = 'legacy'",
+        );
+        await expectLater(
+          local.saveRecordingCheckpoint(
+            'legacy',
+            pausedAt: pausedAt,
+            completedPauses: Duration.zero,
+          ),
+          throwsA(isA<Exception>()),
+        );
+        expect(
+          (await local.fetchRecordingCheckpoint('legacy'))!.pausedAt,
+          isNull,
+        );
+      },
+    );
+
+    test(
+      'rolls back the first column when the second alteration fails',
+      () async {
+        final raw = legacyDatabase();
+        raw.execute(
+          'ALTER TABLE activities ADD COLUMN recording_completed_pause_ms INTEGER',
+        );
+        final db = LocalDatabase.forTesting(NativeDatabase.opened(raw));
+        addTearDown(db.close);
+        await expectLater(db.select(db.activities).get(), throwsA(anything));
+        final names = raw
+            .select("PRAGMA table_info('activities')")
+            .map((row) => row['name']);
+        expect(names, isNot(contains('recording_paused_at_ms')));
+        expect(raw.select('PRAGMA user_version').single.values.single, 9);
+      },
+    );
+  });
+
   group('v2 -> current migration', () {
     test(
       'adds new columns with defaults and preserves existing rows',
@@ -83,7 +177,7 @@ void main() {
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
 
-        expect(db.schemaVersion, 9);
+        expect(db.schemaVersion, 10);
         // Existing preferences survive untouched.
         expect(prefs.mapTheme, MapThemeColumn.white);
         expect(prefs.hasCompletedOnboarding, isTrue);
@@ -217,7 +311,7 @@ void main() {
         await (db.select(
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
-        expect(db.schemaVersion, 9);
+        expect(db.schemaVersion, 10);
 
         final remainingTables = raw
             .select(
@@ -285,7 +379,7 @@ void main() {
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
 
-        expect(db.schemaVersion, 9);
+        expect(db.schemaVersion, 10);
         // v2 backfill: existing users skip onboarding and get the changelog
         // sentinel; fresh installs (not this path) get the column defaults.
         expect(prefs.hasCompletedOnboarding, isTrue);

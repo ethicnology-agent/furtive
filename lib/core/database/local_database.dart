@@ -17,7 +17,7 @@ class LocalDatabase extends _$LocalDatabase {
   LocalDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -250,6 +250,12 @@ class LocalDatabase extends _$LocalDatabase {
       // recording meant, and `unknown` already behaves as the permissive
       // generic profile.
       await m.addColumn(activities, activities.activityType);
+    }
+    if (from < 10) {
+      // NULL preserves legacy recovery from point statuses until the first
+      // explicit pause/resume command creates an authoritative checkpoint.
+      await m.addColumn(activities, activities.recordingPausedAtMs);
+      await m.addColumn(activities, activities.recordingCompletedPauseMs);
     }
   }
 }
