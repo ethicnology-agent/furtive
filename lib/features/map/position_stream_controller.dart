@@ -5,6 +5,7 @@ import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/repositories/location_repository.dart';
+import 'package:geolocator/geolocator.dart';
 
 /// Owns the lifetime of the GPS position stream.
 ///
@@ -60,6 +61,11 @@ class PositionStreamController {
   }
 
   StreamSubscription<PositionEntity>? _subscription;
+  StreamSubscription<bool>? _serviceSubscription;
+  bool? _serviceEnabled;
+  int _serviceGeneration = 0;
+  bool _disposed = false;
+  Future<void>? _reopening;
   Future<void>? _opening;
   DateTime? _lastFixAt;
   MovementProfileEntity? _profile;
@@ -95,17 +101,54 @@ class PositionStreamController {
 
   /// Opens the stream if it is not already open, memoising the in-flight open so
   /// concurrent callers await the same one. Always use this rather than [_open].
-  Future<void> ensureOpen() {
+  Future<void> ensureOpen() => _reopening ?? _ensureOpen();
+
+  Future<void> _ensureOpen() {
+    if (_disposed) return Future.value();
+    _serviceSubscription ??= _location.getServiceEnabledStream().listen(
+      _onServiceChanged,
+      onError: (Object error, StackTrace stack) =>
+          logs.severe('location service status', error: error, trace: stack),
+    );
+    if (_serviceEnabled == false) return Future.value();
     if (_subscription != null) return Future.value();
     return _opening ??= _open().whenComplete(() => _opening = null);
   }
 
   /// Cancels and reopens. Used when [isStale] indicates the OS suspended the
   /// stream in the background.
-  Future<void> reopen() async {
-    await _subscription?.cancel();
+  Future<void> reopen() =>
+      _reopening ??= _reopen().whenComplete(() => _reopening = null);
+
+  Future<void> _reopen() async {
+    final previous = _subscription;
     _subscription = null;
-    await ensureOpen();
+    await previous?.cancel();
+    await _ensureOpen();
+  }
+
+  void _onServiceChanged(bool enabled) {
+    if (_serviceEnabled == enabled) return;
+    _serviceEnabled = enabled;
+    final generation = ++_serviceGeneration;
+    if (enabled && !_disposed) {
+      unawaited(_recoverService(generation));
+    }
+  }
+
+  Future<void> _recoverService(int generation) async {
+    try {
+      // Android's LocationManager removes updates when disabled but leaves the
+      // Dart stream open. Enabling the provider does not register them again.
+      // Observe that transition even when the app never leaves the foreground.
+      final permitted = await _location.checkLocationPermission();
+      if (!permitted || _disposed || generation != _serviceGeneration) return;
+      await reopen();
+    } catch (error, stack) {
+      // One attempt per enabled transition; permission or platform failures
+      // must not start a retry loop while the service is unavailable.
+      logs.severe('location service recovery', error: error, trace: stack);
+    }
   }
 
   /// Points the stream at a different activity profile, reopening it if it is
@@ -146,21 +189,28 @@ class PositionStreamController {
       onRawFix: () => _lastFixAt = _clock.nowUtc(),
     );
     _subscription = stream
-        .handleError(
-          (Object error, StackTrace stack) =>
-              logs.severe('position stream', error: error, trace: stack),
-        )
+        .handleError((Object error, StackTrace stack) {
+          if (error is LocationServiceDisabledException) {
+            _onServiceChanged(false);
+          }
+          logs.severe('position stream', error: error, trace: stack);
+        })
         .listen(
           (position) => onPosition?.call(position),
           onDone: () {
             logs.warning('Position stream closed; reopening.');
             _subscription = null;
-            onStreamClosed?.call();
+            if (!_disposed && _serviceEnabled != false) {
+              onStreamClosed?.call();
+            }
           },
         );
   }
 
   Future<void> dispose() async {
+    _disposed = true;
+    await _serviceSubscription?.cancel();
+    _serviceSubscription = null;
     await _subscription?.cancel();
     _subscription = null;
     onPosition = null;

@@ -15,6 +15,9 @@ import 'package:geolocator/geolocator.dart';
 /// downstream distance and interpolation; a mis-sanitised altitude accuracy
 /// fabricates hundreds of metres of elevation gain.
 class _FakeGps implements LocationGpsDataSource {
+  @override
+  Stream<bool> getServiceEnabledStream() => const Stream.empty();
+
   final StreamController<Position> raw = StreamController<Position>.broadcast();
   Position? current;
   bool batteryDisabled = true;

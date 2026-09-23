@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_handler.dart' hide ServiceStatus;
 import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/errors.dart';
 
@@ -20,6 +20,17 @@ const int _kDistanceFilterMeters = 0;
 const Duration _kCurrentLocationTimeLimit = Duration(seconds: 12);
 
 class LocationGpsDataSource {
+  Stream<bool> getServiceEnabledStream() {
+    // Recover Android's LocationManager registration after a provider toggle.
+    // Service status is unavailable on web and some desktop implementations.
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
+      return const Stream.empty();
+    }
+    return Geolocator.getServiceStatusStream().map(
+      (status) => status == ServiceStatus.enabled,
+    );
+  }
+
   Future<Position> getCurrentLocation() async {
     final hasPermission = await checkLocationPermission();
     if (!hasPermission) {

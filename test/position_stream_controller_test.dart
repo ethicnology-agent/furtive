@@ -1,9 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/features/map/position_stream_controller.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'support/fakes.dart';
+
+class _PermissionLocation extends FakeLocationRepository {
+  final permission = Completer<bool>();
+
+  @override
+  Future<bool> checkLocationPermission() => permission.future;
+}
 
 /// Coverage for the GPS stream lifecycle extracted from MapBloc.
 ///
@@ -132,6 +142,90 @@ void main() {
     await controller.reopen();
     expect(location.positionStreamOpenCount, 2);
     expect(controller.isOpen, isTrue);
+  });
+
+  test(
+    'reenabling location reopens the native stream without a resume',
+    () async {
+      final controller = build();
+      await controller.ensureOpen();
+      location.serviceEnabled.add(false);
+      location.serviceEnabled.add(false);
+      await Future<void>.delayed(Duration.zero);
+      await controller.reopen();
+      await controller.ensureOpen();
+      expect(location.positionStreamOpenCount, 1);
+
+      location.serviceEnabled.add(true);
+      location.serviceEnabled.add(true);
+      await Future<void>.delayed(Duration.zero);
+      expect(location.positionStreamOpenCount, 2);
+      final received = <PositionEntity>[];
+      controller.onPosition = received.add;
+      location.fixes.add(fixAt(start));
+      await Future<void>.delayed(Duration.zero);
+      expect(received, hasLength(1));
+      await controller.dispose();
+    },
+  );
+
+  test('service events cannot reopen a disposed controller', () async {
+    final controller = build();
+    await controller.ensureOpen();
+    location.serviceEnabled.add(false);
+    await Future<void>.delayed(Duration.zero);
+    await controller.dispose();
+    location.serviceEnabled.add(true);
+    await Future<void>.delayed(Duration.zero);
+    expect(location.positionStreamOpenCount, 1);
+    expect(location.serviceEnabled.hasListener, isFalse);
+  });
+
+  for (final granted in [false, true]) {
+    test('recovery with permission $granted is safe across disposal', () async {
+      final pending = _PermissionLocation();
+      final controller = PositionStreamController(location: pending);
+      await controller.ensureOpen();
+      pending.serviceEnabled.add(false);
+      await Future<void>.delayed(Duration.zero);
+      pending.serviceEnabled.add(true);
+      await Future<void>.delayed(Duration.zero);
+      if (granted) await controller.dispose();
+      pending.permission.complete(granted);
+      await Future<void>.delayed(Duration.zero);
+      expect(pending.positionStreamOpenCount, 1);
+      await controller.dispose();
+      await pending.dispose();
+    });
+  }
+
+  test('a disabled stream error waits for service recovery', () async {
+    final controller = build();
+    await controller.ensureOpen();
+    location.fixes.addError(const LocationServiceDisabledException());
+    await Future<void>.delayed(Duration.zero);
+    await controller.reopen();
+    expect(location.positionStreamOpenCount, 1);
+    location.serviceEnabled.add(true);
+    await Future<void>.delayed(Duration.zero);
+    expect(location.positionStreamOpenCount, 2);
+    await controller.dispose();
+  });
+
+  test('disabling again invalidates a pending recovery', () async {
+    final pending = _PermissionLocation();
+    final controller = PositionStreamController(location: pending);
+    await controller.ensureOpen();
+    pending.serviceEnabled.add(false);
+    pending.serviceEnabled.add(true);
+    await Future<void>.delayed(Duration.zero);
+    pending.serviceEnabled.add(false);
+    await Future<void>.delayed(Duration.zero);
+    pending.permission.complete(true);
+    await Future<void>.delayed(Duration.zero);
+    expect(pending.positionStreamOpenCount, 1);
+    await controller.dispose();
+    await pending.dispose();
   });
 
   test(

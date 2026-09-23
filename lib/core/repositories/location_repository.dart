@@ -23,6 +23,8 @@ class LocationRepository {
 
   final LocationGpsDataSource gps;
 
+  Stream<bool> getServiceEnabledStream() => gps.getServiceEnabledStream();
+
   Future<PositionEntity> getCurrentLocation() async {
     final position = await gps.getCurrentLocation();
     return _toEntity(position) ??

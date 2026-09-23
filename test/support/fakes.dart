@@ -31,6 +31,14 @@ class FakeLocationRepository extends LocationRepository {
   /// Emit onto this to deliver fixes to whatever opened the stream.
   final StreamController<PositionEntity> fixes =
       StreamController<PositionEntity>.broadcast();
+  final StreamController<bool> serviceEnabled =
+      StreamController<bool>.broadcast();
+
+  @override
+  Stream<bool> getServiceEnabledStream() => serviceEnabled.stream;
+
+  @override
+  Future<bool> checkLocationPermission() async => true;
 
   /// Returned by [getCurrentLocation] unless [failCurrentLocation].
   PositionEntity? currentLocation;
@@ -95,7 +103,10 @@ class FakeLocationRepository extends LocationRepository {
     return batteryOptimizationDisabled;
   }
 
-  Future<void> dispose() => fixes.close();
+  Future<void> dispose() async {
+    await fixes.close();
+    await serviceEnabled.close();
+  }
 }
 
 /// Never called: [FakeLocationRepository] overrides every method that would
