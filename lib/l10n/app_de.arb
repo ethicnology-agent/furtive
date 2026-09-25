@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Ausgewogen",
   "prefDetailEndurance": "Ausdauer",
   "prefMapControlsOnRight": "Kartensteuerung rechts",
-  "prefMapControlsOnRightSubtitle": "Die Schaltflächen Folgen, Start, Pause und Stopp sitzen am rechten Rand. Zum Verschieben nach links für Linkshänder ausschalten. Der Kartenhinweis wandert in die gegenüberliegende Ecke."
+  "prefMapControlsOnRightSubtitle": "Die Schaltflächen Folgen, Start, Pause und Stopp sitzen am rechten Rand. Zum Verschieben nach links für Linkshänder ausschalten. Der Kartenhinweis wandert in die gegenüberliegende Ecke.",
+  "prefMapMilestones": "Entfernungsmarkierungen",
+  "prefMapMilestonesOff": "Aus"
 }

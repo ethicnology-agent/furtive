@@ -532,6 +532,7 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                         userPosition: loc,
                         deviceHeading: state.deviceHeading,
                         controlsOnLeft: state.mapControlsOnLeft,
+                        milestoneIntervalKm: state.mapMilestoneIntervalKm,
                         // Panning by hand means the user wants to look somewhere
                         // else, so stop dragging the camera back.
                         onUserGesture: () {

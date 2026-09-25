@@ -29,6 +29,7 @@ void main() {
     String? style,
     bool left = false,
     VoidCallback? gesture,
+    int milestoneIntervalKm = 1,
   }) =>
       view.build(
             styleUrl: style,
@@ -40,6 +41,7 @@ void main() {
             userPosition: user,
             deviceHeading: 180,
             controlsOnLeft: left,
+            milestoneIntervalKm: milestoneIntervalKm,
             onUserGesture: gesture ?? () {},
           )
           as ml.MapLibreMap;
@@ -147,6 +149,18 @@ void main() {
       final markers = (map.children.single as ml.WidgetLayer).markers;
       expect(markers, isNotEmpty);
       expect((markers.first.child as KmMilestoneChip).label, '1');
+      final sparseMarkers =
+          (build(track: track, milestoneIntervalKm: 5).children.single
+                  as ml.WidgetLayer)
+              .markers;
+      expect(
+        sparseMarkers.every(
+          (marker) =>
+              int.parse((marker.child as KmMilestoneChip).label) % 5 == 0,
+        ),
+        isTrue,
+      );
+      expect(build(track: track, milestoneIntervalKm: 0).children, isEmpty);
       expect(
         build(track: track.copyWith(points: [points.first])).layers,
         isEmpty,

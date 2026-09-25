@@ -172,5 +172,7 @@
   "prefDetailBalanced": "সুষম",
   "prefDetailEndurance": "সহনশীলতা",
   "prefMapControlsOnRight": "ডান দিকে ম্যাপ নিয়ন্ত্রণ",
-  "prefMapControlsOnRightSubtitle": "অনুসরণ, শুরু, বিরতি ও থামার বোতাম ডান প্রান্তে থাকে। বাঁ হাতে ব্যবহারের জন্য বাম দিকে সরাতে বন্ধ করুন। ম্যাপের কৃতিত্ব বিপরীত কোণে চলে যায়।"
+  "prefMapControlsOnRightSubtitle": "অনুসরণ, শুরু, বিরতি ও থামার বোতাম ডান প্রান্তে থাকে। বাঁ হাতে ব্যবহারের জন্য বাম দিকে সরাতে বন্ধ করুন। ম্যাপের কৃতিত্ব বিপরীত কোণে চলে যায়।",
+  "prefMapMilestones": "দূরত্ব চিহ্ন",
+  "prefMapMilestonesOff": "বন্ধ"
 }

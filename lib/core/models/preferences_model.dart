@@ -10,6 +10,7 @@ class PreferencesModel {
   final bool mapTilesEnabled;
   final bool showOnLockScreen;
   final bool mapControlsOnLeft;
+  final int mapMilestoneIntervalKm;
   final ActivityTypeColumn lastActivityType;
   final RecordingDetailColumn recordingDetail;
 
@@ -21,6 +22,7 @@ class PreferencesModel {
     this.mapTilesEnabled = true,
     this.showOnLockScreen = true,
     this.mapControlsOnLeft = false,
+    this.mapMilestoneIntervalKm = 1,
     this.lastActivityType = ActivityTypeColumn.walk,
     this.recordingDetail = RecordingDetailColumn.balanced,
   });
@@ -34,6 +36,7 @@ class PreferencesModel {
       mapTilesEnabled: preferences.mapTilesEnabled,
       showOnLockScreen: preferences.showOnLockScreen,
       mapControlsOnLeft: preferences.mapControlsOnLeft,
+      mapMilestoneIntervalKm: preferences.mapMilestoneIntervalKm,
       lastActivityType: ActivityTypeExtension.fromEntity(
         preferences.lastActivityType,
       ),
@@ -52,6 +55,7 @@ class PreferencesModel {
       mapTilesEnabled: model.mapTilesEnabled,
       showOnLockScreen: model.showOnLockScreen,
       mapControlsOnLeft: model.mapControlsOnLeft,
+      mapMilestoneIntervalKm: model.mapMilestoneIntervalKm,
       lastActivityType: model.lastActivityType.toEntity(),
       recordingDetail: model.recordingDetail.toEntity(),
     );

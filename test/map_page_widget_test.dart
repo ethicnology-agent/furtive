@@ -74,6 +74,7 @@ class _Renderer implements MapView {
   var disposed = false;
   PositionEntity? centre;
   ActivityEntity? track;
+  int? milestoneInterval;
   late VoidCallback gesture;
   @override
   String get name => 'test';
@@ -96,6 +97,7 @@ class _Renderer implements MapView {
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
+    int milestoneIntervalKm = 1,
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
@@ -103,6 +105,7 @@ class _Renderer implements MapView {
     builds++;
     centre = initialCentre;
     this.track = track;
+    milestoneInterval = milestoneIntervalKm;
     gesture = onUserGesture;
     return const SizedBox.expand(key: ValueKey('map-surface'));
   }

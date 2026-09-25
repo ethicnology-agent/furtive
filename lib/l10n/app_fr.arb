@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Équilibré",
   "prefDetailEndurance": "Endurance",
   "activitySwim": "Nage",
-  "activityOther": "Autre"
+  "activityOther": "Autre",
+  "prefMapMilestones": "Repères de distance",
+  "prefMapMilestonesOff": "Désactivés"
 }

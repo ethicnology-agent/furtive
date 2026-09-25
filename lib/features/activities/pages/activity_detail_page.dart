@@ -12,6 +12,8 @@ import 'package:furtive/core/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:furtive/core/entities/preferences_entity.dart';
+import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/usecases/get_map_style_url_use_case.dart';
 import 'package:furtive/core/usecases/export_activity_to_gpx_use_case.dart';
 import 'package:furtive/core/usecases/share_activity_use_case.dart';
@@ -26,12 +28,14 @@ class ActivityDetailPage extends StatefulWidget {
     required this.activity,
     this.mapView,
     this.loadMapStyle,
+    this.loadMilestoneInterval,
     this.exportActivity,
     this.shareActivity,
   });
 
   final MapView? mapView;
   final Future<String?> Function()? loadMapStyle;
+  final Future<int> Function()? loadMilestoneInterval;
   final Future<void> Function(String)? exportActivity;
   final Future<void> Function(BuildContext, ActivityEntity)? shareActivity;
 
@@ -63,11 +67,16 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
   late final MapView _mapView = widget.mapView ?? MapLibreMapView();
   late final _getMapStyleUrlUseCase =
       widget.loadMapStyle ?? GetMapStyleUrlUseCase().call;
+  late final _loadMilestoneInterval =
+      widget.loadMilestoneInterval ??
+      () async =>
+          (await PreferencesRepository().fetch()).mapMilestoneIntervalKm;
   late final _exportActivityToGpxUseCase =
       widget.exportActivity ?? ExportActivityToGpxUseCase().call;
   late final _shareActivityUseCase =
       widget.shareActivity ?? ShareActivityUseCase().call;
   String? _mapStyleUrl;
+  int _mapMilestoneIntervalKm = 1;
   // _isMapStyleLoading covers ONLY the initial map-tile-style fetch.
   // Previously _isLoading was overloaded with export-in-progress as well,
   // which meant the whole map view collapsed to a spinner during GPX
@@ -92,19 +101,23 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
   }
 
   Future<void> _loadMapStyle() async {
+    String? styleUrl;
+    var milestoneIntervalKm = 1;
     try {
-      final styleUrl = await _getMapStyleUrlUseCase();
-      if (!mounted) return;
-      setState(() {
-        _mapStyleUrl = styleUrl;
-        _isMapStyleLoading = false;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _isMapStyleLoading = false;
-      });
-    }
+      styleUrl = await _getMapStyleUrlUseCase();
+    } catch (_) {}
+    try {
+      final storedInterval = await _loadMilestoneInterval();
+      if (mapMilestoneIntervalOptionsKm.contains(storedInterval)) {
+        milestoneIntervalKm = storedInterval;
+      }
+    } catch (_) {}
+    if (!mounted) return;
+    setState(() {
+      _mapStyleUrl = styleUrl;
+      _mapMilestoneIntervalKm = milestoneIntervalKm;
+      _isMapStyleLoading = false;
+    });
   }
 
   @override
@@ -186,6 +199,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                       // for one would prompt for location permission on a page
                       // that has no use for it.
                       showUserLocation: false,
+                      milestoneIntervalKm: _mapMilestoneIntervalKm,
                       // Nothing follows the user here, so a pan means nothing.
                       onUserGesture: () {},
                     ),

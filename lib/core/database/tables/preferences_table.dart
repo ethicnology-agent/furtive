@@ -42,6 +42,10 @@ class Preferences extends Table {
   // corner (see MapPage), because the two collided when both sat right.
   BoolColumn get mapControlsOnLeft =>
       boolean().withDefault(const Constant(false))();
+  // Distance between numbered route markers, in kilometres. Zero disables
+  // them. The preferences UI only writes the supported discrete values.
+  IntColumn get mapMilestoneIntervalKm =>
+      integer().withDefault(const Constant(1))();
   // The activity type to preselect on the record screen. Written on every
   // start so the next recording opens on the last thing the user actually
   // did, which is the only prediction worth making — Strava and OsmAnd both

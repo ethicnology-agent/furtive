@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Equilibrado",
   "prefDetailEndurance": "Resistencia",
   "prefMapControlsOnRight": "Controles del mapa a la derecha",
-  "prefMapControlsOnRightSubtitle": "Los botones seguir, iniciar, pausar y detener están en el borde derecho. Desactiva para moverlos a la izquierda, para zurdos. El crédito del mapa pasa a la esquina opuesta."
+  "prefMapControlsOnRightSubtitle": "Los botones seguir, iniciar, pausar y detener están en el borde derecho. Desactiva para moverlos a la izquierda, para zurdos. El crédito del mapa pasa a la esquina opuesta.",
+  "prefMapMilestones": "Marcadores de distancia",
+  "prefMapMilestonesOff": "Desactivados"
 }

@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Balanserad",
   "prefDetailEndurance": "Uthållighet",
   "prefMapControlsOnRight": "Kartkontroller till höger",
-  "prefMapControlsOnRightSubtitle": "Knapparna följ, starta, pausa och stoppa sitter på högerkanten. Stäng av för att flytta dem till vänster, för vänsterhänt användning. Kartkrediten flyttas till motsatt hörn."
+  "prefMapControlsOnRightSubtitle": "Knapparna följ, starta, pausa och stoppa sitter på högerkanten. Stäng av för att flytta dem till vänster, för vänsterhänt användning. Kartkrediten flyttas till motsatt hörn.",
+  "prefMapMilestones": "Distansmarkeringar",
+  "prefMapMilestonesOff": "Av"
 }

@@ -18,6 +18,19 @@ void main() {
     Database legacyDatabase() {
       final raw = sqlite3.openInMemory();
       raw.execute('''
+        CREATE TABLE preferences (
+          id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          map_theme TEXT NOT NULL,
+          has_completed_onboarding INTEGER NOT NULL DEFAULT 0,
+          ui_locale TEXT NULL,
+          last_shown_changelog_version TEXT NULL,
+          map_tiles_enabled INTEGER NOT NULL DEFAULT 1,
+          show_on_lock_screen INTEGER NOT NULL DEFAULT 1,
+          map_controls_on_left INTEGER NOT NULL DEFAULT 0,
+          last_activity_type TEXT NOT NULL DEFAULT 'walk',
+          recording_detail TEXT NOT NULL DEFAULT 'balanced'
+        );
+        INSERT INTO preferences (id, map_theme) VALUES (1, 'dark');
         CREATE TABLE activities (
           id TEXT NOT NULL PRIMARY KEY,
           name TEXT NOT NULL,
@@ -49,7 +62,7 @@ void main() {
         expect(row.distanceMeters, 42);
         expect(row.activeDurationMs, 15000);
         expect(row.activityType, ActivityTypeColumn.walk);
-        expect(raw.select('PRAGMA user_version').single.values.single, 10);
+        expect(raw.select('PRAGMA user_version').single.values.single, 11);
 
         final pausedAt = DateTime.utc(2026, 9, 22, 12, 0, 10, 250);
         const completed = Duration(seconds: 8, milliseconds: 125);
@@ -177,7 +190,7 @@ void main() {
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
 
-        expect(db.schemaVersion, 10);
+        expect(db.schemaVersion, 11);
         // Existing preferences survive untouched.
         expect(prefs.mapTheme, MapThemeColumn.white);
         expect(prefs.hasCompletedOnboarding, isTrue);
@@ -311,7 +324,7 @@ void main() {
         await (db.select(
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
-        expect(db.schemaVersion, 10);
+        expect(db.schemaVersion, 11);
 
         final remainingTables = raw
             .select(
@@ -379,7 +392,7 @@ void main() {
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
 
-        expect(db.schemaVersion, 10);
+        expect(db.schemaVersion, 11);
         // v2 backfill: existing users skip onboarding and get the changelog
         // sentinel; fresh installs (not this path) get the column defaults.
         expect(prefs.hasCompletedOnboarding, isTrue);
@@ -1111,6 +1124,7 @@ void main() {
           hasCompletedOnboarding: true,
           uiLocale: 'de',
           lastShownChangelogVersion: '1.2.0',
+          mapMilestoneIntervalKm: 50,
         ),
       );
 
@@ -1119,6 +1133,7 @@ void main() {
       expect(read.hasCompletedOnboarding, isTrue);
       expect(read.uiLocale, 'de');
       expect(read.lastShownChangelogVersion, '1.2.0');
+      expect(read.mapMilestoneIntervalKm, 50);
     });
 
     test('the v10 foreign key cascades: deleting an activity row directly (not '

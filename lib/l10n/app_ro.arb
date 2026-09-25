@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Echilibrat",
   "prefDetailEndurance": "Anduranță",
   "prefMapControlsOnRight": "Comenzile hărții în dreapta",
-  "prefMapControlsOnRightSubtitle": "Butoanele urmărire, start, pauză și stop sunt pe marginea din dreapta. Dezactivează pentru a le muta în stânga, pentru stângaci. Creditul hărții trece în colțul opus."
+  "prefMapControlsOnRightSubtitle": "Butoanele urmărire, start, pauză și stop sunt pe marginea din dreapta. Dezactivează pentru a le muta în stânga, pentru stângaci. Creditul hărții trece în colțul opus.",
+  "prefMapMilestones": "Marcaje de distanță",
+  "prefMapMilestonesOff": "Dezactivate"
 }

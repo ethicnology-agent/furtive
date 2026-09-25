@@ -27,6 +27,7 @@ class PreferencesLocalDataSource {
             mapTilesEnabled: Value(preferences.mapTilesEnabled),
             showOnLockScreen: Value(preferences.showOnLockScreen),
             mapControlsOnLeft: Value(preferences.mapControlsOnLeft),
+            mapMilestoneIntervalKm: Value(preferences.mapMilestoneIntervalKm),
             lastActivityType: Value(preferences.lastActivityType),
             recordingDetail: Value(preferences.recordingDetail),
           ),
@@ -63,6 +64,7 @@ class PreferencesLocalDataSource {
       mapTilesEnabled: preferences.mapTilesEnabled,
       showOnLockScreen: preferences.showOnLockScreen,
       mapControlsOnLeft: preferences.mapControlsOnLeft,
+      mapMilestoneIntervalKm: preferences.mapMilestoneIntervalKm,
       lastActivityType: preferences.lastActivityType,
       recordingDetail: preferences.recordingDetail,
     );

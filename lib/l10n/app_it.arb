@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Bilanciato",
   "prefDetailEndurance": "Resistenza",
   "prefMapControlsOnRight": "Comandi mappa a destra",
-  "prefMapControlsOnRightSubtitle": "I pulsanti segui, avvia, pausa e stop sono sul bordo destro. Disattiva per spostarli a sinistra, per i mancini. Il credito della mappa passa nell'angolo opposto."
+  "prefMapControlsOnRightSubtitle": "I pulsanti segui, avvia, pausa e stop sono sul bordo destro. Disattiva per spostarli a sinistra, per i mancini. Il credito della mappa passa nell'angolo opposto.",
+  "prefMapMilestones": "Indicatori di distanza",
+  "prefMapMilestonesOff": "Disattivati"
 }

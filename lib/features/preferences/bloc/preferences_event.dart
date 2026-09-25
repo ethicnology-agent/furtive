@@ -46,6 +46,12 @@ class ChangeMapControlsOnLeft extends PreferencesEvent {
   const ChangeMapControlsOnLeft(this.onLeft);
 }
 
+class ChangeMapMilestoneInterval extends PreferencesEvent {
+  final int intervalKm;
+
+  const ChangeMapMilestoneInterval(this.intervalKm);
+}
+
 class ChangeRecordingDetail extends PreferencesEvent {
   final RecordingDetailEntity detail;
 

@@ -172,5 +172,7 @@
   "prefDetailBalanced": "均衡",
   "prefDetailEndurance": "耐力",
   "prefMapControlsOnRight": "地图控件靠右",
-  "prefMapControlsOnRightSubtitle": "跟随、开始、暂停和停止按钮位于右边缘。关闭可将它们移到左侧，便于左手操作。地图署名会移到对角。"
+  "prefMapControlsOnRightSubtitle": "跟随、开始、暂停和停止按钮位于右边缘。关闭可将它们移到左侧，便于左手操作。地图署名会移到对角。",
+  "prefMapMilestones": "距离标记",
+  "prefMapMilestonesOff": "关闭"
 }

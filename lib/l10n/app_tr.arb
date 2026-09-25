@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Dengeli",
   "prefDetailEndurance": "Dayanıklılık",
   "prefMapControlsOnRight": "Harita denetimleri sağda",
-  "prefMapControlsOnRightSubtitle": "Takip, başlat, duraklat ve durdur düğmeleri sağ kenardadır. Sol elle kullanım için sola taşımak üzere kapatın. Harita künyesi karşı köşeye geçer."
+  "prefMapControlsOnRightSubtitle": "Takip, başlat, duraklat ve durdur düğmeleri sağ kenardadır. Sol elle kullanım için sola taşımak üzere kapatın. Harita künyesi karşı köşeye geçer.",
+  "prefMapMilestones": "Mesafe işaretleri",
+  "prefMapMilestonesOff": "Kapalı"
 }

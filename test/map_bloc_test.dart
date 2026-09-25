@@ -301,12 +301,16 @@ void main() {
         final styleAfterInit = bloc.state.styleUrl;
 
         await prefs.store(
-          (await prefs.fetch()).copyWith(mapControlsOnLeft: true),
+          (await prefs.fetch()).copyWith(
+            mapControlsOnLeft: true,
+            mapMilestoneIntervalKm: 50,
+          ),
         );
         bloc.add(const RefreshRecordingPreferences());
         await Future<void>.delayed(const Duration(milliseconds: 100));
 
         expect(bloc.state.mapControlsOnLeft, isTrue);
+        expect(bloc.state.mapMilestoneIntervalKm, 50);
         expect(bloc.state.styleUrl, styleAfterInit);
         expect(bloc.state.loadingStatus, isNull, reason: 'no loading flash');
       },

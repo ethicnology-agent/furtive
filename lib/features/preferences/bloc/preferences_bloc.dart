@@ -31,6 +31,7 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
     on<ChangeMapTilesEnabled>(_onChangeMapTilesEnabled);
     on<ChangeShowOnLockScreen>(_onChangeShowOnLockScreen);
     on<ChangeMapControlsOnLeft>(_onChangeMapControlsOnLeft);
+    on<ChangeMapMilestoneInterval>(_onChangeMapMilestoneInterval);
     on<ChangeRecordingDetail>(_onChangeRecordingDetail);
   }
 
@@ -118,6 +119,14 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
     Emitter<PreferencesState> emit,
   ) => _applyChange((p) => p.copyWith(recordingDetail: event.detail), emit);
 
+  void _onChangeMapMilestoneInterval(
+    ChangeMapMilestoneInterval event,
+    Emitter<PreferencesState> emit,
+  ) => _applyChange(
+    (p) => p.copyWith(mapMilestoneIntervalKm: event.intervalKm),
+    emit,
+  );
+
   Future<void> _onUpdatePreferences(
     UpdatePreferences event,
     Emitter<PreferencesState> emit,
@@ -179,9 +188,14 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
     // flipping the control side appeared to do nothing until an app restart.
     final recordingChanged =
         previous.mapControlsOnLeft != event.preferences.mapControlsOnLeft ||
+        previous.mapMilestoneIntervalKm !=
+            event.preferences.mapMilestoneIntervalKm ||
         previous.recordingDetail != event.preferences.recordingDetail;
     if (recordingChanged) {
-      getIt<MapBloc>().add(const RefreshRecordingPreferences());
+      // PreferencesPage is also mounted in isolation by widget tests and can
+      // be embedded without the recording stack. Persistence still succeeds;
+      // a live map is refreshed when one is registered.
+      getIt.maybeGet<MapBloc>()?.add(const RefreshRecordingPreferences());
     }
 
     // Apply the locale override immediately so the UI reflects the change

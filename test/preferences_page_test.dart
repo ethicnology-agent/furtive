@@ -86,6 +86,9 @@ void main() {
     matching: find.byType(SwitchListTile),
   );
 
+  Finder milestoneSlider() =>
+      find.byKey(const ValueKey('milestone-interval-slider'));
+
   testWidgets('failed initial load offers retry and recovers', (tester) async {
     final repo = _FailOnceReadRepository(db);
     await tester.pumpWidget(
@@ -173,6 +176,29 @@ void main() {
     await tester.pumpAndSettle();
 
     expect((await repo.fetch()).showOnLockScreen, isTrue);
+  });
+
+  testWidgets('milestone slider only stores one of the supported intervals', (
+    tester,
+  ) async {
+    final repo = PreferencesRepository(
+      local: PreferencesLocalDataSource(db: db),
+    );
+    await pumpPage(tester, repo);
+
+    await tester.ensureVisible(milestoneSlider());
+    await tester.pumpAndSettle();
+    final slider = tester.widget<Slider>(milestoneSlider());
+    expect(slider.value, 1);
+    expect(slider.divisions, 7);
+
+    slider.onChanged!(4);
+    await tester.pumpAndSettle();
+    expect((await repo.fetch()).mapMilestoneIntervalKm, 50);
+
+    tester.widget<Slider>(milestoneSlider()).onChanged!(0);
+    await tester.pumpAndSettle();
+    expect((await repo.fetch()).mapMilestoneIntervalKm, 0);
   });
 }
 

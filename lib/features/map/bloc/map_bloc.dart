@@ -184,6 +184,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
           selectedActivityType: preferences.lastActivityType,
           recordingDetail: preferences.recordingDetail,
           mapControlsOnLeft: preferences.mapControlsOnLeft,
+          mapMilestoneIntervalKm: preferences.mapMilestoneIntervalKm,
         ),
       );
       // Keeps whatever profile is currently recording; only the detail can

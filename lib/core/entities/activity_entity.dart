@@ -495,7 +495,9 @@ class KmSplit {
   }
 }
 
-final Expando<List<KmMilestone>> _kmMilestonesCache = Expando('kmMilestones');
+final Expando<Map<int, List<KmMilestone>>> _kmMilestonesCache = Expando(
+  'kmMilestones',
+);
 final Expando<List<KmSplit>> _kmSplitsCache = Expando('kmSplits');
 
 extension ActivityKmExtension on ActivityEntity {
@@ -503,29 +505,26 @@ extension ActivityKmExtension on ActivityEntity {
   /// Cached per entity instance — KmMilestonesLayer recomputes this on every
   /// build, which the map triggers on every GPS fix; without caching this
   /// re-walks every point of every active segment each time.
-  List<KmMilestone> get kmMilestones =>
-      _kmMilestonesCache[this] ??= _computeKmMilestones();
+  List<KmMilestone> get kmMilestones => kmMilestonesForInterval(1);
 
-  List<KmMilestone> _computeKmMilestones() {
+  /// Numbered route markers at the requested kilometre interval. Zero (and
+  /// defensive negative values from malformed storage) disables the layer.
+  List<KmMilestone> kmMilestonesForInterval(int intervalKm) {
+    if (intervalKm <= 0) return const [];
+    final cache = _kmMilestonesCache[this] ??= <int, List<KmMilestone>>{};
+    return cache[intervalKm] ??= _computeKmMilestones(intervalKm);
+  }
+
+  List<KmMilestone> _computeKmMilestones(int intervalKm) {
     final milestones = <KmMilestone>[];
-    int nextKm = 1;
+    int nextKm = intervalKm;
     double cumulativeMeters = 0;
 
     for (final segment in activeSegments) {
-      final pts = segment.points;
-      for (int i = 0; i < pts.length - 1; i++) {
-        final a = pts[i];
-        final b = pts[i + 1];
-        final segMeters = Geolocator.distanceBetween(
-          a.position.latitude,
-          a.position.longitude,
-          b.position.latitude,
-          b.position.longitude,
-        );
-        // segMeters NaN check covers the case where Geolocator.distanceBetween
-        // would return NaN on bad input; redundant with _segmentPoints
-        // filtering but cheap.
-        if (segMeters == 0 || !segMeters.isFinite) continue;
+      for (final leg in _confirmedMovementLegs(segment.points)) {
+        final a = leg.from;
+        final b = leg.to;
+        final segMeters = leg.meters;
 
         // Walk through every km threshold this segment crosses (handles
         // gaps where one segment covers >1 km, e.g. after a brief loss
@@ -558,7 +557,7 @@ extension ActivityKmExtension on ActivityEntity {
               ),
             );
           }
-          nextKm++;
+          nextKm += intervalKm;
         }
         cumulativeMeters += segMeters;
       }

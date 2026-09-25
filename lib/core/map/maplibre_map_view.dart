@@ -85,6 +85,7 @@ class MapLibreMapView implements MapView {
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
+    int milestoneIntervalKm = 1,
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
@@ -181,7 +182,8 @@ class MapLibreMapView implements MapView {
         if (track != null) ..._trackLayers(track),
       ],
       children: [
-        if (track != null) _milestones(track),
+        if (track != null && milestoneIntervalKm > 0)
+          _milestones(track, milestoneIntervalKm),
         if (me != null) _puck(me, deviceHeading),
         // Legally required whenever tiles are shown: the basemap is Protomaps
         // rendering OpenStreetMap data, and ODbL 4.3 plus Protomaps' terms both
@@ -287,9 +289,9 @@ class MapLibreMapView implements MapView {
     ],
   );
 
-  Widget _milestones(ActivityEntity track) => ml.WidgetLayer(
+  Widget _milestones(ActivityEntity track, int intervalKm) => ml.WidgetLayer(
     markers: [
-      for (final milestone in track.kmMilestones)
+      for (final milestone in track.kmMilestonesForInterval(intervalKm))
         ml.Marker(
           point: ml.Geographic(
             lon: milestone.position.longitude,

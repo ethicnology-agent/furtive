@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Vyvážené",
   "prefDetailEndurance": "Vytrvalost",
   "prefMapControlsOnRight": "Ovládání mapy vpravo",
-  "prefMapControlsOnRightSubtitle": "Tlačítka sledovat, start, pauza a stop jsou u pravého okraje. Vypnutím je přesunete vlevo pro leváky. Popisek mapy se přesune do protilehlého rohu."
+  "prefMapControlsOnRightSubtitle": "Tlačítka sledovat, start, pauza a stop jsou u pravého okraje. Vypnutím je přesunete vlevo pro leváky. Popisek mapy se přesune do protilehlého rohu.",
+  "prefMapMilestones": "Značky vzdálenosti",
+  "prefMapMilestonesOff": "Vypnuto"
 }

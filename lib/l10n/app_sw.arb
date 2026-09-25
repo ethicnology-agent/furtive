@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Uwiano",
   "prefDetailEndurance": "Uvumilivu",
   "prefMapControlsOnRight": "Vidhibiti vya ramani kulia",
-  "prefMapControlsOnRightSubtitle": "Vitufe vya kufuata, kuanza, kusitisha na kusimamisha viko upande wa kulia. Zima ili kuvihamisha kushoto, kwa watumiaji wa mkono wa kushoto. Sifa ya ramani huenda pembe ya pili."
+  "prefMapControlsOnRightSubtitle": "Vitufe vya kufuata, kuanza, kusitisha na kusimamisha viko upande wa kulia. Zima ili kuvihamisha kushoto, kwa watumiaji wa mkono wa kushoto. Sifa ya ramani huenda pembe ya pili.",
+  "prefMapMilestones": "Alama za umbali",
+  "prefMapMilestonesOff": "Imezimwa"
 }

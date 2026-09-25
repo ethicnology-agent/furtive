@@ -17,7 +17,7 @@ class LocalDatabase extends _$LocalDatabase {
   LocalDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -93,6 +93,7 @@ class LocalDatabase extends _$LocalDatabase {
       preferences.mapControlsOnLeft,
       preferences.lastActivityType,
       preferences.recordingDetail,
+      preferences.mapMilestoneIntervalKm,
     ];
     if (from < 2) {
       // v2: add hasCompletedOnboarding + uiLocale + lastShownChangelogVersion
@@ -256,6 +257,12 @@ class LocalDatabase extends _$LocalDatabase {
       // explicit pause/resume command creates an authoritative checkpoint.
       await m.addColumn(activities, activities.recordingPausedAtMs);
       await m.addColumn(activities, activities.recordingCompletedPauseMs);
+    }
+    if (from >= 9 && from < 11) {
+      // Older schemas reach the current preferences shape through the v9
+      // TableMigration above, where this column is declared in
+      // newPreferenceColumns. v9/v10 databases need the additive step here.
+      await m.addColumn(preferences, preferences.mapMilestoneIntervalKm);
     }
   }
 }

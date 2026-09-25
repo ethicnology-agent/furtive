@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Tasapainoinen",
   "prefDetailEndurance": "Kestävyys",
   "prefMapControlsOnRight": "Kartan säätimet oikealla",
-  "prefMapControlsOnRightSubtitle": "Seuraa-, aloita-, tauko- ja lopeta-painikkeet ovat oikeassa reunassa. Poista käytöstä siirtääksesi ne vasemmalle vasenkätisille. Kartan lähdemerkintä siirtyy vastakkaiseen kulmaan."
+  "prefMapControlsOnRightSubtitle": "Seuraa-, aloita-, tauko- ja lopeta-painikkeet ovat oikeassa reunassa. Poista käytöstä siirtääksesi ne vasemmalle vasenkätisille. Kartan lähdemerkintä siirtyy vastakkaiseen kulmaan.",
+  "prefMapMilestones": "Matkamerkit",
+  "prefMapMilestonesOff": "Pois käytöstä"
 }

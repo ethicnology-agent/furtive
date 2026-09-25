@@ -172,5 +172,7 @@
   "prefDetailBalanced": "संतुलित",
   "prefDetailEndurance": "सहनशक्ति",
   "prefMapControlsOnRight": "मैप नियंत्रण दाईं ओर",
-  "prefMapControlsOnRightSubtitle": "फ़ॉलो, शुरू, रोकें और बंद करें बटन दाएं किनारे पर हैं। बाएं हाथ के उपयोग के लिए बाईं ओर ले जाने हेतु बंद करें। मैप श्रेय विपरीत कोने में चला जाता है।"
+  "prefMapControlsOnRightSubtitle": "फ़ॉलो, शुरू, रोकें और बंद करें बटन दाएं किनारे पर हैं। बाएं हाथ के उपयोग के लिए बाईं ओर ले जाने हेतु बंद करें। मैप श्रेय विपरीत कोने में चला जाता है।",
+  "prefMapMilestones": "दूरी चिह्न",
+  "prefMapMilestonesOff": "बंद"
 }

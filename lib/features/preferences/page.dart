@@ -141,6 +141,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         const SizedBox(height: 24),
                         _buildMapControlsSideSection(context, state),
                         const SizedBox(height: 24),
+                        _buildMapMilestoneIntervalSection(context, state),
+                        const SizedBox(height: 24),
                         _buildRecordingDetailSection(context, state),
                         const SizedBox(height: 24),
                       ],
@@ -154,6 +156,44 @@ class _PreferencesPageState extends State<PreferencesPage> {
       },
     );
   }
+}
+
+Widget _buildMapMilestoneIntervalSection(
+  BuildContext context,
+  PreferencesState state,
+) {
+  final l10n = AppLocalizations.of(context);
+  final stored = state.preferences.mapMilestoneIntervalKm;
+  final selectedIndex = mapMilestoneIntervalOptionsKm.indexOf(stored);
+  final index = selectedIndex < 0 ? 1 : selectedIndex;
+  final interval = mapMilestoneIntervalOptionsKm[index];
+  final valueLabel = interval == 0 ? l10n.prefMapMilestonesOff : '$interval km';
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        l10n.prefMapMilestones,
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+      ),
+      const SizedBox(height: 4),
+      Text(valueLabel, style: Theme.of(context).textTheme.bodyMedium),
+      Slider(
+        key: const ValueKey('milestone-interval-slider'),
+        value: index.toDouble(),
+        min: 0,
+        max: (mapMilestoneIntervalOptionsKm.length - 1).toDouble(),
+        divisions: mapMilestoneIntervalOptionsKm.length - 1,
+        label: valueLabel,
+        semanticFormatterCallback: (_) => valueLabel,
+        onChanged: (value) {
+          final next = mapMilestoneIntervalOptionsKm[value.round()];
+          context.read<PreferencesBloc>().add(ChangeMapMilestoneInterval(next));
+        },
+      ),
+    ],
+  );
 }
 
 Widget _buildMapThemeSection(BuildContext context, PreferencesState state) {

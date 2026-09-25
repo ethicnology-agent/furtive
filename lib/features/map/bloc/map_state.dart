@@ -19,6 +19,7 @@ class MapState with MapStateMappable {
     this.selectedActivityType = ActivityTypeEntity.walk,
     this.recordingDetail = RecordingDetailEntity.balanced,
     this.mapControlsOnLeft = false,
+    this.mapMilestoneIntervalKm = 1,
     this.deviceHeading,
   });
 
@@ -43,6 +44,9 @@ class MapState with MapStateMappable {
 
   /// Whether the floating map controls sit on the left. Presentation only.
   final bool mapControlsOnLeft;
+
+  /// Distance between numbered route markers. Zero hides them.
+  final int mapMilestoneIntervalKm;
 
   /// Which way the device is pointing, degrees clockwise from true north, or
   /// null when no compass is available. Deliberately not the same thing as

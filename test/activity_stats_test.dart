@@ -343,6 +343,14 @@ void main() {
       expect(ms.first.km, 1);
     });
 
+    test('milestone interval can be widened or disabled', () {
+      final a = act([pt(0, 0, sec: 0), pt(0, 0.055, sec: 600)]);
+
+      expect(a.kmMilestonesForInterval(5).map((m) => m.km), [5]);
+      expect(a.kmMilestonesForInterval(10), isEmpty);
+      expect(a.kmMilestonesForInterval(0), isEmpty);
+    });
+
     test('trailing fragment under 50 m is dropped', () {
       // Just over 1 km, only a few metres past => no partial split.
       final a = act([

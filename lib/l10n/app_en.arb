@@ -262,5 +262,7 @@
   "prefDetailBalanced": "Balanced",
   "prefDetailEndurance": "Endurance",
   "activitySwim": "Swim",
-  "activityOther": "Other"
+  "activityOther": "Other",
+  "prefMapMilestones": "Distance markers",
+  "prefMapMilestonesOff": "Off"
 }

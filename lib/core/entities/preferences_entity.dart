@@ -5,6 +5,11 @@ part 'preferences_entity.mapper.dart';
 
 enum MapThemeEntity { light, dark, white, grayscale, black }
 
+/// Distances offered by the map-marker slider. The stored value is the actual
+/// interval rather than the slider index so it remains meaningful if the UI is
+/// reordered later. Zero disables milestone markers.
+const mapMilestoneIntervalOptionsKm = <int>[0, 1, 5, 10, 50, 100, 500, 1000];
+
 @MappableClass()
 class PreferencesEntity with PreferencesEntityMappable {
   final MapThemeEntity mapTheme;
@@ -27,6 +32,8 @@ class PreferencesEntity with PreferencesEntityMappable {
   // false = floating map controls on the right (default). See
   // preferences_table.dart.
   final bool mapControlsOnLeft;
+  // Distance between numbered route markers. Zero disables them.
+  final int mapMilestoneIntervalKm;
   // Activity type preselected on the record screen — the last one recorded.
   final ActivityTypeEntity lastActivityType;
   // Sampling density relative to the activity profile's own default.
@@ -43,6 +50,7 @@ class PreferencesEntity with PreferencesEntityMappable {
     this.mapTilesEnabled = true,
     this.showOnLockScreen = true,
     this.mapControlsOnLeft = false,
+    this.mapMilestoneIntervalKm = 1,
     this.lastActivityType = ActivityTypeEntity.walk,
     this.recordingDetail = RecordingDetailEntity.balanced,
   });

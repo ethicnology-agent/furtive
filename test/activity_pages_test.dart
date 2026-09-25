@@ -60,6 +60,7 @@ class _RecordingMapView implements MapView {
   PositionEntity? centre;
   bool? fitBounds;
   bool? showLocation;
+  int? milestoneInterval;
   bool disposed = false;
   @override
   String get name => 'test map';
@@ -82,6 +83,7 @@ class _RecordingMapView implements MapView {
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
+    int milestoneIntervalKm = 1,
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
@@ -90,6 +92,7 @@ class _RecordingMapView implements MapView {
     centre = initialCentre;
     fitBounds = fitTrackBounds;
     showLocation = showUserLocation;
+    milestoneInterval = milestoneIntervalKm;
     return const SizedBox.expand(key: Key('recorded-map'));
   }
 }
@@ -203,6 +206,7 @@ void main() {
           activity: track,
           mapView: map,
           loadMapStyle: () async => null,
+          loadMilestoneInterval: () async => 50,
         ),
       );
       expect(find.byKey(const Key('recorded-map')), findsOneWidget);
@@ -210,6 +214,7 @@ void main() {
       expect(map.centre, same(first));
       expect(map.fitBounds, isTrue);
       expect(map.showLocation, isFalse);
+      expect(map.milestoneInterval, 50);
       await tester.pumpWidget(const SizedBox());
       expect(map.disposed, isTrue);
     },

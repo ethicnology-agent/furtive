@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Seimbang",
   "prefDetailEndurance": "Daya tahan",
   "prefMapControlsOnRight": "Kontrol peta di kanan",
-  "prefMapControlsOnRightSubtitle": "Tombol ikuti, mulai, jeda dan berhenti ada di sisi kanan. Nonaktifkan untuk memindahkannya ke kiri untuk pengguna kiri. Kredit peta pindah ke sudut seberang."
+  "prefMapControlsOnRightSubtitle": "Tombol ikuti, mulai, jeda dan berhenti ada di sisi kanan. Nonaktifkan untuk memindahkannya ke kiri untuk pengguna kiri. Kredit peta pindah ke sudut seberang.",
+  "prefMapMilestones": "Penanda jarak",
+  "prefMapMilestonesOff": "Nonaktif"
 }

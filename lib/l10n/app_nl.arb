@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Gebalanceerd",
   "prefDetailEndurance": "Duurzaam",
   "prefMapControlsOnRight": "Kaartknoppen rechts",
-  "prefMapControlsOnRightSubtitle": "De knoppen volgen, start, pauze en stop zitten aan de rechterrand. Schakel uit om ze naar links te verplaatsen, voor linkshandig gebruik. De kaartvermelding gaat naar de tegenoverliggende hoek."
+  "prefMapControlsOnRightSubtitle": "De knoppen volgen, start, pauze en stop zitten aan de rechterrand. Schakel uit om ze naar links te verplaatsen, voor linkshandig gebruik. De kaartvermelding gaat naar de tegenoverliggende hoek.",
+  "prefMapMilestones": "Afstandsmarkeringen",
+  "prefMapMilestonesOff": "Uit"
 }

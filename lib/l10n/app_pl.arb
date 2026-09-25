@@ -172,5 +172,7 @@
   "prefDetailBalanced": "Zrównoważone",
   "prefDetailEndurance": "Wytrzymałość",
   "prefMapControlsOnRight": "Sterowanie mapą po prawej",
-  "prefMapControlsOnRightSubtitle": "Przyciski śledzenia, start, pauza i stop są przy prawej krawędzi. Wyłącz, by przenieść je na lewo, dla osób leworęcznych. Podpis mapy przechodzi do przeciwnego narożnika."
+  "prefMapControlsOnRightSubtitle": "Przyciski śledzenia, start, pauza i stop są przy prawej krawędzi. Wyłącz, by przenieść je na lewo, dla osób leworęcznych. Podpis mapy przechodzi do przeciwnego narożnika.",
+  "prefMapMilestones": "Znaczniki odległości",
+  "prefMapMilestonesOff": "Wyłączone"
 }
