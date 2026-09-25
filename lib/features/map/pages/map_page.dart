@@ -550,7 +550,8 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                 BlocBuilder<RecordingBloc, RecordingState>(
                   buildWhen: (previous, current) =>
                       previous.elapsedTime != current.elapsedTime ||
-                      previous.activity != current.activity,
+                      previous.activity != current.activity ||
+                      previous.isPaused != current.isPaused,
                   builder: (context, rec) {
                     if (rec.activity == null) return const SizedBox.shrink();
                     return Positioned(
@@ -559,13 +560,14 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                       right: 0,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          maxHeight: MediaQuery.sizeOf(context).height * 0.3,
+                          maxHeight: MediaQuery.sizeOf(context).height * 0.4,
                         ),
                         child: SingleChildScrollView(
                           child: ActivityStatsWidget(
                             activity: rec.activity!,
                             elapsedTime: rec.elapsedTime,
                             opaqueBackground: true,
+                            isCurrentlyPaused: rec.isPaused,
                           ),
                         ),
                       ),

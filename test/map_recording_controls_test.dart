@@ -12,11 +12,12 @@ void main() {
     bool starting = false,
     bool following = false,
     bool hasLocation = true,
+    Locale locale = const Locale('en'),
     VoidCallback? onFollow,
   }) => MaterialApp(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
-    locale: const Locale('en'),
+    locale: locale,
     home: Scaffold(
       floatingActionButton: MapRecordingControls(
         isRecording: recording,
@@ -39,7 +40,7 @@ void main() {
     ),
   );
 
-  testWidgets('primary action stays put and Stop is adjacent to Resume', (
+  testWidgets('Stop stays above Follow while active and paused', (
     tester,
   ) async {
     final primary = find.byKey(const ValueKey('recording-primary'));
@@ -51,16 +52,67 @@ void main() {
 
     await tester.pumpWidget(subject(recording: true));
     await tester.pumpAndSettle();
-    expect(tester.getRect(primary), startRect);
+    final pauseRect = tester.getRect(primary);
+    expect(pauseRect.right, startRect.right);
+    expect(pauseRect.top, startRect.top);
+    expect(pauseRect.bottom, startRect.bottom);
     expect(find.text('Pause'), findsOneWidget);
+    final activeStopRect = tester.getRect(find.byType(HoldToConfirmButton));
+    final activeFollowRect = tester.getRect(
+      find.widgetWithText(FloatingActionButton, 'Follow'),
+    );
+    expect(activeFollowRect.top - activeStopRect.bottom, closeTo(16, 0.001));
+    expect(activeStopRect.bottom, lessThan(activeFollowRect.top));
 
     await tester.pumpWidget(subject(recording: true, paused: true));
     await tester.pumpAndSettle();
-    expect(tester.getRect(primary), startRect);
+    final resumeRect = tester.getRect(primary);
+    expect(resumeRect.right, startRect.right);
+    expect(resumeRect.top, startRect.top);
+    expect(resumeRect.bottom, startRect.bottom);
     expect(find.text('Resume'), findsOneWidget);
     final stopRect = tester.getRect(find.byType(HoldToConfirmButton));
-    expect(startRect.top - stopRect.bottom, closeTo(16, 0.001));
-    expect(tester.getRect(find.text('Share')).bottom, lessThan(stopRect.top));
+    final followRect = tester.getRect(
+      find.widgetWithText(FloatingActionButton, 'Follow'),
+    );
+    expect(followRect.top - stopRect.bottom, closeTo(16, 0.001));
+    expect(stopRect.bottom, lessThan(followRect.top));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('control width follows the largest visible localized label', (
+    tester,
+  ) async {
+    await tester.pumpWidget(subject(recording: true, paused: true));
+    await tester.pumpAndSettle();
+
+    final controlsRect = tester.getRect(find.byType(MapRecordingControls));
+    expect(
+      tester.getRect(find.byType(HoldToConfirmButton)).width,
+      controlsRect.width,
+    );
+    expect(
+      tester.getRect(find.byKey(const ValueKey('recording-primary'))).width,
+      controlsRect.width,
+    );
+
+    await tester.pumpWidget(subject(recording: true, hasLocation: false));
+    await tester.pumpAndSettle();
+    final waitingWidth = tester
+        .getRect(find.byType(MapRecordingControls))
+        .width;
+    expect(waitingWidth, greaterThan(controlsRect.width));
+
+    await tester.pumpWidget(
+      subject(
+        recording: true,
+        paused: true,
+        following: true,
+        locale: const Locale('fr', 'CA'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Suivi actif'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

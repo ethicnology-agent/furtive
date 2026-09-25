@@ -22,6 +22,7 @@ class StatBlock extends StatelessWidget {
   final String value;
   final bool emphasize;
   final bool compact;
+  final bool dense;
 
   const StatBlock({
     super.key,
@@ -30,6 +31,7 @@ class StatBlock extends StatelessWidget {
     required this.value,
     this.emphasize = false,
     this.compact = false,
+    this.dense = false,
   });
 
   const StatBlock.compact({
@@ -38,7 +40,8 @@ class StatBlock extends StatelessWidget {
     required this.value,
     this.label = '',
     this.emphasize = false,
-  }) : compact = true;
+  }) : compact = true,
+       dense = false;
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +85,14 @@ class StatBlock extends StatelessWidget {
               Text(label.toUpperCase(), style: textTheme.labelSmall),
               Text(
                 value,
-                style: textTheme.titleLarge?.copyWith(
-                  color: valueColor,
-                  fontFeatures: kTabularFigures,
-                ),
+                style: (dense ? textTheme.titleMedium : textTheme.titleLarge)
+                    ?.copyWith(
+                      color: valueColor,
+                      fontSize: dense ? 20 : null,
+                      height: dense ? 1.15 : null,
+                      fontWeight: FontWeight.w700,
+                      fontFeatures: kTabularFigures,
+                    ),
               ),
             ],
           ),
