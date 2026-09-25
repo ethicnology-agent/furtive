@@ -65,6 +65,37 @@ void main() {
   });
 
   group('distance / duration / speed', () {
+    test('stationary GPS jitter below ten meters does not create speed', () {
+      // Alternate roughly five metres around the same anchor. Summing every
+      // raw leg would manufacture about 20 m of travel while the phone is
+      // stationary.
+      final a = act([
+        pt(0, 0, sec: 0),
+        pt(0, 0.000045, sec: 1),
+        pt(0, 0, sec: 2),
+        pt(0, 0.000045, sec: 3),
+        pt(0, 0, sec: 4),
+      ]);
+
+      expect(a.activeDistanceMeters, 0);
+      expect(a.activeSpeedKmh, 0);
+      expect(a.activePaceMinPerKm, '--:--');
+    });
+
+    test('small forward steps accumulate until movement exceeds ten meters', () {
+      // Each raw step is only ~4.45 m, but displacement from the last accepted
+      // anchor eventually exceeds 10 m and must count as real movement.
+      final a = act([
+        pt(0, 0, sec: 0),
+        pt(0, 0.00004, sec: 1),
+        pt(0, 0.00008, sec: 2),
+        pt(0, 0.00012, sec: 3),
+        pt(0, 0.00016, sec: 4),
+      ]);
+
+      expect(a.activeDistanceMeters, closeTo(13.36, 0.2));
+    });
+
     test('two points: great-circle distance and elapsed active time', () {
       // 0.001 deg of longitude at the equator ~= 111.32 m.
       final a = act([pt(0, 0, sec: 0), pt(0, 0.001, sec: 10)]);

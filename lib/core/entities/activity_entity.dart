@@ -126,6 +126,38 @@ class _StatsBundle {
 
 final Expando<_StatsBundle> _statsCache = Expando('stats');
 
+/// Minimum displacement from the last distance anchor that counts as real
+/// movement. GPS fixes commonly wander several metres around a stationary
+/// phone; summing every raw leg turns that noise into distance and speed.
+const double _minimumMovementMeters = 10.0;
+
+typedef _MovementLeg = ({
+  ActivityPointEntity from,
+  ActivityPointEntity to,
+  double meters,
+});
+
+Iterable<_MovementLeg> _confirmedMovementLegs(
+  List<ActivityPointEntity> points, {
+  double minimumMeters = _minimumMovementMeters,
+}) sync* {
+  if (points.length < 2) return;
+
+  var anchor = points.first;
+  for (final candidate in points.skip(1)) {
+    final meters = Geolocator.distanceBetween(
+      anchor.position.latitude,
+      anchor.position.longitude,
+      candidate.position.latitude,
+      candidate.position.longitude,
+    );
+    if (!meters.isFinite || meters < minimumMeters) continue;
+
+    yield (from: anchor, to: candidate, meters: meters);
+    anchor = candidate;
+  }
+}
+
 extension ActivityStatisticsExtension on ActivityEntity {
   double get activeDistanceInKm => activeDistanceMeters / 1000;
 
@@ -171,7 +203,13 @@ extension ActivityStatisticsExtension on ActivityEntity {
     signalLostDuration: _calculateSegmentsDuration(signalLostSegments),
     activeDistanceMeters: _calculateSegmentsDistance(activeSegments),
     pausedDistanceMeters: _calculateSegmentsDistance(pausedSegments),
-    signalLostDistanceMeters: _calculateSegmentsDistance(signalLostSegments),
+    // A signal-loss span is already explicitly marked as uncertain and shown
+    // for information only. Preserve its complete straight-line distance
+    // instead of applying the stationary-jitter dead-band.
+    signalLostDistanceMeters: _calculateSegmentsDistance(
+      signalLostSegments,
+      minimumMeters: 0,
+    ),
     activeElevationGain: _calculateSegmentsElevationGain(activeSegments),
     pausedElevationGain: _calculateSegmentsElevationGain(pausedSegments),
   );
@@ -273,20 +311,18 @@ extension ActivityStatisticsExtension on ActivityEntity {
     return totalDuration;
   }
 
-  double _calculateSegmentsDistance(List<ActivitySegment> segments) {
+  double _calculateSegmentsDistance(
+    List<ActivitySegment> segments, {
+    double minimumMeters = _minimumMovementMeters,
+  }) {
     double totalDistance = 0.0;
     for (final segment in segments) {
-      final points = segment.points;
-      double segmentDistance = 0.0;
-      for (int i = 0; i < points.length - 1; i++) {
-        segmentDistance += Geolocator.distanceBetween(
-          points[i].position.latitude,
-          points[i].position.longitude,
-          points[i + 1].position.latitude,
-          points[i + 1].position.longitude,
-        );
+      for (final leg in _confirmedMovementLegs(
+        segment.points,
+        minimumMeters: minimumMeters,
+      )) {
+        totalDistance += leg.meters;
       }
-      totalDistance += segmentDistance;
     }
     return totalDistance;
   }
@@ -546,47 +582,44 @@ extension ActivityKmExtension on ActivityEntity {
 
     for (final segment in activeSegments) {
       final pts = segment.points;
-      for (int i = 0; i < pts.length - 1; i++) {
-        final a = pts[i];
-        final b = pts[i + 1];
-        final segMeters = Geolocator.distanceBetween(
-          a.position.latitude,
-          a.position.longitude,
-          b.position.latitude,
-          b.position.longitude,
-        );
+      if (pts.isEmpty) continue;
+      final segmentStart = pts.first.time;
+      for (final leg in _confirmedMovementLegs(pts)) {
+        final a = leg.from;
+        final b = leg.to;
+        final segMeters = leg.meters;
         final segActiveMs =
             b.time.millisecondsSinceEpoch - a.time.millisecondsSinceEpoch;
         // Guard against GPS clock skew / out-of-order points — a negative
         // delta would produce negative split durations and a negative bar.
         if (segActiveMs < 0) continue;
 
-        // Only walk km thresholds for legs that actually cover ground, but
-        // always accrue the elapsed time below — a stationary stretch (two
-        // fixes at the same spot, common at distanceFilter=0) still consumes
-        // active time the next split's pace must include. Skipping the time
-        // here made the splits sum to less than activeDuration.
-        if (segMeters.isFinite && segMeters > 0) {
-          while (cumulativeMeters + segMeters >= nextKm * 1000) {
-            final overshoot = nextKm * 1000 - cumulativeMeters;
-            final t = overshoot / segMeters;
-            final activeAtCrossing =
-                cumulativeActive +
-                Duration(milliseconds: (segActiveMs * t).round());
-            splits.add(
-              KmSplit(
-                index: nextKm,
-                distanceMeters: 1000,
-                duration: activeAtCrossing - prevSplitActive,
-                isPartial: false,
-              ),
-            );
-            prevSplitActive = activeAtCrossing;
-            nextKm++;
-          }
-          cumulativeMeters += segMeters;
+        final activeBeforeLeg =
+            cumulativeActive + a.time.difference(segmentStart);
+        while (cumulativeMeters + segMeters >= nextKm * 1000) {
+          final overshoot = nextKm * 1000 - cumulativeMeters;
+          final t = overshoot / segMeters;
+          final activeAtCrossing =
+              activeBeforeLeg +
+              Duration(milliseconds: (segActiveMs * t).round());
+          splits.add(
+            KmSplit(
+              index: nextKm,
+              distanceMeters: 1000,
+              duration: activeAtCrossing - prevSplitActive,
+              isPartial: false,
+            ),
+          );
+          prevSplitActive = activeAtCrossing;
+          nextKm++;
         }
-        cumulativeActive += Duration(milliseconds: segActiveMs);
+        cumulativeMeters += segMeters;
+      }
+      final segmentDuration = pts.last.time.difference(segmentStart);
+      if (!segmentDuration.isNegative) {
+        // Time spent stationary or below the movement threshold still belongs
+        // to the split pace even though it contributes no distance.
+        cumulativeActive += segmentDuration;
       }
     }
 
