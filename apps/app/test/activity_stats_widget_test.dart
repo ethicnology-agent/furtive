@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/widgets/activity_stats_widget.dart';
 import 'package:furtive/core/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:geo/geo.dart';
 
 void main() {
   final start = DateTime.utc(2026, 9, 23);

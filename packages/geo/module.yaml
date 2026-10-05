@@ -1,0 +1,7 @@
+role: foundation
+responsibility: >-
+  Own PositionEntity: one GPS fix with the uncertainties the platform
+  reported alongside it, and the vocabulary every other module speaks about
+  place.
+storage: none
+allowed_dependencies: []

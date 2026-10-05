@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/entities/position_entity.dart';
+import 'package:geo/geo.dart';
 
 /// The rendering port: everything Furtive needs from a map, and nothing else.
 ///

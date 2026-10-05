@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:geo/geo.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 
 /// Ingestion-time quality gate for the continuous tracking stream. Rejects
 /// fixes that are more likely GPS noise (multipath, urban canyon reflection,

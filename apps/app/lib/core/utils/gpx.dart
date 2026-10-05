@@ -17,10 +17,10 @@ class GpxPoint {
 
 /// Parse a `<trkpt>` element and return [GpxPoint] if it carries valid data,
 /// or null if the lat/lon are missing, non-finite, or out of WGS84 range.
-/// Used by both the OSM trace renderer (lib/core/models/trace_model.dart) and
-/// the GPX activity importer — keeping a single validator avoids the bug
-/// class where one entry point silently lets junk in and the other crashes
-/// downstream LatLng construction.
+/// The single validator for untrusted coordinates entering the application,
+/// so junk cannot be let in by one entry point and crash downstream LatLng
+/// construction in another. The OSM trace renderer that was its second
+/// caller is gone; the GPX importer is the one that remains.
 GpxPoint? parseTrkpt(XmlElement point) {
   final lat = double.tryParse(point.getAttribute('lat') ?? '');
   final lon = double.tryParse(point.getAttribute('lon') ?? '');

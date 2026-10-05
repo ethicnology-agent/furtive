@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/clock.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/features/map/position_stream_controller.dart';
+import 'package:geo/geo.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'support/fakes.dart';

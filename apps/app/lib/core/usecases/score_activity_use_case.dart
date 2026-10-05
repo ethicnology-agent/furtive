@@ -1,7 +1,7 @@
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
+import 'package:geo/geo.dart';
 
 class ScoreActivityUseCase {
   ScoreActivityUseCase({ActivityRepository? activities, Clock? clock})

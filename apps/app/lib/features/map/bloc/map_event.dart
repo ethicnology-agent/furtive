@@ -1,5 +1,5 @@
 import 'package:furtive/core/entities/activity_profile.dart';
-import 'package:furtive/core/entities/position_entity.dart';
+import 'package:geo/geo.dart';
 
 sealed class MapEvent {
   const MapEvent();

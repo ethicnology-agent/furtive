@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/widgets/hold_to_confirm_button.dart';
@@ -20,6 +19,7 @@ import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:furtive/features/recording/bloc/recording_state.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:geo/geo.dart';
 
 class _Map extends Cubit<MapState> implements MapBloc {
   _Map(super.initialState);

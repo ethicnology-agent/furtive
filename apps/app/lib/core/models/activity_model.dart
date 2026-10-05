@@ -2,8 +2,8 @@ import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/database/tables/activity_points_table.dart';
 import 'package:furtive/core/database/tables/preferences_table.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/models/preferences_model.dart';
+import 'package:geo/geo.dart';
 
 class ActivityModel {
   final String id;

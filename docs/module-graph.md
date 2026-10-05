@@ -12,12 +12,16 @@ graph TD
   style furtive_leaflet_viewer stroke:#5135a1
   furtive_share["furtive_share"]
   style furtive_share stroke:#d42752
+  geo["geo"]
+  style geo stroke:#362842
   furtive --> diagnostics
   furtive --> furtive_share
+  furtive --> geo
   furtive_leaflet_viewer --> furtive_share
   subgraph packages0 ["packages"]
     diagnostics
     furtive_share
+    geo
   end
   subgraph apps1 ["apps"]
     furtive

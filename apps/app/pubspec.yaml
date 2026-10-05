@@ -71,6 +71,8 @@ dependencies:
     path: ../../packages/diagnostics
   furtive_share:
     path: ../../packages/furtive_share
+  geo:
+    path: ../../packages/geo
   nostr: ^2.0.0
 
 dev_dependencies:

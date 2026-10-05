@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/entities/position_entity.dart';
+import 'package:geo/geo.dart';
 
 void main() {
   final t0 = DateTime.utc(2026, 1, 1, 12);

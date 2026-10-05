@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/map/maplibre_map_view.dart';
 import 'package:furtive/core/theme.dart';
@@ -19,6 +18,7 @@ import 'package:furtive/core/usecases/export_activity_to_gpx_use_case.dart';
 import 'package:furtive/core/usecases/share_activity_use_case.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
+import 'package:geo/geo.dart';
 
 class ActivityDetailPage extends StatefulWidget {
   final ActivityEntity activity;

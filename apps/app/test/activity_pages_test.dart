@@ -8,7 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/entities/activity_summary.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/map/map_view.dart';
@@ -21,6 +20,7 @@ import 'package:furtive/features/activities/bloc/activities_state.dart';
 import 'package:furtive/features/activities/pages/activities_list_page.dart';
 import 'package:furtive/features/activities/pages/activity_detail_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:geo/geo.dart';
 
 import 'support/fakes.dart';
 

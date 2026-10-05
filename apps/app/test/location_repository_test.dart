@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/datasources/location_gps_data_source.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
-import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/core/repositories/location_repository.dart';
+import 'package:geo/geo.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Coverage for the boundary where raw platform fixes become domain positions.
