@@ -67,7 +67,7 @@ publishes sampled, already-accepted recording points to the configured Nostr
 relays. No account or long-term Nostr key is created. An optional password is
 derived with Argon2id and must be sent separately from the link.
 
-The viewer and threat model live in [`viewer/`](viewer/) and
+The viewer and threat model live in [`apps/viewer/`](apps/viewer/) and
 [`docs/SHARE-TRACKING.md`](docs/SHARE-TRACKING.md). A full process kill ends a
 share because its ephemeral keys are deliberately never persisted; recording
 resume remains independent.
@@ -75,7 +75,7 @@ resume remains independent.
 ## Releases
 
 Release artifacts are produced unsigned by Flutter (`signingConfig = null`
-in `android/app/build.gradle.kts`) and signed out-of-band with
+in `apps/app/android/app/build.gradle.kts`) and signed out-of-band with
 `apksigner` / `zipalign`. Keystores never enter this repository — do
 not add a `key.properties` or wire signing into Gradle.
 
@@ -86,7 +86,7 @@ container produce byte-identical output. The repository pins the major inputs:
 
 - `debian:trixie@sha256:…` (multi-arch index digest, in `Containerfile.tools`)
 - Flutter `3.44.9` via `.fvmrc`
-- Android NDK / SDK / build-tools / JVM in `android/gradle.properties`
+- Android NDK / SDK / build-tools / JVM in `apps/app/android/gradle.properties`
 - `pubspec.lock` enforced via `flutter pub get --enforce-lockfile`
 - Gradle distribution, FVM installer, and Android command-line tools checksums
 - `SOURCE_DATE_EPOCH = $(git log -1 --format=%ct)` passed to the container

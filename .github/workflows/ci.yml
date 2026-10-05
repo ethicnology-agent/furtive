@@ -33,6 +33,7 @@ jobs:
           cache: true
 
       - name: pub get (enforce lockfile)
+        working-directory: apps/app
         run: flutter pub get --enforce-lockfile
 
       - name: viewer pub get (enforce lockfile)
@@ -44,9 +45,11 @@ jobs:
       # dart_mappable (*mapper.dart) and drift (*.g.dart) generated sources
       # are gitignored — analyze/test can't resolve without them.
       - name: build_runner (generate *.g.dart / *mapper.dart)
+        working-directory: apps/app
         run: dart run build_runner build --delete-conflicting-outputs --force-jit
 
       - name: Generate localizations + check ARB parity
+        working-directory: apps/app
         run: |
           flutter gen-l10n
           python3 -c "import json, os, sys; \
@@ -59,9 +62,14 @@ jobs:
           sys.exit(0) if not bad else (print('PARITY ISSUES:'), [print(f'  {loc}: missing={m} extra={e}') for loc,m,e in bad], sys.exit(1))"
 
       - name: dart format --set-exit-if-changed
-        run: dart format --set-exit-if-changed lib test packages/furtive_share/lib packages/furtive_share/test viewer/lib viewer/test viewer/web
+        run: >-
+          dart format --set-exit-if-changed
+          apps/app/lib apps/app/test
+          packages/furtive_share/lib packages/furtive_share/test
+          viewer/lib viewer/test viewer/web
 
       - name: flutter analyze
+        working-directory: apps/app
         run: flutter analyze
 
       - name: Analyze shared package and web viewer
@@ -97,6 +105,7 @@ jobs:
       # is what stops the suite from silently rotting. Without a measured floor
       # in CI, coverage only ever moves in one direction.
       - name: flutter test (with coverage)
+        working-directory: apps/app
         run: flutter test --coverage
 
       - name: Shared package tests
@@ -113,4 +122,5 @@ jobs:
       # Analyze/test cannot compile Kotlin, merge the Android manifest, resolve
       # MapLibre Native, or exercise release-only Gradle configuration.
       - name: Compile release APK
+        working-directory: apps/app
         run: flutter build apk --release

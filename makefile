@@ -1,3 +1,7 @@
+# The Flutter application is one workspace member among several; every
+# command that targets it rather than the workspace runs from here.
+APP := apps/app
+
 .PHONY: all setup clean deps build-runner build-runner-watch ios-pod-update drift-migrations devcontainer devcontainer-create devcontainer-start container-tools container-app apk fvm-check release debug translations verify-reproducible format analyze test viewer-deps viewer-analyze viewer-build share-boundary share-config check
 
 fvm-check:
@@ -17,32 +21,30 @@ setup: fvm-check clean deps build-runner
 
 clean:
 	@echo "🧹 Clean generated build output"
-	@fvm flutter clean
+	@cd $(APP) && fvm flutter clean
 
 deps:
 	@echo "🏃 Fetch dependencies"
 	@fvm flutter pub get --enforce-lockfile
-	@fvm dart pub get --directory packages/furtive_share --enforce-lockfile
-	@fvm dart pub get --directory viewer --enforce-lockfile
 
 build-runner:
 	@echo "🏗️ Build runner"
-	@fvm dart run build_runner build --delete-conflicting-outputs --force-jit
+	@cd $(APP) && fvm dart run build_runner build --delete-conflicting-outputs --force-jit
 
 build-runner-watch:
 	@echo "🏗️ Build runner (watch mode)"
-	@fvm dart run build_runner watch --delete-conflicting-outputs --force-jit
+	@cd $(APP) && fvm dart run build_runner watch --delete-conflicting-outputs --force-jit
 
 drift-migrations:
 	@echo "🔄 Create schema and sum migrations"
-	@fvm dart run drift_dev make-migrations
+	@cd $(APP) && fvm dart run drift_dev make-migrations
 
 translations:
-	@echo "🌐 Generating localizations from lib/l10n/*.arb"
-	@fvm flutter gen-l10n
+	@echo "🌐 Generating localizations from $(APP)/lib/l10n/*.arb"
+	@cd $(APP) && fvm flutter gen-l10n
 	@echo "🔎 Checking ARB key parity against app_en.arb"
 	@python3 -c "import json, os, sys; \
-d = 'lib/l10n'; \
+d = '$(APP)/lib/l10n'; \
 arbs = {f[4:-4]: {k for k in json.load(open(os.path.join(d,f))).keys() if not k.startswith('@')} \
         for f in sorted(os.listdir(d)) if f.startswith('app_') and f.endswith('.arb')}; \
 en = arbs['en']; \
@@ -52,24 +54,22 @@ sys.exit(0) if not bad else (print('PARITY ISSUES:'), [print(f'  {loc}: missing=
 
 format:
 	@echo "🎨 Checking formatting (dart format --set-exit-if-changed)"
-	@fvm dart format --set-exit-if-changed lib test packages/furtive_share/lib packages/furtive_share/test viewer/lib viewer/test viewer/web tool/validate_share_config.dart
+	@fvm dart format --set-exit-if-changed $(APP)/lib $(APP)/test packages/furtive_share/lib packages/furtive_share/test viewer/lib viewer/test viewer/web tool/validate_share_config.dart
 
 analyze:
 	@echo "🔎 Running flutter analyze"
-	@fvm flutter analyze
+	@cd $(APP) && fvm flutter analyze
 	@$(MAKE) viewer-analyze
 
 test:
 	@echo "🧪 Running flutter test"
-	@fvm flutter test
+	@cd $(APP) && fvm flutter test
 	@echo "🔐 Running pure-Dart share package tests"
 	@cd packages/furtive_share && fvm dart test
 	@echo "🌐 Running web viewer logic tests"
 	@cd viewer && fvm dart test
 
-viewer-deps:
-	@echo "🌐 Fetching viewer dependencies"
-	@fvm dart pub get --directory viewer --enforce-lockfile
+viewer-deps: deps
 
 viewer-analyze:
 	@echo "🔎 Analyzing shared package and web viewer"
@@ -100,7 +100,7 @@ share-config:
 
 # Everything CI runs on every push/PR (see .github/workflows/ci.yml) — kept
 # as a single make target so it can also be run locally before pushing.
-# `translations` both regenerates lib/l10n/app_localizations*.dart (gitignored,
+# `translations` both regenerates $(APP)/lib/l10n/app_localizations*.dart (gitignored,
 # needed for analyze/test to see the generated AppLocalizations class) and
 # checks ARB key parity across every locale.
 check: deps build-runner translations format analyze share-boundary test viewer-build
@@ -110,7 +110,7 @@ ios-pod-update:
 	@if [ "$$(uname)" != "Darwin" ]; then echo "Skipping pod update (not macOS)"; exit 0; fi
 	@echo "🍎 Fetching iOS dependencies"
 	@fvm flutter precache --ios
-	@cd ios && pod install --repo-update && cd -
+	@cd $(APP)/ios && pod install --repo-update && cd -
 
 # Container runtime — default podman, override with CONTAINER=docker for
 # environments without podman.
@@ -120,10 +120,10 @@ container-tools:
 	@echo "🔧 Building tools image"
 	@$(CONTAINER) build -f Containerfile.tools -t furtive-tools \
 		--build-arg FLUTTER_VERSION=$$(python3 -c 'import json; print(json.load(open(".fvmrc"))["flutter"])') \
-		--build-arg JVM_TARGET=$$(grep 'android.jvmTarget' android/gradle.properties | cut -d= -f2) \
-		--build-arg ANDROID_API_LEVEL=$$(grep 'android.compileSdk' android/gradle.properties | cut -d= -f2) \
-		--build-arg ANDROID_BUILD_TOOLS=$$(grep 'android.buildToolsVersion' android/gradle.properties | cut -d= -f2) \
-		--build-arg ANDROID_NDK=$$(grep 'android.ndkVersion' android/gradle.properties | cut -d= -f2) \
+		--build-arg JVM_TARGET=$$(grep 'android.jvmTarget' $(APP)/android/gradle.properties | cut -d= -f2) \
+		--build-arg ANDROID_API_LEVEL=$$(grep 'android.compileSdk' $(APP)/android/gradle.properties | cut -d= -f2) \
+		--build-arg ANDROID_BUILD_TOOLS=$$(grep 'android.buildToolsVersion' $(APP)/android/gradle.properties | cut -d= -f2) \
+		--build-arg ANDROID_NDK=$$(grep 'android.ndkVersion' $(APP)/android/gradle.properties | cut -d= -f2) \
 		.
 
 container-app: container-tools
@@ -147,11 +147,11 @@ release debug:
 
 # Flutter writes APK and AAB to different paths
 ifeq ($(FORMAT),aab)
-  CONTAINER_OUTPUT := /app/build/app/outputs/bundle/$(MODE)/app-$(MODE).aab
+  CONTAINER_OUTPUT := /app/$(APP)/build/app/outputs/bundle/$(MODE)/app-$(MODE).aab
   HOST_OUTPUT := ./app-$(MODE).aab
   FLUTTER_BUILD := fvm flutter build appbundle --$(MODE)
 else
-  CONTAINER_OUTPUT := /app/build/app/outputs/flutter-apk/app-$(MODE).apk
+  CONTAINER_OUTPUT := /app/$(APP)/build/app/outputs/flutter-apk/app-$(MODE).apk
   HOST_OUTPUT := ./app-$(MODE).apk
   FLUTTER_BUILD := fvm flutter build apk --$(MODE)
 endif
@@ -185,7 +185,7 @@ apk: container-app
 	@$(CONTAINER) run --name furtive-build \
 		--ulimit nofile=65536:65536 \
 		-e SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) \
-		furtive-app bash -c 'cd /app && $(FLUTTER_BUILD) $(DART_DEFINES)'
+		furtive-app bash -c 'cd /app/$(APP) && $(FLUTTER_BUILD) $(DART_DEFINES)'
 	@$(CONTAINER) cp furtive-build:$(CONTAINER_OUTPUT) $(HOST_OUTPUT)
 	@$(CONTAINER) rm furtive-build > /dev/null
 	@echo "✅ Output extracted: $(HOST_OUTPUT)"

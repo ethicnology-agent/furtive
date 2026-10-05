@@ -20,7 +20,7 @@ from pathlib import Path
 # Ratchet. Raise this — never lower it — as coverage improves.
 MIN_LINE_COVERAGE = 78.0
 
-LCOV = Path("coverage/lcov.info")
+LCOV = Path("apps/app/coverage/lcov.info")
 
 # Excluded from the aggregate: drift/dart_mappable output and the generated
 # AppLocalizations. Nothing here is hand-written, so it is neither meaningful
