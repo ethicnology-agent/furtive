@@ -14,8 +14,16 @@ on:
       - .github/workflows/deploy-viewer.yml
       - packages/furtive_share/**
       - site/**
+      # Both halves of the build: the packager, and the script that compiles
+      # and invokes it. Listing one and not the other would leave a change to
+      # the other silently undeployed.
+      - tool/build_viewer.dart
       - tool/package_viewer.py
       - apps/viewer/**
+      # One workspace, one resolution: the viewer's dependencies are decided
+      # here, so a change to either can change what is shipped.
+      - pubspec.yaml
+      - pubspec.lock
 
 # contents stays read-only: the job reads the tree and publishes build/viewer.
 # The two Pages scopes are what actions/deploy-pages needs to mint its OIDC
@@ -51,11 +59,10 @@ jobs:
           channel: stable
           cache: true
 
-      - name: pub get (enforce lockfile)
-        run: dart pub get --enforce-lockfile
-
-      - name: shared package pub get (enforce lockfile)
-        run: dart pub get --directory packages/furtive_share --enforce-lockfile
+      - name: Bootstrap the workspace
+        run: |
+          dart pub get --enforce-lockfile
+          dart run melos bootstrap
 
       # Pages is static and cannot proxy tiles, so this deployment cannot honour
       # the same-origin basemap the self-hosted contract assumes. It loads the
@@ -77,11 +84,7 @@ jobs:
       - name: Compile and package the viewer
         env:
           VIEWER_TILE_URL: https://tile.openstreetmap.org/{z}/{x}/{y}.png
-        run: |
-          mkdir -p build/site/share
-          dart compile js -O4 -DTILE_URL="$VIEWER_TILE_URL" \
-            -o build/site/share/main.dart.js apps/viewer/web/main.dart
-          python3 tool/package_viewer.py build/site/share --tile-url "$VIEWER_TILE_URL"
+        run: dart run tool/build_viewer.dart build/site/share
 
       # The viewer is published under /share/ so the domain root can carry the
       # presentation page instead. That page holds no script at all: a share key

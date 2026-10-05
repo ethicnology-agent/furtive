@@ -72,6 +72,40 @@ The viewer and threat model live in [`apps/viewer/`](apps/viewer/) and
 share because its ephemeral keys are deliberately never persisted; recording
 resume remains independent.
 
+## Development
+
+The repository is a Dart pub workspace: `apps/app` is the Flutter
+application, `apps/viewer` the static web viewer, and `packages/furtive_share`
+the pure-Dart wire format and cryptography both of them share. One lockfile
+resolves all three, and each declares what it may depend on in its
+`module.yaml`.
+
+Melos runs every task, defined in the `melos:` section of the root
+`pubspec.yaml`. The scripts call `flutter` and `dart` from the PATH, so they
+are identical in CI, which installs Flutter directly, and locally, where
+`fvm exec` puts the version pinned in `.fvmrc` on the PATH:
+
+```sh
+fvm exec dart pub get --enforce-lockfile
+fvm exec dart run melos bootstrap
+fvm exec dart run melos run verify
+```
+
+`verify` is exactly what CI runs: generation, ARB key parity across every
+locale, module boundaries, the dependency graph, formatting, analysis with
+`--fatal-infos`, the share-layer boundary, every member's tests with
+coverage, the coverage floor, and both viewer packagings.
+`fvm exec dart run melos run --list` shows the individual scripts; the
+useful ones during development are `generate`, `analyze`, `test`,
+`architecture` and `app`.
+
+Generated sources — ARB output and drift code — are not committed. Run
+`melos run generate` in a fresh clone, modify the generator inputs rather
+than their output, and never edit a generated file.
+
+The makefile is now limited to what Melos does not cover: the reproducible
+container build, the release artefacts, and the dev container.
+
 ## Releases
 
 Release artifacts are produced unsigned by Flutter (`signingConfig = null`

@@ -1,8 +1,13 @@
+# Melos owns every workspace task; see the `melos:` section of the root
+# pubspec and run them with `fvm exec dart run melos run <script>`. What is
+# left here is what Melos does not cover: the reproducible container build,
+# the release artefacts, and the dev container.
+#
 # The Flutter application is one workspace member among several; every
 # command that targets it rather than the workspace runs from here.
 APP := apps/app
 
-.PHONY: all setup clean deps build-runner build-runner-watch ios-pod-update drift-migrations devcontainer devcontainer-create devcontainer-start container-tools container-app apk fvm-check release debug translations verify-reproducible format analyze test viewer-deps viewer-analyze viewer-build share-boundary share-config architecture check
+.PHONY: fvm-check deps build-runner ios-pod-update devcontainer devcontainer-create devcontainer-start container-tools container-app apk release debug verify-reproducible
 
 fvm-check:
 	@echo "🔍 Checking FVM"
@@ -12,105 +17,16 @@ fvm-check:
 	fi
 	@fvm install
 
-all: setup
-	@echo "✨ All tasks completed!"
-
-setup: fvm-check clean deps build-runner
-	@if [ "$$(uname)" = "Darwin" ]; then $(MAKE) ios-pod-update; fi
-	@echo "🚀 Setup complete!"
-
-clean:
-	@echo "🧹 Clean generated build output"
-	@cd $(APP) && fvm flutter clean
-
+# Thin facades over Melos, kept because Containerfile.app invokes them to
+# build the image without reaching into the workspace layout.
 deps:
 	@echo "🏃 Fetch dependencies"
-	@fvm flutter pub get --enforce-lockfile
+	@fvm exec dart pub get --enforce-lockfile
+	@fvm exec dart run melos bootstrap
 
 build-runner:
-	@echo "🏗️ Build runner"
-	@cd $(APP) && fvm dart run build_runner build --delete-conflicting-outputs --force-jit
-
-build-runner-watch:
-	@echo "🏗️ Build runner (watch mode)"
-	@cd $(APP) && fvm dart run build_runner watch --delete-conflicting-outputs --force-jit
-
-drift-migrations:
-	@echo "🔄 Create schema and sum migrations"
-	@cd $(APP) && fvm dart run drift_dev make-migrations
-
-translations:
-	@echo "🌐 Generating localizations from $(APP)/lib/l10n/*.arb"
-	@cd $(APP) && fvm flutter gen-l10n
-	@echo "🔎 Checking ARB key parity against app_en.arb"
-	@python3 -c "import json, os, sys; \
-d = '$(APP)/lib/l10n'; \
-arbs = {f[4:-4]: {k for k in json.load(open(os.path.join(d,f))).keys() if not k.startswith('@')} \
-        for f in sorted(os.listdir(d)) if f.startswith('app_') and f.endswith('.arb')}; \
-en = arbs['en']; \
-bad = [(loc, sorted(en - keys), sorted(keys - en)) for loc, keys in arbs.items() if loc != 'en' and (en - keys or keys - en)]; \
-print(f'  {len(arbs)} locales, {len(en)} keys each'); \
-sys.exit(0) if not bad else (print('PARITY ISSUES:'), [print(f'  {loc}: missing={m} extra={e}') for loc,m,e in bad], sys.exit(1))"
-
-format:
-	@echo "🎨 Checking formatting (dart format --set-exit-if-changed)"
-	@fvm dart format --set-exit-if-changed $(APP)/lib $(APP)/test packages/furtive_share/lib packages/furtive_share/test apps/viewer/lib apps/viewer/test apps/viewer/web tool/validate_share_config.dart
-
-analyze:
-	@echo "🔎 Running flutter analyze"
-	@cd $(APP) && fvm flutter analyze
-	@$(MAKE) viewer-analyze
-
-test:
-	@echo "🧪 Running flutter test"
-	@cd $(APP) && fvm flutter test
-	@echo "🔐 Running pure-Dart share package tests"
-	@cd packages/furtive_share && fvm dart test
-	@echo "🌐 Running web viewer logic tests"
-	@cd apps/viewer && fvm dart test
-
-viewer-deps: deps
-
-viewer-analyze:
-	@echo "🔎 Analyzing shared package and web viewer"
-	@fvm dart analyze packages/furtive_share
-	@fvm dart analyze apps/viewer
-
-# Same-origin by default, so a self-hosted viewer contacts no third-party tile
-# host. Overriding this points the basemap at a public service and discloses the
-# viewed area to it — a deliberate trade, documented in docs/SHARE-TRACKING.md.
-VIEWER_TILE_URL ?= /tiles/{z}/{x}/{y}.png
-
-viewer-build:
-	@echo "🌐 Compiling the Dart Web viewer"
-	@mkdir -p build/viewer
-	@fvm dart compile js -O4 -DTILE_URL='$(VIEWER_TILE_URL)' -o build/viewer/main.dart.js apps/viewer/web/main.dart
-	@python3 tool/package_viewer.py build/viewer --tile-url '$(VIEWER_TILE_URL)'
-
-# The path package is a real compiler boundary, and this denylist guards its
-# product promise as well: no storage, sensor, Flutter, or app import. See
-# docs/SHARE-TRACKING.md.
-share-boundary:
-	@echo "🚧 Checking the share-layer boundary"
-	@python3 tool/check_share_boundary.py
-
-# Reads each member's module.yaml and rejects a dependency, cycle or import
-# that crosses a boundary the module did not declare.
-architecture:
-	@echo "🧱 Checking module boundaries"
-	@fvm dart run tool/check_architecture.dart
-
-share-config:
-	@echo "🔐 Validating the live-share release configuration"
-	@fvm dart run tool/validate_share_config.dart
-
-# Everything CI runs on every push/PR (see .github/workflows/ci.yml) — kept
-# as a single make target so it can also be run locally before pushing.
-# `translations` both regenerates $(APP)/lib/l10n/app_localizations*.dart (gitignored,
-# needed for analyze/test to see the generated AppLocalizations class) and
-# checks ARB key parity across every locale.
-check: deps build-runner translations format analyze architecture share-boundary test viewer-build
-	@echo "✅ All checks passed"
+	@echo "🏗️ Generate translations and database code"
+	@fvm exec dart run melos run generate
 
 ios-pod-update:
 	@if [ "$$(uname)" != "Darwin" ]; then echo "Skipping pod update (not macOS)"; exit 0; fi

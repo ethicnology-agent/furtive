@@ -9,7 +9,7 @@ MapLibre, storage, and sensors are intentionally absent.
 From the repository root:
 
 ```sh
-make viewer-deps viewer-build
+fvm exec dart run melos run viewer:build
 ```
 
 The static output is written to `build/viewer/`. It includes Leaflet 1.9.4 and
@@ -24,8 +24,8 @@ files referenced by its current `index.html`.
 The host must serve:
 
 - dark raster XYZ tiles at `/tiles/{z}/{x}/{y}.png`, the same-origin default;
-  `make viewer-build VIEWER_TILE_URL=…` retargets the basemap, and the packager
-  then grants that one origin in the CSP;
+  `VIEWER_TILE_URL=… fvm exec dart run melos run viewer:build` retargets the
+  basemap, and the packager then grants that one origin in the CSP;
 - the viewer over HTTPS so links containing `wss://` relays are not downgraded;
 - `index.html` without long-lived caching and content-hashed static assets with
   compression;

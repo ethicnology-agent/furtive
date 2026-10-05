@@ -23,7 +23,174 @@ dev_dependencies:
   furtive_share:
     path: packages/furtive_share
 
+  # Task orchestration across the workspace members.
+  melos: ^8.9.0
+
   # tool/check_architecture.dart parses every member's imports.
   analyzer: ^13.0.0
   path: ^1.9.1
   yaml: ^3.1.4
+
+# Every task below runs the SDK from the PATH, so it is identical in CI,
+# which installs Flutter directly, and locally, where `fvm exec` puts the
+# version pinned in .fvmrc on the PATH:
+#
+#     fvm exec dart run melos run verify
+melos:
+  ide:
+    intellij: false
+  categories:
+    apps:
+      - apps/**
+    packages:
+      - packages/**
+  command:
+    run:
+      noSelect: true
+    bootstrap:
+      enforceLockfile: true
+  scripts:
+    prepare:
+      description: Install locked dependencies and generate every member's sources.
+      run: dart run melos bootstrap && dart run melos run generate --no-select
+
+    generate:
+      description: Generate translations and private database code.
+      dependsOn:
+        - generate:l10n
+        - generate:database
+
+    generate:l10n:
+      description: Generate localized messages from each member's ARB files.
+      exec:
+        command: flutter gen-l10n
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        fileExists: l10n.yaml
+
+    generate:database:
+      description: Generate drift and dart_mappable sources in dependency order.
+      exec:
+        command: dart run build_runner build --delete-conflicting-outputs --force-jit
+        concurrency: 1
+        failFast: true
+        orderDependents: true
+      packageFilters:
+        dependsOn: build_runner
+
+    l10n:parity:
+      description: Reject a locale whose ARB keys have drifted from English.
+      run: python3 tool/check_arb_parity.py
+
+    analyze:
+      description: Analyze every member.
+      dependsOn:
+        - analyze:flutter
+        - analyze:dart
+
+    analyze:flutter:
+      exec:
+        command: flutter analyze --no-pub --fatal-infos
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: true
+
+    analyze:dart:
+      exec:
+        command: dart analyze --fatal-infos
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: false
+
+    format:check:
+      description: Check formatting without changing sources.
+      run: >-
+        dart format --output=none --set-exit-if-changed
+        apps/app/lib apps/app/test
+        apps/viewer/lib apps/viewer/test apps/viewer/web
+        packages/furtive_share/lib packages/furtive_share/test
+        tool
+
+    architecture:
+      description: Check module contracts, allowed dependencies, cycles and imports.
+      run: dart run tool/check_architecture.dart
+
+    graph:
+      description: Regenerate the dependency diagram.
+      run: dart run tool/graph.dart
+
+    graph:check:
+      description: Reject a stale dependency diagram.
+      run: dart run tool/graph.dart --check
+
+    test:
+      description: Run every member's tests.
+      dependsOn:
+        - test:flutter
+        - test:dart
+
+    test:flutter:
+      exec:
+        command: dart run "$MELOS_ROOT_PATH/tool/test_module.dart" flutter --coverage
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: true
+        dirExists: test
+
+    test:dart:
+      exec:
+        command: dart run "$MELOS_ROOT_PATH/tool/test_module.dart" dart
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: false
+        dirExists: test
+
+    coverage:
+      description: Fail if line coverage drops below the ratcheted floor.
+      run: python3 tool/coverage_threshold.py --report
+
+    share:boundary:
+      description: Reject an import that would drag Flutter, storage or sensors into the shared package.
+      run: python3 tool/check_share_boundary.py
+
+    share:config:
+      description: Validate the live-share release configuration from the environment.
+      run: dart run tool/validate_share_config.dart
+
+    viewer:build:
+      description: Compile and package the static web viewer.
+      run: dart run tool/build_viewer.dart
+
+    viewer:build:deployed:
+      description: Package the viewer against the basemap the deployment ships.
+      run: >-
+        VIEWER_TILE_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+        dart run tool/build_viewer.dart build/viewer-basemap &&
+        grep -q "img-src 'self' data: https://tile.openstreetmap.org"
+        build/viewer-basemap/index.html
+
+    app:
+      description: Run the application on an available device.
+      run: dart run tool/run_app.dart apps/app
+      stdio: inherit
+
+    verify:
+      description: Everything CI runs on a push.
+      dependsOn:
+        - generate
+        - l10n:parity
+        - architecture
+        - graph:check
+        - format:check
+        - analyze
+        - share:boundary
+        - test
+        - coverage
+        - viewer:build
+        - viewer:build:deployed
+
