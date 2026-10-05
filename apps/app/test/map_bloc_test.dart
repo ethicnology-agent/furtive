@@ -5,13 +5,11 @@ import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/database/tables/activity_points_table.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';
-import 'package:furtive/core/datasources/preferences_local_data_source.dart';
 import 'package:flutter/foundation.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/facades/compass_facade.dart';
 import 'package:furtive/core/models/activity_model.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
-import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/usecases/ensure_background_tracking_use_case.dart';
 import 'package:furtive/core/usecases/get_map_style_url_use_case.dart';
 import 'package:furtive/core/usecases/score_activity_use_case.dart';
@@ -21,6 +19,7 @@ import 'package:furtive/features/map/bloc/map_state.dart';
 import 'package:furtive/features/map/position_stream_controller.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
+import 'package:preferences/preferences.dart';
 
 import 'support/fakes.dart';
 
@@ -38,6 +37,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late LocalDatabase db;
+  late PreferencesRepository preferences;
   late FixedClock clock;
   late FakeLocationRepository location;
   late RecordingBloc recording;
@@ -45,6 +45,9 @@ void main() {
 
   setUp(() {
     db = inMemoryDatabase();
+    // Settings live in their own store now; each test gets an isolated
+    // in-memory one so nothing reaches the production database.
+    preferences = PreferencesRepository.inMemory();
     clock = FixedClock(start);
     location = FakeLocationRepository(currentLocation: fixAt(start));
     final repo = ActivityRepository(
@@ -64,24 +67,19 @@ void main() {
   tearDown(() async {
     await recording.close();
     await location.dispose();
+    await preferences.close();
     await db.close();
   });
 
   MapBloc buildBloc() => MapBloc(
     recording: recording,
-    getMapStyleUrl: GetMapStyleUrlUseCase(
-      preferences: PreferencesRepository(
-        local: PreferencesLocalDataSource(db: db),
-      ),
-    ),
+    getMapStyleUrl: GetMapStyleUrlUseCase(preferences: preferences),
     location: location,
     positionStream: PositionStreamController(location: location, clock: clock),
-    // Backed by the in-memory database like the style use case above: MapBloc
-    // reads the recording preferences on InitMap, and the default would reach
-    // for the getIt-registered production database.
-    preferences: PreferencesRepository(
-      local: PreferencesLocalDataSource(db: db),
-    ),
+    // The same isolated store the style use case above reads: MapBloc reads
+    // the recording preferences on InitMap, and the default constructor would
+    // reach for the real settings database.
+    preferences: preferences,
     // Reported as a non-Android platform so the facade short-circuits: the
     // compass is a native sensor stream with no meaning in a unit test, and
     // its own suite covers the smoothing.
@@ -265,9 +263,7 @@ void main() {
     test('the recording-detail preference reaches the GPS layer', () async {
       // A setting that is stored and displayed but changes nothing is how the
       // dead `accuracy_in_meters` column happened. This one has to bite.
-      final prefs = PreferencesRepository(
-        local: PreferencesLocalDataSource(db: db),
-      );
+      final prefs = preferences;
       await prefs.store(
         (await prefs.fetch()).copyWith(
           recordingDetail: RecordingDetailEntity.precise,
@@ -290,9 +286,7 @@ void main() {
         // nothing until the app was restarted. InitMap is the wrong hammer here
         // — it re-resolves the basemap style and flashes the loading UI for a
         // change that only moves buttons.
-        final prefs = PreferencesRepository(
-          local: PreferencesLocalDataSource(db: db),
-        );
+        final prefs = preferences;
         final bloc = buildBloc();
         addTearDown(bloc.close);
         bloc.add(const InitMap());

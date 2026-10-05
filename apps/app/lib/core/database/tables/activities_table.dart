@@ -1,6 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:furtive/core/database/tables/preferences_table.dart'
-    show ActivityTypeColumn;
 
 @DataClassName('ActivitiesRow')
 // Indexed on startedAt because the activities list page sorts by it on
@@ -45,3 +43,13 @@ class Activities extends Table {
   @override
   Set<Column<Object>> get primaryKey => {id};
 }
+
+/// Storage spelling of ActivityTypeEntity. Duplicated rather than reusing the
+/// entity so a rename in the domain layer cannot silently rewrite what is
+/// already on disk — same reason ActivityPointsStatusColumn exists.
+/// Adding a value here needs no migration — drift stores the name in a plain
+/// TEXT column with no CHECK constraint. **Removing** one does: any stored row
+/// still holding it stops mapping back to an enum and fails on read, so a
+/// removal must be paired with a migration rewriting those rows (see the v14
+/// step in local_database.dart).
+enum ActivityTypeColumn { walk, run, bike, car, swim, aircraft, other, unknown }

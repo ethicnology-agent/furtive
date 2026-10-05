@@ -1,6 +1,7 @@
 import 'package:activity_profile/activity_profile.dart';
-import 'package:furtive/core/database/tables/preferences_table.dart';
-import 'package:furtive/core/entities/preferences_entity.dart';
+import 'preferences_database.dart';
+import 'preferences_table.dart';
+import 'preferences_entity.dart';
 
 class PreferencesModel {
   final MapThemeColumn mapTheme;
@@ -26,6 +27,29 @@ class PreferencesModel {
     this.lastActivityType = ActivityTypeColumn.walk,
     this.recordingDetail = RecordingDetailColumn.balanced,
   });
+
+  /// What a store that has never been written holds.
+  ///
+  /// Every field but the theme falls back to its column default, so this and
+  /// the schema cannot disagree; the dark theme is the one deliberate choice,
+  /// and it is the value the previous database seeded a fresh row with.
+  static PreferencesModel get defaults => PreferencesModel(
+    mapTheme: MapThemeColumn.dark,
+    hasCompletedOnboarding: false,
+  );
+
+  static PreferencesModel fromRow(PreferencesRow row) => PreferencesModel(
+    mapTheme: row.mapTheme,
+    hasCompletedOnboarding: row.hasCompletedOnboarding,
+    uiLocale: row.uiLocale,
+    lastShownChangelogVersion: row.lastShownChangelogVersion,
+    mapTilesEnabled: row.mapTilesEnabled,
+    showOnLockScreen: row.showOnLockScreen,
+    mapControlsOnLeft: row.mapControlsOnLeft,
+    mapMilestoneIntervalKm: row.mapMilestoneIntervalKm,
+    lastActivityType: row.lastActivityType,
+    recordingDetail: row.recordingDetail,
+  );
 
   static PreferencesModel fromEntity(PreferencesEntity preferences) {
     return PreferencesModel(

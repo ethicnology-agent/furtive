@@ -6,7 +6,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/facades/compass_facade.dart';
 import 'package:furtive/core/repositories/location_repository.dart';
-import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/usecases/get_map_style_url_use_case.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';
@@ -14,6 +13,7 @@ import 'package:furtive/features/map/position_stream_controller.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:furtive/features/recording/bloc/recording_state.dart';
+import 'package:preferences/preferences.dart';
 
 // Localised display strings live in MapPage (_loadingMessage); this enum is
 // just the state tag.

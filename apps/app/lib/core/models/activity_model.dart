@@ -1,8 +1,8 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/database/tables/activity_points_table.dart';
-import 'package:furtive/core/database/tables/preferences_table.dart';
+import 'package:furtive/core/database/tables/activities_table.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/models/preferences_model.dart';
 import 'package:geo/geo.dart';
 
 class ActivityModel {
@@ -152,4 +152,32 @@ class ActivityPointModel {
       verticalAccuracy: row.verticalAccuracy,
     );
   }
+}
+
+/// Storage <-> domain mapping for the activity taxonomy. Written out rather
+/// than matched on `name` so adding a value on one side without the other is a
+/// compile error, not a runtime surprise on someone's stored data.
+extension ActivityTypeExtension on ActivityTypeColumn {
+  static ActivityTypeColumn fromEntity(ActivityTypeEntity type) =>
+      switch (type) {
+        ActivityTypeEntity.walk => ActivityTypeColumn.walk,
+        ActivityTypeEntity.run => ActivityTypeColumn.run,
+        ActivityTypeEntity.bike => ActivityTypeColumn.bike,
+        ActivityTypeEntity.car => ActivityTypeColumn.car,
+        ActivityTypeEntity.swim => ActivityTypeColumn.swim,
+        ActivityTypeEntity.aircraft => ActivityTypeColumn.aircraft,
+        ActivityTypeEntity.other => ActivityTypeColumn.other,
+        ActivityTypeEntity.unknown => ActivityTypeColumn.unknown,
+      };
+
+  ActivityTypeEntity toEntity() => switch (this) {
+    ActivityTypeColumn.walk => ActivityTypeEntity.walk,
+    ActivityTypeColumn.run => ActivityTypeEntity.run,
+    ActivityTypeColumn.bike => ActivityTypeEntity.bike,
+    ActivityTypeColumn.car => ActivityTypeEntity.car,
+    ActivityTypeColumn.swim => ActivityTypeEntity.swim,
+    ActivityTypeColumn.aircraft => ActivityTypeEntity.aircraft,
+    ActivityTypeColumn.other => ActivityTypeEntity.other,
+    ActivityTypeColumn.unknown => ActivityTypeEntity.unknown,
+  };
 }

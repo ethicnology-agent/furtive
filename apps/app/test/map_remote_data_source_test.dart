@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/database/tables/preferences_table.dart';
+import 'package:preferences/preferences.dart';
 import 'package:furtive/core/datasources/map_remote_data_source.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -128,9 +128,9 @@ void main() {
     });
 
     test('the theme selects the Protomaps flavour', () async {
-      // The five MapThemeColumn values are named after Protomaps' flavours
+      // The five MapThemeEntity values are named after Protomaps' flavours
       // precisely so this stays a name substitution rather than a lookup table.
-      for (final theme in MapThemeColumn.values) {
+      for (final theme in MapThemeEntity.values) {
         expect(
           await source(style()).getStyleUrl(theme: theme),
           '$base/${theme.name}/en.json?key=$key',

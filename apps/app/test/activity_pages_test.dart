@@ -142,6 +142,10 @@ void main() {
   }) => ActivityDetailPage(
     activity: activity,
     loadMapStyle: style ?? () async => null,
+    // Settings have their own database now; without this seam the page would
+    // reach for the real file through path_provider, which a widget test has
+    // no plugin for.
+    loadMilestoneInterval: () async => 1,
     exportActivity: export ?? (_) async {},
     shareActivity: share ?? (_, _) async {},
   );

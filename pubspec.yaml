@@ -21,6 +21,7 @@ workspace:
   - packages/diagnostics
   - packages/furtive_share
   - packages/geo
+  - packages/preferences
   - packages/ui_kit
 
 dev_dependencies:
@@ -121,6 +122,7 @@ melos:
         packages/activity_profile/lib packages/activity_profile/test
         packages/diagnostics/lib packages/diagnostics/test
         packages/geo/lib packages/geo/test
+        packages/preferences/lib packages/preferences/test
         packages/ui_kit/lib packages/ui_kit/test
         packages/furtive_share/lib packages/furtive_share/test
         tool

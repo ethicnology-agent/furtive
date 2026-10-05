@@ -75,6 +75,8 @@ dependencies:
     path: ../../packages/furtive_share
   geo:
     path: ../../packages/geo
+  preferences:
+    path: ../../packages/preferences
   ui_kit:
     path: ../../packages/ui_kit
   nostr: ^2.0.0

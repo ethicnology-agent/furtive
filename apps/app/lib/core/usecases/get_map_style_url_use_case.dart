@@ -1,6 +1,5 @@
 import 'package:furtive/core/datasources/map_remote_data_source.dart';
-import 'package:furtive/core/models/preferences_model.dart';
-import 'package:furtive/core/repositories/preferences_repository.dart';
+import 'package:preferences/preferences.dart';
 
 /// Resolves the map style to render with, combining the stored preferences
 /// (theme, UI locale, tile opt-out) with the remote Protomaps style.
@@ -28,7 +27,7 @@ class GetMapStyleUrlUseCase {
       // Map label language is derived from the UI locale (or the device locale
       // when there is no override). The dedicated "Map Language" picker is
       // gone — two language settings were redundant.
-      theme: MapThemeExtension.fromEntity(preferences.mapTheme),
+      theme: preferences.mapTheme,
       userLocaleTag: preferences.uiLocale,
       tilesEnabled: preferences.mapTilesEnabled,
     );

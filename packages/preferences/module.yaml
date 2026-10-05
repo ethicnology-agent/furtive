@@ -1,0 +1,6 @@
+role: capability
+responsibility: >-
+  Own the application's settings: their values, their defaults, and the
+  database they live in.
+storage: private Drift SQLite database (preferences.sqlite)
+allowed_dependencies: [activity_profile]

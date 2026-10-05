@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:furtive/core/database/tables/preferences_table.dart';
 import 'package:http/http.dart' as http;
+import 'package:preferences/preferences.dart';
 
 // Build-time configuration, injected via --dart-define rather than shipped as
 // a .env asset. Configuration, not confidentiality: a --dart-define becomes a
@@ -128,7 +128,7 @@ class MapRemoteDataSource {
   /// Dart keeps the deliberate tile-less fallback that the keyless build
   /// already relies on. Drop this once upstream exposes a failure event.
   Future<String?> getStyleUrl({
-    MapThemeColumn theme = MapThemeColumn.light,
+    MapThemeEntity theme = MapThemeEntity.light,
     String? userLocaleTag,
     bool tilesEnabled = true,
   }) async {

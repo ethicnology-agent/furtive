@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:diagnostics/diagnostics.dart';
-import 'package:furtive/core/entities/preferences_entity.dart';
+import 'package:preferences/preferences.dart';
 
 part 'preferences_state.mapper.dart';
 

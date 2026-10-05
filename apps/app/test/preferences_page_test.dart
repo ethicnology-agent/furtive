@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/datasources/preferences_local_data_source.dart';
-import 'package:furtive/core/entities/preferences_entity.dart';
 import 'package:furtive/core/locale_cubit.dart';
 import 'package:furtive/core/locator.dart';
-import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/features/preferences/page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 import 'support/fakes.dart';
@@ -22,8 +20,7 @@ import 'support/fakes.dart';
 /// the control must roll back to the value that is actually stored, or the
 /// UI would show a setting that never landed.
 class _FailingPreferencesRepository extends PreferencesRepository {
-  _FailingPreferencesRepository(LocalDatabase db)
-    : super(local: PreferencesLocalDataSource(db: db));
+  _FailingPreferencesRepository() : super.inMemory();
 
   @override
   Future<void> store(PreferencesEntity preferences) async {
@@ -36,8 +33,7 @@ class _FailingPreferencesRepository extends PreferencesRepository {
 final enLocalizations = lookupAppLocalizations(const Locale('en'));
 
 class _FailOnceReadRepository extends PreferencesRepository {
-  _FailOnceReadRepository(LocalDatabase db)
-    : super(local: PreferencesLocalDataSource(db: db));
+  _FailOnceReadRepository() : super.inMemory();
   int reads = 0;
   @override
   Future<PreferencesEntity> fetch() async {
@@ -90,7 +86,7 @@ void main() {
       find.byKey(const ValueKey('milestone-interval-slider'));
 
   testWidgets('failed initial load offers retry and recovers', (tester) async {
-    final repo = _FailOnceReadRepository(db);
+    final repo = _FailOnceReadRepository();
     await tester.pumpWidget(
       MaterialApp(
         theme: appTheme,
@@ -111,9 +107,7 @@ void main() {
   testWidgets('toggling a switch persists immediately, with no Apply button', (
     tester,
   ) async {
-    final repo = PreferencesRepository(
-      local: PreferencesLocalDataSource(db: db),
-    );
+    final repo = PreferencesRepository.inMemory();
     await pumpPage(tester, repo);
 
     expect(
@@ -140,7 +134,7 @@ void main() {
     'a failed auto-save reports the failure and rolls the control back to '
     'the persisted value',
     (tester) async {
-      await pumpPage(tester, _FailingPreferencesRepository(db));
+      await pumpPage(tester, _FailingPreferencesRepository());
 
       await tester.ensureVisible(lockScreenSwitch());
       await tester.pumpAndSettle();
@@ -163,7 +157,7 @@ void main() {
     // The gated repository holds the first write in flight while the second
     // toggle is already queued: this is the race the serialised write queue
     // exists for — the older snapshot must not land after the newer one.
-    final repo = _SlowPreferencesRepository(db);
+    final repo = _SlowPreferencesRepository();
     await pumpPage(tester, repo);
 
     await tester.ensureVisible(lockScreenSwitch());
@@ -181,9 +175,7 @@ void main() {
   testWidgets('milestone slider only stores one of the supported intervals', (
     tester,
   ) async {
-    final repo = PreferencesRepository(
-      local: PreferencesLocalDataSource(db: db),
-    );
+    final repo = PreferencesRepository.inMemory();
     await pumpPage(tester, repo);
 
     await tester.ensureVisible(milestoneSlider());
@@ -205,8 +197,7 @@ void main() {
 /// Storage whose first write only completes when the test says so, so two
 /// auto-applied writes can be forced to overlap.
 class _SlowPreferencesRepository extends PreferencesRepository {
-  _SlowPreferencesRepository(LocalDatabase db)
-    : super(local: PreferencesLocalDataSource(db: db));
+  _SlowPreferencesRepository() : super.inMemory();
 
   final _gate = Completer<void>();
 

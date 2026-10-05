@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/entities/preferences_entity.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/features/onboarding/onboarding_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 void main() {

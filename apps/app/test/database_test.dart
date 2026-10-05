@@ -1,14 +1,13 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/database/local_database.dart';
+import 'package:furtive/core/database/tables/activities_table.dart';
 import 'package:furtive/core/database/tables/activity_points_table.dart';
 import 'package:furtive/core/database/tables/preferences_table.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/datasources/preferences_local_data_source.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/models/activity_model.dart';
-import 'package:furtive/core/models/preferences_model.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 void main() {
@@ -1114,26 +1113,6 @@ void main() {
       );
 
       expect(await ds.fetchOngoing(), isNull);
-    });
-
-    test('preferences round-trip preserves all fields', () async {
-      final ds = PreferencesLocalDataSource();
-      await ds.store(
-        PreferencesModel(
-          mapTheme: MapThemeColumn.white,
-          hasCompletedOnboarding: true,
-          uiLocale: 'de',
-          lastShownChangelogVersion: '1.2.0',
-          mapMilestoneIntervalKm: 50,
-        ),
-      );
-
-      final read = await ds.fetch();
-      expect(read.mapTheme, MapThemeColumn.white);
-      expect(read.hasCompletedOnboarding, isTrue);
-      expect(read.uiLocale, 'de');
-      expect(read.lastShownChangelogVersion, '1.2.0');
-      expect(read.mapMilestoneIntervalKm, 50);
     });
 
     test('the v10 foreign key cascades: deleting an activity row directly (not '

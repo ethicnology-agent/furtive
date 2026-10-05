@@ -1,5 +1,5 @@
 import 'package:activity_profile/activity_profile.dart';
-import 'package:furtive/core/entities/preferences_entity.dart';
+import 'package:preferences/preferences.dart';
 
 sealed class PreferencesEvent {
   const PreferencesEvent();

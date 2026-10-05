@@ -2,13 +2,14 @@ import 'dart:async';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/facades/backup_exclusion_facade.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/facades/lock_screen_facade.dart';
 import 'package:furtive/core/facades/process_exit_facade.dart';
 import 'package:furtive/core/global.dart';
+import 'package:furtive/core/legacy_preferences.dart';
 import 'package:furtive/core/locale_cubit.dart';
-import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
@@ -19,6 +20,7 @@ import 'package:furtive/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'core/locator.dart';
 
@@ -64,6 +66,26 @@ void main() {
       // because its initial state requires a DB read first.
       Locator.setup();
 
+      // One-time handover: until 1.4 the settings lived in the recording
+      // database, beside every GPS fix. They have their own store now, and
+      // this is the only place that knows both.
+      //
+      // Offered, not forced: adoptIfEmpty refuses once anything has been
+      // stored, so a second launch — or a user who has since changed a
+      // setting — cannot be overwritten by a stale row. Failure is
+      // survivable rather than silent: the new store falls back to its
+      // defaults, so the worst case is the onboarding wizard showing again,
+      // not a lost recording.
+      try {
+        final carried = await LegacyPreferences(getIt<LocalDatabase>()).read();
+        if (carried != null &&
+            await PreferencesRepository().adoptIfEmpty(carried)) {
+          logs.config('Preferences carried over from the recording database');
+        }
+      } catch (e, st) {
+        logs.severe('Preferences handover failed', error: e, trace: st);
+      }
+
       // Read the stored locale override so LocaleCubit is correct on frame 1.
       // On first launch the row doesn't exist yet (beforeOpen runs lazily on
       // first query), so fetch() may throw — fall back to system locale.
@@ -99,6 +121,13 @@ void main() {
           p.join(appDir.path, 'app.sqlite-wal'),
           p.join(appDir.path, 'app.sqlite-shm'),
           p.join(appDir.path, 'app.sqlite-journal'),
+          // The settings database is small and holds no location, but it
+          // does hold what a user chose; the same "no cloud" posture that
+          // excludes the recordings excludes it.
+          p.join(appDir.path, 'preferences.sqlite'),
+          p.join(appDir.path, 'preferences.sqlite-wal'),
+          p.join(appDir.path, 'preferences.sqlite-shm'),
+          p.join(appDir.path, 'preferences.sqlite-journal'),
           logs.logsFile.path,
         ]),
       );
