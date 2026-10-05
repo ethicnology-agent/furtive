@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/map/maplibre_map_view.dart';
 import 'package:furtive/core/widgets/activity_stats_widget.dart';
-import 'package:furtive/core/widgets/activity_type_picker.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:furtive/features/map/activity_type_labels.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
@@ -654,6 +654,8 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                     final picked = await showActivityTypePicker(
                       context,
                       selected: state.selectedActivityType,
+                      title: l10n.activityPickerTitle,
+                      labelFor: (type) => activityTypeName(l10n, type),
                     );
                     if (picked != null) map.add(SelectActivityType(picked));
                   },

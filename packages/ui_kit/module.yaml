@@ -4,4 +4,4 @@ responsibility: >-
   renders, so a styling decision is made once and cannot drift between the
   screens that depend on it.
 storage: none
-allowed_dependencies: []
+allowed_dependencies: [activity_profile]

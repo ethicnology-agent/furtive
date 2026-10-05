@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:furtive/core/global.dart';
 import 'package:furtive/features/changelog/changelog_entries.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:ui_kit/ui_kit.dart';

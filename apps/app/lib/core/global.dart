@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-export 'extensions.dart';
-
 class Global {
   static const maxZoom = 18.0;
   static const defaultZoom = 12.0;

@@ -40,7 +40,14 @@ resource and reaches no capability — it is below every feature so a styling
 decision is made once.
 
 Localization is not owned here. Components take the strings they display,
-so the module that knows what a label means also owns its translation.
+so the module that knows what a label means also owns its translation —
+`showActivityTypePicker` receives its title and a `labelFor`, and the
+application keeps the mapping from a type to its translated name.
+
+The kit does depend on `activity_profile`, which is a foundation module and
+carries no behaviour: an icon for an activity type means the same thing in
+every locale, so the mapping belongs with the component while the label
+does not.
 
 ## Guarantees
 
@@ -59,4 +66,8 @@ of one.
 compact one with and without a label, emphasis, and tabular figures.
 `test/labeled_dropdown_test.dart` covers rendering through `labelFor`,
 reporting a selection, the nullable case, and the decoration override that
-keeps the trigger text legible.
+keeps the trigger text legible. `test/activity_type_picker_test.dart` covers
+that every selectable type is listed and `unknown` is not, that labels come
+from the caller, the title's header semantics, the checked selection,
+dismissal, and that every type has an icon.
+`test/formatting_test.dart` covers the display helpers.

@@ -24,6 +24,7 @@ graph TD
   furtive --> geo
   furtive --> ui_kit
   furtive_leaflet_viewer --> furtive_share
+  ui_kit --> activity_profile
   subgraph packages0 ["packages"]
     activity_profile
     diagnostics
