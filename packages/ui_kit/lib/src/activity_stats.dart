@@ -1,21 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/l10n/app_localizations.dart';
-import 'package:ui_kit/ui_kit.dart';
 
+import 'formatting.dart';
+import 'stat_block.dart';
+import 'theme.dart';
+
+/// One set of figures for the stats panel, already reduced to what it shows.
+///
+/// [pace] arrives formatted because minutes-per-kilometre is not a plain
+/// number — whoever computes it decides how it reads.
+class UiActivityStats {
+  const UiActivityStats({
+    required this.duration,
+    required this.distanceKm,
+    required this.pace,
+    required this.speedKmh,
+  });
+
+  final Duration duration;
+  final double distanceKm;
+  final String pace;
+  final double speedKmh;
+}
+
+/// The eight strings the panel renders, already translated.
+class UiActivityStatsLabels {
+  const UiActivityStatsLabels({
+    required this.elapsed,
+    required this.active,
+    required this.paused,
+    required this.duration,
+    required this.distance,
+    required this.pace,
+    required this.speed,
+    required this.elevation,
+  });
+
+  final String elapsed;
+  final String active;
+  final String paused;
+  final String duration;
+  final String distance;
+  final String pace;
+  final String speed;
+  final String elevation;
+}
+
+/// Elapsed time over a grid of figures, with an active/paused selector once
+/// a recording has been paused at least once.
+///
+/// Takes figures rather than a recording: the panel is shown by two
+/// different journeys, so it sits below both, and a ui module may not reach
+/// a business one. Elevation is reported for the active figures only —
+/// elevation gained while paused is not gain anyone climbed.
 class ActivityStatsWidget extends StatefulWidget {
-  final ActivityEntity activity;
-  final Duration elapsedTime;
-  final bool opaqueBackground;
-  final bool isCurrentlyPaused;
-
   const ActivityStatsWidget({
     super.key,
-    required this.activity,
+    required this.active,
+    required this.paused,
+    required this.activeElevationGainMeters,
     required this.elapsedTime,
-    this.opaqueBackground = false,
+    required this.labels,
+    this.hasPausedSegments = false,
     this.isCurrentlyPaused = false,
+    this.opaqueBackground = false,
   });
+
+  final UiActivityStats active;
+  final UiActivityStats paused;
+  final double activeElevationGainMeters;
+  final Duration elapsedTime;
+  final UiActivityStatsLabels labels;
+
+  /// Whether the recording has ever been paused. The selector appears on
+  /// either this or [isCurrentlyPaused]: a pause that has just begun has
+  /// produced no paused segment yet, and the selector still belongs there.
+  final bool hasPausedSegments;
+  final bool isCurrentlyPaused;
+  final bool opaqueBackground;
 
   @override
   State<ActivityStatsWidget> createState() => _ActivityStatsWidgetState();
@@ -26,11 +87,11 @@ class _ActivityStatsWidgetState extends State<ActivityStatsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final activity = widget.activity;
+    final labels = widget.labels;
     final showPauseSelector =
-        widget.isCurrentlyPaused || activity.pausedSegments.isNotEmpty;
+        widget.isCurrentlyPaused || widget.hasPausedSegments;
     final showingPaused = showPauseSelector && _paused;
+    final shown = showingPaused ? widget.paused : widget.active;
     final content = Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Column(
@@ -42,7 +103,7 @@ class _ActivityStatsWidgetState extends State<ActivityStatsWidget> {
             children: [
               Expanded(
                 child: Text(
-                  l10n.statsElapsed,
+                  labels.elapsed,
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
@@ -63,12 +124,12 @@ class _ActivityStatsWidgetState extends State<ActivityStatsWidget> {
               runSpacing: 8,
               children: [
                 ChoiceChip(
-                  label: Text(l10n.statsActive),
+                  label: Text(labels.active),
                   selected: !_paused,
                   onSelected: (_) => setState(() => _paused = false),
                 ),
                 ChoiceChip(
-                  label: Text(l10n.statsPaused),
+                  label: Text(labels.paused),
                   selected: _paused,
                   onSelected: (_) => setState(() => _paused = true),
                 ),
@@ -79,19 +140,14 @@ class _ActivityStatsWidgetState extends State<ActivityStatsWidget> {
           _StatsRow(
             first: StatBlock(
               icon: Icons.timer_outlined,
-              label: l10n.statDuration,
-              value:
-                  (showingPaused
-                          ? activity.pausedDuration
-                          : activity.activeDuration)
-                      .toHHMMSS(),
+              label: labels.duration,
+              value: shown.duration.toHHMMSS(),
               dense: true,
             ),
             second: StatBlock(
               icon: Icons.straighten_rounded,
-              label: l10n.statDistance,
-              value:
-                  '${(showingPaused ? activity.pausedDistanceInKm : activity.activeDistanceInKm).fmt2} km',
+              label: labels.distance,
+              value: '${shown.distanceKm.fmt2} km',
               emphasize: true,
               dense: true,
             ),
@@ -100,16 +156,14 @@ class _ActivityStatsWidgetState extends State<ActivityStatsWidget> {
           _StatsRow(
             first: StatBlock(
               icon: Icons.timelapse_rounded,
-              label: l10n.statPace,
-              value:
-                  '${showingPaused ? activity.pausedPaceMinPerKm : activity.activePaceMinPerKm} /km',
+              label: labels.pace,
+              value: '${shown.pace} /km',
               dense: true,
             ),
             second: StatBlock(
               icon: Icons.speed_rounded,
-              label: l10n.statSpeed,
-              value:
-                  '${(showingPaused ? activity.pausedSpeedKmh : activity.activeSpeedKmh).fmt2} km/h',
+              label: labels.speed,
+              value: '${shown.speedKmh.fmt2} km/h',
               dense: true,
             ),
           ),
@@ -118,8 +172,8 @@ class _ActivityStatsWidgetState extends State<ActivityStatsWidget> {
             _StatsRow(
               first: StatBlock(
                 icon: Icons.terrain_rounded,
-                label: l10n.statElevation,
-                value: '${activity.activeElevationGain.round()} m',
+                label: labels.elevation,
+                value: '${widget.activeElevationGainMeters.round()} m',
                 dense: true,
               ),
             ),

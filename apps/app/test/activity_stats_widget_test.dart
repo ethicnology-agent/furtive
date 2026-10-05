@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:furtive/core/activity_stats_view.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/widgets/activity_stats_widget.dart';
 import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
@@ -64,10 +64,21 @@ void main() {
               color: AppColors.tertiary.background,
               child: Column(
                 children: [
-                  ActivityStatsWidget(
-                    activity: subjectActivity ?? activity,
-                    elapsedTime: const Duration(minutes: 16),
-                    isCurrentlyPaused: isCurrentlyPaused,
+                  Builder(
+                    builder: (context) {
+                      final subject = subjectActivity ?? activity;
+                      return ActivityStatsWidget(
+                        active: subject.activeStats,
+                        paused: subject.pausedStats,
+                        activeElevationGainMeters: subject.activeElevationGain,
+                        hasPausedSegments: subject.pausedSegments.isNotEmpty,
+                        elapsedTime: const Duration(minutes: 16),
+                        labels: activityStatsLabels(
+                          AppLocalizations.of(context),
+                        ),
+                        isCurrentlyPaused: isCurrentlyPaused,
+                      );
+                    },
                   ),
                   KmSplitsChart(activity: activity),
                 ],

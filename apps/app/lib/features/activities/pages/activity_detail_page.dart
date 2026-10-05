@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furtive/core/activity_stats_view.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/map/maplibre_map_view.dart';
-import 'package:furtive/core/widgets/activity_stats_widget.dart';
 import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:furtive/core/global.dart';
@@ -263,8 +263,12 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                 ),
               ),
               ActivityStatsWidget(
-                activity: activity,
+                active: activity.activeStats,
+                paused: activity.pausedStats,
+                activeElevationGainMeters: activity.activeElevationGain,
+                hasPausedSegments: activity.pausedSegments.isNotEmpty,
                 elapsedTime: stoppedAt.difference(activity.startedAt),
+                labels: activityStatsLabels(AppLocalizations.of(context)),
               ),
               // Detected GPS outages (indoors, tunnel, process kill):
               // shown only when the trace actually contains one, so

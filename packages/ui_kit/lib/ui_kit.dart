@@ -7,6 +7,7 @@
 /// every feature so a styling decision is made once.
 library;
 
+export 'src/activity_stats.dart';
 export 'src/activity_type_picker.dart';
 export 'src/formatting.dart';
 export 'src/labeled_dropdown.dart';

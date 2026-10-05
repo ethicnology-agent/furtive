@@ -10,6 +10,11 @@ assembling one locally: two local assemblies of the same thing drift, which
 is the problem this module exists to end — `StatBlock` replaced several
 ad hoc stat chips that had each acquired slightly different styling.
 
+A component also belongs here when more than one journey renders it and a
+feature therefore cannot own it: `ActivityStatsWidget` is shown by both the
+live map and the activity detail sheet. It takes figures and labels rather
+than a recording, which is what lets it sit below both.
+
 Reusability alone is not the test for admission. A component belongs here
 when it carries a product decision: `StatBlock`'s two densities and its rule
 of one emphasised value per group, `LabeledDropdown`'s deliberate refusal of
@@ -70,4 +75,7 @@ keeps the trigger text legible. `test/activity_type_picker_test.dart` covers
 that every selectable type is listed and `unknown` is not, that labels come
 from the caller, the title's header semantics, the checked selection,
 dismissal, and that every type has an icon.
+`test/activity_stats_test.dart` covers the figures and the caller's labels,
+the two ways the pause selector appears, that choosing paused swaps every
+figure, that elevation is hidden with them, and the opt-in background.
 `test/formatting_test.dart` covers the display helpers.

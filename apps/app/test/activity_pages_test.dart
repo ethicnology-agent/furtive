@@ -12,7 +12,6 @@ import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
-import 'package:furtive/core/widgets/activity_stats_widget.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
 import 'package:furtive/features/activities/bloc/activities_state.dart';

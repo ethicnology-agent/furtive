@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furtive/core/activity_stats_view.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/map/maplibre_map_view.dart';
-import 'package:furtive/core/widgets/activity_stats_widget.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/features/map/activity_type_labels.dart';
@@ -565,8 +565,16 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                         ),
                         child: SingleChildScrollView(
                           child: ActivityStatsWidget(
-                            activity: rec.activity!,
+                            active: rec.activity!.activeStats,
+                            paused: rec.activity!.pausedStats,
+                            activeElevationGainMeters:
+                                rec.activity!.activeElevationGain,
+                            hasPausedSegments:
+                                rec.activity!.pausedSegments.isNotEmpty,
                             elapsedTime: rec.elapsedTime,
+                            labels: activityStatsLabels(
+                              AppLocalizations.of(context),
+                            ),
                             opaqueBackground: true,
                             isCurrentlyPaused: rec.isPaused,
                           ),
