@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:file_selector/file_selector.dart';
-import 'package:furtive/core/errors.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';

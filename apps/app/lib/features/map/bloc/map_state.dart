@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:furtive/core/errors.dart';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/position_entity.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';

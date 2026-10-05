@@ -1,7 +1,7 @@
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/theme.dart';
 import 'package:furtive/features/logs/logs_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';

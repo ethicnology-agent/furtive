@@ -1,9 +1,9 @@
+import 'package:diagnostics/diagnostics.dart';
 import 'package:drift/drift.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/entities/activity_summary.dart';
 import 'package:furtive/core/clock.dart';
-import 'package:furtive/core/errors.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/models/activity_model.dart';
 

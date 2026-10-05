@@ -2,15 +2,20 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:furtive/core/global.dart';
 import 'package:logging_colorful/logging_colorful.dart' as dep;
 export 'package:logging_colorful/logging_colorful.dart';
 
 MyLogs logs = MyLogs.init();
 
+/// Supplies the environment header written at the top of a fresh log file.
+typedef DiagnosticContext = List<String> Function();
+
+List<String> _noContext() => const [];
+
 class MyLogs {
   final Directory dir;
   final dep.LoggerColorful logger;
+  final DiagnosticContext context;
   static const _logFilename = 'logs.tsv';
 
   /// Hard cap for the log file. Every level, including INFO, is persisted
@@ -30,7 +35,7 @@ class MyLogs {
   // would be written twice — to two different files.
   static StreamSubscription<dep.LogRecord>? _rootSubscription;
 
-  MyLogs._(this.dir, this.logger) {
+  MyLogs._(this.dir, this.logger, this.context) {
     dep.Logger.root.level = dep.Level.ALL;
 
     _rootSubscription?.cancel();
@@ -74,16 +79,32 @@ class MyLogs {
     _enqueue(() => logsFile.writeAsString('$log\n', mode: FileMode.append));
   }
 
-  MyLogs.init({String name = 'MyLogs', Directory? directory})
-    : this._(
-        directory ?? Directory.current,
-        // iOS emulator doesn't support colors –> https://github.com/flutter/flutter/issues/20663
-        // We don't want colors in release mode either
-        dep.LoggerColorful(
-          name,
-          disabledColors: Platform.isIOS || kReleaseMode,
-        ),
-      );
+  /// Resolves once every record logged before this call has reached the file.
+  ///
+  /// Logging is fire-and-forget by design, which leaves a caller that has
+  /// just logged unable to read the record back: the record first crosses
+  /// `Logger.root`'s stream, which delivers on a microtask, and only then
+  /// joins the write chain. Yielding to the event queue clears the first
+  /// hop, and a no-op queued behind everything pending clears the second.
+  Future<void> flush() async {
+    await Future<void>.delayed(Duration.zero);
+    await _enqueue(() async {});
+  }
+
+  MyLogs.init({
+    String name = 'MyLogs',
+    Directory? directory,
+    DiagnosticContext context = _noContext,
+  }) : this._(
+         directory ?? Directory.current,
+         // iOS emulator doesn't support colors –> https://github.com/flutter/flutter/issues/20663
+         // We don't want colors in release mode either
+         dep.LoggerColorful(
+           name,
+           disabledColors: Platform.isIOS || kReleaseMode,
+         ),
+         context,
+       );
 
   Future<void> ensureLogsExist() async {
     try {
@@ -126,29 +147,18 @@ class MyLogs {
     });
   }
 
+  /// Writes the environment header supplied by [context] at the top of a
+  /// fresh log file, and again after the file is cleared.
+  ///
+  /// What belongs in that header — build version, device model, OS release —
+  /// is the owner's knowledge, not this module's: reading it here would make
+  /// diagnostics depend on the platform plugins that answer those questions,
+  /// and would put the decision of what is safe to record in the wrong place.
+  /// Whoever supplies the lines is responsible for keeping personal data out
+  /// of them.
   void addContextInfos() {
-    config('Version: ${Global.app.version}+${Global.app.buildNumber}');
-    config('Signature: ${Global.app.buildSignature}');
-    if (Platform.isAndroid) {
-      final android = Global.android!;
-      config('Manufacturer: ${android.manufacturer}');
-      config('Brand: ${android.brand}');
-      config('Model: ${android.model}');
-      config('Device: ${android.device}');
-      config('Android: ${android.version.release}');
-      config('Sdk: ${android.version.sdkInt}');
-    } else if (Platform.isIOS) {
-      final ios = Global.ios!;
-      config('Model: ${ios.model}');
-      config('Model Name: ${ios.modelName}');
-      // ios.name is the user-assigned device name ("Jane's iPhone") — personal
-      // data. Deliberately not logged so exported logs carry no PII.
-      config('System Name: ${ios.systemName}');
-      config('System Version: ${ios.systemVersion}');
-      config('UTS Version: ${ios.utsname.version}');
-      config('UTS Release: ${ios.utsname.release}');
-      config('UTS Machine: ${ios.utsname.machine}');
-      config('iOS App on Mac: ${ios.isiOSAppOnMac}');
+    for (final line in context()) {
+      config(line);
     }
   }
 

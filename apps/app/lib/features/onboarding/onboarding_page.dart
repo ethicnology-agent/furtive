@@ -1,3 +1,4 @@
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/entities/preferences_entity.dart'
@@ -6,7 +7,6 @@ import 'package:furtive/core/global.dart';
 import 'package:furtive/core/locale_cubit.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/ui_languages.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/widgets/bottom_navigation_widget.dart';

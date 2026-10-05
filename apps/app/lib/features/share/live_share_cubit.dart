@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_state.dart';
 import 'package:furtive_share/furtive_share.dart';

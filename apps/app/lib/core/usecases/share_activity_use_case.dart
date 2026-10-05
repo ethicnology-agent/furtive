@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/errors.dart';
 import 'package:furtive/core/extensions.dart';
 import 'package:furtive/core/widgets/share_card.dart';
 import 'package:furtive/l10n/app_localizations.dart';

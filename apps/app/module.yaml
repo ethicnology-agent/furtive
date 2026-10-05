@@ -3,4 +3,4 @@ responsibility: >-
   Record, review and share activities. Still holds every capability it will
   own modules for; see architecture.md for the extraction order.
 storage: private Drift SQLite database (activities, activity points, preferences)
-allowed_dependencies: [furtive_share]
+allowed_dependencies: [diagnostics, furtive_share]

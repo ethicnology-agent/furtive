@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/position_entity.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/repositories/location_repository.dart';
 import 'package:geolocator/geolocator.dart';
 

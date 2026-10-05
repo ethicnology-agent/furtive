@@ -1,0 +1,6 @@
+role: foundation
+responsibility: >-
+  Own the diagnostic log: its levels, its sanitization, its serialized
+  on-disk file and that file's size cap.
+storage: a single rotating TSV file in a directory its owner chooses
+allowed_dependencies: []

@@ -1,5 +1,5 @@
 *mapper.dart
-apps/app/lib/l10n/app_localizations*.dart
+**/l10n/app_localizations*.dart
 
 # Miscellaneous
 *.class
@@ -34,11 +34,10 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
-apps/app/build/
+build/
 
-# Test coverage output (`flutter test --coverage`)
-apps/app/coverage/
+# Test coverage output. Unanchored: each member writes its own.
+coverage/
 
 # Symbolication related
 app.*.symbols

@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/errors.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
 import 'package:furtive/core/usecases/ensure_background_tracking_use_case.dart';
 import 'package:furtive/core/usecases/score_activity_use_case.dart';

@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/position_entity.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/utils/gps_quality_filter.dart';
 
 import '../datasources/location_gps_data_source.dart';

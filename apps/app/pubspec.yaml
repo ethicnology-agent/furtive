@@ -58,7 +58,6 @@ dependencies:
   path_provider: ^2.1.6
   path: ^1.9.1
   dart_mappable: ^4.8.0
-  logging_colorful: ^1.3.2
   package_info_plus: ^10.2.1
   url_launcher: ^6.3.2
   device_info_plus: ^13.2.0
@@ -68,6 +67,8 @@ dependencies:
 
   # Shared live-tracking format and cryptography. Kept in a pure-Dart package so
   # the mobile app and the sensor-free web viewer compile the same source.
+  diagnostics:
+    path: ../../packages/diagnostics
   furtive_share:
     path: ../../packages/furtive_share
   nostr: ^2.0.0

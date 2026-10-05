@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:furtive/core/database/tables/preferences_table.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:http/http.dart' as http;
 
 // Build-time configuration, injected via --dart-define rather than shipped as

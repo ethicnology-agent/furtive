@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Fail if line coverage in coverage/lcov.info drops below a floor.
+"""Fail if line coverage across the workspace drops below a floor.
 
-Run after `flutter test --coverage`:
+Run after `melos run test`, which writes one lcov per member:
 
     python3 tool/coverage_threshold.py            # uses MIN_LINE_COVERAGE below
     python3 tool/coverage_threshold.py 65         # explicit floor
@@ -12,6 +12,17 @@ MIN_LINE_COVERAGE whenever a phase lands real coverage, and it can then never
 silently regress. Generated sources and localisations are excluded because
 their line counts swamp the hand-written code and would let real regressions
 hide behind codegen churn.
+
+Every member that produces an lcov report is measured, not just the
+application. Reading one member's report would turn the ratchet into a leak:
+extracting a well-tested file into a module would raise the reported figure
+by removing lines from the denominator, and extracting a poorly tested one
+would hide it entirely.
+
+Pure-Dart members are not covered yet: `dart test --coverage` emits a
+different format that needs `format_coverage` to become lcov. Their tests
+run, but their lines are counted by neither the numerator nor the
+denominator.
 """
 
 import sys
@@ -20,7 +31,8 @@ from pathlib import Path
 # Ratchet. Raise this — never lower it — as coverage improves.
 MIN_LINE_COVERAGE = 78.0
 
-LCOV = Path("apps/app/coverage/lcov.info")
+# One per workspace member that has tests.
+LCOV_REPORTS = sorted(Path(".").glob("*/*/coverage/lcov.info"))
 
 # Excluded from the aggregate: drift/dart_mappable output and the generated
 # AppLocalizations. Nothing here is hand-written, so it is neither meaningful
@@ -60,11 +72,18 @@ def main() -> int:
         args.remove("--report")
     floor = float(args[0]) if args else MIN_LINE_COVERAGE
 
-    if not LCOV.exists():
-        print(f"{LCOV} not found — run `flutter test --coverage` first.")
+    if not LCOV_REPORTS:
+        print("No lcov report found — run `melos run test` first.")
         return 1
 
-    records = [r for r in parse(LCOV.read_text()) if not excluded(r[0])]
+    # Prefix each record with its member, so two modules owning a
+    # lib/src/<same name>.dart are counted and reported separately.
+    records = [
+        (f"{report.parent.parent}/{path}", found, hit)
+        for report in LCOV_REPORTS
+        for path, found, hit in parse(report.read_text())
+        if not excluded(path)
+    ]
     if not records:
         print("No coverage records left after exclusions.")
         return 1

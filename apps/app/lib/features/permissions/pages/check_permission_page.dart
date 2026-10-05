@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/global.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/entities/preferences_entity.dart';
 import 'package:furtive/core/utils/version.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:furtive/core/logs.dart';
 
 /// Device heading — which way the phone is pointing — as degrees clockwise
 /// from **true** north.

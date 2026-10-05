@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/facades/backup_exclusion_facade.dart';
@@ -19,7 +20,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'core/locator.dart';
-import 'core/logs.dart';
 import 'core/theme.dart';
 
 void main() {
@@ -33,7 +33,7 @@ void main() {
       await Global.init();
 
       final appDir = await getApplicationDocumentsDirectory();
-      logs = MyLogs.init(directory: appDir);
+      logs = MyLogs.init(directory: appDir, context: Global.diagnosticContext);
       await logs.ensureLogsExist();
 
       // Diagnostic-only: log why the previous process instance disappeared

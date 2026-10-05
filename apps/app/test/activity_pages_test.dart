@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/entities/activity_summary.dart';
 import 'package:furtive/core/entities/position_entity.dart';
-import 'package:furtive/core/errors.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/map/map_view.dart';

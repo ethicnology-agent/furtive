@@ -16,8 +16,9 @@ environment:
 
 workspace:
   - apps/app
-  - packages/furtive_share
   - apps/viewer
+  - packages/diagnostics
+  - packages/furtive_share
 
 dev_dependencies:
   furtive_share:
@@ -111,6 +112,7 @@ melos:
         dart format --output=none --set-exit-if-changed
         apps/app/lib apps/app/test
         apps/viewer/lib apps/viewer/test apps/viewer/web
+        packages/diagnostics/lib packages/diagnostics/test
         packages/furtive_share/lib packages/furtive_share/test
         tool
 

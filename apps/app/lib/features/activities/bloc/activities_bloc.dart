@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/entities/activity_summary.dart';
-import 'package:furtive/core/errors.dart';
-import 'package:furtive/core/logs.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
 import 'package:furtive/core/usecases/import_activity_from_gpx_use_case.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';

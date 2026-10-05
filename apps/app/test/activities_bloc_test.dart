@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/errors.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
 import 'package:furtive/core/usecases/import_activity_from_gpx_use_case.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';

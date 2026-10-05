@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/position_entity.dart';
-import 'package:furtive/core/errors.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
 import 'package:furtive/core/utils/gpx.dart';
 import 'package:xml/xml.dart';

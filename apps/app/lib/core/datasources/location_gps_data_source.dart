@@ -1,8 +1,8 @@
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart' hide ServiceStatus;
 import 'package:furtive/core/entities/activity_profile.dart';
-import 'package:furtive/core/errors.dart';
 
 // 0 = record every GPS fix. Used to be user-configurable but the setting
 // confused more than it helped; the activity-recording use case wants the

@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/errors.dart';
 import 'package:furtive/features/permissions/bloc/permissions_event.dart';
 import 'package:furtive/features/permissions/bloc/permissions_state.dart';
 import 'package:furtive/features/permissions/permission_repository.dart';

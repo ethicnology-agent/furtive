@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:furtive/core/errors.dart';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:furtive/features/permissions/permission_entity.dart';
 
 part 'permissions_state.mapper.dart';
