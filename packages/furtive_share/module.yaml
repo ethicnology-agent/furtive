@@ -1,0 +1,6 @@
+role: foundation
+responsibility: >-
+  Own the live-sharing wire format and its cryptography, identically for the
+  application that encrypts and the viewer that decrypts.
+storage: none
+allowed_dependencies: []

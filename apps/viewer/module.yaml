@@ -1,0 +1,6 @@
+role: shell
+responsibility: >-
+  Decrypt and render a live share in a browser, from the key carried in the
+  URL fragment and never sent to a server.
+storage: none
+allowed_dependencies: [furtive_share]

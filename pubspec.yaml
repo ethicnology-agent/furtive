@@ -22,3 +22,8 @@ workspace:
 dev_dependencies:
   furtive_share:
     path: packages/furtive_share
+
+  # tool/check_architecture.dart parses every member's imports.
+  analyzer: ^12.0.0
+  path: ^1.9.1
+  yaml: ^3.1.4

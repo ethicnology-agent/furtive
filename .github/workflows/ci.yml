@@ -93,6 +93,11 @@ jobs:
           grep -q "img-src 'self' data: https://tile.openstreetmap.org" \
             build/viewer-basemap/index.html
 
+      # Reads each workspace member's module.yaml and rejects a dependency,
+      # cycle or import that crosses a boundary the module did not declare.
+      - name: Module boundaries
+        run: dart run tool/check_architecture.dart
+
       # Fails on an import that would drag Flutter, storage, or sensors into the
       # pure-Dart package shared with the web viewer.
       - name: Share-layer boundary

@@ -2,7 +2,7 @@
 # command that targets it rather than the workspace runs from here.
 APP := apps/app
 
-.PHONY: all setup clean deps build-runner build-runner-watch ios-pod-update drift-migrations devcontainer devcontainer-create devcontainer-start container-tools container-app apk fvm-check release debug translations verify-reproducible format analyze test viewer-deps viewer-analyze viewer-build share-boundary share-config check
+.PHONY: all setup clean deps build-runner build-runner-watch ios-pod-update drift-migrations devcontainer devcontainer-create devcontainer-start container-tools container-app apk fvm-check release debug translations verify-reproducible format analyze test viewer-deps viewer-analyze viewer-build share-boundary share-config architecture check
 
 fvm-check:
 	@echo "🔍 Checking FVM"
@@ -94,6 +94,12 @@ share-boundary:
 	@echo "🚧 Checking the share-layer boundary"
 	@python3 tool/check_share_boundary.py
 
+# Reads each member's module.yaml and rejects a dependency, cycle or import
+# that crosses a boundary the module did not declare.
+architecture:
+	@echo "🧱 Checking module boundaries"
+	@fvm dart run tool/check_architecture.dart
+
 share-config:
 	@echo "🔐 Validating the live-share release configuration"
 	@fvm dart run tool/validate_share_config.dart
@@ -103,7 +109,7 @@ share-config:
 # `translations` both regenerates $(APP)/lib/l10n/app_localizations*.dart (gitignored,
 # needed for analyze/test to see the generated AppLocalizations class) and
 # checks ARB key parity across every locale.
-check: deps build-runner translations format analyze share-boundary test viewer-build
+check: deps build-runner translations format analyze architecture share-boundary test viewer-build
 	@echo "✅ All checks passed"
 
 ios-pod-update:
