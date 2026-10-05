@@ -45,3 +45,11 @@ recordings, not a measured constant.
 `test/position_test.dart` covers the heading contract: the threshold in both
 directions and at its exact boundary, an unknown speed, a missing heading,
 and the non-finite and out-of-range values the platform can produce.
+
+`test/distance_test.dart` covers the distance against the sphere it is
+defined on: identity, a quarter of the equator, pole to pole by either
+meridian, antipodes, the pole where longitude costs nothing, symmetry, the
+published Paris-London figure, a metre-scale step, and the antimeridian.
+The application holds the same function against geolocator's original in
+`test/distance_parity_test.dart`; that one is the bit-equality check and
+needs the plugin, so it cannot live here.

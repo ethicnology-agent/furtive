@@ -19,10 +19,8 @@ extracting a well-tested file into a module would raise the reported figure
 by removing lines from the denominator, and extracting a poorly tested one
 would hide it entirely.
 
-Pure-Dart members are not covered yet: `dart test --coverage` emits a
-different format that needs `format_coverage` to become lcov. Their tests
-run, but their lines are counted by neither the numerator nor the
-denominator.
+Pure-Dart members are converted by the test:dart script, which runs
+format_coverage over the VM hitmap `dart test --coverage` leaves behind.
 """
 
 import sys

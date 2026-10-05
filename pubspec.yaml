@@ -35,6 +35,9 @@ dev_dependencies:
   path: ^1.9.1
   yaml: ^3.1.4
 
+  # tool/format_dart_coverage.dart converts pure-Dart hitmaps to lcov.
+  coverage: ^1.15.1
+
 # Every task below runs the SDK from the PATH, so it is identical in CI,
 # which installs Flutter directly, and locally, where `fvm exec` puts the
 # version pinned in .fvmrc on the PATH:
@@ -150,8 +153,16 @@ melos:
         dirExists: test
 
     test:dart:
+      # `dart test` emits a VM hitmap, not lcov, so the figure a pure-Dart
+      # member contributes would otherwise be invisible to the coverage
+      # floor — and a well-tested module leaving the application would lower
+      # the measured total. format_coverage resolves from the workspace root,
+      # which every member shares.
       exec:
-        command: dart run "$MELOS_ROOT_PATH/tool/test_module.dart" dart
+        command: >-
+          dart run "$MELOS_ROOT_PATH/tool/test_module.dart" dart --coverage=coverage &&
+          dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info
+          --base-directory=. --report-on=lib
         concurrency: 1
         failFast: true
       packageFilters:
