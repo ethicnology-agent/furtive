@@ -20,6 +20,7 @@ workspace:
   - packages/diagnostics
   - packages/furtive_share
   - packages/geo
+  - packages/ui_kit
 
 dev_dependencies:
   furtive_share:
@@ -115,6 +116,7 @@ melos:
         apps/viewer/lib apps/viewer/test apps/viewer/web
         packages/diagnostics/lib packages/diagnostics/test
         packages/geo/lib packages/geo/test
+        packages/ui_kit/lib packages/ui_kit/test
         packages/furtive_share/lib packages/furtive_share/test
         tool
 

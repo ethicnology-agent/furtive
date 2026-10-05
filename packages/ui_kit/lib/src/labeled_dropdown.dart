@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furtive/core/theme.dart';
+import 'theme.dart';
 
 /// Drop-in replacement for `DropdownButtonFormField` that ignores the
 /// global `inputDecorationTheme` (which fills inputs with tealAccent — fine

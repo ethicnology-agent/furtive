@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class LogsPage extends StatefulWidget {
   const LogsPage({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 /// Widget coverage for the splits chart.
 ///

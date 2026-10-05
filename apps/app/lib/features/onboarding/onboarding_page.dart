@@ -7,10 +7,8 @@ import 'package:furtive/core/global.dart';
 import 'package:furtive/core/locale_cubit.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/ui_languages.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/widgets/bottom_navigation_widget.dart';
-import 'package:furtive/core/widgets/labeled_dropdown.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/preferences/page.dart' show mapThemeName;
@@ -20,6 +18,7 @@ import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_event.dart';
 import 'package:furtive/features/permissions/bloc/permissions_state.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 /// First-launch wizard:
 /// 1. Welcome

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furtive/core/theme.dart';
+import 'theme.dart';
 
 /// Shared "icon + label + value" stat display, replacing the ad hoc
 /// solid-mint pill chips and one-off `_StatItem` widgets that used to be

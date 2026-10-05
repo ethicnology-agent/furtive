@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/extensions.dart';
-import 'package:furtive/core/theme.dart';
-import 'package:furtive/core/widgets/stat_block.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class ActivityStatsWidget extends StatefulWidget {
   final ActivityEntity activity;

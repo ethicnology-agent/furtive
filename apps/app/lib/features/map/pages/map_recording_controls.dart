@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/widgets/activity_type_picker.dart';
 import 'package:furtive/core/widgets/hold_to_confirm_button.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 /// Keeps the recording action under the same thumb across state transitions.
 class MapRecordingControls extends StatelessWidget {

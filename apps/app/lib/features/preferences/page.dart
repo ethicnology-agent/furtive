@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/preferences_entity.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/ui_languages.dart';
-import 'package:furtive/core/widgets/labeled_dropdown.dart';
 import 'package:furtive/features/preferences/bloc/preferences_bloc.dart';
 import 'package:furtive/features/preferences/bloc/preferences_event.dart';
 import 'package:furtive/features/preferences/bloc/preferences_state.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class PreferencesPage extends StatefulWidget {
   const PreferencesPage({super.key, this.repository});

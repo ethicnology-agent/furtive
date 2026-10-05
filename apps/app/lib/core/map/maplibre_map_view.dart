@@ -6,12 +6,12 @@ import 'package:flutter/gestures.dart'
 import 'package:flutter/widgets.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/map/map_view.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/utils/geo_circle.dart';
 import 'package:furtive/core/widgets/km_milestone_chip.dart';
 import 'package:furtive/core/widgets/user_location_puck.dart';
 import 'package:geo/geo.dart';
 import 'package:maplibre/maplibre.dart' as ml;
+import 'package:ui_kit/ui_kit.dart';
 
 /// [MapView] backed by MapLibre Native.
 ///

@@ -1,7 +1,7 @@
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SupportDeveloperWidget extends StatelessWidget {

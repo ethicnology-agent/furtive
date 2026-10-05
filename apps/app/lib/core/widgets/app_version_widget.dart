@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furtive/core/global.dart';
-import 'package:furtive/core/theme.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class AppVersionWidget extends StatelessWidget {
   const AppVersionWidget({super.key});

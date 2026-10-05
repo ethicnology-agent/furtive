@@ -14,14 +14,18 @@ graph TD
   style furtive_share stroke:#d42752
   geo["geo"]
   style geo stroke:#362842
+  ui_kit["ui_kit"]
+  style ui_kit stroke:#375a43
   furtive --> diagnostics
   furtive --> furtive_share
   furtive --> geo
+  furtive --> ui_kit
   furtive_leaflet_viewer --> furtive_share
   subgraph packages0 ["packages"]
     diagnostics
     furtive_share
     geo
+    ui_kit
   end
   subgraph apps1 ["apps"]
     furtive

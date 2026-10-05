@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/global.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/features/settings/settings_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 void main() {
   for (final size in [const Size(800, 360), const Size(360, 800)]) {

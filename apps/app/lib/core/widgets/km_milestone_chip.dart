@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furtive/core/theme.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 /// Numbered circular badge marking one kilometre milestone on a map.
 ///

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 enum _Metric { pace, speed }
 

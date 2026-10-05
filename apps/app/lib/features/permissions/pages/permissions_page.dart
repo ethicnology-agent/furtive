@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/global.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/widgets/bottom_navigation_widget.dart';
 import 'package:furtive/features/onboarding/onboarding_page.dart';
@@ -10,6 +9,7 @@ import 'package:furtive/features/permissions/bloc/permissions_event.dart';
 import 'package:furtive/features/permissions/bloc/permissions_state.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 // Map the runtime Permission to the localised name/description in
 // app_*.arb. Unknown permissions fall back to the entity copy so a newly

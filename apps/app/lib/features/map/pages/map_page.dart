@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/map/maplibre_map_view.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/core/widgets/activity_stats_widget.dart';
 import 'package:furtive/core/widgets/activity_type_picker.dart';
 import 'package:furtive/core/global.dart';
@@ -25,6 +24,7 @@ import 'package:furtive/features/activities/bloc/activities_event.dart';
 import 'package:furtive/features/activities/pages/activity_detail_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 String _loadingMessage(AppLocalizations l10n, LoadingStatus status) =>
     switch (status) {

@@ -19,8 +19,8 @@ import 'package:furtive/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'core/locator.dart';
-import 'core/theme.dart';
 
 void main() {
   runZonedGuarded(

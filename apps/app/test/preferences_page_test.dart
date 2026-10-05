@@ -8,9 +8,9 @@ import 'package:furtive/core/entities/preferences_entity.dart';
 import 'package:furtive/core/locale_cubit.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/features/preferences/page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 import 'support/fakes.dart';
 

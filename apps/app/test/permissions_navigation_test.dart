@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/locator.dart';
-import 'package:furtive/core/theme.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/features/permissions/pages/permissions_page.dart';
 import 'package:furtive/features/permissions/permission_entity.dart';
 import 'package:furtive/features/permissions/permission_repository.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class _GrantedPermissions extends PermissionRepository {
   @override

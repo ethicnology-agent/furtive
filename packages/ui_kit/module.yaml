@@ -1,0 +1,7 @@
+role: ui
+responsibility: >-
+  Own the application's theme and the visual components more than one place
+  renders, so a styling decision is made once and cannot drift between the
+  screens that depend on it.
+storage: none
+allowed_dependencies: []
