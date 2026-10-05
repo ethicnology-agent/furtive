@@ -54,7 +54,7 @@ sys.exit(0) if not bad else (print('PARITY ISSUES:'), [print(f'  {loc}: missing=
 
 format:
 	@echo "🎨 Checking formatting (dart format --set-exit-if-changed)"
-	@fvm dart format --set-exit-if-changed $(APP)/lib $(APP)/test packages/furtive_share/lib packages/furtive_share/test viewer/lib viewer/test viewer/web tool/validate_share_config.dart
+	@fvm dart format --set-exit-if-changed $(APP)/lib $(APP)/test packages/furtive_share/lib packages/furtive_share/test apps/viewer/lib apps/viewer/test apps/viewer/web tool/validate_share_config.dart
 
 analyze:
 	@echo "🔎 Running flutter analyze"
@@ -67,14 +67,14 @@ test:
 	@echo "🔐 Running pure-Dart share package tests"
 	@cd packages/furtive_share && fvm dart test
 	@echo "🌐 Running web viewer logic tests"
-	@cd viewer && fvm dart test
+	@cd apps/viewer && fvm dart test
 
 viewer-deps: deps
 
 viewer-analyze:
 	@echo "🔎 Analyzing shared package and web viewer"
 	@fvm dart analyze packages/furtive_share
-	@fvm dart analyze viewer
+	@fvm dart analyze apps/viewer
 
 # Same-origin by default, so a self-hosted viewer contacts no third-party tile
 # host. Overriding this points the basemap at a public service and discloses the
@@ -84,7 +84,7 @@ VIEWER_TILE_URL ?= /tiles/{z}/{x}/{y}.png
 viewer-build:
 	@echo "🌐 Compiling the Dart Web viewer"
 	@mkdir -p build/viewer
-	@fvm dart compile js -O4 -DTILE_URL='$(VIEWER_TILE_URL)' -o build/viewer/main.dart.js viewer/web/main.dart
+	@fvm dart compile js -O4 -DTILE_URL='$(VIEWER_TILE_URL)' -o build/viewer/main.dart.js apps/viewer/web/main.dart
 	@python3 tool/package_viewer.py build/viewer --tile-url '$(VIEWER_TILE_URL)'
 
 # The path package is a real compiler boundary, and this denylist guards its

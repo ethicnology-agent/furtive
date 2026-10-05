@@ -126,14 +126,14 @@ def main() -> int:
         return 1
 
     script = compiled.read_bytes()
-    styles = (root / "viewer/web/styles.css").read_bytes()
+    styles = (root / "apps/viewer/web/styles.css").read_bytes()
     script_name = f"main.{digest(script)[:12]}.js"
     styles_name = f"styles.{digest(styles)[:12]}.css"
     write_atomic(output / script_name, script)
     write_atomic(output / styles_name, styles)
     compiled.unlink()
 
-    template = (root / "viewer/web/index.html").read_text(encoding="utf-8")
+    template = (root / "apps/viewer/web/index.html").read_text(encoding="utf-8")
     index = template.replace("styles.css", styles_name).replace(
         "main.dart.js", script_name
     )

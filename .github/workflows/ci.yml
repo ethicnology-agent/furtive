@@ -36,9 +36,6 @@ jobs:
         working-directory: apps/app
         run: flutter pub get --enforce-lockfile
 
-      - name: viewer pub get (enforce lockfile)
-        run: dart pub get --directory viewer --enforce-lockfile
-
       - name: shared package pub get (enforce lockfile)
         run: dart pub get --directory packages/furtive_share --enforce-lockfile
 
@@ -66,7 +63,7 @@ jobs:
           dart format --set-exit-if-changed
           apps/app/lib apps/app/test
           packages/furtive_share/lib packages/furtive_share/test
-          viewer/lib viewer/test viewer/web
+          apps/viewer/lib apps/viewer/test apps/viewer/web
 
       - name: flutter analyze
         working-directory: apps/app
@@ -75,12 +72,12 @@ jobs:
       - name: Analyze shared package and web viewer
         run: |
           dart analyze packages/furtive_share
-          dart analyze viewer
+          dart analyze apps/viewer
 
       - name: Compile web viewer
         run: |
           mkdir -p build/viewer
-          dart compile js -O4 -o build/viewer/main.dart.js viewer/web/main.dart
+          dart compile js -O4 -o build/viewer/main.dart.js apps/viewer/web/main.dart
           python3 tool/package_viewer.py build/viewer
 
       # The step above packages the same-origin default, which exercises neither
@@ -113,7 +110,7 @@ jobs:
         run: dart test
 
       - name: Viewer logic tests
-        working-directory: viewer
+        working-directory: apps/viewer
         run: dart test
 
       - name: Coverage floor

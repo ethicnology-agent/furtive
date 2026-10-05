@@ -17,7 +17,7 @@ environment:
 workspace:
   - apps/app
   - packages/furtive_share
-  - viewer
+  - apps/viewer
 
 dev_dependencies:
   furtive_share:

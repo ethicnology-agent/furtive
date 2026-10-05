@@ -15,7 +15,7 @@ on:
       - packages/furtive_share/**
       - site/**
       - tool/package_viewer.py
-      - viewer/**
+      - apps/viewer/**
 
 # contents stays read-only: the job reads the tree and publishes build/viewer.
 # The two Pages scopes are what actions/deploy-pages needs to mint its OIDC
@@ -51,8 +51,8 @@ jobs:
           channel: stable
           cache: true
 
-      - name: viewer pub get (enforce lockfile)
-        run: dart pub get --directory viewer --enforce-lockfile
+      - name: pub get (enforce lockfile)
+        run: dart pub get --enforce-lockfile
 
       - name: shared package pub get (enforce lockfile)
         run: dart pub get --directory packages/furtive_share --enforce-lockfile
@@ -80,7 +80,7 @@ jobs:
         run: |
           mkdir -p build/site/share
           dart compile js -O4 -DTILE_URL="$VIEWER_TILE_URL" \
-            -o build/site/share/main.dart.js viewer/web/main.dart
+            -o build/site/share/main.dart.js apps/viewer/web/main.dart
           python3 tool/package_viewer.py build/site/share --tile-url "$VIEWER_TILE_URL"
 
       # The viewer is published under /share/ so the domain root can carry the
