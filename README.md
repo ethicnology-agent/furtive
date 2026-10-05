@@ -85,7 +85,7 @@ not add a `key.properties` or wire signing into Gradle.
 container produce byte-identical output. The repository pins the major inputs:
 
 - `debian:trixie@sha256:…` (multi-arch index digest, in `Containerfile.tools`)
-- Flutter `3.44.9` via `.fvmrc`
+- Flutter `3.47.6` via `.fvmrc`
 - Android NDK / SDK / build-tools / JVM in `apps/app/android/gradle.properties`
 - `pubspec.lock` enforced via `flutter pub get --enforce-lockfile`
 - Gradle distribution, FVM installer, and Android command-line tools checksums

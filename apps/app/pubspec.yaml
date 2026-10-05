@@ -82,33 +82,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  # ---------------------------------------------------------------------
-  # THE ANALYZER-13 WALL — why the three codegen packages below are pinned
-  # to older versions even though newer ones exist.
-  #
-  # Every newer release of build_runner (>=2.15.2), drift_dev (>2.34.0) and
-  # dart_mappable_builder (>=4.9.0) requires analyzer ^13.0.0 (build_runner
-  # additionally needs meta ^1.18.3). Flutter 3.44.9 ships Dart 3.12.2, which
-  # caps analyzer at 12.1.0 and pins meta 1.18.0; flutter_test additionally
-  # pins test_api 0.7.11 and matcher 0.12.19, so pulling analyzer 13 drags in
-  # a `test` version that conflicts with bloc_test.
-  #
-  # These bumps resolve cleanly in a bare Dart project — they fail HERE
-  # specifically because of the Flutter SDK's own pins. Nothing to fix on our
-  # side: re-attempt all three together the first time a Flutter stable ships
-  # analyzer >= 13 / meta >= 1.18.3.
-  # ---------------------------------------------------------------------
-  build_runner: ^2.15.1
-  # Blocked by the analyzer-13 wall above — and this pin has a visible cost:
-  # against drift 2.34.2, drift_dev 2.34.0's CLI does not compile, so
-  # `dart run drift_dev schema <dump|export|generate|steps>` dies on
-  # `allSchemaEntities` (removed from drift3_preview's GeneratedDatabase).
-  # The whole schema-migration verification toolchain (SchemaVerifier,
-  # step-by-step migration tests) is therefore unavailable. build_runner
-  # codegen is unaffected, which is why it goes unnoticed day to day.
-  # Until the wall lifts, migrations are covered only by the hand-written
-  # tests in test/database_test.dart.
-  drift_dev: ^2.34.0
+  # These three move together: each of them requires analyzer ^13, which
+  # Dart 3.13 is the first SDK to allow. They were pinned below that for as
+  # long as the SDK capped analyzer at 12.1.0 — see the toolchain commit
+  # that lifted it.
+  build_runner: ^2.15.2
+  drift_dev: ^2.34.6
   sqlite3: ^3.5.0 # already a drift transitive; declared for the migration test
   # Both are already path_provider transitives; declared explicitly because
   # test/file_system_facade_test.dart imports them directly to substitute a fake
@@ -117,7 +96,7 @@ dev_dependencies:
   path_provider_platform_interface: ^2.1.3
   plugin_platform_interface: ^2.1.8
   bloc_test: ^10.0.0
-  dart_mappable_builder: ^4.8.0 # blocked by the analyzer-13 wall above
+  dart_mappable_builder: ^4.9.1
 
 # Launcher icons are committed artifacts, not a build step: the generator was
 # removed because it pins cli_util ^0.4 and a workspace resolves one version

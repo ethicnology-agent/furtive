@@ -21,6 +21,14 @@ analyzer:
     # Generated sources are gitignored and regenerated in CI; nothing here is
     # hand-written, so lints against them are noise.
     todo: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   # The lint rules applied to this project can be customized in the section
