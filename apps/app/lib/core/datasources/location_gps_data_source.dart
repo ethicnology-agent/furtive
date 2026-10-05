@@ -146,7 +146,8 @@ class LocationGpsDataSource {
           // runs. Stopping is done in-app (pause → hold Stop), not by swipe.
           setOngoing: true,
           // defType is the Android resource folder name, NOT the package id.
-          // flutter_launcher_icons emits `launcher_icon.png` under mipmap-*.
+          // The committed launcher icons are named `launcher_icon.png` under
+          // mipmap-*, which is also what the manifest's android:icon uses.
           notificationIcon: AndroidResource(
             name: 'launcher_icon',
             defType: 'mipmap',

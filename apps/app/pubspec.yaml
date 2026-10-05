@@ -118,20 +118,12 @@ dev_dependencies:
   plugin_platform_interface: ^2.1.8
   bloc_test: ^10.0.0
   dart_mappable_builder: ^4.8.0 # blocked by the analyzer-13 wall above
-  flutter_launcher_icons: "^0.14.4"
 
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/logo.png"
-  min_sdk_android: 24 # android min sdk min:16, default 21
-  windows:
-    generate: true
-    image_path: "assets/logo.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "assets/logo.png"
+# Launcher icons are committed artifacts, not a build step: the generator was
+# removed because it pins cli_util ^0.4 and a workspace resolves one version
+# for every member. Regenerate from assets/logo.png outside this workspace
+# when the logo changes, then commit the result. The Android manifest points
+# at @mipmap/launcher_icon, which is what the committed icons are named.
 
 # The following section is specific to Flutter packages.
 flutter:
