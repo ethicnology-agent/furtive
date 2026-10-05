@@ -86,6 +86,7 @@ are identical in CI, which installs Flutter directly, and locally, where
 `fvm exec` puts the version pinned in `.fvmrc` on the PATH:
 
 ```sh
+fvm install                                  # once, installs the pinned SDK
 fvm exec dart pub get --enforce-lockfile
 fvm exec dart run melos bootstrap
 fvm exec dart run melos run verify
@@ -103,8 +104,9 @@ Generated sources — ARB output and drift code — are not committed. Run
 `melos run generate` in a fresh clone, modify the generator inputs rather
 than their output, and never edit a generated file.
 
-The makefile is now limited to what Melos does not cover: the reproducible
-container build, the release artefacts, and the dev container.
+The container build, the release artefacts and the dev container are Melos
+scripts too: `apk`, `reproducible`, `devcontainer:create` and
+`devcontainer:start`.
 
 ## Releases
 
@@ -115,7 +117,7 @@ not add a `key.properties` or wire signing into Gradle.
 
 ## Reproducible builds
 
-`make verify-reproducible` verifies that two clean APK builds in the same pinned
+`fvm exec dart run melos run reproducible` verifies that two clean APK builds in the same pinned
 container produce byte-identical output. The repository pins the major inputs:
 
 - `debian:trixie@sha256:…` (multi-arch index digest, in `Containerfile.tools`)
@@ -126,7 +128,7 @@ container produce byte-identical output. The repository pins the major inputs:
 - `SOURCE_DATE_EPOCH = $(git log -1 --format=%ct)` passed to the container
   so Gradle/AGP/Kotlin emit deterministic timestamps
 
-Verify locally with `make verify-reproducible` (builds twice, compares
+Verify locally with `fvm exec dart run melos run reproducible` (builds twice, compares
 SHA-256, fails with a diffoscope hint on mismatch).
 
 This is not a timeless guarantee across arbitrary future package mirrors:

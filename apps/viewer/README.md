@@ -101,5 +101,5 @@ Three things are set outside this repository:
    default branch has to be among them under Settings → Environments →
    `github-pages`, or the run is refused.
 3. The app only produces links once built with the matching viewer origin:
-   `make apk SHARE_VIEWER_URL=https://furtive.ethicnology.com/share/`, which
+   `SHARE_VIEWER_URL=https://furtive.ethicnology.com/share/ fvm exec dart run melos run apk`, which
    the release workflow reads from the `SHARE_VIEWER_URL` repository variable.

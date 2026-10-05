@@ -179,6 +179,36 @@ melos:
       run: dart run tool/run_app.dart apps/app
       stdio: inherit
 
+    ios:pods:
+      description: Fetch the iOS pods for the application.
+      run: flutter precache --ios && cd apps/app/ios && pod install --repo-update
+      stdio: inherit
+
+    apk:
+      description: >-
+        Build the release artefact inside the pinned container. Honours
+        CONTAINER, MODE, FORMAT, GRADLE_HEAP, SOURCE_DATE_EPOCH and the
+        PROTOMAPS/SHARE dart-defines.
+      run: dart run tool/build_release.dart
+      stdio: inherit
+
+    reproducible:
+      description: Build the release artefact twice and compare SHA-256.
+      run: dart run tool/verify_reproducible.dart
+      stdio: inherit
+
+    devcontainer:create:
+      description: Create the dev container.
+      run: devcontainer up --workspace-folder . --config ./.devcontainer/devcontainer.json
+      stdio: inherit
+
+    devcontainer:start:
+      description: Start the dev container and open a shell in it.
+      run: >-
+        "${CONTAINER:-podman}" start "$(basename "$MELOS_ROOT_PATH")" &&
+        "${CONTAINER:-podman}" exec -it "$(basename "$MELOS_ROOT_PATH")" bash
+      stdio: inherit
+
     verify:
       description: Everything CI runs on a push.
       dependsOn:

@@ -5,11 +5,11 @@ Reproducible Flutter / Android toolchain for furtive. Inspired by [bullbitcoin-m
 ## Usage
 
 ```bash
-make devcontainer-create   # first time: build toolchain image + create + start
-make devcontainer-start    # subsequent times: start stopped container and exec into it
+fvm exec dart run melos run devcontainer:create   # first time: build toolchain image + create + start
+fvm exec dart run melos run devcontainer:start    # subsequent times: start stopped container and exec into it
 ```
 
-The dev container is built from `Containerfile.tools` (Flutter SDK + Android toolchain only). The workspace is mounted live, so code changes don't require rebuilding the image. `Containerfile.app` is reserved for reproducible APK builds via `make apk`.
+The dev container is built from `Containerfile.tools` (Flutter SDK + Android toolchain only). The workspace is mounted live, so code changes don't require rebuilding the image. `Containerfile.app` is reserved for reproducible APK builds via `fvm exec dart run melos run apk`.
 
 or directly:
 
@@ -32,9 +32,9 @@ This ensures Rosetta is active in the Podman VM. Without it, x86_64 binaries fal
 ## Build APK outside the dev container
 
 ```bash
-make apk            # release apk
-make apk debug      # debug apk
-make apk FORMAT=aab # release app bundle
+fvm exec dart run melos run apk                  # release apk
+MODE=debug fvm exec dart run melos run apk       # debug apk
+FORMAT=aab fvm exec dart run melos run apk       # release app bundle
 ```
 
-Defaults to `podman`. Override with `CONTAINER=docker make apk`.
+Defaults to `podman`. Override with `CONTAINER=docker fvm exec dart run melos run apk`.
