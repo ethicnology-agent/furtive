@@ -171,7 +171,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **The share card ignored the system font scale**, so a user with large
   accessibility text exported a visibly broken PNG they never saw before sharing.
   The card is pinned to `TextScaler.noScaling` and covered by golden tests.
-- **`activity_points` → `activities` foreign key now cascades** (schema v10). It
+- **`activity_points` → `activities` foreign key now cascades** (schema v9). It
   previously declared a reference with no `ON DELETE` action, so nothing at the
   SQLite level prevented orphan point rows; only the app's own transaction did.
 - Indexed `activities.stopped_at`, used by the resume-after-kill lookup on every

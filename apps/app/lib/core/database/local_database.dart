@@ -17,7 +17,7 @@ class LocalDatabase extends _$LocalDatabase {
   LocalDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -253,16 +253,23 @@ class LocalDatabase extends _$LocalDatabase {
       await m.addColumn(activities, activities.activityType);
     }
     if (from < 10) {
+      // v10 — everything this release adds, in one revision. It was written
+      // as two while the branch was in flight (pause checkpoints, then the
+      // milestone interval); v9 is the last schema any release shipped, so
+      // the next number is 10 and there is exactly one of it. Same reason
+      // the v9 step above folded four older revisions together.
+      //
       // NULL preserves legacy recovery from point statuses until the first
       // explicit pause/resume command creates an authoritative checkpoint.
       await m.addColumn(activities, activities.recordingPausedAtMs);
       await m.addColumn(activities, activities.recordingCompletedPauseMs);
-    }
-    if (from >= 9 && from < 11) {
-      // Older schemas reach the current preferences shape through the v9
-      // TableMigration above, where this column is declared in
-      // newPreferenceColumns. v9/v10 databases need the additive step here.
-      await m.addColumn(preferences, preferences.mapMilestoneIntervalKm);
+      if (from == 9) {
+        // Anything older reaches the current preferences shape through the
+        // v9 TableMigration above, which rebuilds the table from
+        // newPreferenceColumns and therefore already includes this one.
+        // Only a database sitting at exactly 9 needs the additive step.
+        await m.addColumn(preferences, preferences.mapMilestoneIntervalKm);
+      }
     }
   }
 }

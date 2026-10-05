@@ -48,6 +48,29 @@ void main() {
       return raw;
     }
 
+    test('adds the milestone interval a v9 preferences table lacks', () async {
+      // The one column that only a database sitting at exactly 9 receives
+      // from an additive step: anything older is rebuilt from
+      // newPreferenceColumns by the v9 TableMigration and already has it.
+      // Aggregating the two in-flight revisions into v10 is precisely the
+      // change that could have dropped this path, so it is asserted here.
+      final raw = legacyDatabase();
+      expect(
+        raw.select("PRAGMA table_info('preferences')").map((r) => r['name']),
+        isNot(contains('map_milestone_interval_km')),
+        reason: 'the fixture must really be a v9 table',
+      );
+
+      final db = LocalDatabase.forTesting(NativeDatabase.opened(raw));
+      addTearDown(db.close);
+      final row = await (db.select(
+        db.preferences,
+      )..where((t) => t.id.equals(1))).getSingle();
+
+      expect(row.mapMilestoneIntervalKm, 1);
+      expect(raw.select('PRAGMA user_version').single.values.single, 10);
+    });
+
     test(
       'preserves legacy activity and round-trips precise pause commands',
       () async {
@@ -61,7 +84,7 @@ void main() {
         expect(row.distanceMeters, 42);
         expect(row.activeDurationMs, 15000);
         expect(row.activityType, ActivityTypeColumn.walk);
-        expect(raw.select('PRAGMA user_version').single.values.single, 11);
+        expect(raw.select('PRAGMA user_version').single.values.single, 10);
 
         final pausedAt = DateTime.utc(2026, 9, 22, 12, 0, 10, 250);
         const completed = Duration(seconds: 8, milliseconds: 125);
@@ -189,7 +212,7 @@ void main() {
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
 
-        expect(db.schemaVersion, 11);
+        expect(db.schemaVersion, 10);
         // Existing preferences survive untouched.
         expect(prefs.mapTheme, MapThemeColumn.white);
         expect(prefs.hasCompletedOnboarding, isTrue);
@@ -323,7 +346,7 @@ void main() {
         await (db.select(
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
-        expect(db.schemaVersion, 11);
+        expect(db.schemaVersion, 10);
 
         final remainingTables = raw
             .select(
@@ -391,7 +414,7 @@ void main() {
           db.preferences,
         )..where((t) => t.id.equals(1))).getSingle();
 
-        expect(db.schemaVersion, 11);
+        expect(db.schemaVersion, 10);
         // v2 backfill: existing users skip onboarding and get the changelog
         // sentinel; fresh installs (not this path) get the column defaults.
         expect(prefs.hasCompletedOnboarding, isTrue);
@@ -1115,7 +1138,7 @@ void main() {
       expect(await ds.fetchOngoing(), isNull);
     });
 
-    test('the v10 foreign key cascades: deleting an activity row directly (not '
+    test('the v9 foreign key cascades: deleting an activity row directly (not '
         'through delete()) no longer leaves orphan points behind', () async {
       final ds = ActivityLocalDataSource();
       final t = DateTime.utc(2026, 1, 1, 12);
@@ -1140,7 +1163,7 @@ void main() {
       );
       expect(await db.select(db.activityPoints).get(), isNotEmpty);
 
-      // Bypass delete()'s transaction entirely — before v10 the FK was inert
+      // Bypass delete()'s transaction entirely — before v9 the FK was inert
       // metadata and this left an orphan point row pointing at nothing.
       await (db.delete(
         db.activities,
