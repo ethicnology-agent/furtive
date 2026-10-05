@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/widgets/km_splits_chart.dart';
+import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 
 void main() {
   KmSplit split(int index, Duration duration) => KmSplit(

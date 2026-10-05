@@ -6,7 +6,7 @@ import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/map/maplibre_map_view.dart';
 import 'package:furtive/core/widgets/activity_stats_widget.dart';
-import 'package:furtive/core/widgets/km_splits_chart.dart';
+import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
