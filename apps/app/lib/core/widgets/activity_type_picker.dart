@@ -1,5 +1,5 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 
@@ -25,17 +25,6 @@ String activityTypeName(AppLocalizations l10n, ActivityTypeEntity type) =>
       ActivityTypeEntity.other => l10n.activityOther,
       ActivityTypeEntity.unknown => l10n.activityUnknown,
     };
-
-/// The activities offered in the picker, in display order.
-///
-/// [ActivityTypeEntity.unknown] is deliberately absent: it exists for rows that
-/// predate the taxonomy and for imports, and offering it as a choice would
-/// invite users to record untyped activities on purpose — the one thing the
-/// type is meant to stop.
-List<ActivityTypeEntity> get selectableActivityTypes => ActivityTypeEntity
-    .values
-    .where((type) => type != ActivityTypeEntity.unknown)
-    .toList(growable: false);
 
 /// Bottom sheet listing every activity, with the current one checked. Returns
 /// the chosen type, or null if dismissed.

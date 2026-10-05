@@ -1,6 +1,6 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/preferences_entity.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/ui_languages.dart';

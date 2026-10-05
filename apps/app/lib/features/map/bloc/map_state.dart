@@ -1,6 +1,6 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:diagnostics/diagnostics.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:geo/geo.dart';
 

@@ -1,0 +1,7 @@
+role: foundation
+responsibility: >-
+  Own the activity vocabulary: the type the user picks, the movement profile
+  it implies, the sampling intent, and the tuning constants that follow from
+  them.
+storage: none
+allowed_dependencies: []

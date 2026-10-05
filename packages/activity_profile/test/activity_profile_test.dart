@@ -1,6 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
-import 'package:furtive/core/widgets/activity_type_picker.dart';
+import 'package:test/test.dart';
+import 'package:activity_profile/activity_profile.dart';
 
 void main() {
   group('taxonomy', () {

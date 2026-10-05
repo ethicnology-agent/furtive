@@ -1,4 +1,4 @@
-import 'package:furtive/core/entities/activity_profile.dart';
+import 'package:activity_profile/activity_profile.dart';
 import 'package:geo/geo.dart';
 
 sealed class RecordingEvent {

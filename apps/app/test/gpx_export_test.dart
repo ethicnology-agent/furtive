@@ -1,8 +1,8 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/core/usecases/export_activity_to_gpx_use_case.dart';
 import 'package:geo/geo.dart';

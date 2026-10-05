@@ -1,3 +1,4 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/clock.dart';
@@ -6,7 +7,6 @@ import 'package:furtive/core/database/tables/activity_points_table.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';
 import 'package:furtive/core/datasources/preferences_local_data_source.dart';
 import 'package:flutter/foundation.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/facades/compass_facade.dart';
 import 'package:furtive/core/models/activity_model.dart';

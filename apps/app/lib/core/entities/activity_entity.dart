@@ -1,7 +1,7 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:collection/collection.dart' show mergeSort;
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:geo/geo.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 
 part 'activity_entity.mapper.dart';
 

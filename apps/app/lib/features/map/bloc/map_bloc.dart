@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:activity_profile/activity_profile.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/facades/compass_facade.dart';
 import 'package:furtive/core/repositories/location_repository.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';

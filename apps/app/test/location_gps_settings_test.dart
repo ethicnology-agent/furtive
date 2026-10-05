@@ -1,7 +1,7 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/datasources/location_gps_data_source.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:geolocator/geolocator.dart';
 
 void main() {

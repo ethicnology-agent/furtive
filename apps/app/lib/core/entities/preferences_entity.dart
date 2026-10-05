@@ -1,5 +1,5 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 
 part 'preferences_entity.mapper.dart';
 

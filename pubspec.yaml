@@ -17,6 +17,7 @@ environment:
 workspace:
   - apps/app
   - apps/viewer
+  - packages/activity_profile
   - packages/diagnostics
   - packages/furtive_share
   - packages/geo
@@ -114,6 +115,7 @@ melos:
         dart format --output=none --set-exit-if-changed
         apps/app/lib apps/app/test
         apps/viewer/lib apps/viewer/test apps/viewer/web
+        packages/activity_profile/lib packages/activity_profile/test
         packages/diagnostics/lib packages/diagnostics/test
         packages/geo/lib packages/geo/test
         packages/ui_kit/lib packages/ui_kit/test

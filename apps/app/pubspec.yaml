@@ -67,6 +67,8 @@ dependencies:
 
   # Shared live-tracking format and cryptography. Kept in a pure-Dart package so
   # the mobile app and the sensor-free web viewer compile the same source.
+  activity_profile:
+    path: ../../packages/activity_profile
   diagnostics:
     path: ../../packages/diagnostics
   furtive_share:

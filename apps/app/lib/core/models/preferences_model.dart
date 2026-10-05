@@ -1,5 +1,5 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:furtive/core/database/tables/preferences_table.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/entities/preferences_entity.dart';
 
 class PreferencesModel {

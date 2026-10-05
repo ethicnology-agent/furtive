@@ -1,6 +1,6 @@
+import 'package:activity_profile/activity_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/entities/activity_profile.dart';
 import 'package:furtive/core/widgets/hold_to_confirm_button.dart';
 import 'package:furtive/features/map/pages/map_recording_controls.dart';
 import 'package:furtive/l10n/app_localizations.dart';
