@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart' show mergeSort;
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:geo/geo.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:furtive/core/entities/activity_profile.dart';
 
 part 'activity_entity.mapper.dart';
@@ -145,7 +144,7 @@ Iterable<_MovementLeg> _confirmedMovementLegs(
 
   var anchor = points.first;
   for (final candidate in points.skip(1)) {
-    final meters = Geolocator.distanceBetween(
+    final meters = distanceBetween(
       anchor.position.latitude,
       anchor.position.longitude,
       candidate.position.latitude,
