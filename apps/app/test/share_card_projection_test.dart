@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/widgets/share_card.dart';
+import 'package:furtive/features/activities/widgets/share_card.dart';
 
 void main() {
   const size = Size(1000, 1000); // square canvas keeps the math easy to read

@@ -14,7 +14,7 @@ import 'package:furtive/core/entities/preferences_entity.dart';
 import 'package:furtive/core/repositories/preferences_repository.dart';
 import 'package:furtive/core/usecases/get_map_style_url_use_case.dart';
 import 'package:furtive/core/usecases/export_activity_to_gpx_use_case.dart';
-import 'package:furtive/core/usecases/share_activity_use_case.dart';
+import 'package:furtive/features/activities/share_activity_use_case.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
 import 'package:geo/geo.dart';
