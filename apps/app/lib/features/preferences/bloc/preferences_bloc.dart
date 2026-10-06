@@ -1,9 +1,9 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/facades/lock_screen_facade.dart';
-import 'package:furtive/core/locale_cubit.dart';
-import 'package:furtive/core/locator.dart';
+import 'package:platform_services/platform_services.dart';
+import 'package:furtive/app/locale_cubit.dart';
+import 'package:furtive/app/locator.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/preferences/bloc/preferences_event.dart';

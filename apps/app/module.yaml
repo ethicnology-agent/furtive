@@ -1,7 +1,8 @@
 role: shell
 responsibility: >-
-  Record, review and share activities. Still holds every capability it will
-  own modules for; see architecture.md for the extraction order.
+  Compose the journeys into an application: wire them together, own what is
+  application-wide rather than feature-local, and carry the one-time
+  handover out of the pre-1.4 storage layout.
 storage: none — the recordings and the settings each own their own
 allowed_dependencies:
   [
@@ -13,6 +14,7 @@ allowed_dependencies:
     geo,
     location,
     map_view,
+    platform_services,
     preferences,
     ui_kit,
     wall_clock,

@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/activity_stats_view.dart';
-import 'package:furtive/core/facades/file_system_facade.dart';
-import 'package:furtive/shell/map_track_view.dart';
+import 'package:furtive/app/activity_stats_view.dart';
+import 'package:platform_services/platform_services.dart';
+import 'package:furtive/app/map_track_view.dart';
 import 'package:map_view/map_view.dart';
 import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
-import 'package:furtive/core/global.dart';
+import 'package:furtive/app/global.dart';
 import 'package:activities/activities.dart';
 import 'package:basemap/basemap.dart';
 import 'package:furtive/features/activities/export_activity_to_gpx_use_case.dart';

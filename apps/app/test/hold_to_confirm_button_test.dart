@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/widgets/hold_to_confirm_button.dart';
+import 'package:furtive/features/map/widgets/hold_to_confirm_button.dart';
 
 void main() {
   Widget subject(VoidCallback onConfirmed) => MaterialApp(

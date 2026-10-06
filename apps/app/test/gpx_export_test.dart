@@ -3,7 +3,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
 import 'package:activities/activities.dart';
-import 'package:furtive/core/locator.dart';
+import 'package:furtive/app/locator.dart';
 import 'package:furtive/features/activities/export_activity_to_gpx_use_case.dart';
 import 'package:geo/geo.dart';
 

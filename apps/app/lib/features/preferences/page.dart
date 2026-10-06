@@ -1,7 +1,7 @@
 import 'package:activity_profile/activity_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/ui_languages.dart';
+import 'package:furtive/app/ui_languages.dart';
 import 'package:furtive/features/preferences/bloc/preferences_bloc.dart';
 import 'package:furtive/features/preferences/bloc/preferences_event.dart';
 import 'package:furtive/features/preferences/bloc/preferences_state.dart';

@@ -1,11 +1,11 @@
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/global.dart';
-import 'package:furtive/core/locale_cubit.dart';
-import 'package:furtive/core/locator.dart';
-import 'package:furtive/core/ui_languages.dart';
-import 'package:furtive/core/widgets/bottom_navigation_widget.dart';
+import 'package:furtive/app/global.dart';
+import 'package:furtive/app/locale_cubit.dart';
+import 'package:furtive/app/locator.dart';
+import 'package:furtive/app/ui_languages.dart';
+import 'package:furtive/app/bottom_navigation_widget.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/preferences/page.dart' show mapThemeName;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/widgets/bottom_navigation_widget.dart';
+import 'package:furtive/app/bottom_navigation_widget.dart';
 import 'package:furtive/features/onboarding/onboarding_page.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_event.dart';

@@ -26,6 +26,7 @@ workspace:
   - packages/geo
   - packages/location
   - packages/map_view
+  - packages/platform_services
   - packages/preferences
   - packages/ui_kit
 
@@ -132,6 +133,7 @@ melos:
         packages/geo/lib packages/geo/test
         packages/location/lib packages/location/test
         packages/map_view/lib packages/map_view/test
+        packages/platform_services/lib packages/platform_services/test
         packages/preferences/lib packages/preferences/test
         packages/ui_kit/lib packages/ui_kit/test
         packages/furtive_share/lib packages/furtive_share/test

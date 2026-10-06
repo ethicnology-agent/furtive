@@ -24,6 +24,8 @@ graph TD
   style location stroke:#c12dba
   map_view["map_view"]
   style map_view stroke:#bdbde1
+  platform_services["platform_services"]
+  style platform_services stroke:#746227
   preferences["preferences"]
   style preferences stroke:#f493f6
   ui_kit["ui_kit"]
@@ -45,6 +47,7 @@ graph TD
   furtive --> geo
   furtive --> location
   furtive --> map_view
+  furtive --> platform_services
   furtive --> preferences
   furtive --> ui_kit
   furtive_leaflet_viewer --> furtive_share
@@ -53,6 +56,7 @@ graph TD
   location --> geo
   map_view --> geo
   map_view --> ui_kit
+  platform_services --> diagnostics
   preferences --> activity_profile
   ui_kit --> activity_profile
   subgraph packages0 ["packages"]
@@ -64,6 +68,7 @@ graph TD
     geo
     location
     map_view
+    platform_services
     preferences
     ui_kit
     wall_clock

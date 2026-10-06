@@ -1,0 +1,8 @@
+role: capability
+responsibility: >-
+  Own what the application has to ask the host operating system for, and
+  cannot do itself: keeping files out of a cloud backup, handing one to
+  another app, showing over the lock screen, and finding out why the process
+  died last time.
+storage: files in the temporary directory, each one it writes and purges
+allowed_dependencies: [diagnostics]

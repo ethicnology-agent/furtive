@@ -85,6 +85,8 @@ dependencies:
     path: ../../packages/location
   map_view:
     path: ../../packages/map_view
+  platform_services:
+    path: ../../packages/platform_services
   preferences:
     path: ../../packages/preferences
   ui_kit:
@@ -112,8 +114,6 @@ dev_dependencies:
   # test/file_system_facade_test.dart imports them directly to substitute a fake
   # temp directory, which is what makes the location-bearing-temp-file purge
   # testable at all.
-  path_provider_platform_interface: ^2.1.3
-  plugin_platform_interface: ^2.1.8
   bloc_test: ^10.0.0
   dart_mappable_builder: ^4.9.1
 

@@ -2,13 +2,10 @@ import 'dart:async';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/facades/backup_exclusion_facade.dart';
-import 'package:furtive/core/facades/file_system_facade.dart';
-import 'package:furtive/core/facades/lock_screen_facade.dart';
-import 'package:furtive/core/facades/process_exit_facade.dart';
-import 'package:furtive/core/global.dart';
-import 'package:furtive/core/legacy_preferences.dart';
-import 'package:furtive/core/locale_cubit.dart';
+import 'package:platform_services/platform_services.dart';
+import 'package:furtive/app/global.dart';
+import 'package:furtive/app/legacy_preferences.dart';
+import 'package:furtive/app/locale_cubit.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
@@ -21,7 +18,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
-import 'core/locator.dart';
+import 'app/locator.dart';
 
 void main() {
   runZonedGuarded(

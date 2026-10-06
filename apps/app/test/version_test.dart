@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/utils/version.dart';
+import 'package:furtive/features/permissions/version.dart';
 
 void main() {
   group('isNewerVersion', () {
