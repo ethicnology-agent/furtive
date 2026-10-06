@@ -21,7 +21,12 @@ import 'package:ui_kit/ui_kit.dart';
 /// Regenerate deliberately with: flutter test --update-goldens
 void main() {
   ActivityEntity buildActivity() {
-    final start = DateTime.utc(2026, 7, 26, 8, 30);
+    // Local, not UTC. The card renders `startedAt.toLocal()`, so a UTC
+    // fixture makes the image depend on the machine's timezone: this one
+    // was captured at 04:30 on a UTC-4 laptop and rendered 08:30 on a UTC
+    // runner. The difference was two glyphs, which stayed under the
+    // comparator's tolerance until something else moved as well.
+    final start = DateTime(2026, 7, 26, 8, 30);
     // A small L-shaped route with a steady 1 m/s pace, so distance, duration and
     // the drawn polyline are all deterministic.
     final points = <ActivityPointEntity>[];

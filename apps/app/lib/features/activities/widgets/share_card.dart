@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:activities/activities.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:furtive/labels/locale_digits.dart';
 import 'package:intl/intl.dart';
 import 'package:ui_kit/ui_kit.dart';
 
@@ -34,6 +35,10 @@ class ShareCard extends StatelessWidget {
     final dateLabel = DateFormat.yMMMd(
       localeName,
     ).add_Hm().format(activity.startedAt.toLocal());
+    // The figures below are built with ASCII digits — toStringAsFixed and
+    // friends know nothing of a locale — while the date above is localised.
+    // In `ar` and `bn` that puts two numbering systems on one image.
+    String digits(String value) => localeDigits(value, localeName);
     final activityName =
         (activity.name.isNotEmpty && activity.name != kDefaultActivityName)
         ? activity.name
@@ -106,20 +111,21 @@ class ShareCard extends StatelessWidget {
                     children: [
                       _StatTile(
                         label: l10n.statDistance,
-                        value: '${activity.activeDistanceInKm.fmt2} km',
+                        value: digits('${activity.activeDistanceInKm.fmt2} km'),
                       ),
                       _StatTile(
                         label: l10n.statDuration,
-                        value: activity.activeDuration.toHHMMSS(),
+                        value: digits(activity.activeDuration.toHHMMSS()),
                       ),
                       _StatTile(
                         label: l10n.statPace,
-                        value: '${activity.activePaceMinPerKm} /km',
+                        value: digits('${activity.activePaceMinPerKm} /km'),
                       ),
                       _StatTile(
                         label: l10n.statElevation,
-                        value:
-                            '+${activity.activeElevationGain.toStringAsFixed(0)} m',
+                        value: digits(
+                          '+${activity.activeElevationGain.toStringAsFixed(0)} m',
+                        ),
                       ),
                     ],
                   ),
