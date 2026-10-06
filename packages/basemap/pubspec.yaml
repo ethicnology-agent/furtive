@@ -1,0 +1,22 @@
+name: basemap
+description: "Which basemap style to request, or none at all."
+publish_to: none
+resolution: workspace
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  diagnostics:
+    path: ../diagnostics
+  flutter:
+    sdk: flutter
+  http: ^1.6.0
+  preferences:
+    path: ../preferences
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter

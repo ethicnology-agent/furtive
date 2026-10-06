@@ -8,6 +8,8 @@ graph TD
   style activities stroke:#ff6714
   activity_profile["activity_profile"]
   style activity_profile stroke:#295a3f
+  basemap["basemap"]
+  style basemap stroke:#244b75
   diagnostics["diagnostics"]
   style diagnostics stroke:#811832
   furtive["furtive"]
@@ -30,8 +32,11 @@ graph TD
   activities --> diagnostics
   activities --> geo
   activities --> wall_clock
+  basemap --> diagnostics
+  basemap --> preferences
   furtive --> activities
   furtive --> activity_profile
+  furtive --> basemap
   furtive --> wall_clock
   furtive --> diagnostics
   furtive --> furtive_share
@@ -48,6 +53,7 @@ graph TD
   subgraph packages0 ["packages"]
     activities
     activity_profile
+    basemap
     diagnostics
     furtive_share
     geo

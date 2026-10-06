@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
-import 'package:furtive/core/usecases/get_map_style_url_use_case.dart';
+import 'package:basemap/basemap.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';
 import 'package:furtive/features/map/position_stream_controller.dart';

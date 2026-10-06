@@ -71,6 +71,8 @@ dependencies:
     path: ../../packages/activities
   activity_profile:
     path: ../../packages/activity_profile
+  basemap:
+    path: ../../packages/basemap
   wall_clock:
     path: ../../packages/wall_clock
   diagnostics:

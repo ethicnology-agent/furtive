@@ -1,0 +1,6 @@
+role: capability
+responsibility: >-
+  Decide which basemap style the map should load, in the reader's language,
+  or none — and verify it is actually reachable before the map tries.
+storage: none
+allowed_dependencies: [diagnostics, preferences]

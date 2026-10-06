@@ -6,7 +6,7 @@ import 'package:activities/testing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:activities/activities.dart';
 import 'package:location/location.dart';
-import 'package:furtive/core/usecases/get_map_style_url_use_case.dart';
+import 'package:basemap/basemap.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';

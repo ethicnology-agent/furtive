@@ -1,4 +1,4 @@
-import 'package:furtive/core/datasources/map_remote_data_source.dart';
+import 'map_remote_data_source.dart';
 import 'package:preferences/preferences.dart';
 
 /// Resolves the map style to render with, combining the stored preferences
