@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/app/activity_stats_view.dart';
-import 'package:furtive/app/map_track_view.dart';
+import 'package:furtive/views/map_camera.dart';
+import 'package:furtive/labels/activity_stats_labels.dart';
+import 'package:furtive/views/activity_stats_view.dart';
+import 'package:furtive/views/map_track_view.dart';
 import 'package:map_view/map_view.dart';
-import 'package:furtive/app/global.dart';
 import 'package:activities/activities.dart';
 import 'package:furtive/features/map/activity_type_labels.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
@@ -238,7 +239,7 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                 !firstPoint.position.longitude.isFinite) {
               return;
             }
-            _mapView.moveTo(firstPoint.position, Global.maxZoom);
+            _mapView.moveTo(firstPoint.position, MapCamera.maxZoom);
           },
         ),
         BlocListener<MapBloc, MapState>(
@@ -252,8 +253,8 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
             _mapView.moveTo(
               loc,
               state.isFollowingUser
-                  ? _mapView.currentZoom ?? Global.defaultZoom
-                  : Global.defaultZoom,
+                  ? _mapView.currentZoom ?? MapCamera.defaultZoom
+                  : MapCamera.defaultZoom,
             );
           },
         ),
@@ -342,8 +343,8 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                                     state.mapMilestoneIntervalKm,
                               ),
                         initialCentre: loc,
-                        initialZoom: loc == null ? 1 : Global.defaultZoom,
-                        maxZoom: Global.maxZoom,
+                        initialZoom: loc == null ? 1 : MapCamera.defaultZoom,
+                        maxZoom: MapCamera.maxZoom,
                         showUserLocation: true,
                         // The same value the Follow button centres on, so the
                         // puck and the camera cannot point at different
@@ -467,7 +468,7 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                   onFollow: () {
                     if (loc == null) return;
                     if (!state.isFollowingUser) {
-                      _mapView.moveTo(loc, Global.maxZoom);
+                      _mapView.moveTo(loc, MapCamera.maxZoom);
                     }
                     map.add(const ToggleFollowUser());
                   },

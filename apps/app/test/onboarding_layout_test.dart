@@ -58,6 +58,7 @@ void main() {
             child: child!,
           ),
           home: OnboardingPage(
+            onFinished: () {},
             permissionsStep: (onReady) =>
                 PermissionsStep(onRequiredGrantedChanged: onReady),
           ),
@@ -127,6 +128,36 @@ void main() {
     });
   }
 
+  testWidgets('a language chosen in the wizard is previewed, not stored', (
+    tester,
+  ) async {
+    // The wizard used to call the shell's LocaleCubit itself. It now says
+    // which language was picked and nothing more, so prove the picker still
+    // reaches whoever applies it.
+    final previewed = <String?>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: appTheme,
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: OnboardingPage(
+          onFinished: () {},
+          onPreviewLocale: previewed.add,
+          permissionsStep: (_) => const SizedBox.shrink(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+
+    tester
+        .widget<LabeledDropdown<String?>>(find.byType(LabeledDropdown<String?>))
+        .onChanged('fr');
+    expect(previewed, ['fr']);
+  });
+
   testWidgets('the wizard finishes only once its step says it may', (
     tester,
   ) async {
@@ -142,6 +173,7 @@ void main() {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: OnboardingPage(
+          onFinished: () {},
           permissionsStep: (onReady) {
             report = onReady;
             return const SizedBox.shrink();

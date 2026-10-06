@@ -1,11 +1,11 @@
 import 'package:activity_profile/activity_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/app/ui_languages.dart';
+import 'package:furtive/labels/ui_languages.dart';
 import 'package:furtive/features/preferences/bloc/preferences_bloc.dart';
 import 'package:furtive/features/preferences/bloc/preferences_event.dart';
 import 'package:furtive/features/preferences/bloc/preferences_state.dart';
-import 'package:furtive/app/map_theme_name.dart';
+import 'package:furtive/labels/map_theme_name.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';

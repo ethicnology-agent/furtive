@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+/// What this build is and what it runs on.
 class Global {
-  static const maxZoom = 18.0;
-  static const defaultZoom = 12.0;
-
   static late PackageInfo app;
   static AndroidDeviceInfo? android;
   static IosDeviceInfo? ios;

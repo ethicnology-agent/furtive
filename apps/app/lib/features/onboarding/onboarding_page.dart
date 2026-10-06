@@ -1,11 +1,8 @@
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/app/global.dart';
-import 'package:furtive/app/locale_cubit.dart';
-import 'package:furtive/app/ui_languages.dart';
-import 'package:furtive/app/bottom_navigation_widget.dart';
-import 'package:furtive/app/map_theme_name.dart';
+import 'package:furtive/labels/ui_languages.dart';
+import 'package:furtive/labels/map_theme_name.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
@@ -16,7 +13,26 @@ import 'package:ui_kit/ui_kit.dart';
 /// 3. Permissions (locationWhenInUse required; locationAlways optional).
 ///    Finish is disabled until locationWhenInUse is granted.
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({super.key, required this.permissionsStep});
+  const OnboardingPage({
+    super.key,
+    required this.permissionsStep,
+    required this.onFinished,
+    this.onPreviewLocale,
+  });
+
+  /// Called once the wizard has stored what the user chose.
+  ///
+  /// Where a finished wizard lands is not the wizard's to know — it used to
+  /// push the home shell itself, which is a feature deciding what the
+  /// application opens on.
+  final VoidCallback onFinished;
+
+  /// Applies a UI language before it is stored, so the user sees the choice.
+  ///
+  /// A preview, not a setting: nothing is persisted until the wizard
+  /// finishes, which is the one case the settings subscription cannot serve.
+  /// Whoever holds the live locale performs it; the wizard only says which.
+  final ValueChanged<String?>? onPreviewLocale;
 
   /// What fills the third step, and how it reports that the user may finish.
   ///
@@ -95,9 +111,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       // of the three things it is built from actually changed.
 
       if (!mounted) return;
-      await Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const BottomNavigationWidget()),
-      );
+      widget.onFinished();
     } catch (e, st) {
       logs.severe('Onboarding finish', error: e, trace: st);
       if (!mounted) return;
@@ -139,10 +153,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       onThemeChanged: (v) => setState(() => _theme = v),
                       onUiLocaleChanged: (v) {
                         setState(() => _uiLocale = v);
-                        // A preview, not a setting: nothing is stored
-                        // until the wizard finishes, so this is the one
-                        // case the subscription cannot serve.
-                        context.read<LocaleCubit>().setLocale(v);
+                        widget.onPreviewLocale?.call(v);
                       },
                     ),
                     _StepShell(

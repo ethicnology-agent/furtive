@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/activities.dart';
+import 'package:furtive/views/map_camera.dart';
 import 'package:furtive/app/bottom_navigation_widget.dart';
-import 'package:furtive/app/global.dart';
 import 'package:furtive/features/share/live_share_control.dart';
 import 'package:map_view/map_view.dart';
 import 'package:furtive/features/map/widgets/hold_to_confirm_button.dart';
@@ -206,7 +206,7 @@ void main() {
     (tester) async {
       await mount(tester);
       await tester.tap(find.text('Follow'));
-      expect(renderer.moves.single, (position, Global.maxZoom));
+      expect(renderer.moves.single, (position, MapCamera.maxZoom));
       expect(map.events.last, isA<ToggleFollowUser>());
       map.update(map.state.copyWith(isFollowingUser: true));
       await tester.pumpAndSettle();
@@ -290,7 +290,7 @@ void main() {
       );
       await tester.pump();
       expect(renderer.track!.positions, hasLength(1));
-      expect(renderer.moves.last, (position, Global.maxZoom));
+      expect(renderer.moves.last, (position, MapCamera.maxZoom));
     },
   );
 

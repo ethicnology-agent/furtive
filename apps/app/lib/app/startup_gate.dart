@@ -4,6 +4,7 @@ import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/app/global.dart';
+import 'package:furtive/app/locale_cubit.dart';
 import 'package:furtive/features/permissions/version.dart';
 import 'package:furtive/app/bottom_navigation_widget.dart';
 import 'package:furtive/features/changelog/changelog_entries.dart';
@@ -137,9 +138,15 @@ class _StartupGateState extends State<StartupGate> {
 
   /// The wizard, with the permission step this app's permissions feature
   /// fills. The wizard asks for a step; choosing which one is the shell's.
-  Widget _onboarding() => OnboardingPage(
-    permissionsStep: (onReady) =>
-        PermissionsStep(onRequiredGrantedChanged: onReady),
+  Widget _onboarding() => Builder(
+    builder: (context) => OnboardingPage(
+      permissionsStep: (onReady) =>
+          PermissionsStep(onRequiredGrantedChanged: onReady),
+      onPreviewLocale: context.read<LocaleCubit>().setLocale,
+      onFinished: () => Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const BottomNavigationWidget()),
+      ),
+    ),
   );
 
   @override
