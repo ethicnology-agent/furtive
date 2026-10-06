@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/utils/gpx.dart';
+import 'package:furtive/features/activities/gpx.dart';
 import 'package:xml/xml.dart';
 
 XmlElement _root(String body) => XmlDocument.parse(body).rootElement;

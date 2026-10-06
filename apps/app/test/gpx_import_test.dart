@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/locator.dart';
-import 'package:furtive/core/usecases/import_activity_from_gpx_use_case.dart';
+import 'package:furtive/features/activities/import_activity_from_gpx_use_case.dart';
 
 /// End-to-end test of ImportActivityFromGpxUseCase — exercises the real
 /// parse → segment-stitch → persist path against an in-memory database.

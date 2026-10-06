@@ -5,7 +5,7 @@ import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/entities/activity_summary.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
-import 'package:furtive/core/usecases/import_activity_from_gpx_use_case.dart';
+import 'package:furtive/features/activities/import_activity_from_gpx_use_case.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
 import 'package:furtive/features/activities/bloc/activities_state.dart';
 

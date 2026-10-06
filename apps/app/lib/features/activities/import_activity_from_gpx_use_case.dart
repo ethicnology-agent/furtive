@@ -6,7 +6,7 @@ import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
-import 'package:furtive/core/utils/gpx.dart';
+import 'package:furtive/features/activities/gpx.dart';
 import 'package:geo/geo.dart';
 import 'package:xml/xml.dart';
 
