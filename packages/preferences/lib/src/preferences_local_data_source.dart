@@ -34,6 +34,11 @@ class PreferencesLocalDataSource {
         );
   }
 
+  /// Emits the row on every change, and once on subscription.
+  Stream<PreferencesRow?> watchRow() => (db.select(
+    db.preferences,
+  )..where((t) => t.id.equals(_rowId))).watchSingleOrNull();
+
   Future<PreferencesRow?> fetchRow() => (db.select(
     db.preferences,
   )..where((t) => t.id.equals(_rowId))).getSingleOrNull();

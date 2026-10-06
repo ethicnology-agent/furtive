@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
-import 'package:furtive/app/locale_cubit.dart';
-import 'package:furtive/app/locator.dart';
 import 'package:furtive/features/preferences/page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:preferences/preferences.dart';
@@ -47,13 +45,10 @@ void main() {
 
   setUp(() {
     db = inMemoryDatabase();
-    if (getIt.isRegistered<LocaleCubit>()) getIt.unregister<LocaleCubit>();
-    getIt.registerSingleton<LocaleCubit>(LocaleCubit(null));
   });
 
   tearDown(() async {
     await db.close();
-    await getIt.reset();
   });
 
   Future<void> pumpPage(WidgetTester tester, PreferencesRepository repo) async {

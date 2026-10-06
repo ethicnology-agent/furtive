@@ -113,6 +113,31 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
     // stops one, or the app cold-starts onto an activity the OS killed
     // mid-run. Watching the recorder covers all three with one path, instead
     // of asking every caller to remember to reconfigure the stream.
+    // Settings are watched rather than pushed. What a settings change means
+    // to the map is the map's decision, and the alternative was the
+    // preferences page reaching into this bloc through the service locator
+    // to tell it — which meant the page had to know which fields this screen
+    // cares about, and which of two events each one deserves.
+    //
+    // The first emission is a baseline, never a trigger: InitMap opens the
+    // OS location-permission dialog, and firing it because a stream started
+    // would prompt on launch.
+    _preferencesSub = _preferences.watch().listen((preferences) {
+      final style = (
+        preferences.mapTheme,
+        preferences.mapTilesEnabled,
+        preferences.uiLocale,
+      );
+      final seeded = _appliedStyle != null;
+      final changed = seeded && style != _appliedStyle;
+      _appliedStyle = style;
+      if (!seeded || isClosed) return;
+      // The style is resolved from the theme, the tile opt-out and the map
+      // label language. Anything else only moves buttons or changes the
+      // sampling rate, and re-resolving for those flashes the loading UI.
+      add(changed ? const InitMap() : const RefreshRecordingPreferences());
+    });
+
     _recordingSub = _recording.stream.listen((recordingState) {
       final profile = recordingState.activity?.activityType.movementProfile;
       if (profile == _appliedProfile) return;
@@ -147,6 +172,8 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
   final PreferencesRepository _preferences;
   final CompassFacade _compass;
   StreamSubscription<RecordingState>? _recordingSub;
+  StreamSubscription<PreferencesEntity>? _preferencesSub;
+  (MapThemeEntity, bool, String?)? _appliedStyle;
   StreamSubscription<double>? _compassSub;
 
   /// Last profile handed to the stream controller. Tracked here rather than
@@ -164,6 +191,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
   Future<void> close() async {
     WidgetsBinding.instance.removeObserver(this);
     await _recordingSub?.cancel();
+    await _preferencesSub?.cancel();
     // Cancelling unregisters the sensor listener on the platform side; left
     // running it keeps the sensor hub awake for the life of the process.
     await _compassSub?.cancel();

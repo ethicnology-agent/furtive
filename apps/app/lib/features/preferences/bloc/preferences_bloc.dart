@@ -2,10 +2,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:platform_services/platform_services.dart';
-import 'package:furtive/app/locale_cubit.dart';
-import 'package:furtive/app/locator.dart';
-import 'package:furtive/features/map/bloc/map_bloc.dart';
-import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/preferences/bloc/preferences_event.dart';
 import 'package:furtive/features/preferences/bloc/preferences_state.dart';
 import 'package:preferences/preferences.dart';
@@ -170,36 +166,11 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
       ),
     );
 
-    // Re-init the map only when something the map style actually depends on
-    // changed. Re-firing InitMap for an unrelated toggle (the lock-screen one)
-    // needlessly re-resolves the style and flashes the loading UI. The position
-    // stream is preserved either way (InitMap is idempotent on it), so a live
-    // recording is never disturbed.
-    final mapChanged =
-        previous.mapTheme != event.preferences.mapTheme ||
-        previous.mapTilesEnabled != event.preferences.mapTilesEnabled;
-    if (mapChanged) getIt<MapBloc>().add(InitMap());
-
-    // The recording preferences reach the map by a lighter path: they move
-    // buttons and change the sampling rate, neither of which needs the style
-    // re-resolved. Without this the map keeps whatever it read at startup, so
-    // flipping the control side appeared to do nothing until an app restart.
-    final recordingChanged =
-        previous.mapControlsOnLeft != event.preferences.mapControlsOnLeft ||
-        previous.mapMilestoneIntervalKm !=
-            event.preferences.mapMilestoneIntervalKm ||
-        previous.recordingDetail != event.preferences.recordingDetail;
-    if (recordingChanged) {
-      // PreferencesPage is also mounted in isolation by widget tests and can
-      // be embedded without the recording stack. Persistence still succeeds;
-      // a live map is refreshed when one is registered.
-      getIt.maybeGet<MapBloc>()?.add(const RefreshRecordingPreferences());
-    }
-
-    // Apply the locale override immediately so the UI reflects the change
-    // without requiring an app restart.
-    final code = event.preferences.uiLocale;
-    getIt<LocaleCubit>().setLocale(code);
+    // Nothing is pushed anywhere from here. The map and the locale watch the
+    // settings and decide for themselves what a change means to them; this
+    // page only has to store what the user chose. It used to reach both
+    // through the service locator, which meant changing a setting required
+    // knowing every screen that reads one.
 
     // Apply the lock-screen visibility toggle immediately (Android only,
     // no-op elsewhere) so the user doesn't need to restart the app to see

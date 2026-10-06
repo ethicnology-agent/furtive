@@ -47,6 +47,44 @@ void main() {
     expect(read.recordingDetail, RecordingDetailEntity.precise);
   });
 
+  group('watch', () {
+    test('emits once on subscription, before anything changes', () async {
+      // A subscriber needs no separate read to get started.
+      expect(await subject.watch().first, isA<PreferencesEntity>());
+    });
+
+    test('an untouched store still emits, with the defaults', () async {
+      final first = await subject.watch().first;
+
+      expect(first.mapTheme, MapThemeEntity.dark);
+      expect(first.hasCompletedOnboarding, isFalse);
+    });
+
+    test('emits again on every write', () async {
+      final seen = <String?>[];
+      final subscription = subject.watch().listen((p) => seen.add(p.uiLocale));
+
+      await subject.store((await subject.fetch()).copyWith(uiLocale: 'fr'));
+      await subject.store((await subject.fetch()).copyWith(uiLocale: 'de'));
+      await Future<void>.delayed(Duration.zero);
+      await subscription.cancel();
+
+      expect(seen, [null, 'fr', 'de']);
+    });
+
+    test('carries the whole settings, not a diff', () async {
+      // Each consumer decides what changed and whether it matters to them,
+      // which is only possible if every emission is complete.
+      await subject.store(_carried);
+
+      final emitted = await subject.watch().first;
+
+      expect(emitted.mapTheme, MapThemeEntity.white);
+      expect(emitted.mapMilestoneIntervalKm, 50);
+      expect(emitted.recordingDetail, RecordingDetailEntity.precise);
+    });
+  });
+
   group('adoptIfEmpty', () {
     test('takes settings over when nothing has been stored', () async {
       expect(await subject.adoptIfEmpty(_carried), isTrue);

@@ -65,9 +65,9 @@ void main() {
     await db.close();
   });
 
-  MapBloc buildBloc() => MapBloc(
+  MapBloc buildBloc({GetMapStyleUrlUseCase? style}) => MapBloc(
     recording: recording,
-    getMapStyleUrl: GetMapStyleUrlUseCase(preferences: preferences),
+    getMapStyleUrl: style ?? GetMapStyleUrlUseCase(preferences: preferences),
     location: location,
     positionStream: PositionStreamController(location: location, clock: clock),
     // The same isolated store the style use case above reads: MapBloc reads
@@ -101,6 +101,56 @@ void main() {
       ),
     );
   }
+
+  test(
+    'watching the settings never opens the location stream by itself',
+    () async {
+      // InitMap asks the OS for location permission. The map subscribes to the
+      // settings when it is built, and that subscription emits immediately —
+      // so the first emission has to be a baseline and never a trigger, or
+      // launching the app would prompt before the user asked for anything.
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(location.positionStreamOpenAttempts, 0);
+      expect(bloc.state.styleUrl, isNull);
+    },
+  );
+
+  test('a style-affecting setting re-resolves; another one does not', () async {
+    // Counting resolutions rather than watching the URL: this build has no
+    // tile key, so the answer is null either way — null is a first-class
+    // answer here, which makes it useless as a probe.
+    final style = _CountingStyle(preferences);
+    final bloc = buildBloc(style: style);
+    addTearDown(bloc.close);
+    bloc.add(const InitMap());
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    final afterInit = style.calls;
+
+    await preferences.store(
+      (await preferences.fetch()).copyWith(mapControlsOnLeft: true),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    expect(
+      style.calls,
+      afterInit,
+      reason: 'moving the controls must not re-resolve the style',
+    );
+    expect(bloc.state.mapControlsOnLeft, isTrue);
+
+    await preferences.store(
+      (await preferences.fetch()).copyWith(mapTheme: MapThemeEntity.white),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    expect(
+      style.calls,
+      greaterThan(afterInit),
+      reason: 'a new theme is a new style',
+    );
+  });
 
   blocTest<MapBloc, MapState>(
     'InitMap opens the stream, fetches a fix and settles with no loading status',
@@ -432,4 +482,19 @@ void main() {
     wait: const Duration(milliseconds: 40),
     verify: (bloc) => expect(bloc.state.isFollowingUser, isFalse),
   );
+}
+
+/// Counts how often the style is resolved, which is what distinguishes a
+/// full re-init from the lighter refresh.
+class _CountingStyle extends GetMapStyleUrlUseCase {
+  _CountingStyle(PreferencesRepository preferences)
+    : super(preferences: preferences);
+
+  int calls = 0;
+
+  @override
+  Future<String?> call() {
+    calls++;
+    return super.call();
+  }
 }

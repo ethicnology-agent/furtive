@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/app/global.dart';
 import 'package:furtive/app/locale_cubit.dart';
-import 'package:furtive/app/locator.dart';
 import 'package:furtive/app/ui_languages.dart';
 import 'package:furtive/app/bottom_navigation_widget.dart';
-import 'package:furtive/features/map/bloc/map_bloc.dart';
-import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/preferences/page.dart' show mapThemeName;
 import 'package:furtive/features/permissions/permission_entity.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -110,14 +107,10 @@ class _OnboardingPageState extends State<OnboardingPage>
           lastShownChangelogVersion: Global.app.version,
         ),
       );
-      // Apply locale immediately so the app shell uses the chosen language
-      // from the first frame after onboarding completes.
-      getIt<LocaleCubit>().setLocale(_uiLocale);
-
-      // MapBloc was instantiated at app start with the DB defaults — re-fire
-      // InitMap so the user's chosen theme/language take effect before the
-      // map page is shown.
-      getIt<MapBloc>().add(const InitMap());
+      // Nothing is applied by hand here. Both the locale and the map watch
+      // the settings: storing them above is what makes the chosen language
+      // and theme take effect, and the map re-resolves its style only if one
+      // of the three things it is built from actually changed.
 
       if (!mounted) return;
       await Navigator.of(context).pushReplacement(
@@ -166,9 +159,10 @@ class _OnboardingPageState extends State<OnboardingPage>
                         onThemeChanged: (v) => setState(() => _theme = v),
                         onUiLocaleChanged: (v) {
                           setState(() => _uiLocale = v);
-                          // Preview locale change live so the wizard itself
-                          // immediately reflects the chosen language.
-                          getIt<LocaleCubit>().setLocale(v);
+                          // A preview, not a setting: nothing is stored
+                          // until the wizard finishes, so this is the one
+                          // case the subscription cannot serve.
+                          context.read<LocaleCubit>().setLocale(v);
                         },
                       ),
                       const _PermissionsStep(),

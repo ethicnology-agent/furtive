@@ -45,6 +45,19 @@ class PreferencesRepository {
     );
   }
 
+  /// The settings, now and on every change.
+  ///
+  /// Emits once on subscription, so a subscriber needs no separate read to
+  /// get started. Consumers decide for themselves what a change means to
+  /// them: a store that knew which screen cares about which field would be
+  /// the settings page reaching into everything that reads one, which is
+  /// what this replaced.
+  Stream<PreferencesEntity> watch() => _local.watchRow().map(
+    (row) => PreferencesModel.toEntity(
+      row == null ? PreferencesModel.defaults : PreferencesModel.fromRow(row),
+    ),
+  );
+
   /// Takes [preferences] over, but only if nothing has ever been stored here.
   ///
   /// This is how settings that predate this database arrive. It is
