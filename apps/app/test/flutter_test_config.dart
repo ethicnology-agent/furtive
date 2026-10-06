@@ -25,9 +25,19 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
 }
 
 /// Ignores sub-pixel renderer differences while keeping real layout changes
-/// visible. The GitHub Linux runner differs from the development machine by
-/// 0.02% (237 pixels) on the 1080x1350 share card; 0.1% leaves a 5x margin for
-/// that antialiasing noise and still fails any perceptible design regression.
+/// visible.
+///
+/// The tolerance absorbs antialiasing noise between runs on the same
+/// platform. It does **not** absorb the gap between platforms: measured on
+/// 2026-10-06, macOS renders this card 0.68% (9930 pixels) away from the
+/// committed images for the LTR card and 1.14% for the RTL one, against a
+/// 0.1% tolerance. An earlier version of this comment claimed 0.02% (237
+/// pixels), which has not been true since the Flutter 3.47 bump.
+///
+/// The consequence is the part worth keeping: **these goldens are Linux
+/// artefacts and the CI is their oracle.** Regenerating them on a
+/// development machine replaces a correct image with one that fails there,
+/// so `--update-goldens` belongs on a runner, not here.
 class _TolerantGoldenFileComparator extends LocalFileComparator {
   _TolerantGoldenFileComparator(
     super.testFile, {
