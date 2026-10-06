@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furtive/features/activities/bloc/activities_bloc.dart';
+import 'package:furtive/features/activities/bloc/activities_event.dart';
 import 'package:furtive/features/activities/pages/activities_list_page.dart';
+import 'package:furtive/features/activities/pages/activity_detail_page.dart';
 import 'package:furtive/features/map/pages/map_page.dart';
 import 'package:furtive/features/settings/settings_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:map_view/map_view.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
-  const BottomNavigationWidget({super.key});
+  const BottomNavigationWidget({super.key, this.mapView});
+
+  /// Rendering port handed to the map, for mounting this shell without a
+  /// native map. The same seam [MapPage] already exposes, and for the same
+  /// reason: the orchestration this widget performs when a recording ends is
+  /// otherwise only reachable by running the application.
+  final MapView? mapView;
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
@@ -24,7 +35,24 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     _pageController = PageController();
     _selectedTab = ValueNotifier(0);
     _pages = [
-      MapPage(selectedTab: _selectedTab),
+      MapPage(
+        mapView: widget.mapView,
+        selectedTab: _selectedTab,
+        // Orchestration across journeys, which is what a shell is for: the
+        // activity list refreshes because a recording landed in it, and the
+        // finished recording opens if the user was watching it happen.
+        onRecordingCeased: (ceased, {required mapWasVisible}) {
+          if (!mounted) return;
+          context.read<ActivitiesBloc>().add(const FetchActivities());
+          if (mapWasVisible) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ActivityDetailPage(activity: ceased),
+              ),
+            );
+          }
+        },
+      ),
       const ActivitiesListPage(),
       const SettingsPage(),
     ];

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/activities.dart';
+import 'package:furtive/app/bottom_navigation_widget.dart';
 import 'package:furtive/app/global.dart';
 import 'package:map_view/map_view.dart';
 import 'package:furtive/features/map/widgets/hold_to_confirm_button.dart';
@@ -149,6 +150,10 @@ void main() {
     await sharing.close();
   });
 
+  /// What the page reported when the recording it was showing ended.
+  final ceased = <({ActivityEntity activity, bool mapWasVisible})>[];
+  setUp(ceased.clear);
+
   Future<void> mount(WidgetTester tester, {ValueNotifier<int>? tab}) async {
     await tester.pumpWidget(
       MultiBlocProvider(
@@ -162,7 +167,12 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: MapPage(mapView: renderer, selectedTab: tab),
+          home: MapPage(
+            mapView: renderer,
+            selectedTab: tab,
+            onRecordingCeased: (activity, {required mapWasVisible}) =>
+                ceased.add((activity: activity, mapWasVisible: mapWasVisible)),
+          ),
         ),
       ),
     );
@@ -372,18 +382,85 @@ void main() {
     },
   );
 
-  testWidgets(
-    'stopping from another tab refreshes activities without stealing navigation',
-    (tester) async {
-      final tab = ValueNotifier(1);
-      addTearDown(tab.dispose);
-      recording.update(RecordingState(activity: activity()));
-      await mount(tester, tab: tab);
-      recording.update(const RecordingState());
-      await tester.pumpAndSettle();
-      expect(activities.events.whereType<FetchActivities>(), hasLength(1));
-      expect(find.text('Start'), findsOneWidget);
-      expect(find.byType(MapPage), findsOneWidget);
-    },
-  );
+  testWidgets('the shell refreshes the list and opens the finished recording', (
+    tester,
+  ) async {
+    final pushes = _Pushes();
+    // The consequence of a recording ending spans two journeys, so it lives
+    // in the shell. Mounted here rather than in a file of its own because the
+    // fakes a shell needs are the ones this file already has.
+    recording.update(RecordingState(activity: activity()));
+    await tester.pumpWidget(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<MapBloc>.value(value: map),
+          BlocProvider<RecordingBloc>.value(value: recording),
+          BlocProvider<ActivitiesBloc>.value(value: activities),
+          BlocProvider<LiveShareCubit>.value(value: sharing),
+        ],
+        child: MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          navigatorObservers: [pushes],
+          home: BottomNavigationWidget(mapView: renderer),
+        ),
+      ),
+    );
+    // Bounded pumps rather than pumpAndSettle: the shell also mounts the
+    // activity list and the settings page, whose own loads never settle in a
+    // test that has not faked them.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+
+    recording.update(const RecordingState());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(activities.events.whereType<FetchActivities>(), hasLength(1));
+    // Asserted as a route pushed rather than as a rendered page: building the
+    // detail page reaches a real repository, which is that page's own test's
+    // business, not this one's.
+    expect(pushes.routes, hasLength(1));
+  });
+
+  testWidgets('stopping reports the finished recording, once', (tester) async {
+    // What happens next is the shell's business now. This page's job is to
+    // say that the recording it was showing ended, and to answer the one
+    // question only it can: whether the user was looking at the map.
+    recording.update(RecordingState(activity: activity()));
+    await mount(tester);
+    recording.update(const RecordingState());
+    await tester.pumpAndSettle();
+
+    expect(ceased, hasLength(1));
+    expect(ceased.single.mapWasVisible, isTrue);
+  });
+
+  testWidgets('stopping from another tab reports it as not visible', (
+    tester,
+  ) async {
+    // The State is kept alive across tab switches, so the route alone cannot
+    // answer this: all three PageView children share one ModalRoute.
+    final tab = ValueNotifier(1);
+    addTearDown(tab.dispose);
+    recording.update(RecordingState(activity: activity()));
+    await mount(tester, tab: tab);
+    recording.update(const RecordingState());
+    await tester.pumpAndSettle();
+
+    expect(ceased, hasLength(1));
+    expect(ceased.single.mapWasVisible, isFalse);
+    expect(find.byType(MapPage), findsOneWidget);
+  });
+}
+
+/// Records the routes pushed after the first, which is the home route.
+class _Pushes extends NavigatorObserver {
+  final routes = <Route<dynamic>>[];
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previous) {
+    if (previous != null) routes.add(route);
+  }
 }

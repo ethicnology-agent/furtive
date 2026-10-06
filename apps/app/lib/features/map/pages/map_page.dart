@@ -19,9 +19,6 @@ import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:recording_session/recording_session.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
-import 'package:furtive/features/activities/bloc/activities_bloc.dart';
-import 'package:furtive/features/activities/bloc/activities_event.dart';
-import 'package:furtive/features/activities/pages/activity_detail_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:ui_kit/ui_kit.dart';
@@ -33,7 +30,22 @@ String _loadingMessage(AppLocalizations l10n, LoadingStatus status) =>
     };
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, this.selectedTab, this.mapView});
+  const MapPage({
+    super.key,
+    this.selectedTab,
+    this.mapView,
+    this.onRecordingCeased,
+  });
+
+  /// Called when the recording this page was showing ends.
+  ///
+  /// What happens next — refreshing the activity list, opening the finished
+  /// recording — is the shell's decision, because it spans journeys this page
+  /// does not own. [mapWasVisible] is this page's own answer about itself:
+  /// whether the user was looking at the map when the recording stopped, which
+  /// only it can tell.
+  final void Function(ActivityEntity ceased, {required bool mapWasVisible})?
+  onRecordingCeased;
 
   /// Optional rendering port for embedding the recording UI without a native map.
   final MapView? mapView;
@@ -79,20 +91,16 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
     _stopSub = recording.stream.listen((state) {
       final ceased = previous;
       if (ceased != null && state.activity == null && mounted) {
-        context.read<ActivitiesBloc>().add(const FetchActivities());
-        // Only push when this page's route is actually on top. The State is kept
-        // alive across tab switches, so route state alone is insufficient: all
-        // three PageView children share the same ModalRoute.
-        if (shouldOpenStoppedActivity(
-          routeIsCurrent: ModalRoute.of(context)?.isCurrent ?? false,
-          selectedTab: widget.selectedTab?.value ?? 0,
-        )) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => ActivityDetailPage(activity: ceased),
-            ),
-          );
-        }
+        // Visibility is this page's own answer. The State is kept alive across
+        // tab switches, so route state alone is insufficient: all three
+        // PageView children share the same ModalRoute.
+        widget.onRecordingCeased?.call(
+          ceased,
+          mapWasVisible: shouldOpenStoppedActivity(
+            routeIsCurrent: ModalRoute.of(context)?.isCurrent ?? false,
+            selectedTab: widget.selectedTab?.value ?? 0,
+          ),
+        );
       }
       previous = state.activity;
     });
