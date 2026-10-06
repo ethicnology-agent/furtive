@@ -5,12 +5,7 @@ import 'package:furtive/app/global.dart';
 import 'package:furtive/app/locale_cubit.dart';
 import 'package:furtive/app/ui_languages.dart';
 import 'package:furtive/app/bottom_navigation_widget.dart';
-import 'package:furtive/features/preferences/page.dart' show mapThemeName;
-import 'package:furtive/features/permissions/permission_entity.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
-import 'package:furtive/features/permissions/bloc/permissions_event.dart';
-import 'package:furtive/features/permissions/bloc/permissions_state.dart';
+import 'package:furtive/app/map_theme_name.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
@@ -21,48 +16,35 @@ import 'package:ui_kit/ui_kit.dart';
 /// 3. Permissions (locationWhenInUse required; locationAlways optional).
 ///    Finish is disabled until locationWhenInUse is granted.
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({super.key});
+  const OnboardingPage({super.key, required this.permissionsStep});
+
+  /// What fills the third step, and how it reports that the user may finish.
+  ///
+  /// A slot rather than a widget this wizard builds: the step is another
+  /// feature's, and the only thing the wizard needs back from it is whether
+  /// the finish button may light up.
+  final Widget Function(ValueChanged<bool> onReady) permissionsStep;
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
-class _OnboardingPageState extends State<OnboardingPage>
-    with WidgetsBindingObserver {
+class _OnboardingPageState extends State<OnboardingPage> {
   final _pageController = PageController();
   final _preferences = PreferencesRepository();
-
-  late final PermissionsBloc _permissionsBloc;
 
   MapThemeEntity _theme = MapThemeEntity.dark;
   String? _uiLocale; // null = follow system
   int _currentStep = 0;
   bool _saving = false;
+  bool _canFinish = false;
 
   static const _stepCount = 3;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    _permissionsBloc = PermissionsBloc()..add(const LoadPermissions());
-  }
-
-  @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
-    _permissionsBloc.close();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Android 11+ locationAlways requires the user to go to system
-    // settings and come back. Refresh when the app resumes.
-    if (state == AppLifecycleState.resumed) {
-      _permissionsBloc.add(const LoadPermissions());
-    }
   }
 
   Future<void> _next() async {
@@ -134,98 +116,102 @@ class _OnboardingPageState extends State<OnboardingPage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _permissionsBloc,
-      child: PopScope(
-        canPop: _currentStep == 0 && !_saving,
-        onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) _previous();
-        },
-        child: Scaffold(
-          body: SafeArea(
-            child: Column(
-              children: [
-                _ProgressIndicator(step: _currentStep, total: _stepCount),
-                Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onPageChanged: (i) => setState(() => _currentStep = i),
-                    children: [
-                      _WelcomeStep(),
-                      _SettingsStep(
-                        theme: _theme,
-                        uiLocale: _uiLocale,
-                        onThemeChanged: (v) => setState(() => _theme = v),
-                        onUiLocaleChanged: (v) {
-                          setState(() => _uiLocale = v);
-                          // A preview, not a setting: nothing is stored
-                          // until the wizard finishes, so this is the one
-                          // case the subscription cannot serve.
-                          context.read<LocaleCubit>().setLocale(v);
-                        },
-                      ),
-                      const _PermissionsStep(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: context.screenPadding,
-                    vertical: MediaQuery.sizeOf(context).shortestSide * 0.1,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: BlocBuilder<PermissionsBloc, PermissionsState>(
-                      builder: (context, permissionsState) {
-                        final isLastStep = _currentStep == _stepCount - 1;
-                        final canFinish =
-                            !isLastStep || permissionsState.requiredGranted;
-                        return Row(
-                          children: [
-                            if (_currentStep > 0) ...[
-                              Flexible(
-                                child: TextButton(
-                                  onPressed: _saving ? null : _previous,
-                                  child: Text(
-                                    AppLocalizations.of(context).btnBack,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                            ],
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: (_saving || !canFinish)
-                                    ? null
-                                    : _next,
-                                child: _saving
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : Text(
-                                        isLastStep
-                                            ? AppLocalizations.of(
-                                                context,
-                                              ).btnFinish
-                                            : AppLocalizations.of(
-                                                context,
-                                              ).btnNext,
-                                      ),
-                              ),
-                            ),
-                          ],
-                        );
+    return PopScope(
+      canPop: _currentStep == 0 && !_saving,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) _previous();
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              _ProgressIndicator(step: _currentStep, total: _stepCount),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (i) => setState(() => _currentStep = i),
+                  children: [
+                    _WelcomeStep(),
+                    _SettingsStep(
+                      theme: _theme,
+                      uiLocale: _uiLocale,
+                      onThemeChanged: (v) => setState(() => _theme = v),
+                      onUiLocaleChanged: (v) {
+                        setState(() => _uiLocale = v);
+                        // A preview, not a setting: nothing is stored
+                        // until the wizard finishes, so this is the one
+                        // case the subscription cannot serve.
+                        context.read<LocaleCubit>().setLocale(v);
                       },
                     ),
+                    _StepShell(
+                      title: AppLocalizations.of(
+                        context,
+                      ).onboardPermissionsTitle,
+                      subtitle: AppLocalizations.of(
+                        context,
+                      ).onboardPermissionsSubtitle,
+                      child: widget.permissionsStep(
+                        (ready) => setState(() => _canFinish = ready),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.screenPadding,
+                  vertical: MediaQuery.sizeOf(context).shortestSide * 0.1,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Builder(
+                    builder: (context) {
+                      final isLastStep = _currentStep == _stepCount - 1;
+                      final canFinish = !isLastStep || _canFinish;
+                      return Row(
+                        children: [
+                          if (_currentStep > 0) ...[
+                            Flexible(
+                              child: TextButton(
+                                onPressed: _saving ? null : _previous,
+                                child: Text(
+                                  AppLocalizations.of(context).btnBack,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                          ],
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: (_saving || !canFinish) ? null : _next,
+                              child: _saving
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : Text(
+                                      isLastStep
+                                          ? AppLocalizations.of(
+                                              context,
+                                            ).btnFinish
+                                          : AppLocalizations.of(
+                                              context,
+                                            ).btnNext,
+                                    ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -382,150 +368,6 @@ class _SettingsStep extends StatelessWidget {
             onChanged: onUiLocaleChanged,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PermissionsStep extends StatelessWidget {
-  const _PermissionsStep();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return _StepShell(
-      title: l10n.onboardPermissionsTitle,
-      subtitle: l10n.onboardPermissionsSubtitle,
-      child: BlocConsumer<PermissionsBloc, PermissionsState>(
-        listenWhen: (previous, current) =>
-            previous.errorMessage != current.errorMessage,
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!.message),
-                backgroundColor: AppColors.destructive.background,
-                duration: const Duration(seconds: 3),
-              ),
-            );
-            context.read<PermissionsBloc>().add(const ClearPermissionsError());
-          }
-        },
-        builder: (context, state) {
-          if (state.isLoading && state.permissions.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Column(
-            children: [
-              for (var i = 0; i < state.permissions.length; i++) ...[
-                if (i > 0) const SizedBox(height: 12),
-                _PermissionCard(permission: state.permissions[i]),
-              ],
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-// Map the runtime Permission to the localised name/description copies in
-// app_*.arb. Unknown permissions fall back to the entity's hardcoded text
-// so newly-added permissions don't break the build.
-String _localizedName(BuildContext context, PermissionEntity p) {
-  final l10n = AppLocalizations.of(context);
-  if (p.permission == Permission.locationWhenInUse) {
-    return l10n.permLocationWhileUsingName;
-  }
-  if (p.permission == Permission.locationAlways) {
-    return l10n.permLocationAlwaysName;
-  }
-  if (p.permission == Permission.notification) {
-    return l10n.permNotificationName;
-  }
-  return p.name;
-}
-
-String _localizedDescription(BuildContext context, PermissionEntity p) {
-  final l10n = AppLocalizations.of(context);
-  if (p.permission == Permission.locationWhenInUse) {
-    return l10n.permLocationWhileUsingDesc;
-  }
-  if (p.permission == Permission.locationAlways) {
-    return l10n.permLocationAlwaysDesc;
-  }
-  if (p.permission == Permission.notification) {
-    return l10n.permNotificationDesc;
-  }
-  return p.description;
-}
-
-class _PermissionCard extends StatelessWidget {
-  final PermissionEntity permission;
-  const _PermissionCard({required this.permission});
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  permission.isGranted
-                      ? Icons.check_circle_rounded
-                      : Icons.radio_button_unchecked_rounded,
-                  color: permission.isGranted ? kMint : kTextMuted,
-                  size: 22,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    _localizedName(context, permission),
-                    style: textTheme.titleMedium,
-                  ),
-                ),
-                if (permission.isOptional)
-                  Text(
-                    AppLocalizations.of(context).permOptional,
-                    style: textTheme.labelSmall,
-                  ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Padding(
-              padding: const EdgeInsets.only(left: 34),
-              child: Text(
-                _localizedDescription(context, permission),
-                style: textTheme.bodySmall,
-              ),
-            ),
-            if (!permission.isGranted) ...[
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.only(left: 34),
-                child: OutlinedButton(
-                  onPressed: () => context.read<PermissionsBloc>().add(
-                    RequestPermission(permission.permission),
-                  ),
-                  child: Text(AppLocalizations.of(context).btnGrant),
-                ),
-              ),
-            ],
-            if (permission.isPermanentlyDenied)
-              Padding(
-                padding: const EdgeInsets.only(left: 34, top: 8),
-                child: Text(
-                  AppLocalizations.of(context).permDeniedMsg,
-                  style: textTheme.bodySmall?.copyWith(color: kWarning),
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }

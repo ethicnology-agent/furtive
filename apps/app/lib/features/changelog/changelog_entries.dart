@@ -12,7 +12,7 @@ class ChangelogRelease {
 /// versions on disk; rotate older ones out as they become irrelevant.
 ///
 /// The `version:` values here are what gate and label the in-app changelog:
-/// CheckPermissionPage shows every entry strictly newer than the user's
+/// StartupGate shows every entry strictly newer than the user's
 /// `lastShownChangelogVersion`, then stamps the current app version.
 ///
 /// On build numbers: the versionCode had stayed at 1 across every release up

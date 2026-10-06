@@ -33,7 +33,11 @@ void main() {
             ).copyWith(textScaler: TextScaler.linear(2)),
             child: child!,
           ),
-          home: const SettingsPage(),
+          home: SettingsPage(
+            onOpenPermissions: () {},
+            onOpenPreferences: () {},
+            onOpenLogs: () {},
+          ),
         ),
       );
       await tester.pumpAndSettle();

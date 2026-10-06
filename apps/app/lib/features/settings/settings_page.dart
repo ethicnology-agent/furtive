@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:furtive/features/settings/widgets/app_version_widget.dart';
 import 'package:furtive/features/settings/widgets/support_developer_widget.dart';
-import 'package:furtive/features/permissions/pages/permissions_page.dart';
-import 'package:furtive/features/preferences/page.dart';
-import 'package:furtive/features/logs/logs_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  const SettingsPage({
+    super.key,
+    required this.onOpenPermissions,
+    required this.onOpenPreferences,
+    required this.onOpenLogs,
+  });
+
+  /// What each row opens.
+  ///
+  /// This page is a menu: it names the destinations and knows what they are
+  /// called. Reaching them is routing across three other journeys, and a
+  /// menu that pushes them itself is a menu that imports them.
+  final VoidCallback onOpenPermissions;
+  final VoidCallback onOpenPreferences;
+  final VoidCallback onOpenLogs;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +40,7 @@ class SettingsPage extends StatelessWidget {
                     Icons.chevron_right_rounded,
                     color: kTextMuted,
                   ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const PermissionsPage(returnToSettings: true),
-                      ),
-                    );
-                  },
+                  onTap: onOpenPermissions,
                 ),
                 const Divider(height: 1, indent: 16, endIndent: 16),
                 ListTile(
@@ -46,13 +50,7 @@ class SettingsPage extends StatelessWidget {
                     Icons.chevron_right_rounded,
                     color: kTextMuted,
                   ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const PreferencesPage(),
-                      ),
-                    );
-                  },
+                  onTap: onOpenPreferences,
                 ),
                 const Divider(height: 1, indent: 16, endIndent: 16),
                 ListTile(
@@ -62,11 +60,7 @@ class SettingsPage extends StatelessWidget {
                     Icons.chevron_right_rounded,
                     color: kTextMuted,
                   ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const LogsPage()),
-                    );
-                  },
+                  onTap: onOpenLogs,
                 ),
               ],
             ),

@@ -47,9 +47,12 @@ void main() {
               child: const Text('Open permissions'),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => BlocProvider.value(
+                  builder: (routeContext) => BlocProvider.value(
                     value: bloc,
-                    child: const PermissionsPage(returnToSettings: true),
+                    child: PermissionsPage(
+                      // What settings asks for: come back here.
+                      onContinue: () async => Navigator.of(routeContext).pop(),
+                    ),
                   ),
                 ),
               ),

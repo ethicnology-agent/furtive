@@ -5,6 +5,7 @@ import 'package:furtive/app/ui_languages.dart';
 import 'package:furtive/features/preferences/bloc/preferences_bloc.dart';
 import 'package:furtive/features/preferences/bloc/preferences_event.dart';
 import 'package:furtive/features/preferences/bloc/preferences_state.dart';
+import 'package:furtive/app/map_theme_name.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
@@ -215,16 +216,6 @@ Widget _buildMapThemeSection(BuildContext context, PreferencesState state) {
     ],
   );
 }
-
-/// Localised display name for a map theme. Shared with the onboarding wizard.
-String mapThemeName(AppLocalizations l10n, MapThemeEntity theme) =>
-    switch (theme) {
-      MapThemeEntity.light => l10n.prefThemeLight,
-      MapThemeEntity.dark => l10n.prefThemeDark,
-      MapThemeEntity.white => l10n.prefThemeWhite,
-      MapThemeEntity.grayscale => l10n.prefThemeGrayscale,
-      MapThemeEntity.black => l10n.prefThemeBlack,
-    };
 
 Widget _buildMapTilesSection(BuildContext context, PreferencesState state) {
   final l10n = AppLocalizations.of(context);

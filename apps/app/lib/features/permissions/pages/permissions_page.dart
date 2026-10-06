@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/app/bottom_navigation_widget.dart';
-import 'package:furtive/features/onboarding/onboarding_page.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_event.dart';
 import 'package:furtive/features/permissions/bloc/permissions_state.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 // Map the runtime Permission to the localised name/description in
@@ -34,9 +31,16 @@ String _localizedDescription(
 }
 
 class PermissionsPage extends StatefulWidget {
-  const PermissionsPage({super.key, this.returnToSettings = false});
+  const PermissionsPage({super.key, required this.onContinue});
 
-  final bool returnToSettings;
+  /// What happens once the user is done with this page.
+  ///
+  /// A callback rather than a flag describing where they came from. This page
+  /// grants permissions; whether that means popping back to settings or
+  /// choosing between the wizard and the home shell is the caller's question,
+  /// and it used to be answered here by reading a boolean named after one of
+  /// the two callers.
+  final Future<void> Function() onContinue;
 
   @override
   State<PermissionsPage> createState() => _PermissionsPageState();
@@ -44,8 +48,6 @@ class PermissionsPage extends StatefulWidget {
 
 class _PermissionsPageState extends State<PermissionsPage>
     with WidgetsBindingObserver {
-  final _preferences = PreferencesRepository();
-
   @override
   void initState() {
     super.initState();
@@ -55,23 +57,7 @@ class _PermissionsPageState extends State<PermissionsPage>
     context.read<PermissionsBloc>().add(const LoadPermissions());
   }
 
-  Future<void> _onContinue() async {
-    if (widget.returnToSettings) {
-      Navigator.of(context).pop();
-      return;
-    }
-    // B39: Continue must honor the onboarding flag — otherwise a fresh
-    // install that lands on this page (because permissions were denied)
-    // skips the wizard once permissions are granted.
-    final prefs = await _preferences.fetch();
-    if (!mounted) return;
-    final destination = prefs.hasCompletedOnboarding
-        ? const BottomNavigationWidget()
-        : const OnboardingPage();
-    await Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => destination));
-  }
+  Future<void> _onContinue() => widget.onContinue();
 
   @override
   void dispose() {

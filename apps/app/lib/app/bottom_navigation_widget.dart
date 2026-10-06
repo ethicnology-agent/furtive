@@ -4,7 +4,10 @@ import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
 import 'package:furtive/features/activities/pages/activities_list_page.dart';
 import 'package:furtive/features/activities/pages/activity_detail_page.dart';
+import 'package:furtive/features/logs/logs_page.dart';
 import 'package:furtive/features/map/pages/map_page.dart';
+import 'package:furtive/features/permissions/pages/permissions_page.dart';
+import 'package:furtive/features/preferences/page.dart';
 import 'package:furtive/features/settings/settings_page.dart';
 import 'package:furtive/features/share/live_share_control.dart';
 import 'package:furtive/l10n/app_localizations.dart';
@@ -57,9 +60,21 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         },
       ),
       const ActivitiesListPage(),
-      const SettingsPage(),
+      SettingsPage(
+        // The menu names its destinations; reaching them is the shell's.
+        onOpenPermissions: () => _push(
+          (context) => PermissionsPage(onContinue: () async => _pop(context)),
+        ),
+        onOpenPreferences: (() => _push((_) => const PreferencesPage())),
+        onOpenLogs: () => _push((_) => const LogsPage()),
+      ),
     ];
   }
+
+  void _push(WidgetBuilder builder) =>
+      Navigator.of(context).push(MaterialPageRoute(builder: builder));
+
+  void _pop(BuildContext context) => Navigator.of(context).pop();
 
   @override
   void dispose() {

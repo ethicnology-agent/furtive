@@ -9,7 +9,7 @@ import 'package:furtive/app/locale_cubit.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
-import 'package:furtive/features/permissions/pages/check_permission_page.dart';
+import 'package:furtive/app/startup_gate.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
 import 'package:furtive/l10n/app_localizations.dart';
@@ -176,7 +176,7 @@ class MyApp extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: locale,
-          home: const CheckPermissionPage(),
+          home: const StartupGate(),
         ),
       ),
     );

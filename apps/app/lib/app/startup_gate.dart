@@ -14,16 +14,24 @@ import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_event.dart';
 import 'package:furtive/features/permissions/bloc/permissions_state.dart';
 import 'package:furtive/features/permissions/pages/permissions_page.dart';
+import 'package:furtive/features/permissions/permissions_step.dart';
 import 'package:preferences/preferences.dart';
 
-class CheckPermissionPage extends StatefulWidget {
-  const CheckPermissionPage({super.key});
+/// Decides what the application opens on.
+///
+/// It lived in the permissions feature because it checks permissions, but
+/// checking is not what it is for: it chooses between the onboarding wizard,
+/// the post-upgrade changelog, the permission recovery page and the home
+/// shell. That is routing across four journeys, which is the shell's job and
+/// no feature's.
+class StartupGate extends StatefulWidget {
+  const StartupGate({super.key});
 
   @override
-  State<CheckPermissionPage> createState() => _PermissionCheckPageState();
+  State<StartupGate> createState() => _StartupGateState();
 }
 
-class _PermissionCheckPageState extends State<CheckPermissionPage> {
+class _StartupGateState extends State<StartupGate> {
   bool _hasNavigated = false;
   String? _navigationError;
   final _preferences = PreferencesRepository();
@@ -98,9 +106,9 @@ class _PermissionCheckPageState extends State<CheckPermissionPage> {
     // revoked (e.g. via system settings while the app was backgrounded).
     final Widget destination;
     if (!prefs.hasCompletedOnboarding) {
-      destination = const OnboardingPage();
+      destination = _onboarding();
     } else if (!allGranted) {
-      destination = const PermissionsPage();
+      destination = PermissionsPage(onContinue: _afterPermissions);
     } else {
       destination = const BottomNavigationWidget();
     }
@@ -109,6 +117,30 @@ class _PermissionCheckPageState extends State<CheckPermissionPage> {
       context,
     ).pushReplacement(MaterialPageRoute(builder: (_) => destination));
   }
+
+  /// Where a user lands once they have granted what was missing.
+  ///
+  /// Re-read rather than remembered: a fresh install that reached the
+  /// permission page because permissions were denied must still see the
+  /// wizard once they are granted, and the flag may have been written
+  /// between this gate running and the user finishing.
+  Future<void> _afterPermissions() async {
+    final prefs = await _preferences.fetch();
+    if (!mounted) return;
+    final destination = prefs.hasCompletedOnboarding
+        ? const BottomNavigationWidget()
+        : _onboarding();
+    await Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => destination));
+  }
+
+  /// The wizard, with the permission step this app's permissions feature
+  /// fills. The wizard asks for a step; choosing which one is the shell's.
+  Widget _onboarding() => OnboardingPage(
+    permissionsStep: (onReady) =>
+        PermissionsStep(onRequiredGrantedChanged: onReady),
+  );
 
   @override
   Widget build(BuildContext context) {

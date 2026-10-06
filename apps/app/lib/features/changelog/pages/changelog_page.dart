@@ -4,7 +4,7 @@ import 'package:furtive/l10n/app_localizations.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 /// Full-screen "What's New" shown after an app upgrade. Pushed by
-/// CheckPermissionPage between the permission check and the bottom-nav with
+/// StartupGate between the permission check and the bottom-nav with
 /// the set of releases newer than the version the user last saw. The Got It
 /// button pops the route — the caller persists the new version once the
 /// future resolves.
