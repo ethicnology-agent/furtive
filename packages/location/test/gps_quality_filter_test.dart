@@ -1,6 +1,6 @@
 import 'package:activity_profile/activity_profile.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/utils/gps_quality_filter.dart';
+import 'package:location/location.dart';
 import 'package:geo/geo.dart';
 
 void main() {

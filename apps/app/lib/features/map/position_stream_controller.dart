@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:activity_profile/activity_profile.dart';
 import 'package:wall_clock/wall_clock.dart';
 import 'package:diagnostics/diagnostics.dart';
-import 'package:furtive/core/repositories/location_repository.dart';
+import 'package:location/location.dart';
 import 'package:geo/geo.dart';
 import 'package:geolocator/geolocator.dart';
 

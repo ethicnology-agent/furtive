@@ -1,0 +1,7 @@
+role: capability
+responsibility: >-
+  Own the device's position stream: how often it is asked for a fix, which
+  fixes are trustworthy enough to keep, when the stream has silently died,
+  and which way the device is heading.
+storage: none
+allowed_dependencies: [activity_profile, diagnostics, geo]

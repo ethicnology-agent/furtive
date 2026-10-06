@@ -1,4 +1,4 @@
-import 'package:furtive/core/repositories/location_repository.dart';
+import 'location_repository.dart';
 
 /// Best-effort request for the battery-optimisation (Doze / App Standby)
 /// exemption. A continuous GPS tracker must keep its foreground service alive

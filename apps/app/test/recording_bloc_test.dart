@@ -5,7 +5,7 @@ import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
 import 'package:activities/activities.dart';
-import 'package:furtive/core/usecases/ensure_background_tracking_use_case.dart';
+import 'package:location/location.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:furtive/features/recording/bloc/recording_state.dart';

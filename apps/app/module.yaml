@@ -10,6 +10,7 @@ allowed_dependencies:
     diagnostics,
     furtive_share,
     geo,
+    location,
     preferences,
     ui_kit,
     wall_clock,

@@ -23,6 +23,7 @@ workspace:
   - packages/diagnostics
   - packages/furtive_share
   - packages/geo
+  - packages/location
   - packages/preferences
   - packages/ui_kit
 
@@ -126,6 +127,7 @@ melos:
         packages/wall_clock/lib packages/wall_clock/test
         packages/diagnostics/lib packages/diagnostics/test
         packages/geo/lib packages/geo/test
+        packages/location/lib packages/location/test
         packages/preferences/lib packages/preferences/test
         packages/ui_kit/lib packages/ui_kit/test
         packages/furtive_share/lib packages/furtive_share/test

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/utils/signal_gap_detector.dart';
+import 'package:location/location.dart';
 
 void main() {
   final t0 = DateTime.utc(2026, 1, 1, 12);
