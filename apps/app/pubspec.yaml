@@ -69,6 +69,8 @@ dependencies:
   # the mobile app and the sensor-free web viewer compile the same source.
   activity_profile:
     path: ../../packages/activity_profile
+  wall_clock:
+    path: ../../packages/wall_clock
   diagnostics:
     path: ../../packages/diagnostics
   furtive_share:

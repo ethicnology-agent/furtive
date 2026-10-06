@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/clock.dart';
 import 'package:furtive/features/map/position_stream_controller.dart';
 import 'package:geo/geo.dart';
 import 'package:geolocator/geolocator.dart';

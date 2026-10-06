@@ -1,7 +1,7 @@
 import 'package:activity_profile/activity_profile.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/database/tables/activity_points_table.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';

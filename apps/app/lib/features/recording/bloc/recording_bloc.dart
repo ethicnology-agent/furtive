@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:wall_clock/wall_clock.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
 import 'package:furtive/core/usecases/ensure_background_tracking_use_case.dart';

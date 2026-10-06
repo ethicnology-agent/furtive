@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:activity_profile/activity_profile.dart';
+import 'package:wall_clock/wall_clock.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart' show compute;
-import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
 import 'package:furtive/core/utils/gpx.dart';

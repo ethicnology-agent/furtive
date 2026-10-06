@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:wall_clock/wall_clock.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';
 import 'package:furtive/core/entities/activity_entity.dart';

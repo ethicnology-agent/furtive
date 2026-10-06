@@ -20,7 +20,10 @@ graph TD
   style preferences stroke:#f493f6
   ui_kit["ui_kit"]
   style ui_kit stroke:#375a43
+  wall_clock["wall_clock"]
+  style wall_clock stroke:#173271
   furtive --> activity_profile
+  furtive --> wall_clock
   furtive --> diagnostics
   furtive --> furtive_share
   furtive --> geo
@@ -36,6 +39,7 @@ graph TD
     geo
     preferences
     ui_kit
+    wall_clock
   end
   subgraph apps1 ["apps"]
     furtive

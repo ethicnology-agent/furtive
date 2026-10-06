@@ -18,6 +18,7 @@ workspace:
   - apps/app
   - apps/viewer
   - packages/activity_profile
+  - packages/wall_clock
   - packages/diagnostics
   - packages/furtive_share
   - packages/geo
@@ -120,6 +121,7 @@ melos:
         apps/app/lib apps/app/test
         apps/viewer/lib apps/viewer/test apps/viewer/web
         packages/activity_profile/lib packages/activity_profile/test
+        packages/wall_clock/lib packages/wall_clock/test
         packages/diagnostics/lib packages/diagnostics/test
         packages/geo/lib packages/geo/test
         packages/preferences/lib packages/preferences/test

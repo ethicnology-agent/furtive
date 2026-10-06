@@ -1,0 +1,6 @@
+role: foundation
+responsibility: >-
+  Own the application's reading of the wall clock, so every window measured
+  in hours or seconds can be driven from a test instead of waited out.
+storage: none
+allowed_dependencies: []

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';

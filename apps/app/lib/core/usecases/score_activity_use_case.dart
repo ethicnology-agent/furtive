@@ -1,5 +1,5 @@
+import 'package:wall_clock/wall_clock.dart';
 import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/clock.dart';
 import 'package:furtive/core/repositories/activity_repository.dart';
 import 'package:geo/geo.dart';
 

@@ -1,5 +1,5 @@
 import 'package:activity_profile/activity_profile.dart';
-import 'package:furtive/core/clock.dart';
+import 'package:wall_clock/wall_clock.dart';
 import 'package:furtive/core/datasources/activity_local_data_source.dart';
 import 'package:furtive/core/entities/activity_summary.dart';
 import 'package:furtive/core/models/activity_model.dart';
