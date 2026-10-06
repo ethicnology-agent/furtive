@@ -4,6 +4,7 @@ import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
+import 'package:recording_session/recording_session.dart';
 
 final getIt = GetIt.instance;
 
@@ -19,12 +20,21 @@ class Locator {
     // Blocs are lazy singletons so cross-bloc wiring (MapBloc forwarding fixes
     // to RecordingBloc, a preferences change re-initing the map) reaches the
     // live instance rather than a fresh one.
-    getIt.registerLazySingleton<RecordingBloc>(RecordingBloc.new);
+    // The recording is a capability and the shell owns it: three things
+    // watch it, so none of them may. The bloc is one of the three, not its
+    // owner — it is the shape widgets rebuild from.
+    getIt.registerLazySingleton<RecordingSession>(
+      RecordingSession.new,
+      dispose: (session) => session.close(),
+    );
+    getIt.registerLazySingleton<RecordingBloc>(
+      () => RecordingBloc(session: getIt<RecordingSession>()),
+    );
     getIt.registerLazySingleton<LiveShareCubit>(
-      () => LiveShareCubit(recording: getIt<RecordingBloc>()),
+      () => LiveShareCubit(recording: getIt<RecordingSession>()),
     );
     getIt.registerLazySingleton<MapBloc>(
-      () => MapBloc(recording: getIt<RecordingBloc>()),
+      () => MapBloc(recording: getIt<RecordingSession>()),
     );
     getIt.registerLazySingleton<ActivitiesBloc>(ActivitiesBloc.new);
     getIt.registerLazySingleton<PermissionsBloc>(PermissionsBloc.new);

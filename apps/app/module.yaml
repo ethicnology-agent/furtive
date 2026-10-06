@@ -16,6 +16,7 @@ allowed_dependencies:
     map_view,
     platform_services,
     preferences,
+    recording_session,
     ui_kit,
     wall_clock,
   ]

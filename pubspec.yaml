@@ -28,6 +28,7 @@ workspace:
   - packages/map_view
   - packages/platform_services
   - packages/preferences
+  - packages/recording_session
   - packages/ui_kit
 
 dev_dependencies:

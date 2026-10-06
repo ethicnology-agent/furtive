@@ -8,9 +8,7 @@ import 'package:location/location.dart';
 import 'package:basemap/basemap.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';
-import 'package:furtive/features/recording/bloc/recording_bloc.dart';
-import 'package:furtive/features/recording/bloc/recording_event.dart';
-import 'package:furtive/features/recording/bloc/recording_state.dart';
+import 'package:recording_session/recording_session.dart';
 import 'package:preferences/preferences.dart';
 
 // Localised display strings live in MapPage (_loadingMessage); this enum is
@@ -26,7 +24,7 @@ enum LoadingStatus { localizing, loadingMap }
 /// neither.
 class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
   MapBloc({
-    required RecordingBloc recording,
+    required RecordingSession recording,
     GetMapStyleUrlUseCase? getMapStyleUrl,
     LocationRepository? location,
     PositionStreamController? positionStream,
@@ -46,7 +44,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
        );
 
   MapBloc._({
-    required RecordingBloc recording,
+    required RecordingSession recording,
     required GetMapStyleUrlUseCase getMapStyleUrl,
     required LocationRepository location,
     required PositionStreamController? positionStream,
@@ -137,7 +135,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
       add(changed ? const InitMap() : const RefreshRecordingPreferences());
     });
 
-    _recordingSub = _recording.stream.listen((recordingState) {
+    _recordingSub = _recording.watch().listen((recordingState) {
       final profile = recordingState.activity?.activityType.movementProfile;
       if (profile == _appliedProfile) return;
       _appliedProfile = profile;
@@ -164,7 +162,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
     // explicitly once the user is ready to see the map.
   }
 
-  final RecordingBloc _recording;
+  final RecordingSession _recording;
   final GetMapStyleUrlUseCase _getMapStyleUrlUseCase;
   final LocationRepository _location;
   final PositionStreamController _positions;
@@ -269,7 +267,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
     // questions — it already returns early when there is no activity. The map
     // reading the recording's state to decide is what made a screen depend on
     // the movement profile's accuracy tolerance.
-    _recording.add(ScoreFix(position: event.position));
+    unawaited(_recording.score(event.position));
     // Feeds the magnetic-to-true-north correction. Declination varies over
     // kilometres, so every fix is far more often than needed — but it is one
     // cheap platform call against a stream that already runs at seconds
@@ -310,7 +308,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
     // an unlock (GPS not warmed up), and doing the resume first makes it
     // independent of the fix's outcome. RecordingBloc's own `activity != null`
     // guard makes a repeat cheap.
-    _recording.add(const ResumeOngoingRecording());
+    unawaited(_recording.resumeOngoing());
 
     try {
       emit(state.copyWith(userLocation: await _location.getCurrentLocation()));
@@ -368,7 +366,7 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
         'EnsureTracking: tracking gap of ${gap.inSeconds}s detected '
         '(stream suspended/killed while backgrounded).',
       );
-      _recording.add(ReportTrackingGap(gap));
+      _recording.reportTrackingGap(gap);
     }
 
     logs.warning('EnsureTracking: position stream stale/dead, reopening.');

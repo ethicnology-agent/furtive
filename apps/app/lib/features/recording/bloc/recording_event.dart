@@ -73,3 +73,12 @@ class ReportTrackingGap extends RecordingEvent {
 class ClearTrackingGap extends RecordingEvent {
   const ClearTrackingGap();
 }
+
+/// Starts the adapter's subscription to the session it renders.
+///
+/// Part of this sealed family only because the family is sealed: a bloc may
+/// emit nothing outside a handler, so the subscription has to live inside
+/// one. Added once, by [RecordingBloc]'s constructor, and never again.
+class WatchSession extends RecordingEvent {
+  const WatchSession();
+}

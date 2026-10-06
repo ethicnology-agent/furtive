@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:activity_profile/activity_profile.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:location/testing.dart';
+import 'package:recording_session/recording_session.dart';
 import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
@@ -11,8 +13,6 @@ import 'package:basemap/basemap.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';
-import 'package:furtive/features/recording/bloc/recording_bloc.dart';
-import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:preferences/preferences.dart';
 
 import 'support/fakes.dart';
@@ -34,7 +34,7 @@ void main() {
   late PreferencesRepository preferences;
   late FixedClock clock;
   late FakeLocationRepository location;
-  late RecordingBloc recording;
+  late RecordingSession recording;
   final start = DateTime.utc(2026, 7, 26, 10);
 
   setUp(() {
@@ -48,7 +48,7 @@ void main() {
       local: ActivityLocalDataSource(db: db, clock: clock),
       clock: clock,
     );
-    recording = RecordingBloc(
+    recording = RecordingSession(
       activities: repo,
       score: ScoreActivityUseCase(activities: repo, clock: clock),
       ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
@@ -207,7 +207,7 @@ void main() {
     expect(recording.state.activity, isNull);
 
     // Now record, and the next fix must reach the activity.
-    recording.add(const StartRecording());
+    unawaited(recording.start());
     await Future<void>.delayed(const Duration(milliseconds: 60));
     location.fixes.add(fixAt(start.add(const Duration(seconds: 6))));
     await Future<void>.delayed(const Duration(milliseconds: 80));
@@ -220,7 +220,7 @@ void main() {
     bloc.add(const InitMap());
     await Future<void>.delayed(const Duration(milliseconds: 120));
 
-    recording.add(const StartRecording(activityType: ActivityTypeEntity.run));
+    unawaited(recording.start(activityType: ActivityTypeEntity.run));
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     final vague = fixAt(start.add(const Duration(seconds: 5)), accuracy: 150);
@@ -247,9 +247,9 @@ void main() {
     bloc.add(const InitMap());
     await Future<void>.delayed(const Duration(milliseconds: 120));
 
-    recording.add(const StartRecording(activityType: ActivityTypeEntity.run));
+    unawaited(recording.start(activityType: ActivityTypeEntity.run));
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    recording.add(const PauseRecording());
+    unawaited(recording.pause());
     await Future<void>.delayed(const Duration(milliseconds: 40));
 
     location.fixes.add(
@@ -280,7 +280,7 @@ void main() {
       );
       final openedWhileIdle = location.positionStreamOpenCount;
 
-      recording.add(const StartRecording(activityType: ActivityTypeEntity.car));
+      unawaited(recording.start(activityType: ActivityTypeEntity.car));
       await Future<void>.delayed(const Duration(milliseconds: 150));
 
       // Without this the activity would carry a label and nothing else: the
@@ -296,7 +296,7 @@ void main() {
         MovementProfileEntity.road.tuning.plausibleSpeedMps,
       );
 
-      recording.add(const StopRecording());
+      unawaited(recording.stop());
       await Future<void>.delayed(const Duration(milliseconds: 150));
       expect(
         location.lastTuning?.plausibleSpeedMps,
@@ -360,9 +360,7 @@ void main() {
       bloc.add(const InitMap());
       await Future<void>.delayed(const Duration(milliseconds: 120));
 
-      recording.add(
-        const StartRecording(activityType: ActivityTypeEntity.swim),
-      );
+      unawaited(recording.start(activityType: ActivityTypeEntity.swim));
       await Future<void>.delayed(const Duration(milliseconds: 150));
 
       expect(recording.state.activity!.activityType, ActivityTypeEntity.swim);
@@ -377,9 +375,7 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 120));
 
         location.positionStreamFailuresRemaining = 1;
-        recording.add(
-          const StartRecording(activityType: ActivityTypeEntity.car),
-        );
+        unawaited(recording.start(activityType: ActivityTypeEntity.car));
         await Future<void>.delayed(const Duration(milliseconds: 180));
 
         expect(
@@ -442,7 +438,7 @@ void main() {
         location.fixes.add(fixAt(start));
         await Future<void>.delayed(const Duration(milliseconds: 30));
 
-        recording.add(const StartRecording());
+        unawaited(recording.start());
         await Future<void>.delayed(const Duration(milliseconds: 60));
 
         clock.advance(const Duration(minutes: 5));

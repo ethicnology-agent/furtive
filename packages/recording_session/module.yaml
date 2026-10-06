@@ -1,0 +1,8 @@
+role: capability
+responsibility: >-
+  Own the recording in progress: what is being recorded, whether it is
+  paused, how long it has run, and the serialised mutations that keep those
+  answers consistent across a kill, a backlog of buffered fixes and a GPS
+  outage.
+storage: none — it writes through the activities capability
+allowed_dependencies: [activities, activity_profile, diagnostics, geo, location, wall_clock]

@@ -28,6 +28,8 @@ graph TD
   style platform_services stroke:#746227
   preferences["preferences"]
   style preferences stroke:#f493f6
+  recording_session["recording_session"]
+  style recording_session stroke:#88cd71
   ui_kit["ui_kit"]
   style ui_kit stroke:#375a43
   wall_clock["wall_clock"]
@@ -49,6 +51,7 @@ graph TD
   furtive --> map_view
   furtive --> platform_services
   furtive --> preferences
+  furtive --> recording_session
   furtive --> ui_kit
   furtive_leaflet_viewer --> furtive_share
   location --> activity_profile
@@ -59,6 +62,12 @@ graph TD
   map_view --> ui_kit
   platform_services --> diagnostics
   preferences --> activity_profile
+  recording_session --> activities
+  recording_session --> activity_profile
+  recording_session --> diagnostics
+  recording_session --> geo
+  recording_session --> location
+  recording_session --> wall_clock
   ui_kit --> activity_profile
   subgraph packages0 ["packages"]
     activities
@@ -71,6 +80,7 @@ graph TD
     map_view
     platform_services
     preferences
+    recording_session
     ui_kit
     wall_clock
   end

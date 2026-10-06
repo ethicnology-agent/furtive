@@ -6,8 +6,7 @@ import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:activities/activities.dart';
-import 'package:furtive/features/recording/bloc/recording_bloc.dart';
-import 'package:furtive/features/recording/bloc/recording_state.dart';
+import 'package:recording_session/recording_session.dart';
 import 'package:furtive_share/furtive_share.dart';
 import 'package:nostr/nostr.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -73,7 +72,7 @@ class WebSocketLiveShareRelay implements LiveShareRelay {
 
 class LiveShareCubit extends Cubit<LiveShareState> {
   LiveShareCubit({
-    required RecordingBloc recording,
+    required RecordingSession recording,
     LiveShareRelayConnector? relayConnector,
     Clock? clock,
     Random? random,
@@ -92,14 +91,14 @@ class LiveShareCubit extends Cubit<LiveShareState> {
                  .where((relay) => relay.isNotEmpty),
        ),
        super(const LiveShareState()) {
-    _recordingSubscription = _recording.stream.listen(_onRecordingState);
+    _recordingSubscription = _recording.watch().listen(_onRecordingState);
   }
 
   static const liveCadence = Duration(seconds: 10);
   static const snapshotCadence = Duration(seconds: 30);
   static const shareLifetime = Duration(hours: 12);
 
-  final RecordingBloc _recording;
+  final RecordingSession _recording;
   final LiveShareRelayConnector _connectRelay;
   final Clock _clock;
   final Random _random;

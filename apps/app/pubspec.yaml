@@ -89,6 +89,8 @@ dependencies:
     path: ../../packages/platform_services
   preferences:
     path: ../../packages/preferences
+  recording_session:
+    path: ../../packages/recording_session
   ui_kit:
     path: ../../packages/ui_kit
   nostr: ^2.0.0

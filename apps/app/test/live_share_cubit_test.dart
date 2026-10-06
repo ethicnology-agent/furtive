@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:location/testing.dart';
+import 'package:recording_session/recording_session.dart';
 import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
 import 'package:activities/activities.dart';
 import 'package:location/location.dart';
-import 'package:furtive/features/recording/bloc/recording_bloc.dart';
-import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
 import 'package:furtive_share/furtive_share.dart';
 import 'package:nostr/nostr.dart';
@@ -19,7 +18,7 @@ void main() {
   late LocalDatabase db;
   late FixedClock clock;
   late FakeLocationRepository location;
-  late RecordingBloc recording;
+  late RecordingSession recording;
   late _FakeRelay relay;
   final startedAt = DateTime.utc(2026, 7, 31, 10);
 
@@ -31,7 +30,7 @@ void main() {
       local: ActivityLocalDataSource(db: db, clock: clock),
       clock: clock,
     );
-    recording = RecordingBloc(
+    recording = RecordingSession(
       activities: repository,
       score: ScoreActivityUseCase(activities: repository, clock: clock),
       ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
@@ -49,7 +48,7 @@ void main() {
   });
 
   Future<void> startRecording() async {
-    recording.add(const StartRecording());
+    unawaited(recording.start());
     await Future<void>.delayed(const Duration(milliseconds: 40));
     expect(recording.state.isRecording, isTrue);
   }
@@ -98,8 +97,8 @@ void main() {
     await Future<void>.delayed(const Duration(milliseconds: 20));
 
     for (final seconds in [1, 5, 11, 31]) {
-      recording.add(
-        ScoreFix(position: fixAt(startedAt.add(Duration(seconds: seconds)))),
+      unawaited(
+        recording.score(fixAt(startedAt.add(Duration(seconds: seconds)))),
       );
       await Future<void>.delayed(const Duration(milliseconds: 30));
     }
@@ -147,7 +146,7 @@ void main() {
     addTearDown(cubit.close);
 
     final starting = cubit.start(password: 'separate passphrase');
-    recording.add(const StopRecording());
+    unawaited(recording.stop());
     final link = await starting;
 
     // Deriving takes seconds, so the recording can end underneath it. Now that
@@ -168,8 +167,8 @@ void main() {
     expect(relay.sent, isEmpty, reason: 'nothing to publish while armed');
 
     await startRecording();
-    recording.add(
-      ScoreFix(position: fixAt(startedAt.add(const Duration(seconds: 1)))),
+    unawaited(
+      recording.score(fixAt(startedAt.add(const Duration(seconds: 1)))),
     );
     await Future<void>.delayed(const Duration(milliseconds: 60));
 
@@ -185,12 +184,12 @@ void main() {
     addTearDown(cubit.close);
     final link = await cubit.start();
     await Future<void>.delayed(const Duration(milliseconds: 20));
-    recording.add(
-      ScoreFix(position: fixAt(startedAt.add(const Duration(seconds: 1)))),
+    unawaited(
+      recording.score(fixAt(startedAt.add(const Duration(seconds: 1)))),
     );
     await Future<void>.delayed(const Duration(milliseconds: 40));
 
-    recording.add(const StopRecording());
+    unawaited(recording.stop());
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     final updates = await decryptLiveUpdates(link);
@@ -224,17 +223,17 @@ void main() {
     addTearDown(cubit.close);
     final link = await cubit.start();
     await Future<void>.delayed(const Duration(milliseconds: 20));
-    recording.add(
-      ScoreFix(position: fixAt(startedAt.add(const Duration(seconds: 1)))),
+    unawaited(
+      recording.score(fixAt(startedAt.add(const Duration(seconds: 1)))),
     );
     await Future<void>.delayed(const Duration(milliseconds: 40));
     relay.sent.clear();
 
     clock.advance(const Duration(seconds: 2));
-    recording.add(const PauseRecording());
+    unawaited(recording.pause());
     await Future<void>.delayed(const Duration(milliseconds: 40));
     clock.advance(const Duration(seconds: 3));
-    recording.add(const PauseRecording());
+    unawaited(recording.pause());
     await Future<void>.delayed(const Duration(milliseconds: 40));
 
     final updates = await decryptLiveUpdates(link);
@@ -280,8 +279,8 @@ void main() {
     addTearDown(cubit.close);
 
     await cubit.start();
-    recording.add(
-      ScoreFix(position: fixAt(startedAt.add(const Duration(seconds: 1)))),
+    unawaited(
+      recording.score(fixAt(startedAt.add(const Duration(seconds: 1)))),
     );
     await Future<void>.delayed(const Duration(milliseconds: 60));
 
@@ -297,7 +296,7 @@ void main() {
     await cubit.start();
     await Future<void>.delayed(const Duration(milliseconds: 20));
 
-    recording.add(const StopRecording());
+    unawaited(recording.stop());
     await Future<void>.delayed(const Duration(milliseconds: 60));
 
     expect(cubit.state.isActive, isFalse);

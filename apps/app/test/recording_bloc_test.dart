@@ -9,7 +9,7 @@ import 'package:activities/activities.dart';
 import 'package:location/location.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
-import 'package:furtive/features/recording/bloc/recording_state.dart';
+import 'package:recording_session/recording_session.dart';
 
 import 'support/fakes.dart';
 
@@ -43,12 +43,14 @@ void main() {
   RecordingBloc buildBloc() {
     final repo = repository();
     return RecordingBloc(
-      activities: repo,
-      score: ScoreActivityUseCase(activities: repo, clock: clock),
-      ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
-        location: location,
+      session: RecordingSession(
+        activities: repo,
+        score: ScoreActivityUseCase(activities: repo, clock: clock),
+        ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
+          location: location,
+        ),
+        clock: clock,
       ),
-      clock: clock,
     );
   }
 
@@ -223,12 +225,14 @@ void main() {
             failWrite: failWrite,
           );
           final bloc = RecordingBloc(
-            activities: repo,
-            score: ScoreActivityUseCase(activities: repo, clock: clock),
-            ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
-              location: location,
+            session: RecordingSession(
+              activities: repo,
+              score: ScoreActivityUseCase(activities: repo, clock: clock),
+              ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
+                location: location,
+              ),
+              clock: clock,
             ),
-            clock: clock,
           );
           addTearDown(bloc.close);
           addTearDown(() {
@@ -523,12 +527,14 @@ void main() {
       final local = ActivityLocalDataSource(db: db, clock: clock);
       final repo = _DelayedResumeRepository(local: local, clock: clock);
       final bloc = RecordingBloc(
-        activities: repo,
-        score: ScoreActivityUseCase(activities: repo, clock: clock),
-        ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
-          location: location,
+        session: RecordingSession(
+          activities: repo,
+          score: ScoreActivityUseCase(activities: repo, clock: clock),
+          ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
+            location: location,
+          ),
+          clock: clock,
         ),
-        clock: clock,
       );
       addTearDown(bloc.close);
       addTearDown(() {

@@ -17,7 +17,7 @@ import 'package:furtive/features/map/pages/map_page_logic.dart';
 import 'package:furtive/features/map/pages/map_recording_controls.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
-import 'package:furtive/features/recording/bloc/recording_state.dart';
+import 'package:recording_session/recording_session.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';

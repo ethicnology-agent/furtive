@@ -1,422 +1,55 @@
-import 'dart:async';
-
-import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:wall_clock/wall_clock.dart';
-import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:activities/activities.dart';
-import 'package:location/location.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
-import 'package:furtive/features/recording/bloc/recording_state.dart';
+import 'package:recording_session/recording_session.dart';
 
-/// The recording state machine: start, pause, stop, resume-after-kill, elapsed
-/// time bookkeeping and GPS-outage bracketing.
+/// A bloc-shaped view of [RecordingSession], for the widgets that render it.
 ///
-/// Extracted from MapBloc, which mixed this with stream lifecycle and map
-/// presentation. Keeping it separate matters beyond tidiness: the pause/elapsed
-/// bookkeeping reconstructed in [_onResumeOngoing] after an OS kill is the
-/// subtlest logic in the app, and it was previously reachable by exactly one
-/// test because nothing in MapBloc was injectable.
+/// The state machine itself is a capability now: the map reconfigures the GPS
+/// stream from the recording's activity type and the live share follows its
+/// pauses, so neither can depend on this feature to reach it. What is left
+/// here is the translation between a widget's events and a session's methods,
+/// and a stream Flutter can rebuild from.
+///
+/// Every command handler returns without awaiting on purpose. The session
+/// serialises its own work on two queues — ordering is its guarantee, not
+/// this adapter's — and awaiting here would only hold a bloc event open for
+/// the duration.
 class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
-  RecordingBloc({
-    ActivityRepository? activities,
-    ScoreActivityUseCase? score,
-    EnsureBackgroundTrackingUseCase? ensureBackgroundTracking,
-    Clock? clock,
-    SignalGapDetector? gapDetector,
-  }) : _activities = activities ?? ActivityRepository(clock: clock),
-       _score = score ?? ScoreActivityUseCase(),
-       _ensureBackgroundTracking =
-           ensureBackgroundTracking ?? EnsureBackgroundTrackingUseCase(),
-       _clock = clock ?? const SystemClock(),
-       _gapDetector = gapDetector ?? SignalGapDetector(),
-       super(const RecordingState()) {
-    // Start and cold-start resume must share ONE queue. Per-type transformers
-    // do not coordinate with each other: both handlers could otherwise pass
-    // `state.activity == null`, await storage/platform work, then each install a
-    // different ongoing activity. Sequential also makes a fast second Start a
-    // cheap no-op once the first handler has populated state.
-    on<RecordingInitializationEvent>(_onInitialize, transformer: sequential());
-    // sequential(): the default transformer processes same-typed events
-    // concurrently. At ~5 s per fix there is no throughput cost, but concurrency
-    // here is harmful — two handlers in flight (e.g. the OS delivering a backlog
-    // of buffered fixes after a resume) can both capture the same
-    // `activity.points.last` for gap detection and each write their own
-    // signalLost boundary pair, or clobber each other's in-memory append.
-    on<RecordingMutationEvent>(_onMutation, transformer: sequential());
-    on<TickElapsed>(_onTick);
-    on<ClearRecordingError>((_, emit) => emit(state.copyWith(error: null)));
-    on<ReportTrackingGap>(
-      (event, emit) => emit(state.copyWith(trackingGap: event.gap)),
+  RecordingBloc({RecordingSession? session})
+    : _session = session ?? RecordingSession(),
+      super(const RecordingState()) {
+    // The session's emissions reach this bloc through a handler that never
+    // returns rather than by re-adding each one as an event. A bloc may only
+    // emit from inside a handler, and routing a subscription back through
+    // `add` means the emission is queued behind whatever event caused it —
+    // which silently drops it when the cause was a command this bloc is
+    // still processing.
+    on<WatchSession>(
+      (_, emit) => emit.onEach(_session.watch(), onData: emit.call),
     );
-    on<ClearTrackingGap>((_, emit) => emit(state.copyWith(trackingGap: null)));
+    on<ResumeOngoingRecording>((_, _) => _session.resumeOngoing());
+    on<StartRecording>(
+      (event, _) => _session.start(activityType: event.activityType),
+    );
+    on<PauseRecording>((_, _) => _session.pause());
+    on<StopRecording>((_, _) => _session.stop());
+    on<ScoreFix>((event, _) => _session.score(event.position));
+    on<TickElapsed>((_, _) => _session.tick());
+    on<ReportTrackingGap>((event, _) => _session.reportTrackingGap(event.gap));
+    on<ClearTrackingGap>((_, _) => _session.clearTrackingGap());
+    on<ClearRecordingError>((_, _) => _session.clearError());
+
+    add(const WatchSession());
   }
 
-  final ActivityRepository _activities;
-  final ScoreActivityUseCase _score;
-  final EnsureBackgroundTrackingUseCase _ensureBackgroundTracking;
-  final Clock _clock;
+  final RecordingSession _session;
 
-  /// Detects GPS outages from the cadence of recorded fixes. Reset on
-  /// [StartRecording] so one run's cadence never leaks into the next;
-  /// deliberately NOT reset on resume-from-kill, where an empty window falls
-  /// back to the nominal threshold and still catches the kill-induced gap on
-  /// the first new fix.
-  final SignalGapDetector _gapDetector;
-
-  Timer? _elapsedTimer;
-  DateTime? _startedAt;
-  DateTime? _pauseStartedAt;
-  Duration _completedPauses = Duration.zero;
+  /// The session this bloc renders, for whatever owns it.
+  RecordingSession get session => _session;
 
   @override
-  Future<void> close() {
-    _elapsedTimer?.cancel();
+  Future<void> close() async {
+    await _session.close();
     return super.close();
-  }
-
-  void _startTicking() {
-    _elapsedTimer?.cancel();
-    _elapsedTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (!isClosed) add(const TickElapsed());
-    });
-  }
-
-  Future<void> _onInitialize(
-    RecordingInitializationEvent event,
-    Emitter<RecordingState> emit,
-  ) async {
-    switch (event) {
-      case ResumeOngoingRecording():
-        await _onResumeOngoing(event, emit);
-      case StartRecording():
-        await _onStart(event, emit);
-    }
-  }
-
-  Future<void> _onMutation(
-    RecordingMutationEvent event,
-    Emitter<RecordingState> emit,
-  ) async {
-    switch (event) {
-      case ScoreFix():
-        await _onScoreFix(event, emit);
-      case PauseRecording():
-        await _onPause(event, emit);
-      case StopRecording():
-        await _onStop(event, emit);
-    }
-  }
-
-  Future<void> _onResumeOngoing(
-    ResumeOngoingRecording event,
-    Emitter<RecordingState> emit,
-  ) async {
-    if (state.activity != null) return;
-    try {
-      final ongoing = await _activities.fetchOngoing();
-      if (ongoing == null) return;
-
-      // Rebuild the timing bookkeeping the in-memory bloc lost on the kill.
-      // startedAt is authoritative; completed-pause time comes from the
-      // persisted point statuses (the same calc the stats use).
-      _startedAt = ongoing.startedAt;
-      _completedPauses = ongoing.pausedDuration;
-      _pauseStartedAt = null;
-
-      // Prefer the durable pause/resume checkpoint. Legacy activities have no
-      // checkpoint yet and fall back to the last recorded point. Staying
-      // paused keeps the dead gap out of active
-      // elapsed time; if it was active, the gap counts as elapsed (the run was
-      // notionally still going, just with no GPS) which is the honest reading.
-      //
-      // `points.last`, NOT `firstWhere(time == max(time))`. fetchOngoing orders
-      // by `id ASC`, i.e. insertion order, so the last element IS the last fix
-      // recorded. Selecting by maximum timestamp instead is wrong whenever the
-      // final points share a timestamp — and they routinely do: SQLite truncates
-      // DateTime to whole seconds, so the ±1µs signalLost boundary pair that
-      // brackets a GPS outage collapses into an exact tie with the fix beside it
-      // (the same truncation that forces the stable mergeSort in
-      // activity_entity.dart). firstWhere would then return the *earliest* point
-      // of the tie — typically a signalLost boundary — and read its status
-      // instead of the real last fix's. A run killed while paused right after an
-      // outage would resume UNPAUSED, restarting the timer and counting the dead
-      // time as active.
-      final lastPoint = ongoing.points.isEmpty ? null : ongoing.points.last;
-
-      final Duration elapsed;
-      final checkpoint = await _activities.fetchRecordingCheckpoint(ongoing.id);
-      if (checkpoint != null) {
-        _completedPauses = checkpoint.completedPauses;
-        _pauseStartedAt = checkpoint.pausedAt;
-        elapsed =
-            (checkpoint.pausedAt ?? _clock.nowUtc()).difference(_startedAt!) -
-            _completedPauses;
-        if (checkpoint.pausedAt == null) _startTicking();
-      } else if (lastPoint != null &&
-          lastPoint.status == ActivityPointStatusEntity.paused) {
-        // Continue the ongoing pause from the last fix. _completedPauses already
-        // covers up to that fix, so resuming adds (now - lastFix) without double
-        // counting. Freeze elapsed at the pause moment; no timer while paused.
-        _pauseStartedAt = lastPoint.time;
-        elapsed = lastPoint.time.difference(_startedAt!) - _completedPauses;
-      } else {
-        _startTicking();
-        elapsed = _clock.nowUtc().difference(_startedAt!) - _completedPauses;
-      }
-
-      final wasPaused = _pauseStartedAt != null;
-      logs.fine(
-        'Resumed ongoing activity ${ongoing.id} from storage '
-        '(paused: $wasPaused).',
-      );
-      emit(
-        state.copyWith(
-          activity: ongoing,
-          isPaused: wasPaused,
-          elapsedTime: elapsed.isNegative ? Duration.zero : elapsed,
-        ),
-      );
-    } catch (e, s) {
-      // A failed resume must not block the map from loading.
-      logs.severe('resumeOngoingRecording', error: e, trace: s);
-    }
-  }
-
-  Future<void> _onStart(
-    StartRecording event,
-    Emitter<RecordingState> emit,
-  ) async {
-    // Defence in depth alongside droppable(): a recording is already running,
-    // so a Start here is a no-op rather than a second concurrent activity.
-    if (state.activity != null) return;
-    try {
-      emit(state.copyWith(isStarting: true, error: null));
-
-      // Ask for the battery-optimisation exemption before recording begins so
-      // the foreground service survives a locked screen on aggressive OEMs.
-      // Best-effort: a denial still starts the run (FGS + wake lock remain).
-      if (!await _ensureBackgroundTracking()) {
-        logs.warning(
-          'Battery optimisation exemption not granted; tracking may stop '
-          'while the phone is locked on aggressive OEMs.',
-        );
-      }
-
-      _elapsedTimer?.cancel();
-      _pauseStartedAt = null;
-      _completedPauses = Duration.zero;
-      _gapDetector.reset();
-
-      final activity = await _activities.startNew(
-        activityType: event.activityType,
-      );
-      logs.info(
-        'StartRecording: activity ${activity.id} started at '
-        '${activity.startedAt} as ${activity.activityType.name}',
-      );
-      _startedAt = activity.startedAt;
-      _startTicking();
-
-      emit(state.copyWith(activity: activity));
-    } catch (e, s) {
-      logs.severe('$StartRecording', error: e, trace: s);
-      emit(state.copyWith(error: AppError(e.toString())));
-    } finally {
-      emit(state.copyWith(isStarting: false));
-    }
-  }
-
-  Future<void> _onScoreFix(ScoreFix event, Emitter<RecordingState> emit) async {
-    // A stop can be processed between the fix arriving and this handler running,
-    // nulling state.activity. Return rather than throwing.
-    final activity = state.activity;
-    if (activity == null) return;
-    final status = state.isPaused
-        ? ActivityPointStatusEntity.paused
-        : ActivityPointStatusEntity.active;
-
-    // Whether a fix is good enough to record is the recorder's decision, and
-    // it is made here rather than by whoever hands the fix over. The map used
-    // to make it before forwarding, which meant a screen had to know the
-    // movement profile's tolerance to feed the recording correctly.
-    //
-    // The map's stream deliberately admits one vague fix after a sustained
-    // bad-signal spell so the cursor degrades instead of freezing. That is a
-    // presentation policy, and it is not permission to inflate the active
-    // trace. Paused points remain writable even when vague: they establish
-    // the active<->paused segment boundary and never contribute to distance.
-    if (status == ActivityPointStatusEntity.active) {
-      final tuning = activity.activityType.movementProfile.tuning;
-      if (!tuning.acceptsAccuracy(event.position.accuracy)) {
-        logs.warning(
-          'Skipped an active fix outside the '
-          '${tuning.accuracyToleranceMeters.toStringAsFixed(0)} m recording '
-          'tolerance (accuracy '
-          '${event.position.accuracy?.toStringAsFixed(1) ?? 'unknown'} m).',
-        );
-        return;
-      }
-    }
-
-    // Outage detection runs only between two consecutive *active* fixes: a pause
-    // already excludes its time from active stats, and the active<->paused
-    // transition is an inter-segment gap that is never counted. The check uses
-    // the fix's own timestamp (the same source the stored point gets) so a
-    // queued/delayed handler cannot fabricate a gap.
-    ActivityPointEntity? gapFrom;
-    final previous = activity.points.isEmpty ? null : activity.points.last;
-    if (previous != null &&
-        previous.status == ActivityPointStatusEntity.active &&
-        status == ActivityPointStatusEntity.active) {
-      final fixTime = event.position.time ?? _clock.nowUtc();
-      final gap = _gapDetector.check(previous.time, fixTime);
-      if (gap != null) {
-        gapFrom = previous;
-        logs.warning(
-          'ScoreFix: GPS outage of ${gap.inSeconds}s detected on activity '
-          '${activity.id} (threshold ${_gapDetector.threshold.inSeconds}s) — '
-          'bracketing with signalLost boundary points.',
-        );
-      }
-    }
-
-    try {
-      final newPoints = await _score(
-        activityId: activity.id,
-        position: event.position,
-        status: status,
-        gapFrom: gapFrom,
-      );
-      // Append to the LATEST in-memory activity, not the pre-await capture:
-      // concurrent handlers would otherwise each append to the same stale list
-      // and clobber one another. If a stop landed during the await, skip.
-      final current = state.activity;
-      if (current == null || current.id != activity.id) return;
-      final pointCount = current.points.length + newPoints.length;
-      // Heartbeat, not one line per fix (every ~5 s would flood the log over a
-      // long activity) — roughly one line a minute, so a walk's continuity (or
-      // a silent gap) stays visible in the exported logs.
-      if (pointCount % 12 == 0) {
-        logs.fine(
-          'ScoreFix: activity ${activity.id} has $pointCount points '
-          '(status: ${status.name}).',
-        );
-      }
-      final updated = current.copyWith(
-        points: [...current.points, ...newPoints],
-      );
-      // Computing these also warms ActivityEntity's per-instance stats cache for
-      // the map rebuild. Persisting them keeps the Activities tab from loading
-      // the full in-progress trace just to render one summary row.
-      final liveDistance = updated.activeDistanceMeters;
-      final liveDuration = updated.activeDuration;
-      emit(state.copyWith(activity: updated));
-      try {
-        await _activities.updateLiveAggregates(
-          activity.id,
-          distanceMeters: liveDistance,
-          activeDuration: liveDuration,
-        );
-      } catch (e, s) {
-        // The point itself is already durable. A stale list summary is not a
-        // reason to report that recording failed; cease() recomputes it later.
-        logs.warning('update live activity aggregates', error: e, trace: s);
-      }
-    } catch (e, s) {
-      logs.severe('$ScoreFix', error: e, trace: s);
-      emit(state.copyWith(error: AppError('ScoreFix: $e')));
-    }
-  }
-
-  Future<void> _onPause(
-    PauseRecording event,
-    Emitter<RecordingState> emit,
-  ) async {
-    final activity = state.activity;
-    if (activity == null) return;
-
-    final wasPaused = state.isPaused;
-    final now = _clock.nowUtc();
-    final completedPauses =
-        _completedPauses +
-        (wasPaused && _pauseStartedAt != null
-            ? now.difference(_pauseStartedAt!)
-            : Duration.zero);
-    final pausedAt = wasPaused ? null : now;
-    try {
-      await _activities.saveRecordingCheckpoint(
-        activity.id,
-        pausedAt: pausedAt,
-        completedPauses: completedPauses,
-      );
-    } catch (e, s) {
-      logs.severe('Persist recording pause', error: e, trace: s);
-      emit(state.copyWith(error: AppError(e.toString())));
-      return;
-    }
-    _completedPauses = completedPauses;
-    _pauseStartedAt = pausedAt;
-    logs.info(
-      'PauseRecording: activity ${state.activity!.id} '
-      '${wasPaused ? 'resumed' : 'paused'} at elapsed '
-      '${state.elapsedTime.inSeconds}s.',
-    );
-
-    if (wasPaused) {
-      _startTicking();
-    } else {
-      _elapsedTimer?.cancel();
-    }
-
-    final elapsed = now.difference(_startedAt!) - completedPauses;
-    emit(
-      state.copyWith(
-        isPaused: !wasPaused,
-        elapsedTime: elapsed.isNegative ? Duration.zero : elapsed,
-      ),
-    );
-  }
-
-  Future<void> _onStop(
-    StopRecording event,
-    Emitter<RecordingState> emit,
-  ) async {
-    // Back-to-back Stop taps would hit a null activity on the second pass.
-    final activity = state.activity;
-    if (activity == null) return;
-    try {
-      await _activities.cease(activity.id);
-      logs.info(
-        'StopRecording: activity ${activity.id} stopped with '
-        '${activity.points.length} points, elapsed '
-        '${state.elapsedTime.inSeconds}s.',
-      );
-      _elapsedTimer?.cancel();
-      _elapsedTimer = null;
-      _startedAt = null;
-      _pauseStartedAt = null;
-      _completedPauses = Duration.zero;
-
-      emit(
-        state.copyWith(
-          activity: null,
-          elapsedTime: Duration.zero,
-          isPaused: false,
-        ),
-      );
-    } catch (e, s) {
-      logs.severe('$StopRecording', error: e, trace: s);
-      emit(state.copyWith(error: AppError(e.toString())));
-    }
-  }
-
-  void _onTick(TickElapsed event, Emitter<RecordingState> emit) {
-    final startedAt = _startedAt;
-    if (startedAt == null || state.isPaused) return;
-    final elapsed = _clock.nowUtc().difference(startedAt) - _completedPauses;
-    emit(
-      state.copyWith(elapsedTime: elapsed.isNegative ? Duration.zero : elapsed),
-    );
   }
 }
