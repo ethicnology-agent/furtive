@@ -4,11 +4,10 @@ import 'package:flutter/foundation.dart' show Factory;
 import 'package:flutter/gestures.dart'
     show EagerGestureRecognizer, OneSequenceGestureRecognizer;
 import 'package:flutter/widgets.dart';
-import 'package:activities/activities.dart';
-import 'package:furtive/core/map/map_view.dart';
-import 'package:furtive/core/utils/geo_circle.dart';
-import 'package:furtive/core/widgets/km_milestone_chip.dart';
-import 'package:furtive/core/widgets/user_location_puck.dart';
+import 'map_view.dart';
+import 'geo_circle.dart';
+import 'km_milestone_chip.dart';
+import 'user_location_puck.dart';
 import 'package:geo/geo.dart';
 import 'package:maplibre/maplibre.dart' as ml;
 import 'package:ui_kit/ui_kit.dart';
@@ -78,14 +77,13 @@ class MapLibreMapView implements MapView {
   @override
   Widget build({
     required String? styleUrl,
-    required ActivityEntity? track,
+    required MapTrack? track,
     required PositionEntity? initialCentre,
     required double initialZoom,
     required double maxZoom,
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
-    int milestoneIntervalKm = 1,
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
@@ -123,16 +121,15 @@ class MapLibreMapView implements MapView {
       onMapCreated: (controller) {
         _controller = controller;
         if (fitTrackBounds && track != null) {
-          final points = track.points
+          final points = track.positions
               .where(
-                (p) =>
-                    p.position.latitude.isFinite &&
-                    p.position.longitude.isFinite,
+                (position) =>
+                    position.latitude.isFinite && position.longitude.isFinite,
               )
               .map(
-                (p) => ml.Geographic(
-                  lon: p.position.longitude,
-                  lat: p.position.latitude,
+                (position) => ml.Geographic(
+                  lon: position.longitude,
+                  lat: position.latitude,
                 ),
               )
               .toList();
@@ -182,8 +179,7 @@ class MapLibreMapView implements MapView {
         if (track != null) ..._trackLayers(track),
       ],
       children: [
-        if (track != null && milestoneIntervalKm > 0)
-          _milestones(track, milestoneIntervalKm),
+        if (track != null && track.milestones.isNotEmpty) _milestones(track),
         if (me != null) _puck(me, deviceHeading),
         // Legally required whenever tiles are shown: the basemap is Protomaps
         // rendering OpenStreetMap data, and ODbL 4.3 plus Protomaps' terms both
@@ -209,15 +205,12 @@ class MapLibreMapView implements MapView {
   /// stays solid. Drawing a solid line across a GPS outage would assert a path
   /// that was never recorded; leaving a gap reads as a rendering bug. Dashes say
   /// "unknown".
-  Iterable<ml.Layer> _trackLayers(ActivityEntity track) {
+  Iterable<ml.Layer> _trackLayers(MapTrack track) {
     final layers = <ml.Layer>[];
     for (final segment in track.segments) {
       final chain = <ml.Position>[
-        for (final point in segment.points)
-          ml.Geographic(
-            lon: point.position.longitude,
-            lat: point.position.latitude,
-          ),
+        for (final position in segment.positions)
+          ml.Geographic(lon: position.longitude, lat: position.latitude),
       ];
       // A single-point segment has no line to draw. Common: every segment is
       // one point long for the first fix after a resume.
@@ -225,11 +218,13 @@ class MapLibreMapView implements MapView {
       layers.add(
         ml.PolylineLayer(
           polylines: [ml.Feature(geometry: ml.LineString.from(chain))],
-          color: segment.isActive
+          color: segment.style == MapTrackStyle.active
               ? AppColors.primary.background
               : AppColors.secondary.background,
           width: 4,
-          dashArray: segment.isSignalLost ? const [2, 3] : null,
+          dashArray: segment.style == MapTrackStyle.signalLost
+              ? const [2, 3]
+              : null,
         ),
       );
     }
@@ -289,16 +284,16 @@ class MapLibreMapView implements MapView {
     ],
   );
 
-  Widget _milestones(ActivityEntity track, int intervalKm) => ml.WidgetLayer(
+  Widget _milestones(MapTrack track) => ml.WidgetLayer(
     markers: [
-      for (final milestone in track.kmMilestonesForInterval(intervalKm))
+      for (final milestone in track.milestones)
         ml.Marker(
           point: ml.Geographic(
             lon: milestone.position.longitude,
             lat: milestone.position.latitude,
           ),
           size: const Size.square(28),
-          child: KmMilestoneChip(label: '${milestone.km}'),
+          child: KmMilestoneChip(label: milestone.label),
         ),
     ],
   );

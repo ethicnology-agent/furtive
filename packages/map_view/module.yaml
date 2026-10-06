@@ -1,0 +1,7 @@
+role: ui
+responsibility: >-
+  Own everything the application needs from a map and nothing else: a port
+  narrow enough to swap the renderer behind it, and the MapLibre
+  implementation of it.
+storage: none
+allowed_dependencies: [geo, ui_kit]

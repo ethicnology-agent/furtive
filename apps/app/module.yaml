@@ -12,6 +12,7 @@ allowed_dependencies:
     furtive_share,
     geo,
     location,
+    map_view,
     preferences,
     ui_kit,
     wall_clock,

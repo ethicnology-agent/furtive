@@ -22,6 +22,8 @@ graph TD
   style geo stroke:#362842
   location["location"]
   style location stroke:#c12dba
+  map_view["map_view"]
+  style map_view stroke:#bdbde1
   preferences["preferences"]
   style preferences stroke:#f493f6
   ui_kit["ui_kit"]
@@ -42,12 +44,15 @@ graph TD
   furtive --> furtive_share
   furtive --> geo
   furtive --> location
+  furtive --> map_view
   furtive --> preferences
   furtive --> ui_kit
   furtive_leaflet_viewer --> furtive_share
   location --> activity_profile
   location --> diagnostics
   location --> geo
+  map_view --> geo
+  map_view --> ui_kit
   preferences --> activity_profile
   ui_kit --> activity_profile
   subgraph packages0 ["packages"]
@@ -58,6 +63,7 @@ graph TD
     furtive_share
     geo
     location
+    map_view
     preferences
     ui_kit
     wall_clock

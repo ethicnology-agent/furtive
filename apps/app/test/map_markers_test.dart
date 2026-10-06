@@ -1,8 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/widgets/km_milestone_chip.dart';
-import 'package:furtive/core/widgets/user_location_puck.dart';
+import 'package:map_view/map_view.dart';
 
 void main() {
   testWidgets(

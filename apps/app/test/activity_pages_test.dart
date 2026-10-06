@@ -9,7 +9,7 @@ import 'package:activities/testing.dart';
 import 'package:activities/activities.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/locator.dart';
-import 'package:furtive/core/map/map_view.dart';
+import 'package:map_view/map_view.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
 import 'package:furtive/features/activities/bloc/activities_state.dart';
@@ -53,11 +53,10 @@ class _UnavailableActivityRepository extends ActivityRepository {
 }
 
 class _RecordingMapView implements MapView {
-  ActivityEntity? track;
+  MapTrack? track;
   PositionEntity? centre;
   bool? fitBounds;
   bool? showLocation;
-  int? milestoneInterval;
   bool disposed = false;
   @override
   String get name => 'test map';
@@ -73,14 +72,13 @@ class _RecordingMapView implements MapView {
   @override
   Widget build({
     required String? styleUrl,
-    required ActivityEntity? track,
+    required MapTrack? track,
     required PositionEntity? initialCentre,
     required double initialZoom,
     required double maxZoom,
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
-    int milestoneIntervalKm = 1,
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
@@ -89,7 +87,6 @@ class _RecordingMapView implements MapView {
     centre = initialCentre;
     fitBounds = fitTrackBounds;
     showLocation = showUserLocation;
-    milestoneInterval = milestoneIntervalKm;
     return const SizedBox.expand(key: Key('recorded-map'));
   }
 }
@@ -211,11 +208,17 @@ void main() {
         ),
       );
       expect(find.byKey(const Key('recorded-map')), findsOneWidget);
-      expect(map.track, same(track));
+      // The NaN fix above never reaches the renderer: segmenting drops a
+      // non-finite coordinate, so the map is handed only what it can draw
+      // rather than having to defend itself against the rest.
+      expect(map.track!.positions, [first]);
       expect(map.centre, same(first));
       expect(map.fitBounds, isTrue);
       expect(map.showLocation, isFalse);
-      expect(map.milestoneInterval, 50);
+      // The interval the page loaded is applied before the renderer sees
+      // it: at 50 km a track this short earns no marker at all, which is
+      // exactly what passing 1 would not have produced.
+      expect(map.track!.milestones, isEmpty);
       await tester.pumpWidget(const SizedBox());
       expect(map.disposed, isTrue);
     },

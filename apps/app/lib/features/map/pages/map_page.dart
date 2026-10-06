@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/activity_stats_view.dart';
-import 'package:furtive/core/map/map_view.dart';
-import 'package:furtive/core/map/maplibre_map_view.dart';
+import 'package:furtive/shell/map_track_view.dart';
+import 'package:map_view/map_view.dart';
 import 'package:furtive/core/global.dart';
 import 'package:activities/activities.dart';
 import 'package:furtive/features/map/activity_type_labels.dart';
@@ -521,7 +521,10 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                         styleUrl: state.styleUrl,
                         track: activity == null || activity.points.isEmpty
                             ? null
-                            : activity,
+                            : activity.asMapTrack(
+                                milestoneIntervalKm:
+                                    state.mapMilestoneIntervalKm,
+                              ),
                         initialCentre: loc,
                         initialZoom: loc == null ? 1 : Global.defaultZoom,
                         maxZoom: Global.maxZoom,
@@ -532,7 +535,6 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                         userPosition: loc,
                         deviceHeading: state.deviceHeading,
                         controlsOnLeft: state.mapControlsOnLeft,
-                        milestoneIntervalKm: state.mapMilestoneIntervalKm,
                         // Panning by hand means the user wants to look somewhere
                         // else, so stop dragging the camera back.
                         onUserGesture: () {

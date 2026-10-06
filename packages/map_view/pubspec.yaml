@@ -1,0 +1,22 @@
+name: map_view
+description: "The rendering port for a map, and its MapLibre implementation."
+publish_to: none
+resolution: workspace
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  geo:
+    path: ../geo
+  maplibre: ^0.3.5
+  ui_kit:
+    path: ../ui_kit
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter

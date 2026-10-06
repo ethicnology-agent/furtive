@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/activities.dart';
 import 'package:furtive/core/global.dart';
-import 'package:furtive/core/map/map_view.dart';
+import 'package:map_view/map_view.dart';
 import 'package:furtive/core/widgets/hold_to_confirm_button.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
@@ -74,8 +74,7 @@ class _Renderer implements MapView {
   var builds = 0;
   var disposed = false;
   PositionEntity? centre;
-  ActivityEntity? track;
-  int? milestoneInterval;
+  MapTrack? track;
   late VoidCallback gesture;
   @override
   String get name => 'test';
@@ -91,14 +90,13 @@ class _Renderer implements MapView {
   @override
   Widget build({
     required String? styleUrl,
-    required ActivityEntity? track,
+    required MapTrack? track,
     required PositionEntity? initialCentre,
     required double initialZoom,
     required double maxZoom,
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
-    int milestoneIntervalKm = 1,
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
@@ -106,7 +104,6 @@ class _Renderer implements MapView {
     builds++;
     centre = initialCentre;
     this.track = track;
-    milestoneInterval = milestoneIntervalKm;
     gesture = onUserGesture;
     return const SizedBox.expand(key: ValueKey('map-surface'));
   }
@@ -278,7 +275,7 @@ void main() {
         recording.state.copyWith(activity: activity(points: true)),
       );
       await tester.pump();
-      expect(renderer.track!.points, hasLength(1));
+      expect(renderer.track!.positions, hasLength(1));
       expect(renderer.moves.last, (position, Global.maxZoom));
     },
   );

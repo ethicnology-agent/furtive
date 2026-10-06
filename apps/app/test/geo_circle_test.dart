@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:furtive/core/utils/geo_circle.dart';
+import 'package:map_view/map_view.dart';
 
 void main() {
   // Measured with the same function the app uses for every other distance, so

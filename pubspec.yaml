@@ -25,6 +25,7 @@ workspace:
   - packages/furtive_share
   - packages/geo
   - packages/location
+  - packages/map_view
   - packages/preferences
   - packages/ui_kit
 
@@ -130,6 +131,7 @@ melos:
         packages/diagnostics/lib packages/diagnostics/test
         packages/geo/lib packages/geo/test
         packages/location/lib packages/location/test
+        packages/map_view/lib packages/map_view/test
         packages/preferences/lib packages/preferences/test
         packages/ui_kit/lib packages/ui_kit/test
         packages/furtive_share/lib packages/furtive_share/test

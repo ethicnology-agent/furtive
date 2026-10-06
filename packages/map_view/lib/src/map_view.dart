@@ -1,6 +1,58 @@
 import 'package:flutter/widgets.dart';
-import 'package:activities/activities.dart';
 import 'package:geo/geo.dart';
+
+/// How a stretch of a route was recorded, which is the only thing the
+/// renderer needs to know about it.
+enum MapTrackStyle {
+  /// Drawn solid: the recorder was moving and counting.
+  active,
+
+  /// Drawn in the secondary colour: deliberately paused.
+  paused,
+
+  /// Drawn dashed. A solid line across a GPS outage would assert a path that
+  /// was never recorded, and leaving a gap reads as a rendering bug; dashes
+  /// say "unknown".
+  signalLost,
+}
+
+/// One continuous stretch of a route, recorded one way throughout.
+class MapTrackSegment {
+  const MapTrackSegment({required this.positions, required this.style});
+
+  final List<PositionEntity> positions;
+  final MapTrackStyle style;
+}
+
+/// A numbered marker along a route.
+class MapMilestone {
+  const MapMilestone({required this.position, required this.label});
+
+  final PositionEntity position;
+
+  /// Already formatted. What a milestone counts, and in which unit, is the
+  /// caller's decision.
+  final String label;
+}
+
+/// A route to draw.
+///
+/// Deliberately not a recording. The renderer needs lines, styles and
+/// markers; everything that makes those — segmenting points by what the
+/// recorder was doing, spacing milestones by distance — belongs to whoever
+/// owns the recording, and a map module that knew about it could not be a
+/// shared UI module at all.
+class MapTrack {
+  const MapTrack({required this.segments, this.milestones = const []});
+
+  final List<MapTrackSegment> segments;
+  final List<MapMilestone> milestones;
+
+  /// Every position of every segment, in order — what fitting the camera to
+  /// the route needs.
+  Iterable<PositionEntity> get positions =>
+      segments.expand((segment) => segment.positions);
+}
 
 /// The rendering port: everything Furtive needs from a map, and nothing else.
 ///
@@ -44,9 +96,8 @@ abstract class MapView {
   /// benchmark's recording scenario drives exactly this path at ~2 ms per frame
   /// with zero frames over budget.
   ///
-  /// Segments are styled by kind: active solid, paused in the secondary colour,
-  /// and signalLost dashed — a solid line across a GPS outage would assert a
-  /// path that was never recorded.
+  /// Segments are styled by their [MapTrackStyle], and milestones are drawn
+  /// where the track puts them.
   ///
   /// [onUserGesture] fires when the user pans or zooms by hand, so callers can
   /// drop follow-mode instead of fighting the gesture. It must not fire for
@@ -71,14 +122,13 @@ abstract class MapView {
   /// reintroduce exactly that.
   Widget build({
     required String? styleUrl,
-    required ActivityEntity? track,
+    required MapTrack? track,
     required PositionEntity? initialCentre,
     required double initialZoom,
     required double maxZoom,
     required bool showUserLocation,
     required VoidCallback onUserGesture,
     bool controlsOnLeft = false,
-    int milestoneIntervalKm = 1,
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,

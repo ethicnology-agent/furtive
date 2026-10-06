@@ -83,6 +83,8 @@ dependencies:
     path: ../../packages/geo
   location:
     path: ../../packages/location
+  map_view:
+    path: ../../packages/map_view
   preferences:
     path: ../../packages/preferences
   ui_kit:

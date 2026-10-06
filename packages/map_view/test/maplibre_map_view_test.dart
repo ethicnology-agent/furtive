@@ -1,9 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:activities/activities.dart';
-import 'package:furtive/core/map/maplibre_map_view.dart';
-import 'package:furtive/core/widgets/km_milestone_chip.dart';
-import 'package:furtive/core/widgets/user_location_puck.dart';
+import 'package:map_view/map_view.dart';
 import 'package:geo/geo.dart';
 import 'package:maplibre/maplibre.dart' as ml;
 import 'package:ui_kit/ui_kit.dart';
@@ -23,13 +20,12 @@ void main() {
   tearDown(() => view.dispose());
 
   ml.MapLibreMap build({
-    ActivityEntity? track,
+    MapTrack? track,
     bool showUserLocation = false,
     PositionEntity? user,
     String? style,
     bool left = false,
     VoidCallback? gesture,
-    int milestoneIntervalKm = 1,
   }) =>
       view.build(
             styleUrl: style,
@@ -41,7 +37,6 @@ void main() {
             userPosition: user,
             deviceHeading: 180,
             controlsOnLeft: left,
-            milestoneIntervalKm: milestoneIntervalKm,
             onUserGesture: gesture ?? () {},
           )
           as ml.MapLibreMap;
@@ -108,63 +103,81 @@ void main() {
     expect(gestures, 1);
   });
 
-  test(
-    'active, paused and unknown paths keep distinct styles and milestones',
-    () {
-      final start = DateTime.utc(2026, 9, 4);
-      final points = <ActivityPointEntity>[];
-      for (final status in ActivityPointStatusEntity.values) {
-        for (var i = 0; i < 2; i++) {
-          points.add(
-            ActivityPointEntity(
-              position: PositionEntity(
-                latitude: 45 + points.length * .02,
-                longitude: -72,
-                elevation: 100,
-              ),
-              time: start.add(Duration(minutes: points.length * 10)),
-              status: status,
-            ),
-          );
-        }
-      }
-      final track = ActivityEntity(
-        id: 'route',
-        name: 'Route',
-        description: '',
-        createdAt: start,
-        startedAt: start,
-        stoppedAt: null,
-        points: points,
-      );
-      final map = build(track: track);
-      final lines = map.layers.cast<ml.PolylineLayer>().toList();
-      expect(lines, hasLength(3));
-      expect(lines[0].color, AppColors.primary.background);
-      expect(lines[1].color, AppColors.secondary.background);
-      expect(lines[0].dashArray, isNull);
-      expect(lines[1].dashArray, isNull);
-      expect(lines[2].dashArray, [2, 3]);
-      expect(lines.every((line) => line.width == 4), isTrue);
-      final markers = (map.children.single as ml.WidgetLayer).markers;
-      expect(markers, isNotEmpty);
-      expect((markers.first.child as KmMilestoneChip).label, '1');
-      final sparseMarkers =
-          (build(track: track, milestoneIntervalKm: 5).children.single
-                  as ml.WidgetLayer)
-              .markers;
-      expect(
-        sparseMarkers.every(
-          (marker) =>
-              int.parse((marker.child as KmMilestoneChip).label) % 5 == 0,
+  test('each recorded style gets its own line, drawn its own way', () {
+    // Three segments in, three polylines out: solid for what was recorded as
+    // movement, the secondary colour for a deliberate pause, dashed for an
+    // outage — a solid line across one would assert a path nobody travelled.
+    MapTrackSegment segment(MapTrackStyle style, int index) => MapTrackSegment(
+      style: style,
+      positions: [
+        for (var i = 0; i < 2; i++)
+          PositionEntity(
+            latitude: 45 + (index * 2 + i) * .02,
+            longitude: -72,
+            elevation: 100,
+          ),
+      ],
+    );
+    final track = MapTrack(
+      segments: [
+        segment(MapTrackStyle.active, 0),
+        segment(MapTrackStyle.paused, 1),
+        segment(MapTrackStyle.signalLost, 2),
+      ],
+      milestones: [
+        MapMilestone(
+          position: PositionEntity(latitude: 45, longitude: -72, elevation: 0),
+          label: '1',
         ),
-        isTrue,
-      );
-      expect(build(track: track, milestoneIntervalKm: 0).children, isEmpty);
-      expect(
-        build(track: track.copyWith(points: [points.first])).layers,
-        isEmpty,
-      );
-    },
-  );
+      ],
+    );
+
+    final lines = build(track: track).layers.cast<ml.PolylineLayer>().toList();
+
+    expect(lines, hasLength(3));
+    expect(lines[0].color, AppColors.primary.background);
+    expect(lines[1].color, AppColors.secondary.background);
+    expect(lines[0].dashArray, isNull);
+    expect(lines[1].dashArray, isNull);
+    expect(lines[2].dashArray, [2, 3]);
+    expect(lines.every((line) => line.width == 4), isTrue);
+
+    final markers =
+        (build(track: track).children.single as ml.WidgetLayer).markers;
+    expect((markers.single.child as KmMilestoneChip).label, '1');
+  });
+
+  test('a track with no milestones draws no marker layer', () {
+    // Zero is a setting a user picks: the route and nothing else.
+    final track = MapTrack(
+      segments: [
+        MapTrackSegment(
+          style: MapTrackStyle.active,
+          positions: [
+            PositionEntity(latitude: 45, longitude: -72, elevation: 0),
+            PositionEntity(latitude: 45.1, longitude: -72, elevation: 0),
+          ],
+        ),
+      ],
+    );
+
+    expect(build(track: track).children, isEmpty);
+  });
+
+  test('a one-position segment has no line to draw', () {
+    // Common rather than exotic: every segment is one position long for the
+    // first fix after a resume.
+    final track = MapTrack(
+      segments: [
+        MapTrackSegment(
+          style: MapTrackStyle.active,
+          positions: [
+            PositionEntity(latitude: 45, longitude: -72, elevation: 0),
+          ],
+        ),
+      ],
+    );
+
+    expect(build(track: track).layers, isEmpty);
+  });
 }

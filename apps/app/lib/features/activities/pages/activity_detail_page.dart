@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/core/activity_stats_view.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
-import 'package:furtive/core/map/map_view.dart';
-import 'package:furtive/core/map/maplibre_map_view.dart';
+import 'package:furtive/shell/map_track_view.dart';
+import 'package:map_view/map_view.dart';
 import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:furtive/core/global.dart';
@@ -189,7 +189,9 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                     // instead of an error.
                     child: _mapView.build(
                       styleUrl: _mapStyleUrl,
-                      track: widget.activity,
+                      track: widget.activity.asMapTrack(
+                        milestoneIntervalKm: _mapMilestoneIntervalKm,
+                      ),
                       fitTrackBounds: true,
                       initialCentre: _initialCenter(widget.activity),
                       initialZoom: Global.maxZoom,
@@ -198,7 +200,6 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                       // for one would prompt for location permission on a page
                       // that has no use for it.
                       showUserLocation: false,
-                      milestoneIntervalKm: _mapMilestoneIntervalKm,
                       // Nothing follows the user here, so a pan means nothing.
                       onUserGesture: () {},
                     ),
