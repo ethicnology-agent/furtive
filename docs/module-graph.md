@@ -54,6 +54,7 @@ graph TD
   location --> activity_profile
   location --> diagnostics
   location --> geo
+  location --> wall_clock
   map_view --> geo
   map_view --> ui_kit
   platform_services --> diagnostics

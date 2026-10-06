@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/features/map/position_stream_controller.dart';
+import 'package:location/location.dart';
 import 'package:geo/geo.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'support/fakes.dart';
+import 'package:location/testing.dart';
 
 class _PermissionLocation extends FakeLocationRepository {
   final permission = Completer<bool>();

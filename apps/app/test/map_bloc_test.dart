@@ -1,5 +1,6 @@
 import 'package:activity_profile/activity_profile.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:location/testing.dart';
 import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
@@ -10,7 +11,6 @@ import 'package:basemap/basemap.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';
-import 'package:furtive/features/map/position_stream_controller.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:preferences/preferences.dart';

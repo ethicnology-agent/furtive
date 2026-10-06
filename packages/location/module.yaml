@@ -4,4 +4,4 @@ responsibility: >-
   fixes are trustworthy enough to keep, when the stream has silently died,
   and which way the device is heading.
 storage: none
-allowed_dependencies: [activity_profile, diagnostics, geo]
+allowed_dependencies: [activity_profile, diagnostics, geo, wall_clock]

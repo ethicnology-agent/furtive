@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:location/testing.dart';
 import 'package:wall_clock/wall_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';

@@ -8,7 +8,6 @@ import 'package:location/location.dart';
 import 'package:basemap/basemap.dart';
 import 'package:furtive/features/map/bloc/map_event.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';
-import 'package:furtive/features/map/position_stream_controller.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_event.dart';
 import 'package:furtive/features/recording/bloc/recording_state.dart';

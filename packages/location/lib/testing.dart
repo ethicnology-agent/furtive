@@ -5,4 +5,5 @@
 /// for one. What a recorder needs is in `package:location/location.dart`.
 library;
 
+export 'src/fake_location_repository.dart';
 export 'src/location_gps_data_source.dart';

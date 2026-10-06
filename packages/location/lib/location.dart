@@ -11,4 +11,5 @@ export 'src/compass_facade.dart';
 export 'src/ensure_background_tracking_use_case.dart';
 export 'src/gps_quality_filter.dart';
 export 'src/location_repository.dart';
+export 'src/position_stream_controller.dart';
 export 'src/signal_gap_detector.dart';
