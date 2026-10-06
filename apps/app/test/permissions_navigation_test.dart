@@ -2,8 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/locator.dart';
+import 'package:activities/testing.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/features/permissions/pages/permissions_page.dart';
 import 'package:furtive/features/permissions/permission_entity.dart';
@@ -31,11 +30,10 @@ void main() {
     tester,
   ) async {
     final db = LocalDatabase.forTesting(NativeDatabase.memory());
-    getIt.registerSingleton<LocalDatabase>(db);
+    LocalDatabase.installSharedForTesting(db);
     final bloc = PermissionsBloc(permissions: _GrantedPermissions());
     addTearDown(() async {
       await bloc.close();
-      await getIt.unregister<LocalDatabase>();
       await db.close();
     });
     await tester.pumpWidget(

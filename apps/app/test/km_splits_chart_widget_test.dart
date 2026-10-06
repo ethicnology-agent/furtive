@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';

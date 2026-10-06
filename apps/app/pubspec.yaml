@@ -67,6 +67,8 @@ dependencies:
 
   # Shared live-tracking format and cryptography. Kept in a pure-Dart package so
   # the mobile app and the sensor-free web viewer compile the same source.
+  activities:
+    path: ../../packages/activities
   activity_profile:
     path: ../../packages/activity_profile
   wall_clock:

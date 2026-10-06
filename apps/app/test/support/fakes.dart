@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:activity_profile/activity_profile.dart';
 import 'package:drift/native.dart';
-import 'package:furtive/core/database/local_database.dart';
+import 'package:activities/testing.dart';
 import 'package:furtive/core/datasources/location_gps_data_source.dart';
 import 'package:furtive/core/repositories/location_repository.dart';
 import 'package:geo/geo.dart';

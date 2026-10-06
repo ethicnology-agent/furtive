@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:furtive/core/database/tables/activities_table.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'activities_table.dart';
+import 'activity_entity.dart';
 
 @DataClassName('ActivityPointsRow')
 @TableIndex(name: 'idx_activity_points_activity_id', columns: {#activityId})

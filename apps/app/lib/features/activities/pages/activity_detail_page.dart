@@ -9,7 +9,7 @@ import 'package:furtive/core/map/maplibre_map_view.dart';
 import 'package:furtive/features/activities/widgets/km_splits_chart.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:furtive/core/global.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/core/usecases/get_map_style_url_use_case.dart';
 import 'package:furtive/features/activities/export_activity_to_gpx_use_case.dart';
 import 'package:furtive/features/activities/share_activity_use_case.dart';

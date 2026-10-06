@@ -1,11 +1,10 @@
 import 'package:wall_clock/wall_clock.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:drift/drift.dart';
-import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/entities/activity_summary.dart';
-import 'package:furtive/core/locator.dart';
-import 'package:furtive/core/models/activity_model.dart';
+import 'local_database.dart';
+import 'activity_entity.dart';
+import 'activity_summary.dart';
+import 'activity_model.dart';
 
 class ActivityLocalDataSource {
   /// [db] and [clock] default to the app-wide singleton / real clock, so
@@ -13,7 +12,7 @@ class ActivityLocalDataSource {
   /// in-memory database and a [FixedClock] to drive the stale-activity window
   /// (see [ongoingStaleAfter]) without waiting 12 real hours.
   ActivityLocalDataSource({LocalDatabase? db, Clock? clock})
-    : db = db ?? getIt.get<LocalDatabase>(),
+    : db = db ?? LocalDatabase.shared,
       _clock = clock ?? const SystemClock();
 
   final LocalDatabase db;

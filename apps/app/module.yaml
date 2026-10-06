@@ -2,9 +2,10 @@ role: shell
 responsibility: >-
   Record, review and share activities. Still holds every capability it will
   own modules for; see architecture.md for the extraction order.
-storage: private Drift SQLite database (activities, activity points, preferences)
+storage: none — the recordings and the settings each own their own
 allowed_dependencies:
   [
+    activities,
     activity_profile,
     diagnostics,
     furtive_share,

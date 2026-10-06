@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
-import 'package:furtive/core/repositories/activity_repository.dart';
 
 class ExportActivityToGpxUseCase {
   ExportActivityToGpxUseCase({ActivityRepository? activities})

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/database/local_database.dart';
 import 'package:furtive/core/facades/backup_exclusion_facade.dart';
 import 'package:furtive/core/facades/file_system_facade.dart';
 import 'package:furtive/core/facades/lock_screen_facade.dart';
@@ -77,7 +76,7 @@ void main() {
       // defaults, so the worst case is the onboarding wizard showing again,
       // not a lost recording.
       try {
-        final carried = await LegacyPreferences(getIt<LocalDatabase>()).read();
+        final carried = await const LegacyPreferences().read();
         if (carried != null &&
             await PreferencesRepository().adoptIfEmpty(carried)) {
           logs.config('Preferences carried over from the recording database');

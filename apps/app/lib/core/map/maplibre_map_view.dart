@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show Factory;
 import 'package:flutter/gestures.dart'
     show EagerGestureRecognizer, OneSequenceGestureRecognizer;
 import 'package:flutter/widgets.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/utils/geo_circle.dart';
 import 'package:furtive/core/widgets/km_milestone_chip.dart';

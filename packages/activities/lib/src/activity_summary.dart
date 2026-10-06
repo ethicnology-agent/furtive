@@ -1,4 +1,4 @@
-import 'package:furtive/core/entities/activity_entity.dart' show formatPace;
+import 'activity_entity.dart' show formatPace;
 
 /// Lightweight row for the activities list: the displayed stats only, with no
 /// GPS points loaded. Distance/duration come from the denormalised columns on

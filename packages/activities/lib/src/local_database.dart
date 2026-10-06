@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:furtive/core/database/tables/activities_table.dart';
-import 'package:furtive/core/database/tables/activity_points_table.dart';
-import 'package:furtive/core/database/tables/preferences_table.dart';
+import 'activities_table.dart';
+import 'activity_points_table.dart';
+import 'preferences_table.dart';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -15,6 +15,25 @@ class LocalDatabase extends _$LocalDatabase {
 
   /// Inject a query executor (e.g. `NativeDatabase.memory()`) for tests.
   LocalDatabase.forTesting(super.executor);
+
+  /// One connection per process, for the module's own default call sites.
+  ///
+  /// The composition root used to register this in the service locator and
+  /// close it on reset. It lives here now, because a capability that owns a
+  /// database owns when it is opened; the shell no longer needs to know the
+  /// type at all.
+  static LocalDatabase get shared => _shared ??= LocalDatabase();
+  static LocalDatabase? _shared;
+
+  /// Installs [database] as the process-wide instance, or clears it.
+  ///
+  /// Only reachable through `package:activities/testing.dart`, because it is
+  /// how a test makes the module's default call sites — the ones that stay
+  /// `ActivityLocalDataSource()` in production — read an in-memory database
+  /// instead of the real file. It does not close what it replaces; the test
+  /// that installed one closes it.
+  static void installSharedForTesting(LocalDatabase? database) =>
+      _shared = database;
 
   @override
   int get schemaVersion => 10;

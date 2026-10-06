@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:diagnostics/diagnostics.dart';
-import 'package:furtive/core/entities/activity_summary.dart';
+import 'package:activities/activities.dart';
 
 part 'activities_state.mapper.dart';
 

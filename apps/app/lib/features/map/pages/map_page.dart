@@ -7,7 +7,7 @@ import 'package:furtive/core/activity_stats_view.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/map/maplibre_map_view.dart';
 import 'package:furtive/core/global.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/features/map/activity_type_labels.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/map/bloc/map_state.dart';

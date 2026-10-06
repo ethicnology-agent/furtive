@@ -1,0 +1,6 @@
+role: capability
+responsibility: >-
+  Own recorded activities: their points, the statistics derived from them,
+  and the database they live in.
+storage: private Drift SQLite database (app.sqlite)
+allowed_dependencies: [activity_profile, diagnostics, geo, wall_clock]

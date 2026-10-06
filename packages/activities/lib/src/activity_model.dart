@@ -1,8 +1,8 @@
 import 'package:activity_profile/activity_profile.dart';
-import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/database/tables/activity_points_table.dart';
-import 'package:furtive/core/database/tables/activities_table.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'local_database.dart';
+import 'activity_points_table.dart';
+import 'activities_table.dart';
+import 'activity_entity.dart';
 import 'package:geo/geo.dart';
 
 class ActivityModel {

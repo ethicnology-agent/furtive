@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:ui_kit/ui_kit.dart';

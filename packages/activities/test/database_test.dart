@@ -1,13 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/database/tables/activities_table.dart';
-import 'package:furtive/core/database/tables/activity_points_table.dart';
-import 'package:furtive/core/database/tables/preferences_table.dart';
-import 'package:furtive/core/datasources/activity_local_data_source.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
-import 'package:furtive/core/locator.dart';
-import 'package:furtive/core/models/activity_model.dart';
+import 'package:activities/testing.dart';
+import 'package:activities/activities.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 void main() {
@@ -643,15 +637,12 @@ void main() {
 
     setUp(() {
       db = LocalDatabase.forTesting(NativeDatabase.memory());
-      if (getIt.isRegistered<LocalDatabase>()) {
-        getIt.unregister<LocalDatabase>();
-      }
-      getIt.registerSingleton<LocalDatabase>(db);
+      LocalDatabase.installSharedForTesting(db);
     });
 
     tearDown(() async {
+      LocalDatabase.installSharedForTesting(null);
       await db.close();
-      await getIt.reset();
     });
 
     test('seeds a default preferences row', () async {

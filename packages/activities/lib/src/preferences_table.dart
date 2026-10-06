@@ -1,5 +1,4 @@
-import 'package:furtive/core/database/tables/activities_table.dart'
-    show ActivityTypeColumn;
+import 'activities_table.dart' show ActivityTypeColumn;
 import 'package:drift/drift.dart';
 
 @DataClassName('PreferencesRow')

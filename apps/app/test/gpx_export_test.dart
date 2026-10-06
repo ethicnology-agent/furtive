@@ -1,8 +1,8 @@
 import 'package:activity_profile/activity_profile.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/testing.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/features/activities/export_activity_to_gpx_use_case.dart';
 import 'package:geo/geo.dart';
@@ -18,10 +18,7 @@ void main() {
   late ExportActivityToGpxUseCase useCase;
   setUp(() {
     db = LocalDatabase.forTesting(NativeDatabase.memory());
-    if (getIt.isRegistered<LocalDatabase>()) {
-      getIt.unregister<LocalDatabase>();
-    }
-    getIt.registerSingleton<LocalDatabase>(db);
+    LocalDatabase.installSharedForTesting(db);
     useCase = ExportActivityToGpxUseCase();
   });
   tearDown(() async {

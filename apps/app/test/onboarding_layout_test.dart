@@ -2,8 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/locator.dart';
+import 'package:activities/testing.dart';
 import 'package:furtive/features/onboarding/onboarding_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:preferences/preferences.dart';
@@ -17,7 +16,7 @@ void main() {
 
   setUp(() {
     db = LocalDatabase.forTesting(NativeDatabase.memory());
-    getIt.registerSingleton<LocalDatabase>(db);
+    LocalDatabase.installSharedForTesting(db);
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(permissionsChannel, (call) async {
           if (call.method == 'checkPermissionStatus') return 0;
@@ -28,7 +27,6 @@ void main() {
   tearDown(() async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(permissionsChannel, null);
-    await getIt.unregister<LocalDatabase>();
     await db.close();
   });
 

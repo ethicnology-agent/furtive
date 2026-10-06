@@ -3,7 +3,7 @@ import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/core/global.dart';
 import 'package:furtive/core/map/map_view.dart';
 import 'package:furtive/core/widgets/hold_to_confirm_button.dart';

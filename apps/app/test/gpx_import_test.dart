@@ -4,8 +4,8 @@ import 'package:activity_profile/activity_profile.dart';
 import 'package:wall_clock/wall_clock.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:furtive/core/database/local_database.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/testing.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/core/locator.dart';
 import 'package:furtive/features/activities/import_activity_from_gpx_use_case.dart';
 
@@ -19,10 +19,7 @@ void main() {
 
   setUp(() async {
     db = LocalDatabase.forTesting(NativeDatabase.memory());
-    if (getIt.isRegistered<LocalDatabase>()) {
-      getIt.unregister<LocalDatabase>();
-    }
-    getIt.registerSingleton<LocalDatabase>(db);
+    LocalDatabase.installSharedForTesting(db);
     tmp = await Directory.systemTemp.createTemp('furtive_gpx_test');
   });
 

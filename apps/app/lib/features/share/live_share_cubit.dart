@@ -5,7 +5,7 @@ import 'package:wall_clock/wall_clock.dart';
 import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/core/entities/activity_entity.dart';
+import 'package:activities/activities.dart';
 import 'package:furtive/features/recording/bloc/recording_bloc.dart';
 import 'package:furtive/features/recording/bloc/recording_state.dart';
 import 'package:furtive_share/furtive_share.dart';
