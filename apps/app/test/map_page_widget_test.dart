@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/activities.dart';
 import 'package:furtive/app/bottom_navigation_widget.dart';
 import 'package:furtive/app/global.dart';
+import 'package:furtive/features/share/live_share_control.dart';
 import 'package:map_view/map_view.dart';
 import 'package:furtive/features/map/widgets/hold_to_confirm_button.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
@@ -170,6 +171,9 @@ void main() {
           home: MapPage(
             mapView: renderer,
             selectedTab: tab,
+            // The control is the share feature's; the page is where it is
+            // shown, which is why these tests still reach it from here.
+            shareControlBuilder: LiveShareControl.maybe,
             onRecordingCeased: (activity, {required mapWasVisible}) =>
                 ceased.add((activity: activity, mapWasVisible: mapWasVisible)),
           ),

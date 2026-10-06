@@ -79,3 +79,7 @@ dismissal, and that every type has an icon.
 the two ways the pause selector appears, that choosing paused swaps every
 figure, that elevation is hidden with them, and the opt-in background.
 `test/formatting_test.dart` covers the display helpers.
+`showSingleSnackBar` has no test of its own: it is three lines over
+ScaffoldMessenger, and what it decides — replace rather than queue — is
+asserted where it matters, in the screens that fire several listeners in one
+frame.

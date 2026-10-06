@@ -6,6 +6,7 @@ import 'package:furtive/features/activities/pages/activities_list_page.dart';
 import 'package:furtive/features/activities/pages/activity_detail_page.dart';
 import 'package:furtive/features/map/pages/map_page.dart';
 import 'package:furtive/features/settings/settings_page.dart';
+import 'package:furtive/features/share/live_share_control.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:map_view/map_view.dart';
 
@@ -38,6 +39,8 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
       MapPage(
         mapView: widget.mapView,
         selectedTab: _selectedTab,
+        // The map has room for the control; the share journey owns it.
+        shareControlBuilder: LiveShareControl.maybe,
         // Orchestration across journeys, which is what a shell is for: the
         // activity list refreshes because a recording landed in it, and the
         // finished recording opens if the user was watching it happen.
