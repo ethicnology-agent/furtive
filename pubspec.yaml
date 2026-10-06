@@ -120,24 +120,8 @@ melos:
         flutter: false
 
     format:check:
-      description: Check formatting without changing sources.
-      run: >-
-        dart format --output=none --set-exit-if-changed
-        apps/app/lib apps/app/test
-        apps/viewer/lib apps/viewer/test apps/viewer/web
-        packages/activities/lib packages/activities/test
-        packages/activity_profile/lib packages/activity_profile/test
-        packages/basemap/lib packages/basemap/test
-        packages/wall_clock/lib packages/wall_clock/test
-        packages/diagnostics/lib packages/diagnostics/test
-        packages/geo/lib packages/geo/test
-        packages/location/lib packages/location/test
-        packages/map_view/lib packages/map_view/test
-        packages/platform_services/lib packages/platform_services/test
-        packages/preferences/lib packages/preferences/test
-        packages/ui_kit/lib packages/ui_kit/test
-        packages/furtive_share/lib packages/furtive_share/test
-        tool
+      description: Check formatting across every workspace member.
+      run: dart run tool/check_format.dart
 
     architecture:
       description: Check module contracts, allowed dependencies, cycles and imports.
