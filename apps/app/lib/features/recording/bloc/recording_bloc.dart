@@ -236,6 +236,29 @@ class RecordingBloc extends Bloc<RecordingEvent, RecordingState> {
         ? ActivityPointStatusEntity.paused
         : ActivityPointStatusEntity.active;
 
+    // Whether a fix is good enough to record is the recorder's decision, and
+    // it is made here rather than by whoever hands the fix over. The map used
+    // to make it before forwarding, which meant a screen had to know the
+    // movement profile's tolerance to feed the recording correctly.
+    //
+    // The map's stream deliberately admits one vague fix after a sustained
+    // bad-signal spell so the cursor degrades instead of freezing. That is a
+    // presentation policy, and it is not permission to inflate the active
+    // trace. Paused points remain writable even when vague: they establish
+    // the active<->paused segment boundary and never contribute to distance.
+    if (status == ActivityPointStatusEntity.active) {
+      final tuning = activity.activityType.movementProfile.tuning;
+      if (!tuning.acceptsAccuracy(event.position.accuracy)) {
+        logs.warning(
+          'Skipped an active fix outside the '
+          '${tuning.accuracyToleranceMeters.toStringAsFixed(0)} m recording '
+          'tolerance (accuracy '
+          '${event.position.accuracy?.toStringAsFixed(1) ?? 'unknown'} m).',
+        );
+        return;
+      }
+    }
+
     // Outage detection runs only between two consecutive *active* fixes: a pause
     // already excludes its time from active stats, and the active<->paused
     // transition is an inter-segment gap that is never counted. The check uses

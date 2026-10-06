@@ -265,26 +265,12 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
   }
 
   void _onUpdateUserLocation(UpdateUserLocation event, Emitter<MapState> emit) {
-    final recordingState = _recording.state;
-    final activity = recordingState.activity;
-    if (activity != null) {
-      final tuning = activity.activityType.movementProfile.tuning;
-      final accurateEnough = tuning.acceptsAccuracy(event.position.accuracy);
-      // The map stream deliberately admits one vague fix after a sustained
-      // bad-signal spell so the cursor degrades instead of freezing. That is a
-      // presentation policy, not permission to inflate the active trace.
-      // Paused points remain writable even when vague: they establish the
-      // active<->paused segment boundary and never contribute to distance.
-      if (recordingState.isPaused || accurateEnough) {
-        _recording.add(ScoreFix(position: event.position));
-      } else {
-        logs.warning(
-          'MapBloc skipped an active fix outside the ${tuning.accuracyToleranceMeters.toStringAsFixed(0)} m '
-          'recording tolerance (accuracy '
-          '${event.position.accuracy?.toStringAsFixed(1) ?? 'unknown'} m).',
-        );
-      }
-    }
+    // Every fix is handed over unconditionally. Whether one is good enough to
+    // record, and whether there is a recording at all, are the recorder's
+    // questions — it already returns early when there is no activity. The map
+    // reading the recording's state to decide is what made a screen depend on
+    // the movement profile's accuracy tolerance.
+    _recording.add(ScoreFix(position: event.position));
     // Feeds the magnetic-to-true-north correction. Declination varies over
     // kilometres, so every fix is far more often than needed — but it is one
     // cheap platform call against a stream that already runs at seconds
