@@ -7,8 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
 import 'package:activities/activities.dart';
 import 'package:location/location.dart';
-import 'package:furtive/features/recording/bloc/recording_bloc.dart';
-import 'package:furtive/features/recording/bloc/recording_event.dart';
+import 'package:furtive/app/recording_bloc.dart';
+import 'package:furtive/app/recording_event.dart';
 import 'package:recording_session/recording_session.dart';
 
 import 'support/fakes.dart';

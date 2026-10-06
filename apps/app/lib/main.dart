@@ -10,7 +10,7 @@ import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/app/startup_gate.dart';
-import 'package:furtive/features/recording/bloc/recording_bloc.dart';
+import 'package:furtive/app/recording_bloc.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';

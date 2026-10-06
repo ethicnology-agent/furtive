@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
-import 'package:furtive/features/recording/bloc/recording_bloc.dart';
+import 'package:furtive/app/recording_bloc.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
 import 'package:recording_session/recording_session.dart';
 

@@ -1,14 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/features/recording/bloc/recording_event.dart';
+import 'package:furtive/app/recording_event.dart';
 import 'package:recording_session/recording_session.dart';
 
 /// A bloc-shaped view of [RecordingSession], for the widgets that render it.
 ///
-/// The state machine itself is a capability now: the map reconfigures the GPS
+/// The state machine itself is a capability: the map reconfigures the GPS
 /// stream from the recording's activity type and the live share follows its
-/// pauses, so neither can depend on this feature to reach it. What is left
-/// here is the translation between a widget's events and a session's methods,
-/// and a stream Flutter can rebuild from.
+/// pauses. What is left here is the translation between a widget's events and
+/// a session's methods, and a stream Flutter can rebuild from.
+///
+/// It is the shell's, not a feature's. Once the state machine left, a
+/// `recording` feature with no page, no widget and no journey was two files
+/// of adapter that another feature's page imported — which is how `map ->
+/// recording` survived. A presentation adapter over a shared capability is
+/// glue, and glue belongs where the composition happens.
 ///
 /// Every command handler returns without awaiting on purpose. The session
 /// serialises its own work on two queues — ordering is its guarantee, not
