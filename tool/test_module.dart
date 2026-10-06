@@ -2,6 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 /// A zero exit code alone does not establish that a test run completed.
+///
+/// The JSON reporter splits a failure across two events: `testDone` carries
+/// the verdict, while what actually went wrong — the expectation, the diff,
+/// anything the test printed — arrives as `error` and `print` events keyed by
+/// test id. Forwarding only the verdict leaves a CI log that says a test
+/// failed and nothing about why, which is how a golden failure reached a
+/// reviewer as four words.
 class TestReport {
   bool completed = false;
   bool failed = false;
@@ -34,6 +41,8 @@ Future<void> main(List<String> args) async {
     runInShell: Platform.isWindows,
   );
   final report = TestReport();
+  // Failures name their test by id, which only `testStart` spells out.
+  final names = <Object?, String>{};
   // Forward child stderr without binding this sink: reporter writes must
   // stay possible while the child is still running.
   final errors = process.stderr.listen(stderr.add).asFuture<void>();
@@ -44,9 +53,18 @@ Future<void> main(List<String> args) async {
     try {
       final event = jsonDecode(line) as Map<String, dynamic>;
       report.add(event);
-      if (event['type'] == 'error') stderr.writeln(event['error']);
-      if (event['type'] == 'testStart') {
-        stdout.writeln((event['test'] as Map<String, dynamic>)['name']);
+      switch (event['type']) {
+        case 'error':
+          stderr.writeln(names[event['testID']] ?? '');
+          stderr.writeln(event['error']);
+          final trace = event['stackTrace'];
+          if (trace is String && trace.trim().isNotEmpty) stderr.writeln(trace);
+        case 'print':
+          stdout.writeln(event['message']);
+        case 'testStart':
+          final test = event['test'] as Map<String, dynamic>;
+          names[test['id']] = test['name'] as String;
+          stdout.writeln(test['name']);
       }
     } on FormatException {
       stdout.writeln(line);

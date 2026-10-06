@@ -46,6 +46,19 @@ jobs:
       - name: Verify
         run: dart run melos run verify
 
+      # A golden comparison writes the expected image, what was rendered and
+      # their masked difference next to the test. Without them, a CI-only
+      # failure is a percentage and nothing to look at, and the one machine
+      # that can reproduce it is the runner.
+      - name: Upload golden failures
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: golden-failures
+          path: '**/test/failures/**'
+          if-no-files-found: ignore
+          retention-days: 7
+
       # Analyze/test cannot compile Kotlin, merge the Android manifest, resolve
       # MapLibre Native, or exercise release-only Gradle configuration.
       - name: Compile release APK
