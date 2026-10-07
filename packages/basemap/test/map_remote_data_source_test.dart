@@ -199,6 +199,34 @@ void main() {
       );
     });
 
+    test('a transport failure never leaks the key either', () async {
+      // The messages this file throws are redacted by construction. A
+      // transport failure is not built here at all: `http` raises its own
+      // ClientException carrying `uri=<the full URL>`, key included, and this
+      // application exports its logs. Observed in the field on a DNS failure:
+      // the INFO line above it read `key=***` while the SEVERE line beside it
+      // carried the key in clear.
+      final source = MapRemoteDataSource(
+        apiKey: key,
+        styleUrlBase: base,
+        clientFactory: () => MockClient((request) async {
+          throw http.ClientException(
+            'Failed host lookup: tiles.example.com',
+            request.url,
+          );
+        }),
+      );
+      await expectLater(
+        source.getStyleUrl(),
+        throwsA(
+          predicate<Object>(
+            (e) => !e.toString().contains(key),
+            'no API key in the message',
+          ),
+        ),
+      );
+    });
+
     test('the error never leaks the key', () async {
       await expectLater(
         source('<html>nope</html>').getStyleUrl(),

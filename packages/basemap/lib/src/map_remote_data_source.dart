@@ -209,6 +209,18 @@ class MapRemoteDataSource {
         chunks.add(chunk);
       }
       return Uint8List.fromList(chunks.expand((c) => c).toList());
+    } on Object catch (error, stack) {
+      // Every message thrown above is redacted where it is built. A transport
+      // failure is not built here at all: `http` raises its own
+      // ClientException carrying `uri=<the full URL>`, key included, and this
+      // application exports its logs — so a DNS failure put the key in clear
+      // on the line beside one that read `key=***`.
+      //
+      // Redacting whatever escapes is the fix rather than redacting at each
+      // throw site, because the leak came precisely from the one error this
+      // file does not construct. The stack trace is preserved; only the
+      // message is rewritten.
+      Error.throwWithStackTrace(_redactKey(error.toString()), stack);
     } finally {
       client.close();
     }
