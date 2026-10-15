@@ -2,7 +2,9 @@ package com.ethicnology.furtive
 
 import android.app.ActivityManager
 import android.app.ApplicationExitInfo
+import android.content.Intent
 import android.location.LocationManager
+import android.provider.Settings
 import android.os.Build
 import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
@@ -68,6 +70,7 @@ class MainActivity : FlutterActivity() {
                 when (call.method) {
                     "lastExitReason" -> result.success(lastExitReason())
                     "locationProviders" -> result.success(locationProviders())
+                    "openLocationSettings" -> result.success(openLocationSettings())
                     else -> result.notImplemented()
                 }
             }
@@ -102,6 +105,18 @@ class MainActivity : FlutterActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         }
     }
+
+    // Opens the system screen carrying the location toggle.
+    //
+    // The toggle this points at is not the one users reach for. Android's
+    // per-app permission screen and the system location switch look alike and
+    // are reached by similar paths, so "I granted location" and "location is
+    // on" feel like the same statement and are not. Sending them to the right
+    // screen is cheaper than describing where it is.
+    private fun openLocationSettings(): Boolean = runCatching {
+        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        true
+    }.getOrDefault(false)
 
     // What the platform says about location, through both the legacy
     // per-provider API that geolocator uses and the modern one that replaced

@@ -89,6 +89,21 @@ class ProcessExitFacade {
 class LocationProviderDiagnostics {
   static const _channel = MethodChannel('app.furtive/diagnostics');
 
+  /// Opens the system screen holding the location toggle.
+  ///
+  /// Returns false when the platform refused or there is nothing to open, so
+  /// a caller can keep its message on screen rather than pretend it acted.
+  static Future<bool> openSettings() async {
+    if (!kIsWeb && defaultTargetPlatform != TargetPlatform.android) {
+      return false;
+    }
+    try {
+      return await _channel.invokeMethod<bool>('openLocationSettings') ?? false;
+    } on Object {
+      return false;
+    }
+  }
+
   /// Never throws: this exists to make a log line, not to gate behaviour.
   static Future<String> describe() async {
     if (!kIsWeb && defaultTargetPlatform != TargetPlatform.android) {

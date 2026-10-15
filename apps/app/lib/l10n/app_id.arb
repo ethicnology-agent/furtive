@@ -7,6 +7,7 @@
   "mapFollowing": "Following",
   "mapWaitingForLocation": "Waiting for GPS",
   "mapLocationServiceOff": "Location is off — turn it on in system settings",
+  "mapOpenLocationSettings": "Open settings",
   "mapHoldStopProgress": "Keep holding · {seconds}",
   "liveSharePreparing": "Preparing…",
   "liveShareConnected": "Live connected",

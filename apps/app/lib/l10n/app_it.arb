@@ -7,6 +7,7 @@
   "mapFollowing": "Following",
   "mapWaitingForLocation": "Waiting for GPS",
   "mapLocationServiceOff": "Posizione disattivata: attivala nelle impostazioni",
+  "mapOpenLocationSettings": "Apri impostazioni",
   "mapHoldStopProgress": "Keep holding · {seconds}",
   "liveSharePreparing": "Preparing…",
   "liveShareConnected": "Live connected",

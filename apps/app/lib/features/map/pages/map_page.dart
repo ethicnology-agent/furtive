@@ -20,6 +20,7 @@ import 'package:furtive/app/recording_bloc.dart';
 import 'package:furtive/app/recording_event.dart';
 import 'package:recording_session/recording_session.dart';
 import 'package:furtive/l10n/app_localizations.dart';
+import 'package:platform_services/platform_services.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 String _loadingMessage(AppLocalizations l10n, LoadingStatus status) =>
@@ -382,7 +383,16 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                             AppLocalizations.of(context).mapLocationServiceOff,
                           ),
                         ),
-                        actions: const [SizedBox.shrink()],
+                        actions: [
+                          TextButton(
+                            onPressed: LocationProviderDiagnostics.openSettings,
+                            child: Text(
+                              AppLocalizations.of(
+                                context,
+                              ).mapOpenLocationSettings,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
