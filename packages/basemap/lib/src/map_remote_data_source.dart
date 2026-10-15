@@ -155,7 +155,21 @@ class MapRemoteDataSource {
     final styleUrl = '$_styleUrlBase/${theme.name}/$lang.json?key=$_apiKey';
     logs.info('getStyleUrl: validating style ${_redactKey(styleUrl)}');
 
-    final styleText = await _httpGet(styleUrl);
+    final String styleText;
+    try {
+      styleText = await _httpGet(styleUrl);
+    } on MapStyleUnreachable catch (error) {
+      // Unreachable now is not the same as unusable. The validation below
+      // exists because maplibre reports no style-load failure, so a bad key
+      // or a captive portal would otherwise leave a blank map indistinguish-
+      // able from the deliberate tileless one. A flat network outage is a
+      // third thing: the renderer keeps the style document and the tiles it
+      // already fetched in its ambient cache, and handing it this URL lets it
+      // draw the map the user already has. Refusing would discard a map that
+      // is sitting on the device.
+      logs.warning('getStyleUrl: unvalidated, host unreachable ($error)');
+      return styleUrl;
+    }
     final styleJson = await compute(jsonDecode, styleText);
     if (styleJson is! Map<String, dynamic>) {
       throw 'Protomaps style is not a JSON object: ${_redactKey(styleUrl)}';
@@ -190,7 +204,15 @@ class MapRemoteDataSource {
     final client = _newClient();
     try {
       final request = http.Request('GET', Uri.parse(url));
-      final response = await client.send(request).timeout(_httpTimeout);
+      final http.StreamedResponse response;
+      try {
+        response = await client.send(request).timeout(_httpTimeout);
+      } on Object catch (error) {
+        // Transport-level: no DNS, no route, no answer. Distinguished from an
+        // HTTP status or a malformed body because only this one says nothing
+        // about whether the style is good — just that the network is gone.
+        throw MapStyleUnreachable(_redactKey(error.toString()));
+      }
       if (response.statusCode != 200) {
         throw 'HTTP ${response.statusCode} fetching ${_redactKey(url)}';
       }
@@ -209,6 +231,8 @@ class MapRemoteDataSource {
         chunks.add(chunk);
       }
       return Uint8List.fromList(chunks.expand((c) => c).toList());
+    } on MapStyleUnreachable {
+      rethrow;
     } on Object catch (error, stack) {
       // Every message thrown above is redacted where it is built. A transport
       // failure is not built here at all: `http` raises its own
@@ -228,4 +252,19 @@ class MapRemoteDataSource {
 
   Future<String> _httpGet(String url) async =>
       utf8.decode(await _httpGetBytesCapped(url));
+}
+
+/// The tile host could not be reached at all — no DNS, no route, no answer.
+///
+/// Separate from every other failure this file reports, because it is the only
+/// one that says nothing about whether the style itself is usable. A bad key
+/// or a malformed document means the map will never draw; an outage means it
+/// may already be on the device, in the renderer's cache.
+class MapStyleUnreachable implements Exception {
+  const MapStyleUnreachable(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
 }

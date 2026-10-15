@@ -5,6 +5,7 @@ import 'package:preferences/preferences.dart';
 import 'package:basemap/testing.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:logging/logging.dart';
 
 /// Coverage for basemap resolution.
 ///
@@ -199,33 +200,52 @@ void main() {
       );
     });
 
-    test('a transport failure never leaks the key either', () async {
-      // The messages this file throws are redacted by construction. A
-      // transport failure is not built here at all: `http` raises its own
-      // ClientException carrying `uri=<the full URL>`, key included, and this
-      // application exports its logs. Observed in the field on a DNS failure:
-      // the INFO line above it read `key=***` while the SEVERE line beside it
-      // carried the key in clear.
+    test('an outage yields the URL unvalidated rather than no map', () async {
+      // The renderer keeps the style and the tiles it already fetched. A flat
+      // network outage must therefore not be turned into a tileless map: the
+      // map the user already has is on the device, and refusing the URL is
+      // what throws it away. Measured on a device: with tiles freshly cached
+      // and the network cut, the map drew nothing because this threw.
       final source = MapRemoteDataSource(
         apiKey: key,
         styleUrlBase: base,
         clientFactory: () => MockClient((request) async {
-          throw http.ClientException(
-            'Failed host lookup: tiles.example.com',
-            request.url,
-          );
+          throw http.ClientException('Failed host lookup', request.url);
         }),
       );
-      await expectLater(
-        source.getStyleUrl(),
-        throwsA(
-          predicate<Object>(
-            (e) => !e.toString().contains(key),
-            'no API key in the message',
-          ),
-        ),
-      );
+      final url = await source.getStyleUrl();
+      expect(url, isNotNull);
+      expect(url, contains('key=$key'));
     });
+
+    test(
+      'an outage is logged without the key, since it no longer throws',
+      () async {
+        // The invariant this file states — the key must never appear in an
+        // error or log line — outlived the change that stopped a transport
+        // failure from throwing. It is now reported as a warning instead, so
+        // that is where it has to be checked.
+        final records = <String>[];
+        final subscription = Logger.root.onRecord.listen(
+          (record) => records.add(record.message),
+        );
+        addTearDown(subscription.cancel);
+
+        final source = MapRemoteDataSource(
+          apiKey: key,
+          styleUrlBase: base,
+          clientFactory: () => MockClient((request) async {
+            throw http.ClientException('Failed host lookup', request.url);
+          }),
+        );
+        await source.getStyleUrl();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(records, isNotEmpty);
+        expect(records.join('\n'), isNot(contains(key)));
+        expect(records.join('\n'), contains('key=***'));
+      },
+    );
 
     test('the error never leaks the key', () async {
       await expectLater(
