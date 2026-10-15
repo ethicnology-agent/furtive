@@ -6,6 +6,7 @@
   "mapRecordingStateIdle": "No activity is currently recording.",
   "mapFollowing": "Following",
   "mapWaitingForLocation": "Waiting for GPS",
+  "mapLocationServiceOff": "Location is off — turn it on in system settings",
   "mapHoldStopProgress": "Keep holding · {seconds}",
   "liveSharePreparing": "Preparing…",
   "liveShareConnected": "Live connected",
@@ -24,7 +25,13 @@
   "btnBack": "Back",
   "btnCopy": "Copy",
   "prefLoadFailed": "Could not load your preferences.",
-  "@mapHoldStopProgress": {"placeholders": {"seconds": {"type": "int"}}},
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "@@locale": "hi",
   "appTitle": "Furtive",
   "btnNext": "आगे",

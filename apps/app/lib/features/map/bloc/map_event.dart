@@ -70,3 +70,10 @@ class ToggleFollowUser extends MapEvent {
 class StopFollowingUser extends MapEvent {
   const StopFollowingUser();
 }
+
+/// The device's location service was switched on or off.
+class LocationServiceChanged extends MapEvent {
+  const LocationServiceChanged(this.enabled);
+
+  final bool enabled;
+}

@@ -478,6 +478,37 @@ void main() {
     wait: const Duration(milliseconds: 40),
     verify: (bloc) => expect(bloc.state.isFollowingUser, isFalse),
   );
+
+  group('a switched-off location service is reported, not waited through', () {
+    // The symptom this closes: the application logged "The location service
+    // on the device is disabled." on every launch for days while showing the
+    // user an empty map and no explanation. Silence is correct for a cold
+    // GPS — the open stream delivers — but this failure never resolves on its
+    // own, so it has to reach the screen.
+    test('InitMap surfaces it instead of swallowing it', () async {
+      location.locationServiceDisabled = true;
+      final map = buildBloc();
+      addTearDown(map.close);
+
+      map.add(const InitMap());
+      await map.stream.firstWhere((s) => s.locationServiceEnabled == false);
+
+      expect(map.state.locationServiceEnabled, isFalse);
+    });
+
+    test('a cold GPS is still silent — the two are not conflated', () async {
+      location
+        ..locationServiceDisabled = false
+        ..failCurrentLocation = true;
+      final map = buildBloc();
+      addTearDown(map.close);
+
+      map.add(const InitMap());
+      await map.stream.firstWhere((s) => s.loadingStatus == null);
+
+      expect(map.state.locationServiceEnabled, isNot(false));
+    });
+  });
 }
 
 /// Counts how often the style is resolved, which is what distinguishes a
@@ -493,4 +524,5 @@ class _CountingStyle extends GetMapStyleUrlUseCase {
     calls++;
     return super.call();
   }
+
 }

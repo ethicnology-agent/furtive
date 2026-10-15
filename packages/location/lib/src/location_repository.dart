@@ -26,7 +26,15 @@ class LocationRepository {
   Stream<bool> getServiceEnabledStream() => gps.getServiceEnabledStream();
 
   Future<PositionEntity> getCurrentLocation() async {
-    final position = await gps.getCurrentLocation();
+    final Position position;
+    try {
+      position = await gps.getCurrentLocation();
+    } on LocationServiceDisabledException {
+      // Translated at the boundary so callers never import geolocator to
+      // recognise it. This module owns what a location failure means; the
+      // plugin's exception type is an implementation detail of how we ask.
+      throw LocationServiceDisabledError();
+    }
     return _toEntity(position) ??
         (throw StateError(
           'Geolocator returned a position with non-finite coordinates',
@@ -170,4 +178,14 @@ class LocationRepository {
   Future<bool> requestDisableBatteryOptimization() async {
     return await gps.requestDisableBatteryOptimization();
   }
+}
+
+/// The device's location service is switched off.
+///
+/// Distinct from every other failure this module reports, because it is the
+/// only one that never resolves on its own: no fix will arrive until a human
+/// changes a system setting. Callers are expected to say so on screen rather
+/// than wait.
+class LocationServiceDisabledError extends AppError {
+  LocationServiceDisabledError() : super('Location service is disabled');
 }

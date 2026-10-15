@@ -365,6 +365,27 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                 ),
                 if (state.loadingStatus != null)
                   const Center(child: CircularProgressIndicator()),
+                // A banner, not a snackbar: the service stays off until the
+                // user goes and switches it on, so a message that fades after
+                // three seconds would be the same silence with extra steps.
+                if (state.locationServiceEnabled == false)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: SafeArea(
+                      child: MaterialBanner(
+                        leading: const Icon(Icons.location_disabled),
+                        content: Semantics(
+                          liveRegion: true,
+                          child: Text(
+                            AppLocalizations.of(context).mapLocationServiceOff,
+                          ),
+                        ),
+                        actions: const [SizedBox.shrink()],
+                      ),
+                    ),
+                  ),
                 // Stats overlay: rebuilt by the 1 s tick, which is why it has its
                 // own builder well away from the map subtree.
                 BlocBuilder<RecordingBloc, RecordingState>(

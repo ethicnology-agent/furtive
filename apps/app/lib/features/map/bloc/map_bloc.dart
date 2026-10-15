@@ -60,6 +60,10 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
        super(const MapState()) {
     on<InitMap>(_onInitMap);
     on<EnsureTracking>(_onEnsureTracking);
+    on<LocationServiceChanged>(
+      (event, emit) =>
+          emit(state.copyWith(locationServiceEnabled: event.enabled)),
+    );
     on<ClearError>((_, emit) => emit(state.copyWith(error: null)));
     on<UpdateUserLocation>(_onUpdateUserLocation);
     on<ToggleFollowUser>(
@@ -151,6 +155,14 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
     // would silently end a run the user still wants.
     _positions.onStreamClosed = () {
       if (!isClosed) add(const InitMap());
+    };
+
+    // A service that is off is not a transient to wait through: no fix will
+    // ever arrive until a human changes a system setting, so it has to reach
+    // the screen. Observed in the field as days of silent waiting while the
+    // logs said "The location service on the device is disabled." every time.
+    _positions.onServiceEnabledChanged = (enabled) {
+      if (!isClosed) add(LocationServiceChanged(enabled));
     };
 
     // Observe app lifecycle so the stream is re-validated when the user returns.
@@ -311,7 +323,18 @@ class MapBloc extends Bloc<MapEvent, MapState> with WidgetsBindingObserver {
     unawaited(_recording.resumeOngoing());
 
     try {
-      emit(state.copyWith(userLocation: await _location.getCurrentLocation()));
+      emit(
+        state.copyWith(
+          userLocation: await _location.getCurrentLocation(),
+          locationServiceEnabled: true,
+        ),
+      );
+    } on LocationServiceDisabledError catch (e, s) {
+      // The one failure here that is NOT transient. Silence is right for a
+      // cold GPS — the open stream will deliver — but this one resolves only
+      // when the user switches the service back on, so it is surfaced.
+      logs.severe('InitMap getUserLocation', error: e, trace: s);
+      emit(state.copyWith(locationServiceEnabled: false));
     } catch (e, s) {
       // Non-fatal and deliberately silent (no error banner): right after a cold
       // start the GPS may simply not be warmed up. The already-open stream will

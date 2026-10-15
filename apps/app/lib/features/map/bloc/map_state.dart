@@ -21,6 +21,7 @@ class MapState with MapStateMappable {
     this.mapControlsOnLeft = false,
     this.mapMilestoneIntervalKm = 1,
     this.deviceHeading,
+    this.locationServiceEnabled,
   });
 
   /// Resolved basemap style URL, or null for a tileless map (no PROTOMAPS_KEY
@@ -52,4 +53,13 @@ class MapState with MapStateMappable {
   /// null when no compass is available. Deliberately not the same thing as
   /// `userLocation.heading`, which is the direction of travel.
   final double? deviceHeading;
+
+  /// Whether the device's location service is switched on, or null while
+  /// unknown.
+  ///
+  /// Distinct from "no fix yet". A cold GPS that has not warmed up will
+  /// deliver on its own and deserves silence; a service that is off never
+  /// will, and the user is the only one who can change that. Conflating the
+  /// two is what let the application wait indefinitely while saying nothing.
+  final bool? locationServiceEnabled;
 }

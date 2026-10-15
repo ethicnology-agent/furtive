@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:activity_profile/activity_profile.dart';
 import 'package:wall_clock/wall_clock.dart';
 import 'package:diagnostics/diagnostics.dart';
+
 import 'location_repository.dart';
+
 import 'package:geo/geo.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -80,6 +82,18 @@ class PositionStreamController {
   /// row stays open and keeps recording.
   void Function()? onStreamClosed;
 
+  /// Fires when the device's location service is switched on or off.
+  ///
+  /// Reported rather than only acted on. This controller already recovers
+  /// when the service comes back, but a service that is *off* is not a
+  /// transient the caller should wait through: no fix will ever arrive until
+  /// a human changes a system setting. Only the owner can say that on screen,
+  /// so only the owner can be told.
+  void Function(bool enabled)? onServiceEnabledChanged;
+
+  /// Whether the device's location service is on, or null while unknown.
+  bool? get serviceEnabled => _serviceEnabled;
+
   bool get isOpen => _subscription != null;
 
   /// Wall-clock of the last fix received from the platform, or null if none has
@@ -130,6 +144,7 @@ class PositionStreamController {
   void _onServiceChanged(bool enabled) {
     if (_serviceEnabled == enabled) return;
     _serviceEnabled = enabled;
+    onServiceEnabledChanged?.call(enabled);
     final generation = ++_serviceGeneration;
     if (enabled && !_disposed) {
       unawaited(_recoverService(generation));
@@ -209,6 +224,7 @@ class PositionStreamController {
 
   Future<void> dispose() async {
     _disposed = true;
+    onServiceEnabledChanged = null;
     await _serviceSubscription?.cancel();
     _serviceSubscription = null;
     await _subscription?.cancel();

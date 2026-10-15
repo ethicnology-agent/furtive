@@ -42,6 +42,11 @@ class FakeLocationRepository extends LocationRepository {
   /// right after an unlock" case that must not block a resume.
   bool failCurrentLocation;
 
+  /// Set true to make [getCurrentLocation] fail the way a switched-off device
+  /// location service does — a distinct case from [failCurrentLocation],
+  /// because it never resolves on its own.
+  bool locationServiceDisabled = false;
+
   /// Set true to make [getPositionStream] throw, simulating a stream that can't
   /// be opened at all.
   bool failPositionStream = false;
@@ -54,6 +59,7 @@ class FakeLocationRepository extends LocationRepository {
 
   @override
   Future<PositionEntity> getCurrentLocation() async {
+    if (locationServiceDisabled) throw LocationServiceDisabledError();
     if (failCurrentLocation || currentLocation == null) {
       throw StateError('no fix available');
     }
