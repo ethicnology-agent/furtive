@@ -40,6 +40,17 @@ void main() {
       // diagnosable — a genuine OS/OEM kill (LOW_MEMORY, SIGNALED, FREEZER,
       // ANR) is persisted as a WARNING; anything else (user-initiated exit,
       // clean shutdown) is left as routine INFO, unrecorded on disk.
+      // What the platform answers about location, through the legacy API
+      // geolocator asks and the modern one that replaced it. Logged on every
+      // launch rather than only on failure: when a device insists location is
+      // off while the user sees the toggle on, this line is the difference
+      // between a diagnosis and a guess.
+      unawaited(
+        LocationProviderDiagnostics.describe().then(
+          (state) => logs.config('Location providers: $state'),
+        ),
+      );
+
       unawaited(
         ProcessExitFacade().lastExitReason().then((exit) {
           if (exit == null) return;

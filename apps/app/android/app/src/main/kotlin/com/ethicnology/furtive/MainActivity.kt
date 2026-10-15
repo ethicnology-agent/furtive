@@ -2,6 +2,7 @@ package com.ethicnology.furtive
 
 import android.app.ActivityManager
 import android.app.ApplicationExitInfo
+import android.location.LocationManager
 import android.os.Build
 import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
@@ -66,6 +67,7 @@ class MainActivity : FlutterActivity() {
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "lastExitReason" -> result.success(lastExitReason())
+                    "locationProviders" -> result.success(locationProviders())
                     else -> result.notImplemented()
                 }
             }
@@ -99,6 +101,39 @@ class MainActivity : FlutterActivity() {
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         }
+    }
+
+    // What the platform says about location, through both the legacy
+    // per-provider API that geolocator uses and the modern one that replaced
+    // it. They can disagree: `isProviderEnabled(GPS_PROVIDER)` is the old
+    // question, and Android has been migrating to FUSED_PROVIDER and
+    // `isLocationEnabled()` for several releases. When a device reports
+    // "location services disabled" to an app while the user sees the toggle
+    // on, this is the measurement that says which API is lying.
+    private fun locationProviders(): Map<String, Any?> {
+        val manager = getSystemService(LocationManager::class.java)
+            ?: return mapOf("available" to false)
+        fun enabled(provider: String): Boolean? =
+            runCatching { manager.isProviderEnabled(provider) }.getOrNull()
+        return mapOf(
+            "available" to true,
+            "isLocationEnabled" to
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    manager.isLocationEnabled
+                } else {
+                    null
+                },
+            "gps" to enabled(LocationManager.GPS_PROVIDER),
+            "network" to enabled(LocationManager.NETWORK_PROVIDER),
+            "fused" to
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    enabled(LocationManager.FUSED_PROVIDER)
+                } else {
+                    null
+                },
+            "enabledProviders" to manager.getProviders(true).sorted(),
+            "allProviders" to manager.allProviders.sorted(),
+        )
     }
 
     // The most recently recorded reason this app's process went away, or

@@ -75,3 +75,39 @@ class ProcessExitFacade {
     }
   }
 }
+
+/// What the platform says about location availability, read through both the
+/// legacy per-provider API and the modern one.
+///
+/// `geolocator` decides a device has "location services disabled" with
+/// `isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)`
+/// — the question Android has been migrating away from for several releases,
+/// towards `FUSED_PROVIDER` and `isLocationEnabled()`. When a user sees the
+/// system toggle on and every app still reports location off, those two
+/// answers are the only thing that separates "the toggle really is off" from
+/// "the library is asking the wrong question".
+class LocationProviderDiagnostics {
+  static const _channel = MethodChannel('app.furtive/diagnostics');
+
+  /// Never throws: this exists to make a log line, not to gate behaviour.
+  static Future<String> describe() async {
+    if (!kIsWeb && defaultTargetPlatform != TargetPlatform.android) {
+      return 'not Android';
+    }
+    try {
+      final raw = await _channel.invokeMethod<Map<Object?, Object?>>(
+        'locationProviders',
+      );
+      if (raw == null) return 'unavailable';
+      String flag(Object? v) => v == null ? '?' : '$v';
+      return 'isLocationEnabled=${flag(raw['isLocationEnabled'])} '
+          'gps=${flag(raw['gps'])} '
+          'network=${flag(raw['network'])} '
+          'fused=${flag(raw['fused'])} '
+          'enabled=${raw['enabledProviders']} '
+          'all=${raw['allProviders']}';
+    } on Object catch (error) {
+      return 'probe failed: $error';
+    }
+  }
+}
