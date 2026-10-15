@@ -182,5 +182,38 @@
   "prefMapControlsOnRight": "Controles del mapa a la derecha",
   "prefMapControlsOnRightSubtitle": "Los botones seguir, iniciar, pausar y detener están en el borde derecho. Desactiva para moverlos a la izquierda, para zurdos. El crédito del mapa pasa a la esquina opuesta.",
   "prefMapMilestones": "Marcadores de distancia",
-  "prefMapMilestonesOff": "Desactivados"
+  "prefMapMilestonesOff": "Desactivados",
+  "menuOfflineMaps": "Mapas sin conexión",
+  "offlineTitle": "Mapas sin conexión",
+  "offlineExplainer": "Las áreas que guardas permanecen en el dispositivo y nunca se eliminan.",
+  "offlineNone": "Ninguna área guardada",
+  "offlineAroundMe": "Guardar el área a mi alrededor",
+  "offlineRadius": "Radio: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Descargar",
+  "offlineDownloading": "{done} de {total} teselas · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Sin posición todavía",
+  "offlineNoTiles": "Los mosaicos están desactivados",
+  "offlineUnsupported": "No disponible en este dispositivo",
+  "offlineDelete": "Eliminar",
+  "offlineFailed": "Error en la descarga"
 }

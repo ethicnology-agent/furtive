@@ -10,6 +10,7 @@ class SettingsPage extends StatelessWidget {
     required this.onOpenPermissions,
     required this.onOpenPreferences,
     required this.onOpenLogs,
+    required this.onOpenOfflineMaps,
   });
 
   /// What each row opens.
@@ -20,6 +21,7 @@ class SettingsPage extends StatelessWidget {
   final VoidCallback onOpenPermissions;
   final VoidCallback onOpenPreferences;
   final VoidCallback onOpenLogs;
+  final VoidCallback onOpenOfflineMaps;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,16 @@ class SettingsPage extends StatelessWidget {
                     color: kTextMuted,
                   ),
                   onTap: onOpenPermissions,
+                ),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                ListTile(
+                  leading: const Icon(Icons.download_for_offline_outlined),
+                  title: Text(l10n.menuOfflineMaps),
+                  trailing: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: kTextMuted,
+                  ),
+                  onTap: onOpenOfflineMaps,
                 ),
                 const Divider(height: 1, indent: 16, endIndent: 16),
                 ListTile(

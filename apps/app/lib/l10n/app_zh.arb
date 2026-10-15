@@ -182,5 +182,38 @@
   "prefMapControlsOnRight": "地图控件靠右",
   "prefMapControlsOnRightSubtitle": "跟随、开始、暂停和停止按钮位于右边缘。关闭可将它们移到左侧，便于左手操作。地图署名会移到对角。",
   "prefMapMilestones": "距离标记",
-  "prefMapMilestonesOff": "关闭"
+  "prefMapMilestonesOff": "关闭",
+  "menuOfflineMaps": "Offline maps",
+  "offlineTitle": "Offline maps",
+  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
+  "offlineNone": "No areas kept yet",
+  "offlineAroundMe": "Keep the area around me",
+  "offlineRadius": "Radius: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Download",
+  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "No position yet — wait for GPS",
+  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
+  "offlineUnsupported": "Offline areas are not available on this device",
+  "offlineDelete": "Delete",
+  "offlineFailed": "Download failed"
 }

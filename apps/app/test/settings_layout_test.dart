@@ -37,6 +37,7 @@ void main() {
             onOpenPermissions: () {},
             onOpenPreferences: () {},
             onOpenLogs: () {},
+            onOpenOfflineMaps: () {},
           ),
         ),
       );

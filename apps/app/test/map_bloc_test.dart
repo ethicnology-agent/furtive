@@ -524,5 +524,4 @@ class _CountingStyle extends GetMapStyleUrlUseCase {
     calls++;
     return super.call();
   }
-
 }

@@ -182,5 +182,38 @@
   "prefMapControlsOnRight": "Comandi mappa a destra",
   "prefMapControlsOnRightSubtitle": "I pulsanti segui, avvia, pausa e stop sono sul bordo destro. Disattiva per spostarli a sinistra, per i mancini. Il credito della mappa passa nell'angolo opposto.",
   "prefMapMilestones": "Indicatori di distanza",
-  "prefMapMilestonesOff": "Disattivati"
+  "prefMapMilestonesOff": "Disattivati",
+  "menuOfflineMaps": "Mappe offline",
+  "offlineTitle": "Mappe offline",
+  "offlineExplainer": "Le aree salvate restano sul dispositivo e non vengono mai rimosse.",
+  "offlineNone": "Nessuna area salvata",
+  "offlineAroundMe": "Salva l'area attorno a me",
+  "offlineRadius": "Raggio: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Scarica",
+  "offlineDownloading": "{done} di {total} tasselli · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Ancora nessuna posizione",
+  "offlineNoTiles": "I tasselli sono disattivati",
+  "offlineUnsupported": "Non disponibile su questo dispositivo",
+  "offlineDelete": "Elimina",
+  "offlineFailed": "Download non riuscito"
 }

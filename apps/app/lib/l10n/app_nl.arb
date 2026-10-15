@@ -182,5 +182,38 @@
   "prefMapControlsOnRight": "Kaartknoppen rechts",
   "prefMapControlsOnRightSubtitle": "De knoppen volgen, start, pauze en stop zitten aan de rechterrand. Schakel uit om ze naar links te verplaatsen, voor linkshandig gebruik. De kaartvermelding gaat naar de tegenoverliggende hoek.",
   "prefMapMilestones": "Afstandsmarkeringen",
-  "prefMapMilestonesOff": "Uit"
+  "prefMapMilestonesOff": "Uit",
+  "menuOfflineMaps": "Offline kaarten",
+  "offlineTitle": "Offline kaarten",
+  "offlineExplainer": "Bewaarde gebieden blijven op het apparaat en worden nooit verwijderd.",
+  "offlineNone": "Nog geen gebieden",
+  "offlineAroundMe": "Gebied om mij heen bewaren",
+  "offlineRadius": "Straal: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Downloaden",
+  "offlineDownloading": "{done} van {total} tegels · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Nog geen positie",
+  "offlineNoTiles": "Tegels staan uit",
+  "offlineUnsupported": "Niet beschikbaar op dit apparaat",
+  "offlineDelete": "Verwijderen",
+  "offlineFailed": "Download mislukt"
 }

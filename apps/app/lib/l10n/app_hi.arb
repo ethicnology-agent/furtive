@@ -182,5 +182,38 @@
   "prefMapControlsOnRight": "मैप नियंत्रण दाईं ओर",
   "prefMapControlsOnRightSubtitle": "फ़ॉलो, शुरू, रोकें और बंद करें बटन दाएं किनारे पर हैं। बाएं हाथ के उपयोग के लिए बाईं ओर ले जाने हेतु बंद करें। मैप श्रेय विपरीत कोने में चला जाता है।",
   "prefMapMilestones": "दूरी चिह्न",
-  "prefMapMilestonesOff": "बंद"
+  "prefMapMilestonesOff": "बंद",
+  "menuOfflineMaps": "Offline maps",
+  "offlineTitle": "Offline maps",
+  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
+  "offlineNone": "No areas kept yet",
+  "offlineAroundMe": "Keep the area around me",
+  "offlineRadius": "Radius: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Download",
+  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "No position yet — wait for GPS",
+  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
+  "offlineUnsupported": "Offline areas are not available on this device",
+  "offlineDelete": "Delete",
+  "offlineFailed": "Download failed"
 }

@@ -8,6 +8,9 @@ import 'package:furtive/features/logs/logs_page.dart';
 import 'package:furtive/features/map/pages/map_page.dart';
 import 'package:furtive/features/permissions/pages/permissions_page.dart';
 import 'package:furtive/features/preferences/page.dart';
+import 'package:furtive/features/offline_maps/offline_maps_page.dart';
+import 'package:basemap/basemap.dart';
+import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/settings/settings_page.dart';
 import 'package:furtive/features/share/live_share_control.dart';
 import 'package:furtive/l10n/app_localizations.dart';
@@ -67,6 +70,17 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         ),
         onOpenPreferences: (() => _push((_) => const PreferencesPage())),
         onOpenLogs: () => _push((_) => const LogsPage()),
+        // The page downloads a style and centres on a position; neither is
+        // the settings menu's to know, and neither is the page's to go and
+        // fetch from another feature. The shell holds both and hands them
+        // over, which is why this reads as two closures rather than an
+        // import.
+        onOpenOfflineMaps: () => _push(
+          (_) => OfflineMapsPage(
+            styleUrl: GetMapStyleUrlUseCase().call,
+            currentPosition: () => context.read<MapBloc>().state.userLocation,
+          ),
+        ),
       ),
     ];
   }

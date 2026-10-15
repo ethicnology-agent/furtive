@@ -182,5 +182,38 @@
   "prefMapControlsOnRight": "Kartensteuerung rechts",
   "prefMapControlsOnRightSubtitle": "Die Schaltflächen Folgen, Start, Pause und Stopp sitzen am rechten Rand. Zum Verschieben nach links für Linkshänder ausschalten. Der Kartenhinweis wandert in die gegenüberliegende Ecke.",
   "prefMapMilestones": "Entfernungsmarkierungen",
-  "prefMapMilestonesOff": "Aus"
+  "prefMapMilestonesOff": "Aus",
+  "menuOfflineMaps": "Offline-Karten",
+  "offlineTitle": "Offline-Karten",
+  "offlineExplainer": "Gespeicherte Gebiete bleiben auf dem Gerät und werden nie entfernt.",
+  "offlineNone": "Noch keine Gebiete",
+  "offlineAroundMe": "Gebiet um mich speichern",
+  "offlineRadius": "Radius: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Herunterladen",
+  "offlineDownloading": "{done} von {total} Kacheln · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Noch keine Position",
+  "offlineNoTiles": "Kacheln sind deaktiviert",
+  "offlineUnsupported": "Auf diesem Gerät nicht verfügbar",
+  "offlineDelete": "Löschen",
+  "offlineFailed": "Download fehlgeschlagen"
 }

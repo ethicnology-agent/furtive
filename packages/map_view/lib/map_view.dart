@@ -15,6 +15,7 @@ library;
 
 export 'src/geo_circle.dart';
 export 'src/km_milestone_chip.dart';
+export 'src/offline_tiles.dart';
 export 'src/map_view.dart';
 export 'src/maplibre_map_view.dart';
 export 'src/user_location_puck.dart';

@@ -182,5 +182,38 @@
   "prefMapControlsOnRight": "Керування картою праворуч",
   "prefMapControlsOnRightSubtitle": "Кнопки стеження, запуску, паузи та зупинки розташовані біля правого краю. Вимкніть, щоб перенести їх ліворуч — для лівшів. Атрибуція карти переходить у протилежний кут.",
   "prefMapMilestones": "Позначки відстані",
-  "prefMapMilestonesOff": "Вимкнено"
+  "prefMapMilestonesOff": "Вимкнено",
+  "menuOfflineMaps": "Offline maps",
+  "offlineTitle": "Offline maps",
+  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
+  "offlineNone": "No areas kept yet",
+  "offlineAroundMe": "Keep the area around me",
+  "offlineRadius": "Radius: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Download",
+  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "No position yet — wait for GPS",
+  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
+  "offlineUnsupported": "Offline areas are not available on this device",
+  "offlineDelete": "Delete",
+  "offlineFailed": "Download failed"
 }

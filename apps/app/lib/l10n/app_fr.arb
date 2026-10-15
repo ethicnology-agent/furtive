@@ -182,5 +182,38 @@
   "activitySwim": "Nage",
   "activityOther": "Autre",
   "prefMapMilestones": "Repères de distance",
-  "prefMapMilestonesOff": "Désactivés"
+  "prefMapMilestonesOff": "Désactivés",
+  "menuOfflineMaps": "Cartes hors ligne",
+  "offlineTitle": "Cartes hors ligne",
+  "offlineExplainer": "Les zones que tu gardes restent sur l'appareil et ne sont jamais supprimées. Ce que tu as seulement regardé est aussi en cache, mais peut être récupéré.",
+  "offlineNone": "Aucune zone gardée",
+  "offlineAroundMe": "Garder la zone autour de moi",
+  "offlineRadius": "Rayon : {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Télécharger",
+  "offlineDownloading": "{done} sur {total} tuiles · {mb} Mo",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Pas encore de position — attends le GPS",
+  "offlineNoTiles": "Les tuiles sont désactivées, il n'y a rien à garder",
+  "offlineUnsupported": "Les zones hors ligne ne sont pas disponibles sur cet appareil",
+  "offlineDelete": "Supprimer",
+  "offlineFailed": "Échec du téléchargement"
 }
