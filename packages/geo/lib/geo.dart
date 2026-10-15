@@ -7,5 +7,6 @@
 /// depend on another.
 library;
 
+export 'src/bounds.dart';
 export 'src/distance.dart';
 export 'src/position.dart';
