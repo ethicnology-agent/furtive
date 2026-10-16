@@ -32,16 +32,38 @@ class OfflineMapsPage extends StatefulWidget {
 }
 
 class _OfflineMapsPageState extends State<OfflineMapsPage> {
-  // Measured on an Android 12 device: a 2 km radius over z10-13 is 406 tiles
-  // and 6.3 MB. Tile count roughly quadruples per zoom level, so the upper
-  // bound is what governs the download — 15 keeps streets legible without
-  // the order-of-magnitude jump that 16 and beyond bring.
+  // Measured on an Android 12 device over rural Quebec, z10-15:
+  //
+  //      5 km     636 tiles    6.4 MB   10.1 KB/tile
+  //     10 km   1,213 tiles    8.2 MB    6.8 KB/tile
+  //     25 km   5,109 tiles   19.2 MB    3.8 KB/tile
+  //
+  // Tiles get cheaper as the area grows, because the ones further out are
+  // emptier. The slider's 25 km maximum is 5,109 tiles — just under
+  // MapLibre's 6,000 cap, which is what makes raising that cap worth doing
+  // rather than theoretical: a second area of that size would cross it.
+  //
+  // An earlier note here reasoned that tile count quadruples per zoom level
+  // and concluded a 10 km radius would be hundreds of megabytes. That is
+  // true of a full pyramid and false of a real vector tileset: most tiles at
+  // street zoom are empty and are never fetched, so doubling the radius cost
+  // under two megabytes rather than twenty-five times the download.
+  //
+  // The figures are one rural location and do not generalise: a dense city
+  // carries far more per tile.
+  //
+  // MapLibre's 6,000-tile cap is not among the limits here. It is Mapbox
+  // heritage — the Android method is `setOfflineMapboxTileCountLimit` and
+  // the C++ header scopes it: "This limit does not apply to non-Mapbox tile
+  // sources." Measured rather than taken on faith: with the cap set to 100,
+  // a region needing 636 tiles downloaded all 636 and reported complete.
+  // Nothing here raises it, because nothing here is bound by it.
   static const _minZoom = 10.0;
   static const _maxZoom = 15.0;
 
   OfflineTiles? _tiles;
   List<OfflineArea> _areas = const [];
-  double _radiusKm = 5;
+  double _radiusKm = 10;
   OfflineProgress? _progress;
   StreamSubscription<OfflineProgress>? _download;
   bool _loading = true;
