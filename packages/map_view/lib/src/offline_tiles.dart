@@ -33,7 +33,18 @@ class OfflineProgress {
     required this.bytes,
     required this.isEstimate,
     required this.isComplete,
+    this.regionId,
   });
+
+  /// Which region this is, so a caller can tell it apart from the ones
+  /// already stored.
+  ///
+  /// Worth carrying because the alternatives are both wrong: a caller that
+  /// cannot name the running region may offer to delete it, and one that
+  /// recognises a finished download by taking the highest id is trusting an
+  /// ordering no platform promises — the iOS implementation derives ids from
+  /// a timestamp hash.
+  final int? regionId;
 
   final int tilesDone;
 
@@ -141,6 +152,7 @@ class _MapLibreOfflineTiles implements OfflineTiles {
       )
       .map(
         (progress) => OfflineProgress(
+          regionId: progress.region.id,
           tilesDone: progress.loadedTiles,
           tilesTotal: progress.totalTiles,
           bytes: progress.loadedBytes,

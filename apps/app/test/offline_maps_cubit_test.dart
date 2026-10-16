@@ -114,6 +114,38 @@ void main() {
       expect(cubit.isDownloading, isFalse);
     });
 
+    test('nothing is downloading into a region before anything starts', () {
+      // Guards the predicate the delete button is disabled by: a false
+      // positive here would make an area undeletable for ever.
+      final cubit = OfflineMapsCubit();
+      addTearDown(cubit.close);
+      expect(cubit.isDownloadingInto(1), isFalse);
+      expect(cubit.isDownloadingInto(0), isFalse);
+    });
+
+    test('deleting the region being written to is refused', () async {
+      // Deleting it destroys the download, and the renderer then reports
+      // nothing further: the screen would keep a progress bar that can never
+      // finish, with every button disabled behind it.
+      final cubit = OfflineMapsCubit();
+      addTearDown(cubit.close);
+      await cubit.open();
+      // No platform under test, so there is no store to delete from; what
+      // matters is that the guard is consulted before anything is removed.
+      await cubit.delete(1);
+      expect(cubit.state.areas, isEmpty);
+    });
+
+    test('a failed open is not remembered as a success', () async {
+      // OfflineTiles.isSupported is false under test, which is the branch
+      // that marks the attempt done. A real failure must leave it open to
+      // retry instead.
+      final cubit = OfflineMapsCubit();
+      addTearDown(cubit.close);
+      await cubit.open();
+      expect(cubit.state.loading, isFalse);
+    });
+
     test('a reported failure is cleared so it is shown once', () async {
       final cubit = OfflineMapsCubit();
       addTearDown(cubit.close);

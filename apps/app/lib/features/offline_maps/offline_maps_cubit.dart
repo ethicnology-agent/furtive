@@ -99,6 +99,12 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
   /// swept once it finishes.
   String? _downloadKey;
 
+  /// The region the running download is writing into, learned from its first
+  /// progress event. Deleting that region destroys the download, and the
+  /// renderer then reports nothing further — so the screen would sit on a
+  /// progress bar that can never finish.
+  int? _downloadRegionId;
+
   /// When the running download last wrote its cost down.
   ///
   /// It is written as it goes, not only at the end, so that killing the app
@@ -112,23 +118,37 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
 
   /// Prepares the store. Safe to call on every visit to the screen; the work
   /// happens once, and a download already running is left alone.
+  ///
+  /// A failure here is not remembered as success. Marking the attempt done
+  /// before it had worked meant one bad open left the store null for the
+  /// life of the process: the screen kept its spinner, and coming back only
+  /// ever called [refresh], so the buttons were silently dead until the app
+  /// was restarted.
   Future<void> open() async {
     if (_opened) {
       await refresh();
       return;
     }
-    _opened = true;
     if (!OfflineTiles.isSupported) {
+      _opened = true;
       emit(state.copyWith(loading: false, supported: false));
       return;
     }
-    final tiles = await OfflineTiles.create();
-    _tiles = tiles;
-    // Also set at startup; repeated here so this screen works even if that
-    // pass failed.
-    unawaited(tiles.setMaximumCacheSize(ambientCacheBudgetBytes));
-    _ledger = OfflineLedger(await offlineLedgerFile());
-    await refresh();
+    try {
+      final tiles = await OfflineTiles.create();
+      _tiles = tiles;
+      // Also set at startup; repeated here so this screen works even if that
+      // pass failed.
+      unawaited(tiles.setMaximumCacheSize(ambientCacheBudgetBytes));
+      _ledger = OfflineLedger(await offlineLedgerFile());
+      _opened = true;
+      await refresh();
+    } on Object catch (error, stack) {
+      logs.severe('Offline store', error: error, trace: stack);
+      if (isClosed) return;
+      // Leaves _opened false, so the next visit tries again.
+      emit(state.copyWith(loading: false, failed: true));
+    }
   }
 
   Future<void> refresh() async {
@@ -162,6 +182,7 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
     final tiles = _tiles;
     if (tiles == null || isDownloading) return;
     _downloadKey = key;
+    _downloadRegionId = null;
     _lastRecorded = null;
     emit(state.copyWith(clearDownload: true, failed: false));
     _download = tiles
@@ -176,6 +197,7 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
         .listen(
           (progress) {
             if (isClosed) return;
+            _downloadRegionId ??= progress.regionId;
             emit(
               state.copyWith(
                 download: OfflineDownload(name: name, progress: progress),
@@ -192,6 +214,11 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
             if (isClosed) return;
             unawaited(_stop());
             emit(state.copyWith(clearDownload: true, failed: true));
+            // A download that failed part way still wrote tiles, and the
+            // region it wrote them into is on the device. Without this the
+            // screen keeps saying nothing is kept, and offers no way to
+            // delete what is.
+            unawaited(refresh());
           },
         );
   }
@@ -216,29 +243,41 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
 
   Future<void> _finish(OfflineProgress progress) async {
     final key = _downloadKey;
+    final finishedRegion = _downloadRegionId ?? progress.regionId;
     await _stop();
-    if (key != null) {
-      // The only moment the size exists: no region reports it afterwards.
-      await _ledger?.record(
-        key,
-        OfflineAreaCost(tiles: progress.tilesDone, bytes: progress.bytes),
-      );
-      for (final id in supersededAreaIds(
-        await _tiles?.list() ?? const [],
-        key,
-      )) {
-        await _tiles?.delete(id);
+    try {
+      if (key != null) {
+        // The only moment the size exists: no region reports it afterwards.
+        await _ledger?.record(
+          key,
+          OfflineAreaCost(tiles: progress.tilesDone, bytes: progress.bytes),
+        );
+        for (final id in supersededAreaIds(
+          await _tiles?.list() ?? const [],
+          key,
+          keepId: finishedRegion,
+        )) {
+          await _tiles?.delete(id);
+        }
+      }
+    } on Object catch (error, stack) {
+      // Sweeping the leftovers is tidying, not the download. Letting it
+      // throw here left the screen showing a finished progress bar for ever,
+      // with every button disabled behind it.
+      logs.warning('Offline sweep', error: error, trace: stack);
+    } finally {
+      if (!isClosed) {
+        emit(state.copyWith(clearDownload: true));
+        await refresh();
       }
     }
-    if (isClosed) return;
-    emit(state.copyWith(clearDownload: true));
-    await refresh();
   }
 
   Future<void> _stop() async {
     final download = _download;
     _download = null;
     _downloadKey = null;
+    _downloadRegionId = null;
     await download?.cancel();
   }
 
@@ -253,7 +292,16 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
     await refresh();
   }
 
+  /// Whether [id] is the region the running download is writing into.
+  ///
+  /// It appears in [list] like any other, so the screen would otherwise
+  /// offer to delete it — and deleting it destroys the download without the
+  /// renderer reporting anything, leaving a progress bar that never ends.
+  bool isDownloadingInto(int id) =>
+      _download != null && _downloadRegionId == id;
+
   Future<void> delete(int id) async {
+    if (isDownloadingInto(id)) return;
     await _tiles?.delete(id);
     await refresh();
   }

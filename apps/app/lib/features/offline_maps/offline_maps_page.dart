@@ -524,11 +524,16 @@ class _KeptAreas extends StatelessWidget {
               leading: const Icon(Icons.map_outlined),
               title: Text(area.name.isEmpty ? '#${area.id}' : area.name),
               subtitle: _cost(l10n, state.costs[area.key]),
+              // The running download's region is listed like any other, and
+              // deleting it destroys the download without the renderer
+              // saying so — leaving a progress bar that never ends.
               trailing: IconButton(
                 tooltip: l10n.offlineDelete,
                 icon: const Icon(Icons.delete_outline_rounded),
-                onPressed: () =>
-                    context.read<OfflineMapsCubit>().delete(area.id),
+                onPressed:
+                    context.read<OfflineMapsCubit>().isDownloadingInto(area.id)
+                    ? null
+                    : () => context.read<OfflineMapsCubit>().delete(area.id),
               ),
             ),
         ],

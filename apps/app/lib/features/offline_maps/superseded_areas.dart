@@ -11,20 +11,32 @@ import 'package:map_view/map_view.dart';
 ///
 /// Identity is the [OfflineArea.key] the caller wrote at creation, not the
 /// bounds: bounds come back through a platform channel as doubles, and
-/// deciding what to delete on float equality is not a thing to do. The
-/// highest id is the newest and is the one kept.
+/// deciding what to delete on float equality is not a thing to do.
+///
+/// [keepId] is the region the download just finished into, and it is kept
+/// explicitly. An earlier version kept the highest id instead, which holds
+/// only where ids rise with time: the iOS implementation derives them from a
+/// timestamp hash, so the finished download could have been the one deleted.
 ///
 /// An empty key belongs to a region written by a build that did not set one.
 /// It matches nothing, so such a region is never swept up by a download of
 /// an area that happens to be elsewhere.
-List<int> supersededAreaIds(List<OfflineArea> areas, String key) {
+List<int> supersededAreaIds(
+  List<OfflineArea> areas,
+  String key, {
+  required int? keepId,
+}) {
   if (key.isEmpty) return const [];
   final mine = [
     for (final area in areas)
       if (area.key == key) area.id,
+  ];
+  // Without a surviving id there is nothing to measure the others against,
+  // and deleting all of them would throw away the download that just
+  // finished.
+  if (keepId == null || !mine.contains(keepId)) return const [];
+  return [
+    for (final id in mine)
+      if (id != keepId) id,
   ]..sort();
-  // Fewer than two means there is nothing superseded — and guards the
-  // subtraction below, which would otherwise ask for a negative count.
-  if (mine.length < 2) return const [];
-  return mine.sublist(0, mine.length - 1);
 }
