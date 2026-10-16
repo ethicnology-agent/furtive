@@ -26,6 +26,22 @@ class OfflineLedger {
 
   final File _file;
 
+  /// Every write happens after the one before it.
+  ///
+  /// Progress is recorded while a download runs, completion records again,
+  /// and a refresh prunes rows — all read-modify-write, and all able to
+  /// overlap. Interleaved, a stale snapshot could be written back over a
+  /// newer one.
+  Future<void> _queue = Future<void>.value();
+
+  Future<void> _serialise(Future<void> Function() work) {
+    final next = _queue.then((_) => work());
+    // Keep the chain alive: an entry that threw must not stop later ones,
+    // and _write already swallows its own failures.
+    _queue = next.catchError((Object _) {});
+    return next;
+  }
+
   /// Reads the ledger, treating anything unreadable as empty.
   ///
   /// A corrupt or half-written file must not take out the screen that shows
@@ -47,11 +63,13 @@ class OfflineLedger {
     }
   }
 
-  Future<void> record(String key, OfflineAreaCost cost) async {
-    if (key.isEmpty) return;
-    final entries = await read()
-      ..[key] = cost;
-    await _write(entries);
+  Future<void> record(String key, OfflineAreaCost cost) {
+    if (key.isEmpty) return Future<void>.value();
+    return _serialise(() async {
+      final entries = await read()
+        ..[key] = cost;
+      await _write(entries);
+    });
   }
 
   /// Drops the rows for areas that are no longer on the device.
@@ -59,7 +77,7 @@ class OfflineLedger {
   /// Called with the keys that survive rather than the ones removed, because
   /// a region deleted by anything else — an older build, a future screen —
   /// would otherwise leave its cost counted forever.
-  Future<void> retainOnly(Set<String> keys) async {
+  Future<void> retainOnly(Set<String> keys) => _serialise(() async {
     final entries = await read();
     final kept = {
       for (final entry in entries.entries)
@@ -67,17 +85,32 @@ class OfflineLedger {
     };
     if (kept.length == entries.length) return;
     await _write(kept);
-  }
+  });
 
+  /// Writes beside the ledger and renames over it.
+  ///
+  /// `writeAsString` truncates in place, so a process killed mid-write — the
+  /// case this file exists to survive, since it is written every few seconds
+  /// during a download — left a half-written file that reads as empty and
+  /// took every area's accounting with it. A rename on the same directory is
+  /// atomic, so the ledger is either the old one or the new one.
   Future<void> _write(Map<String, OfflineAreaCost> entries) async {
+    final temporary = File('${_file.path}.tmp');
     try {
-      await _file.writeAsString(
+      await temporary.writeAsString(
         jsonEncode({
           for (final entry in entries.entries) entry.key: entry.value.toJson(),
         }),
+        flush: true,
       );
+      await temporary.rename(_file.path);
     } on Object {
       // Losing the accounting is not worth failing a finished download over.
+      try {
+        if (temporary.existsSync()) temporary.deleteSync();
+      } on Object {
+        // Nothing further to try.
+      }
     }
   }
 }

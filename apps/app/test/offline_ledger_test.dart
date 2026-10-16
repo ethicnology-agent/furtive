@@ -101,6 +101,45 @@ void main() {
     },
   );
 
+  test('a half-written ledger cannot replace a good one', () async {
+    // The write happens every few seconds during a download, so being
+    // killed mid-write is the ordinary case rather than the rare one.
+    // Writing in place truncated the file first, and what came back read as
+    // empty — losing every area's accounting, not just the one being
+    // written.
+    await ledger.record('a', const OfflineAreaCost(tiles: 1, bytes: 1));
+    await ledger.record('b', const OfflineAreaCost(tiles: 2, bytes: 2));
+    expect(await ledger.read(), hasLength(2));
+    // Nothing but the ledger itself is left behind by a successful write.
+    expect(File('${file.path}.tmp').existsSync(), isFalse);
+  });
+
+  test('overlapping writes do not lose the later one', () async {
+    // Progress, completion and pruning all read-modify-write and can
+    // overlap. Interleaved, a stale snapshot could land on top of a newer.
+    final writes = [
+      ledger.record('a', const OfflineAreaCost(tiles: 1, bytes: 1)),
+      ledger.record('b', const OfflineAreaCost(tiles: 2, bytes: 2)),
+      ledger.record('c', const OfflineAreaCost(tiles: 3, bytes: 3)),
+    ];
+    await Future.wait(writes);
+    expect((await ledger.read()).keys, containsAll(['a', 'b', 'c']));
+  });
+
+  test(
+    'a prune racing a record keeps the record it did not know about',
+    () async {
+      await ledger.record('old', const OfflineAreaCost(tiles: 1, bytes: 1));
+      final both = [
+        ledger.retainOnly({'old'}),
+        ledger.record('new', const OfflineAreaCost(tiles: 2, bytes: 2)),
+      ];
+      await Future.wait(both);
+      // Serialised, the prune runs first and the record lands after it.
+      expect((await ledger.read()).containsKey('new'), isTrue);
+    },
+  );
+
   test('a corrupt file reads as empty rather than throwing', () async {
     await file.writeAsString('{not json');
     expect(await ledger.read(), isEmpty);
