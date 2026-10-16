@@ -259,5 +259,16 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostPartial": "{mb} МБ · {tiles} тайлов · не завершено",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -349,5 +349,16 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles} tiles · unfinished",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -259,5 +259,16 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostPartial": "{mb} ՄԲ · {tiles} սալիկ · անավարտ",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

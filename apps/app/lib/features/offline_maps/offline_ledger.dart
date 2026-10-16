@@ -16,6 +16,11 @@ import 'dart:io';
 /// Entries are keyed by the same identity the region metadata carries, so a
 /// download that supersedes an interrupted one replaces its row rather than
 /// adding a second.
+///
+/// Written as the download runs rather than only when it finishes. The first
+/// version recorded at completion alone, which meant an interrupted download
+/// left an area on the list with nothing beside it and a storage total that
+/// accounted for none of the megabytes it had just written.
 class OfflineLedger {
   OfflineLedger(this._file);
 
@@ -77,14 +82,27 @@ class OfflineLedger {
   }
 }
 
-/// What one area cost to download.
+/// What one area cost to download, and whether that download finished.
 class OfflineAreaCost {
-  const OfflineAreaCost({required this.tiles, required this.bytes});
+  const OfflineAreaCost({
+    required this.tiles,
+    required this.bytes,
+    this.complete = true,
+  });
 
   final int tiles;
   final int bytes;
 
-  Map<String, Object?> toJson() => {'tiles': tiles, 'bytes': bytes};
+  /// False while a download is still running, and for one that was cut
+  /// short. An area is listed either way — the renderer keeps the tiles it
+  /// already fetched — so the screen has to be able to say which it is.
+  final bool complete;
+
+  Map<String, Object?> toJson() => {
+    'tiles': tiles,
+    'bytes': bytes,
+    'complete': complete,
+  };
 
   /// Null for anything that is not a well-formed entry, so one bad row
   /// cannot be read as a zero and silently lower the total.
@@ -94,6 +112,13 @@ class OfflineAreaCost {
     final bytes = value['bytes'];
     if (tiles is! int || bytes is! int) return null;
     if (tiles < 0 || bytes < 0) return null;
-    return OfflineAreaCost(tiles: tiles, bytes: bytes);
+    // Rows written before downloads were recorded as they ran carry no
+    // flag, and only ever existed for finished downloads.
+    final complete = value['complete'];
+    return OfflineAreaCost(
+      tiles: tiles,
+      bytes: bytes,
+      complete: complete is bool ? complete : true,
+    );
   }
 }

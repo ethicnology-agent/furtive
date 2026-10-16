@@ -430,10 +430,17 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                               // showing 0.0 MB would be a measurement.
                               subtitle: switch (state.costs[area.key]) {
                                 final cost? => Text(
-                                  l10n.offlineAreaCost(
-                                    _megabytes(cost.bytes),
-                                    cost.tiles.toString(),
-                                  ),
+                                  cost.complete
+                                      ? l10n.offlineAreaCost(
+                                          _megabytes(cost.bytes),
+                                          cost.tiles.toString(),
+                                        )
+                                      // Asking for it again finishes it from
+                                      // the tiles already stored.
+                                      : l10n.offlineAreaCostPartial(
+                                          _megabytes(cost.bytes),
+                                          cost.tiles.toString(),
+                                        ),
                                 ),
                                 _ => null,
                               },

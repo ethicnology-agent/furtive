@@ -259,5 +259,16 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles} döşeme · tamamlanmadı",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

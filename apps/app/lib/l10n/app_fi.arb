@@ -259,5 +259,16 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostPartial": "{mb} Mt · {tiles} ruutua · kesken",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

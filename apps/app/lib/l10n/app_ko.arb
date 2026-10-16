@@ -259,5 +259,16 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostPartial": "{mb} MB · 타일 {tiles}개 · 미완료",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

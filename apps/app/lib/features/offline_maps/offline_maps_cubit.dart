@@ -89,6 +89,15 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
   /// swept once it finishes.
   String? _downloadKey;
 
+  /// When the running download last wrote its cost down.
+  ///
+  /// It is written as it goes, not only at the end, so that killing the app
+  /// mid-download leaves the area accounted for rather than listed with
+  /// nothing beside it. Throttled because progress arrives several times a
+  /// second and this is a file.
+  DateTime? _lastRecorded;
+  static const _recordEvery = Duration(seconds: 5);
+
   bool _opened = false;
 
   /// Prepares the store. Safe to call on every visit to the screen; the work
@@ -143,6 +152,7 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
     final tiles = _tiles;
     if (tiles == null || isDownloading) return;
     _downloadKey = key;
+    _lastRecorded = null;
     emit(state.copyWith(clearProgress: true, failed: false));
     emit(state.copyWith(downloadName: name));
     _download = tiles
@@ -158,7 +168,11 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
           (progress) {
             if (isClosed) return;
             emit(state.copyWith(progress: progress));
-            if (progress.isComplete) unawaited(_finish(progress));
+            if (progress.isComplete) {
+              unawaited(_finish(progress));
+            } else {
+              unawaited(_recordProgress(key, progress));
+            }
           },
           onError: (Object error, StackTrace stack) {
             logs.severe('Offline download', error: error, trace: stack);
@@ -167,6 +181,24 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
             emit(state.copyWith(clearProgress: true, failed: true));
           },
         );
+  }
+
+  /// Writes what the running download has cost so far, at most every
+  /// [_recordEvery]. Marked incomplete, so a download that never finishes
+  /// is reported as the partial thing it is.
+  Future<void> _recordProgress(String key, OfflineProgress progress) async {
+    final now = DateTime.now();
+    final last = _lastRecorded;
+    if (last != null && now.difference(last) < _recordEvery) return;
+    _lastRecorded = now;
+    await _ledger?.record(
+      key,
+      OfflineAreaCost(
+        tiles: progress.tilesDone,
+        bytes: progress.bytes,
+        complete: false,
+      ),
+    );
   }
 
   Future<void> _finish(OfflineProgress progress) async {

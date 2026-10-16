@@ -58,6 +58,49 @@ void main() {
     expect(await ledger.read(), isEmpty);
   });
 
+  test('a download killed part way is still accounted for', () async {
+    // What happened in the wild: France was interrupted at about 5,000
+    // tiles, and because the cost was only written at completion the area
+    // came back listed with nothing beside it while 296 MB sat on disk.
+    await ledger.record(
+      'fr',
+      const OfflineAreaCost(tiles: 5000, bytes: 296_700_000, complete: false),
+    );
+    final back = await ledger.read();
+    expect(back['fr']?.tiles, 5000);
+    expect(back['fr']?.complete, isFalse);
+  });
+
+  test('finishing replaces the partial row and marks it complete', () async {
+    await ledger.record(
+      'fr',
+      const OfflineAreaCost(tiles: 5000, bytes: 1000, complete: false),
+    );
+    await ledger.record(
+      'fr',
+      const OfflineAreaCost(tiles: 2221390, bytes: 9000),
+    );
+    final back = await ledger.read();
+    expect(back, hasLength(1));
+    expect(back['fr']?.complete, isTrue);
+    expect(back['fr']?.tiles, 2221390);
+  });
+
+  test(
+    'a row written before completeness was recorded reads as complete',
+    () async {
+      // Those rows only ever existed for finished downloads, so defaulting
+      // them to unfinished would relabel every area the user already kept.
+      await file.writeAsString(
+        jsonEncode({
+          'a': {'tiles': 1, 'bytes': 2},
+        }),
+      );
+      final back = await ledger.read();
+      expect(back['a']?.complete, isTrue);
+    },
+  );
+
   test('a corrupt file reads as empty rather than throwing', () async {
     await file.writeAsString('{not json');
     expect(await ledger.read(), isEmpty);
