@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:preferences/preferences.dart';
@@ -244,6 +245,29 @@ void main() {
         expect(records, isNotEmpty);
         expect(records.join('\n'), isNot(contains(key)));
         expect(records.join('\n'), contains('key=***'));
+      },
+    );
+
+    test(
+      'a connection lost after the headers is an outage, not a bad style',
+      () async {
+        // The map was already downloaded; the style request gets its 200 and
+        // then the network goes. Treating that as an unusable style threw
+        // away a map sitting on the device.
+        final source = MapRemoteDataSource(
+          apiKey: key,
+          styleUrlBase: base,
+          clientFactory: () =>
+              MockClient.streaming((request, bodyStream) async {
+                return http.StreamedResponse(
+                  Stream<List<int>>.error(
+                    const SocketException('Connection reset by peer'),
+                  ),
+                  200,
+                );
+              }),
+        );
+        expect(await source.getStyleUrl(), contains('key=$key'));
       },
     );
 

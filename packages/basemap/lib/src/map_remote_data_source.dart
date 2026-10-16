@@ -222,13 +222,25 @@ class MapRemoteDataSource {
       }
       final chunks = <List<int>>[];
       var total = 0;
-      await for (final chunk in response.stream.timeout(_httpTimeout)) {
-        total += chunk.length;
-        if (total > _maxResponseBytes) {
-          throw 'Response too large (> $_maxResponseBytes B) fetching '
-              '${_redactKey(url)}';
+      try {
+        await for (final chunk in response.stream.timeout(_httpTimeout)) {
+          total += chunk.length;
+          if (total > _maxResponseBytes) {
+            throw 'Response too large (> $_maxResponseBytes B) fetching '
+                '${_redactKey(url)}';
+          }
+          chunks.add(chunk);
         }
-        chunks.add(chunk);
+      } on String {
+        // The cap above, which is about the document and not the network.
+        rethrow;
+      } on Object catch (error) {
+        // A connection that dies after the headers is the same outage as one
+        // that never connected, and says just as little about whether the
+        // style is usable. Only client.send was treated that way, so losing
+        // the signal mid-body made the map fall back to tileless even with
+        // the whole area downloaded.
+        throw MapStyleUnreachable(_redactKey(error.toString()));
       }
       return Uint8List.fromList(chunks.expand((c) => c).toList());
     } on MapStyleUnreachable {
