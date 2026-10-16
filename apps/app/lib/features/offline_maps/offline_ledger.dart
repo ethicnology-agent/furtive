@@ -120,11 +120,29 @@ class OfflineAreaCost {
   const OfflineAreaCost({
     required this.tiles,
     required this.bytes,
+    this.expected = 0,
     this.complete = true,
   });
 
   final int tiles;
   final int bytes;
+
+  /// How many the whole area needs, as the renderer counted them while the
+  /// download ran. Zero for a row written before this was recorded, and for
+  /// one written before the renderer had finished counting.
+  ///
+  /// Kept so an unfinished area can say how far it got. The count cannot be
+  /// recovered afterwards — nothing reports it once the download is over —
+  /// and recomputing it here would need the area's bounds, which come back
+  /// from the platform as doubles.
+  final int expected;
+
+  /// How much of the area is on the device, or null when the total is not
+  /// known.
+  double? get fraction {
+    if (expected <= 0) return null;
+    return (tiles / expected).clamp(0.0, 1.0);
+  }
 
   /// False while a download is still running, and for one that was cut
   /// short. An area is listed either way — the renderer keeps the tiles it
@@ -134,6 +152,7 @@ class OfflineAreaCost {
   Map<String, Object?> toJson() => {
     'tiles': tiles,
     'bytes': bytes,
+    'expected': expected,
     'complete': complete,
   };
 
@@ -148,9 +167,11 @@ class OfflineAreaCost {
     // Rows written before downloads were recorded as they ran carry no
     // flag, and only ever existed for finished downloads.
     final complete = value['complete'];
+    final expected = value['expected'];
     return OfflineAreaCost(
       tiles: tiles,
       bytes: bytes,
+      expected: expected is int && expected >= 0 ? expected : 0,
       complete: complete is bool ? complete : true,
     );
   }

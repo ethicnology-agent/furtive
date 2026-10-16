@@ -360,5 +360,19 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · {tiles} tiles",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

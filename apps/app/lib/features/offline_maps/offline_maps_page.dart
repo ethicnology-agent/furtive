@@ -584,11 +584,19 @@ class _KeptAreas extends StatelessWidget {
     if (cost == null) return null;
     final mb = _megabytes(cost.bytes);
     final tiles = cost.tiles.toString();
+    if (cost.complete) return Text(l10n.offlineAreaCost(mb, tiles));
+    // Asking for it again finishes it from the tiles already stored, so how
+    // far it got is the thing worth knowing. An area recorded before the
+    // total was known says only that it is unfinished.
+    final fraction = cost.fraction;
     return Text(
-      cost.complete
-          ? l10n.offlineAreaCost(mb, tiles)
-          // Asking for it again finishes it from the tiles already stored.
-          : l10n.offlineAreaCostPartial(mb, tiles),
+      fraction == null
+          ? l10n.offlineAreaCostPartial(mb, tiles)
+          : l10n.offlineAreaCostProgress(
+              (fraction * 100).toStringAsFixed(0),
+              mb,
+              tiles,
+            ),
     );
   }
 }

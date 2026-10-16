@@ -270,5 +270,19 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostProgress": "{percent} % · {mb} МБ · {tiles} тайлов",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

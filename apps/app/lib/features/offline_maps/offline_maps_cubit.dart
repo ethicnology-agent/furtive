@@ -236,6 +236,9 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
       OfflineAreaCost(
         tiles: progress.tilesDone,
         bytes: progress.bytes,
+        // A lower bound until the renderer has finished counting, which is
+        // why it is recorded on every pass rather than only the first.
+        expected: progress.isEstimate ? 0 : progress.tilesTotal,
         complete: false,
       ),
     );
@@ -250,7 +253,11 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
         // The only moment the size exists: no region reports it afterwards.
         await _ledger?.record(
           key,
-          OfflineAreaCost(tiles: progress.tilesDone, bytes: progress.bytes),
+          OfflineAreaCost(
+            tiles: progress.tilesDone,
+            bytes: progress.bytes,
+            expected: progress.tilesTotal,
+          ),
         );
         for (final id in supersededAreaIds(
           await _tiles?.list() ?? const [],

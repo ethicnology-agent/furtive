@@ -270,5 +270,19 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · vigae {tiles}",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -270,5 +270,19 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · 타일 {tiles}개",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }

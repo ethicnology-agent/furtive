@@ -140,6 +140,52 @@ void main() {
     },
   );
 
+  group('how far an unfinished area got', () {
+    test('a fraction needs a total to measure against', () {
+      const unknown = OfflineAreaCost(tiles: 100, bytes: 1, complete: false);
+      expect(unknown.fraction, isNull);
+    });
+
+    test('a partial area reports its share of the whole', () {
+      const half = OfflineAreaCost(
+        tiles: 50,
+        bytes: 1,
+        expected: 100,
+        complete: false,
+      );
+      expect(half.fraction, 0.5);
+    });
+
+    test('more tiles than expected still reads as finished, not over', () {
+      // The renderer counts resources as well as tiles, and the total it
+      // reports early is a lower bound. A bar past 100% would look broken.
+      const over = OfflineAreaCost(tiles: 120, bytes: 1, expected: 100);
+      expect(over.fraction, 1.0);
+    });
+
+    test('the total survives being written and read back', () async {
+      await ledger.record(
+        'a',
+        const OfflineAreaCost(
+          tiles: 50,
+          bytes: 1,
+          expected: 200,
+          complete: false,
+        ),
+      );
+      expect((await ledger.read())['a']?.fraction, 0.25);
+    });
+
+    test('a row from before the total was recorded has no fraction', () async {
+      await file.writeAsString(
+        jsonEncode({
+          'a': {'tiles': 1, 'bytes': 2, 'complete': false},
+        }),
+      );
+      expect((await ledger.read())['a']?.fraction, isNull);
+    });
+  });
+
   test('a corrupt file reads as empty rather than throwing', () async {
     await file.writeAsString('{not json');
     expect(await ledger.read(), isEmpty);

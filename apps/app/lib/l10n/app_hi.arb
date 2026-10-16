@@ -270,5 +270,19 @@
         "type": "String"
       }
     }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · {tiles} टाइलें",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
   }
 }
