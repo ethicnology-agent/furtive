@@ -49,6 +49,7 @@
   "btnGrantToContinue": "Разреши необходимые доступы, чтобы продолжить",
   "btnViewStats": "Статистика",
   "btnCancel": "Отмена",
+  "btnUndo": "Отменить",
   "btnRetry": "Повторить",
   "btnRename": "Переименовать",
   "btnDelete": "Удалить",

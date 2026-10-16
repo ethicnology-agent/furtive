@@ -49,6 +49,7 @@
   "btnGrantToContinue": "続行するには必要な権限を許可してください",
   "btnViewStats": "統計を見る",
   "btnCancel": "キャンセル",
+  "btnUndo": "元に戻す",
   "btnRetry": "再試行",
   "btnRename": "名前を変更",
   "btnDelete": "削除",

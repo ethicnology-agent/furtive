@@ -529,18 +529,33 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
 
     if (result == true && mounted) {
       final completion = Completer<void>();
-      context.read<ActivitiesBloc>().add(
-        DeleteActivity(activityId: widget.activity.id, completion: completion),
-      );
+      // Read before the page pops: afterwards this element is defunct and
+      // the undo action would have nothing to dispatch on.
+      final bloc = context.read<ActivitiesBloc>();
+      final deleted = widget.activity;
+      bloc.add(DeleteActivity(activityId: deleted.id, completion: completion));
       try {
         await completion.future;
         if (!mounted) return;
         final messenger = ScaffoldMessenger.of(context);
-        final message = AppLocalizations.of(context).activityDeleteSuccess;
+        final l10n = AppLocalizations.of(context);
+        final message = l10n.activityDeleteSuccess;
+        final undo = l10n.btnUndo;
         Navigator.pop(context);
         messenger
           ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(message)));
+          ..showSnackBar(
+            SnackBar(
+              content: Text(message),
+              // The entity is still in hand here — points and all — and
+              // storing it writes back the same id, so undo restores the row
+              // rather than making a near-copy of it.
+              action: SnackBarAction(
+                label: undo,
+                onPressed: () => bloc.add(RestoreActivity(activity: deleted)),
+              ),
+            ),
+          );
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(

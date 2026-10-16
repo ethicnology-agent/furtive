@@ -6,6 +6,7 @@ import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:activities/testing.dart';
 import 'package:activities/activities.dart';
+import 'package:geo/geo.dart';
 import 'package:furtive/features/activities/import_activity_from_gpx_use_case.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/activities/bloc/activities_event.dart';
@@ -53,6 +54,66 @@ void main() {
       ),
     );
   }
+
+  blocTest<ActivitiesBloc, ActivitiesState>(
+    'restore puts a deleted activity back with its id and its points',
+    setUp: () async {
+      await repository().store(
+        ActivityEntity(
+          id: 'undo-me',
+          name: 'Lakeside run',
+          description: '',
+          createdAt: start,
+          startedAt: start,
+          stoppedAt: start.add(const Duration(minutes: 5)),
+          points: [
+            ActivityPointEntity(
+              position: PositionEntity(
+                latitude: 45.21,
+                longitude: -72.31,
+                elevation: 293,
+                time: start,
+              ),
+              time: start,
+              status: ActivityPointStatusEntity.active,
+            ),
+            ActivityPointEntity(
+              position: PositionEntity(
+                latitude: 45.22,
+                longitude: -72.32,
+                elevation: 295,
+                time: start.add(const Duration(minutes: 1)),
+              ),
+              time: start.add(const Duration(minutes: 1)),
+              status: ActivityPointStatusEntity.active,
+            ),
+          ],
+        ),
+      );
+    },
+    build: buildBloc,
+    act: (bloc) async {
+      // A fresh repository over the same in-memory database: the page
+      // that deletes is the one still holding the entity.
+      final gone = await repository().fetchSingle('undo-me');
+      final deleted = Completer<void>();
+      bloc.add(DeleteActivity(activityId: 'undo-me', completion: deleted));
+      await deleted.future;
+      // Undo hands back the entity the page was still holding, not an id:
+      // once the rows are gone there is nothing left to look one up from.
+      bloc.add(RestoreActivity(activity: gone));
+    },
+    wait: const Duration(milliseconds: 50),
+    verify: (bloc) async {
+      expect(bloc.state.activities?.map((a) => a.id), contains('undo-me'));
+      final back = await repository().fetchSingle('undo-me');
+      expect(back.name, 'Lakeside run');
+      // The points come back too — a restore that dropped them would leave
+      // a row with no route, which reads as success and is not.
+      expect(back.points, hasLength(2));
+      expect(back.points.first.position.latitude, closeTo(45.21, 1e-9));
+    },
+  );
 
   blocTest<ActivitiesBloc, ActivitiesState>(
     'fetch loads the list and clears the loading flag',

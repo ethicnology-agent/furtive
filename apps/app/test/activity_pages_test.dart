@@ -353,6 +353,41 @@ void main() {
     expect(find.text('Activity deleted successfully'), findsOneWidget);
   });
 
+  testWidgets('deleting offers an undo that puts the activity back', (
+    tester,
+  ) async {
+    // Pushed from a host page, like the one that proves the delete returns
+    // to the list: the snackbar is shown after the detail route pops, so it
+    // needs a Scaffold underneath to land on.
+    await pump(
+      tester,
+      Builder(
+        builder: (context) => Scaffold(
+          body: TextButton(
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute<void>(builder: (_) => detail())),
+            child: const Text('Open activity'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open activity'));
+    await tester.pumpAndSettle();
+    await menuAction(tester, 'Delete activity');
+    await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+    await tester.pumpAndSettle();
+    expect(bloc.events.whereType<DeleteActivity>(), hasLength(1));
+    expect(find.byType(SnackBarAction), findsOneWidget);
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+    // The whole entity, not an id: the rows are gone by now, so an id would
+    // have nothing left to look up.
+    final restored = bloc.events.whereType<RestoreActivity>().single;
+    expect(restored.activity.id, activity.id);
+    expect(restored.activity.name, activity.name);
+  });
+
   testWidgets(
     'export excludes concurrent sharing and restores actions on success',
     (tester) async {

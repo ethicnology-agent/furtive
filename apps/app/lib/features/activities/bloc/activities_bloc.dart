@@ -53,6 +53,8 @@ class ActivitiesBloc extends Bloc<ActivitiesEvent, ActivitiesState> {
         await _onUpdateActivityName(event, emit);
       case DeleteActivity():
         await _onDeleteActivity(event, emit);
+      case RestoreActivity():
+        await _onRestoreActivity(event, emit);
       case ImportActivityFromGpx():
         await _onImportActivityFromGpx(event, emit);
     }
@@ -157,6 +159,39 @@ class ActivitiesBloc extends Bloc<ActivitiesEvent, ActivitiesState> {
       event.completion?.complete();
     } catch (e, s) {
       logs.severe('$DeleteActivity: $e');
+      emit(
+        state.copyWith(
+          error: event.completion == null ? AppError(e.toString()) : null,
+          isLoading: false,
+        ),
+      );
+      event.completion?.completeError(e, s);
+    }
+  }
+
+  /// Writes a deleted activity back and reloads the list.
+  ///
+  /// `store` inserts the header and its points in one transaction keyed by
+  /// the activity's own id, so what comes back is the row that was there —
+  /// same id, same points — not a copy of it under a new one.
+  Future<void> _onRestoreActivity(
+    RestoreActivity event,
+    Emitter<ActivitiesState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true, error: null));
+    try {
+      await _activities.store(event.activity);
+      final activities = await _load();
+      emit(
+        state.copyWith(
+          activities: activities,
+          isLoading: false,
+          hasMore: activities.length == kActivitiesPageSize,
+        ),
+      );
+      event.completion?.complete();
+    } catch (e, s) {
+      logs.severe('$RestoreActivity: $e');
       emit(
         state.copyWith(
           error: event.completion == null ? AppError(e.toString()) : null,

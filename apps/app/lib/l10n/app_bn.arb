@@ -49,6 +49,7 @@
   "btnGrantToContinue": "চালিয়ে যেতে প্রয়োজনীয় অনুমতি দিন",
   "btnViewStats": "পরিসংখ্যান দেখুন",
   "btnCancel": "বাতিল",
+  "btnUndo": "পূর্বাবস্থায় ফেরান",
   "btnRetry": "আবার চেষ্টা করুন",
   "btnRename": "পুনর্নামকরণ",
   "btnDelete": "মুছুন",

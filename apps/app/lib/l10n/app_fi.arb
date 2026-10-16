@@ -49,6 +49,7 @@
   "btnGrantToContinue": "Myönnä vaaditut luvat jatkaaksesi",
   "btnViewStats": "Näytä tilastot",
   "btnCancel": "Peruuta",
+  "btnUndo": "Kumoa",
   "btnRetry": "Yritä uudelleen",
   "btnRename": "Nimeä uudelleen",
   "btnDelete": "Poista",

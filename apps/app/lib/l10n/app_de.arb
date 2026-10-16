@@ -49,6 +49,7 @@
   "btnGrantToContinue": "Erteile die erforderlichen Berechtigungen, um fortzufahren",
   "btnViewStats": "Statistik anzeigen",
   "btnCancel": "Abbrechen",
+  "btnUndo": "Rückgängig",
   "btnRetry": "Erneut versuchen",
   "btnRename": "Umbenennen",
   "btnDelete": "Löschen",

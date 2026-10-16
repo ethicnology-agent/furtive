@@ -49,6 +49,7 @@
   "btnGrantToContinue": "Grant Required Permissions to Continue",
   "btnViewStats": "View Statistics",
   "btnCancel": "Cancel",
+  "btnUndo": "Undo",
   "btnRetry": "Retry",
   "btnRename": "Rename",
   "btnDelete": "Delete",

@@ -49,6 +49,7 @@
   "btnGrantToContinue": "Concede los permisos requeridos para continuar",
   "btnViewStats": "Ver estadísticas",
   "btnCancel": "Cancelar",
+  "btnUndo": "Deshacer",
   "btnRetry": "Reintentar",
   "btnRename": "Renombrar",
   "btnDelete": "Eliminar",

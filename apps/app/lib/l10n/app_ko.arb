@@ -49,6 +49,7 @@
   "btnGrantToContinue": "계속하려면 필요한 권한을 부여하세요",
   "btnViewStats": "통계 보기",
   "btnCancel": "취소",
+  "btnUndo": "실행 취소",
   "btnRetry": "다시 시도",
   "btnRename": "이름 변경",
   "btnDelete": "삭제",

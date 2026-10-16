@@ -49,6 +49,7 @@
   "btnGrantToContinue": "امنح الأذونات المطلوبة للمتابعة",
   "btnViewStats": "عرض الإحصاءات",
   "btnCancel": "إلغاء",
+  "btnUndo": "تراجع",
   "btnRetry": "إعادة المحاولة",
   "btnRename": "إعادة تسمية",
   "btnDelete": "حذف",
