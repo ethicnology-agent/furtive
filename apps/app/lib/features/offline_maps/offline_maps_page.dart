@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:furtive/features/offline_maps/map_storage.dart';
 import 'package:furtive/features/offline_maps/superseded_areas.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
@@ -116,6 +117,9 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
       return;
     }
     _tiles = tiles;
+    // Applied here as well as at startup, so a build that reaches this
+    // screen has the budget even if the startup pass failed.
+    unawaited(tiles.setMaximumCacheSize(ambientCacheBudgetBytes));
     await _refresh();
   }
 

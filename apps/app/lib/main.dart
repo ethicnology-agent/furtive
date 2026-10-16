@@ -7,6 +7,7 @@ import 'package:furtive/app/global.dart';
 import 'package:furtive/app/legacy_preferences.dart';
 import 'package:furtive/app/locale_cubit.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
+import 'package:furtive/features/offline_maps/map_storage.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/app/startup_gate.dart';
@@ -50,6 +51,12 @@ void main() {
           (state) => logs.config('Location providers: $state'),
         ),
       );
+
+      // Tiles fetched while simply using the map are evictable, and the
+      // renderer's own default budget is small enough that a route looked at
+      // often does not survive. Raising it is what lets a habitual run draw
+      // without a signal, without anyone having downloaded anything.
+      unawaited(applyAmbientCacheBudget());
 
       unawaited(
         ProcessExitFacade().lastExitReason().then((exit) {
