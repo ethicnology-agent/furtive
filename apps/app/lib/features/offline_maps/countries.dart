@@ -5,10 +5,16 @@
 //
 // "Primary region" rather than the whole country: a box around every piece of
 // France would stretch from French Guiana to the Rhine, and a box around
-// every piece of Fiji would wrap the planet. So each box covers the country's
-// largest landmass plus any part whose centre lies within 500 km of it —
-// which keeps Corsica with France and Northern Ireland with the United
-// Kingdom, while leaving out French Guiana, Hawaii and the Canaries.
+// every piece of Fiji would wrap the planet. So each box covers the
+// country's largest landmass, plus any part that is either within 500 km of
+// it or at least a quarter of its size.
+//
+// Both halves of that are needed. Distance alone put Kuala Lumpur outside
+// Malaysia, because the peninsula is 66% of the country's largest landmass
+// and sits 833 km from it. Share alone would have pulled in French Guiana,
+// which is 16% of metropolitan France and 6,879 km away. Together they keep
+// Corsica with France and Northern Ireland with the United Kingdom, and
+// leave out Hawaii and the Canaries.
 //
 // Names are English, as Natural Earth records them. They are not translated:
 // the application ships 26 locales and no translated country list, and a
@@ -378,7 +384,7 @@ const countries = <Country>[
   Country(
     'ID',
     'Indonesia',
-    GeoBounds(west: 105.37, south: -10.36, east: 134.73, north: 4.31),
+    GeoBounds(west: 95.29, south: -10.36, east: 141.03, north: 5.48),
   ),
   Country(
     'IR',
@@ -503,7 +509,7 @@ const countries = <Country>[
   Country(
     'MY',
     'Malaysia',
-    GeoBounds(west: 109.66, south: 0.77, east: 119.18, north: 6.93),
+    GeoBounds(west: 100.09, south: 0.77, east: 119.18, north: 6.93),
   ),
   Country(
     'ML',
@@ -643,7 +649,7 @@ const countries = <Country>[
   Country(
     'PH',
     'Philippines',
-    GeoBounds(west: 117.17, south: 8.37, east: 125.78, north: 18.51),
+    GeoBounds(west: 117.17, south: 5.58, east: 126.54, north: 18.51),
   ),
   Country(
     'PL',

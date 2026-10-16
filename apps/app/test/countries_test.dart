@@ -58,6 +58,18 @@ void main() {
       expect(fj.bounds.east - fj.bounds.west, lessThan(10));
     });
 
+    test('Malaysia includes the peninsula, not only Borneo', () {
+      // The largest landmass is Malaysian Borneo; the peninsula is 66% of
+      // it and 833 km away, so a distance-only rule left Kuala Lumpur
+      // outside a box the screen promised was around Malaysia.
+      final my = byCode('MY');
+      expect(my.bounds.west, lessThan(100.5)); // Kuala Lumpur sits at 101.7
+    });
+
+    test('the Philippines reach past their largest island', () {
+      expect(byCode('PH').bounds.north, greaterThan(18));
+    });
+
     test('a country download is a real amount of work', () {
       // Guards the data against a silently empty or absurd box: France was
       // measured at 2.2 million tiles between zoom 10 and 15.

@@ -7,6 +7,11 @@ master/geojson/ne_110m_admin_0_countries.geojson
 Run:
     python3 tool/generate_countries.py ne_110m_admin_0_countries.geojson \
         > apps/app/lib/features/offline_maps/countries.dart
+    dart format apps/app/lib/features/offline_maps/countries.dart
+
+The format pass is part of the recipe, not an afterthought: this writes one
+entry per line and the formatter reflows them, so output that has not been
+formatted will differ from what is committed.
 
 Committed rather than fetched at build time: the picker has to work offline,
 the data changes about never, and a build that reaches out to GitHub is not
@@ -40,15 +45,28 @@ def km_from_box(box, pt):
     dy = 0.0 if s <= y <= n else min(abs(y - s), abs(y - n))
     return math.hypot(dx * 111.32 * math.cos(math.radians(y)), dy * 111.32)
 
+# A part joins the box if it is near the main landmass, or if it is a large
+# enough piece of the country to be a place people live rather than an
+# outlying dependency.
+#
+# Distance alone was not enough: peninsular Malaysia is 66% of the country's
+# largest landmass and sits 833 km from it, so a 500 km rule put Kuala Lumpur
+# outside the box while the screen promised a rectangle around Malaysia.
+# Share alone would not do either: French Guiana is 16% of metropolitan
+# France and 6,879 km away.
 NEAR_KM = 500
+MAJOR_SHARE = 0.25
 
 def primary_box(feat):
     ps = sorted(parts(feat['geometry']), key=ring_area, reverse=True)
+    largest = ring_area(ps[0])
     box = rbox(ps[0])
     for r in ps[1:]:
         b = rbox(r)
         c = ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)
-        if km_from_box(box, c) <= NEAR_KM:
+        near = km_from_box(box, c) <= NEAR_KM
+        major = largest > 0 and ring_area(r) / largest >= MAJOR_SHARE
+        if near or major:
             box = (min(box[0], b[0]), min(box[1], b[1]),
                    max(box[2], b[2]), max(box[3], b[3]))
     return box
@@ -78,10 +96,16 @@ if True:
 //
 // "Primary region" rather than the whole country: a box around every piece of
 // France would stretch from French Guiana to the Rhine, and a box around
-// every piece of Fiji would wrap the planet. So each box covers the country's
-// largest landmass plus any part whose centre lies within 500 km of it —
-// which keeps Corsica with France and Northern Ireland with the United
-// Kingdom, while leaving out French Guiana, Hawaii and the Canaries.
+// every piece of Fiji would wrap the planet. So each box covers the
+// country's largest landmass, plus any part that is either within 500 km of
+// it or at least a quarter of its size.
+//
+// Both halves of that are needed. Distance alone put Kuala Lumpur outside
+// Malaysia, because the peninsula is 66% of the country's largest landmass
+// and sits 833 km from it. Share alone would have pulled in French Guiana,
+// which is 16% of metropolitan France and 6,879 km away. Together they keep
+// Corsica with France and Northern Ireland with the United Kingdom, and
+// leave out Hawaii and the Canaries.
 //
 // Names are English, as Natural Earth records them. They are not translated:
 // the application ships 26 locales and no translated country list, and a
