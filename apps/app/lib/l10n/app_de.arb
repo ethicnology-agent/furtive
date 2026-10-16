@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Ein Land wird als Rechteck darum behalten, Nachbarn und Meer kommen also mit."
+  "offlineCountryBox": "Ein Land wird als Rechteck darum behalten, Nachbarn und Meer kommen also mit.",
+  "offlineAreaCost": "{mb} MB · {tiles} Kacheln",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

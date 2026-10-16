@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "国家以其外接矩形保存，因此邻国和海域也会一并下载。"
+  "offlineCountryBox": "国家以其外接矩形保存，因此邻国和海域也会一并下载。",
+  "offlineAreaCost": "{mb} MB · {tiles} 个瓦片",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

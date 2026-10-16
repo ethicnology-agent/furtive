@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Kraj jest zachowywany jako prostokąt wokół niego, więc sąsiedzi i morze też."
+  "offlineCountryBox": "Kraj jest zachowywany jako prostokąt wokół niego, więc sąsiedzi i morze też.",
+  "offlineAreaCost": "{mb} MB · {tiles} kafelków",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

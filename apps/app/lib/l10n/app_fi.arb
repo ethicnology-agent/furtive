@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Maa säilytetään sen ympärille piirrettynä suorakulmiona, joten naapurit ja meri tulevat mukana."
+  "offlineCountryBox": "Maa säilytetään sen ympärille piirrettynä suorakulmiona, joten naapurit ja meri tulevat mukana.",
+  "offlineAreaCost": "{mb} Mt · {tiles} ruutua",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

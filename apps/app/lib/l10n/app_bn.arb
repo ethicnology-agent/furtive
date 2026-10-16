@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "একটি দেশ তার চারপাশের আয়তক্ষেত্র হিসেবে রাখা হয়, তাই প্রতিবেশী ও সমুদ্রও আসে।"
+  "offlineCountryBox": "একটি দেশ তার চারপাশের আয়তক্ষেত্র হিসেবে রাখা হয়, তাই প্রতিবেশী ও সমুদ্রও আসে।",
+  "offlineAreaCost": "{mb} MB · {tiles}টি টাইল",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

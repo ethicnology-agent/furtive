@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Bir ülke etrafındaki dikdörtgen olarak saklanır, komşular ve deniz de gelir."
+  "offlineCountryBox": "Bir ülke etrafındaki dikdörtgen olarak saklanır, komşular ve deniz de gelir.",
+  "offlineAreaCost": "{mb} MB · {tiles} döşeme",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

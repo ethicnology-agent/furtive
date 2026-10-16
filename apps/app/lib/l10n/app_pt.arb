@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Um país é guardado como um retângulo à sua volta, pelo que os vizinhos e o mar vêm também."
+  "offlineCountryBox": "Um país é guardado como um retângulo à sua volta, pelo que os vizinhos e o mar vêm também.",
+  "offlineAreaCost": "{mb} MB · {tiles} blocos",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

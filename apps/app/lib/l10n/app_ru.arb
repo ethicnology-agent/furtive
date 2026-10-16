@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Страна сохраняется как прямоугольник вокруг неё, поэтому соседи и море тоже."
+  "offlineCountryBox": "Страна сохраняется как прямоугольник вокруг неё, поэтому соседи и море тоже.",
+  "offlineAreaCost": "{mb} МБ · {tiles} тайлов",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

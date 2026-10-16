@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Un paese è conservato come un rettangolo attorno, quindi vengono anche i vicini e il mare."
+  "offlineCountryBox": "Un paese è conservato come un rettangolo attorno, quindi vengono anche i vicini e il mare.",
+  "offlineAreaCost": "{mb} MB · {tiles} tasselli",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "O țară este păstrată ca un dreptunghi în jurul ei, deci vin și vecinii și marea."
+  "offlineCountryBox": "O țară este păstrată ca un dreptunghi în jurul ei, deci vin și vecinii și marea.",
+  "offlineAreaCost": "{mb} MB · {tiles} dale",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

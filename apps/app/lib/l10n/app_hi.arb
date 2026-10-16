@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "देश को उसके चारों ओर एक आयत के रूप में रखा जाता है, इसलिए पड़ोसी और समुद्र भी आते हैं।"
+  "offlineCountryBox": "देश को उसके चारों ओर एक आयत के रूप में रखा जाता है, इसलिए पड़ोसी और समुद्र भी आते हैं।",
+  "offlineAreaCost": "{mb} MB · {tiles} टाइलें",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

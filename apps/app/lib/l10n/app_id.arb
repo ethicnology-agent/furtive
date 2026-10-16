@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Sebuah negara disimpan sebagai persegi panjang di sekitarnya, jadi tetangga dan laut ikut serta."
+  "offlineCountryBox": "Sebuah negara disimpan sebagai persegi panjang di sekitarnya, jadi tetangga dan laut ikut serta.",
+  "offlineAreaCost": "{mb} MB · {tiles} ubin",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

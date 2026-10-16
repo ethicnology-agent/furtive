@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Een land wordt bewaard als een rechthoek eromheen, dus buurlanden en zee komen mee."
+  "offlineCountryBox": "Een land wordt bewaard als een rechthoek eromheen, dus buurlanden en zee komen mee.",
+  "offlineAreaCost": "{mb} MB · {tiles} tegels",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

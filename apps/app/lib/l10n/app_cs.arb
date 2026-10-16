@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Země se ukládá jako obdélník kolem ní, takže sousedé a moře přijdou také."
+  "offlineCountryBox": "Země se ukládá jako obdélník kolem ní, takže sousedé a moře přijdou také.",
+  "offlineAreaCost": "{mb} MB · {tiles} dlaždic",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Un pays est conservé sous forme de rectangle, donc les voisins et la mer viennent avec."
+  "offlineCountryBox": "Un pays est conservé sous forme de rectangle, donc les voisins et la mer viennent avec.",
+  "offlineAreaCost": "{mb} Mo · {tiles} tuiles",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "국가는 그 주변의 직사각형으로 보관되므로 인접국과 바다도 함께 포함됩니다."
+  "offlineCountryBox": "국가는 그 주변의 직사각형으로 보관되므로 인접국과 바다도 함께 포함됩니다.",
+  "offlineAreaCost": "{mb} MB · 타일 {tiles}개",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Μια χώρα αποθηκεύεται ως ορθογώνιο γύρω της, οπότε έρχονται και οι γείτονες και η θάλασσα."
+  "offlineCountryBox": "Μια χώρα αποθηκεύεται ως ορθογώνιο γύρω της, οπότε έρχονται και οι γείτονες και η θάλασσα.",
+  "offlineAreaCost": "{mb} MB · {tiles} πλακίδια",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

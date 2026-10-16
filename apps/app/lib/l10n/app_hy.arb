@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Երկիրը պահվում է որպես իր շուրջ ուղղանկյուն, ուստի հարևաններն ու ծովը նույնպես գալիս են։"
+  "offlineCountryBox": "Երկիրը պահվում է որպես իր շուրջ ուղղանկյուն, ուստի հարևաններն ու ծովը նույնպես գալիս են։",
+  "offlineAreaCost": "{mb} ՄԲ · {tiles} սալիկ",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

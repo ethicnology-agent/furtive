@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "تُحفظ الدولة كمستطيل حولها، لذا يأتي الجيران والبحر أيضًا."
+  "offlineCountryBox": "تُحفظ الدولة كمستطيل حولها، لذا يأتي الجيران والبحر أيضًا.",
+  "offlineAreaCost": "{mb} ميغابايت · {tiles} بلاطة",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

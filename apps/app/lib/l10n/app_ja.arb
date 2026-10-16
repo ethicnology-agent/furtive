@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "国はその周囲の長方形として保存されるため、隣国や海も含まれます。"
+  "offlineCountryBox": "国はその周囲の長方形として保存されるため、隣国や海も含まれます。",
+  "offlineAreaCost": "{mb} MB · {tiles} タイル",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

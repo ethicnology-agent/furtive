@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Nchi huhifadhiwa kama mstatili unaoizunguka, hivyo majirani na bahari huja pia."
+  "offlineCountryBox": "Nchi huhifadhiwa kama mstatili unaoizunguka, hivyo majirani na bahari huja pia.",
+  "offlineAreaCost": "{mb} MB · vigae {tiles}",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

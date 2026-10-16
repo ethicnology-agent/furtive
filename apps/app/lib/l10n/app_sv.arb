@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Ett land sparas som en rektangel runt det, så grannar och hav följer med."
+  "offlineCountryBox": "Ett land sparas som en rektangel runt det, så grannar och hav följer med.",
+  "offlineAreaCost": "{mb} MB · {tiles} rutor",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

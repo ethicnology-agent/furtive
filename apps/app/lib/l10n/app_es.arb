@@ -248,5 +248,16 @@
       }
     }
   },
-  "offlineCountryBox": "Un país se guarda como un rectángulo a su alrededor, así que los vecinos y el mar vienen también."
+  "offlineCountryBox": "Un país se guarda como un rectángulo a su alrededor, así que los vecinos y el mar vienen también.",
+  "offlineAreaCost": "{mb} MB · {tiles} teselas",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }

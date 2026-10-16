@@ -338,5 +338,16 @@
       }
     }
   },
-  "offlineCountryBox": "A country is kept as a rectangle around it, so neighbours and sea come too."
+  "offlineCountryBox": "A country is kept as a rectangle around it, so neighbours and sea come too.",
+  "offlineAreaCost": "{mb} MB · {tiles} tiles",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
 }
