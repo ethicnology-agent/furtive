@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:furtive/features/offline_maps/map_storage.dart';
-import 'package:furtive/features/offline_maps/offline_ledger.dart';
-import 'package:furtive/features/offline_maps/superseded_areas.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furtive/features/offline_maps/offline_maps_cubit.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
-import 'package:map_view/map_view.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 /// Choosing which map areas survive going offline.
@@ -14,6 +12,10 @@ import 'package:ui_kit/ui_kit.dart';
 /// Distinct from the ambient cache, which needs no screen: that is whatever
 /// the user happened to look at and the renderer may reclaim it. This is what
 /// they asked to keep, and only they can say which part of the world that is.
+///
+/// The screen owns none of the work. The store and any download in flight
+/// belong to [OfflineMapsCubit], which the locator keeps for the life of the
+/// process, so leaving this page no longer stops a download that is running.
 class OfflineMapsPage extends StatefulWidget {
   const OfflineMapsPage({
     super.key,
@@ -94,90 +96,14 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   /// cost does not have.
   static const _stepKm = 10.0;
 
-  OfflineTiles? _tiles;
-  OfflineLedger? _ledger;
-  Map<String, OfflineAreaCost> _costs = const {};
-  int? _storageBytes;
-  List<OfflineArea> _areas = const [];
+  /// The only thing this screen still owns: where the slider is. Everything
+  /// else outlives it.
   double _radiusKm = 10;
-  OfflineProgress? _progress;
-  StreamSubscription<OfflineProgress>? _download;
-  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    unawaited(_open());
-  }
-
-  Future<void> _open() async {
-    if (!OfflineTiles.isSupported) {
-      setState(() => _loading = false);
-      return;
-    }
-    final tiles = await OfflineTiles.create();
-    if (!mounted) {
-      tiles.dispose();
-      return;
-    }
-    _tiles = tiles;
-    // Applied here as well as at startup, so a build that reaches this
-    // screen has the budget even if the startup pass failed.
-    unawaited(tiles.setMaximumCacheSize(ambientCacheBudgetBytes));
-    _ledger = OfflineLedger(await offlineLedgerFile());
-    if (!mounted) return;
-    await _refresh();
-  }
-
-  /// What the areas the user chose to keep cost, as recorded when each was
-  /// downloaded. Areas kept by a build that wrote no record contribute
-  /// nothing — which is why this is reported beside the device total rather
-  /// than subtracted from it.
-  int get _keptBytes => _costs.values.fold(0, (sum, cost) => sum + cost.bytes);
-
-  int get _keptTiles => _costs.values.fold(0, (sum, cost) => sum + cost.tiles);
-
-  static String _megabytes(int bytes) =>
-      (bytes / 1024 / 1024).toStringAsFixed(1);
-
-  /// Deletes the earlier regions this download has just superseded.
-  ///
-  /// Only ever the leftovers of the same request: an interrupted download
-  /// leaves a region that is indistinguishable from a finished one, because
-  /// the renderer reports no completion state per region. The newest id is
-  /// the one that just completed, and the tiles are shared, so dropping the
-  /// older rows frees the list without refetching anything.
-  Future<void> _dropSupersededBy(String key) async {
-    final tiles = _tiles;
-    if (tiles == null) return;
-    for (final id in supersededAreaIds(await tiles.list(), key)) {
-      await tiles.delete(id);
-    }
-    await _refresh();
-  }
-
-  Future<void> _refresh() async {
-    final areas = await _tiles?.list() ?? const <OfflineArea>[];
-    // A region can leave by a route this screen did not take — deleted by an
-    // older build, or by the sweep after a retry. Dropping its row here is
-    // what keeps the total from counting storage that is gone.
-    await _ledger?.retainOnly({for (final a in areas) a.key});
-    final costs = await _ledger?.read() ?? const <String, OfflineAreaCost>{};
-    final bytes = await mapStorageBytes();
-    if (!mounted) return;
-    setState(() {
-      _areas = areas;
-      _costs = costs;
-      _storageBytes = bytes;
-      _loading = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    unawaited(_download?.cancel());
-    _tiles?.dispose();
-    super.dispose();
+    unawaited(context.read<OfflineMapsCubit>().open());
   }
 
   /// ui_kit's helper resolves the messenger from a BuildContext, which is the
@@ -188,12 +114,15 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
     ..hideCurrentSnackBar()
     ..showSnackBar(bar);
 
+  static String _megabytes(int bytes) =>
+      (bytes / 1024 / 1024).toStringAsFixed(1);
+
   Future<void> _start() async {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
-    final tiles = _tiles;
+    final cubit = context.read<OfflineMapsCubit>();
     final centre = widget.currentPosition();
-    if (tiles == null || centre == null) {
+    if (centre == null) {
       _show(messenger, SnackBar(content: Text(l10n.offlineNoPosition)));
       return;
     }
@@ -219,123 +148,59 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
         '${centre.longitude.toStringAsFixed(3)}'
         '@${_radiusKm.round()}/$_minZoom-$_maxZoom';
 
-    setState(() => _progress = null);
-    _download = tiles
-        .download(
-          styleUrl: style,
-          bounds: bounds,
-          minZoom: _minZoom,
-          maxZoom: _maxZoom,
-          name: '${_radiusKm.round()} km',
-          key: key,
-        )
-        .listen(
-          (progress) {
-            if (!mounted) return;
-            setState(() => _progress = progress);
-            if (progress.isComplete) {
-              setState(() => _progress = null);
-              // The only moment these numbers exist: the renderer reports no
-              // size per region afterwards, so they are written down now or
-              // the monitor has nothing to show.
-              unawaited(
-                _ledger
-                    ?.record(
-                      key,
-                      OfflineAreaCost(
-                        tiles: progress.tilesDone,
-                        bytes: progress.bytes,
-                      ),
-                    )
-                    .then((_) => _dropSupersededBy(key)),
-              );
-            }
-          },
-          onError: (Object error) {
-            if (!mounted) return;
-            setState(() => _progress = null);
-            _show(
-              messenger,
-              SnackBar(
-                content: Text(l10n.offlineFailed),
-                backgroundColor: AppColors.destructive.background,
-              ),
-            );
-          },
-        );
+    await cubit.download(
+      styleUrl: style,
+      bounds: bounds,
+      minZoom: _minZoom,
+      maxZoom: _maxZoom,
+      name: '${_radiusKm.round()} km',
+      key: key,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.offlineTitle)),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : !OfflineTiles.isSupported
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(
-                  l10n.offlineUnsupported,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            )
-          : ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              children: [
-                Text(
-                  l10n.offlineExplainer,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: kTextMuted),
-                ),
-                const SizedBox(height: 16),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.offlineAroundMe,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text(l10n.offlineRadius(_radiusKm.round().toString())),
-                        Slider(
-                          value: _radiusKm,
-                          min: _stepKm,
-                          max: _maxRadiusKm,
-                          divisions: (_maxRadiusKm / _stepKm).round() - 1,
-                          onChanged: _progress != null
-                              ? null
-                              : (value) => setState(() => _radiusKm = value),
-                        ),
-                        if (_progress case final progress?) ...[
-                          LinearProgressIndicator(value: progress.fraction),
-                          const SizedBox(height: 8),
-                          Text(
-                            l10n.offlineDownloading(
-                              progress.tilesDone.toString(),
-                              progress.tilesTotal.toString(),
-                              (progress.bytes / 1024 / 1024).toStringAsFixed(1),
-                            ),
-                          ),
-                        ] else
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: ElevatedButton(
-                              onPressed: _start,
-                              child: Text(l10n.offlineDownload),
-                            ),
-                          ),
-                      ],
-                    ),
+    return BlocConsumer<OfflineMapsCubit, OfflineMapsState>(
+      listenWhen: (previous, current) => previous.failed != current.failed,
+      listener: (context, state) {
+        if (!state.failed) return;
+        _show(
+          ScaffoldMessenger.of(context),
+          SnackBar(
+            content: Text(l10n.offlineFailed),
+            backgroundColor: AppColors.destructive.background,
+          ),
+        );
+        context.read<OfflineMapsCubit>().failureReported();
+      },
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(title: Text(l10n.offlineTitle)),
+        body: state.loading
+            ? const Center(child: CircularProgressIndicator())
+            : !state.supported
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    l10n.offlineUnsupported,
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 16),
-                if (_storageBytes case final bytes?) ...[
+              )
+            : ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                children: [
+                  Text(
+                    l10n.offlineExplainer,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: kTextMuted),
+                  ),
+                  const SizedBox(height: 16),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -343,63 +208,116 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            l10n.offlineStorageTitle,
+                            l10n.offlineAroundMe,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          const SizedBox(height: 4),
-                          Text(l10n.offlineStorageOnDevice(_megabytes(bytes))),
-                          Text(
-                            l10n.offlineStorageKept(
-                              _megabytes(_keptBytes),
-                              _keptTiles.toString(),
+                          // Hidden while a download runs rather than
+                          // disabled. The download outlives this screen, so
+                          // coming back builds a fresh slider at the default,
+                          // which would sit reading 10 km under the progress
+                          // bar of a 50 km download.
+                          if (state.progress == null) ...[
+                            Text(
+                              l10n.offlineRadius(_radiusKm.round().toString()),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            l10n.offlineStorageCached,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodySmall?.copyWith(color: kTextMuted),
-                          ),
+                            Slider(
+                              value: _radiusKm,
+                              min: _stepKm,
+                              max: _maxRadiusKm,
+                              divisions: (_maxRadiusKm / _stepKm).round() - 1,
+                              onChanged: (value) =>
+                                  setState(() => _radiusKm = value),
+                            ),
+                          ],
+                          if (state.progress case final progress?) ...[
+                            LinearProgressIndicator(value: progress.fraction),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.offlineDownloading(
+                                progress.tilesDone.toString(),
+                                progress.tilesTotal.toString(),
+                                _megabytes(progress.bytes),
+                              ),
+                            ),
+                          ] else
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                onPressed: _start,
+                                child: Text(l10n.offlineDownload),
+                              ),
+                            ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
+                  if (state.storageBytes case final bytes?) ...[
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.offlineStorageTitle,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              l10n.offlineStorageOnDevice(_megabytes(bytes)),
+                            ),
+                            Text(
+                              l10n.offlineStorageKept(
+                                _megabytes(state.keptBytes),
+                                state.keptTiles.toString(),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              l10n.offlineStorageCached,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: kTextMuted),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  if (state.areas.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        l10n.offlineNone,
+                        style: TextStyle(color: kTextMuted),
+                      ),
+                    )
+                  else
+                    Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        children: [
+                          for (final area in state.areas)
+                            ListTile(
+                              leading: const Icon(Icons.map_outlined),
+                              title: Text(
+                                area.name.isEmpty ? '#${area.id}' : area.name,
+                              ),
+                              trailing: IconButton(
+                                tooltip: l10n.offlineDelete,
+                                icon: const Icon(Icons.delete_outline_rounded),
+                                onPressed: () => context
+                                    .read<OfflineMapsCubit>()
+                                    .delete(area.id),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                 ],
-                if (_areas.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      l10n.offlineNone,
-                      style: TextStyle(color: kTextMuted),
-                    ),
-                  )
-                else
-                  Card(
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      children: [
-                        for (final area in _areas)
-                          ListTile(
-                            leading: const Icon(Icons.map_outlined),
-                            title: Text(
-                              area.name.isEmpty ? '#${area.id}' : area.name,
-                            ),
-                            trailing: IconButton(
-                              tooltip: l10n.offlineDelete,
-                              icon: const Icon(Icons.delete_outline_rounded),
-                              onPressed: () async {
-                                await _tiles?.delete(area.id);
-                                await _refresh();
-                              },
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
+              ),
+      ),
     );
   }
 }

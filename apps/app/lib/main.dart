@@ -8,6 +8,7 @@ import 'package:furtive/app/legacy_preferences.dart';
 import 'package:furtive/app/locale_cubit.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/offline_maps/map_storage.dart';
+import 'package:furtive/features/offline_maps/offline_maps_cubit.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/app/startup_gate.dart';
@@ -182,6 +183,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<RecordingBloc>.value(value: getIt<RecordingBloc>()),
         BlocProvider<LiveShareCubit>.value(value: getIt<LiveShareCubit>()),
         BlocProvider<MapBloc>.value(value: getIt<MapBloc>()),
+        BlocProvider<OfflineMapsCubit>.value(value: getIt<OfflineMapsCubit>()),
         BlocProvider<ActivitiesBloc>.value(value: getIt<ActivitiesBloc>()),
         BlocProvider<PermissionsBloc>.value(value: getIt<PermissionsBloc>()),
       ],

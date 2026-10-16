@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:furtive/features/activities/bloc/activities_bloc.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
+import 'package:furtive/features/offline_maps/offline_maps_cubit.dart';
 import 'package:furtive/features/permissions/bloc/permissions_bloc.dart';
 import 'package:furtive/app/recording_bloc.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
@@ -36,6 +37,10 @@ class Locator {
     getIt.registerLazySingleton<MapBloc>(
       () => MapBloc(recording: getIt<RecordingSession>()),
     );
+    // The tile store and any download in flight. A singleton because a
+    // download has to outlive the screen that started it — when this lived
+    // in the page, leaving it stopped the download.
+    getIt.registerLazySingleton<OfflineMapsCubit>(OfflineMapsCubit.new);
     getIt.registerLazySingleton<ActivitiesBloc>(ActivitiesBloc.new);
     getIt.registerLazySingleton<PermissionsBloc>(PermissionsBloc.new);
   }
