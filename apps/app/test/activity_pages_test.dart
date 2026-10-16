@@ -145,13 +145,30 @@ void main() {
     shareActivity: share ?? (_, _) async {},
   );
 
+  /// Rename, export and delete sit behind the overflow menu, so driving one
+  /// means opening it first. Share is still an icon of its own.
+  Future<void> menuAction(WidgetTester tester, String label) async {
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(label));
+    await tester.pumpAndSettle();
+  }
+
+  /// Whether those three actions are offered at all. False covers both ways
+  /// they can be withheld: the menu disabled while a share runs, and the menu
+  /// replaced by its own progress while an export runs.
+  bool menuOffered(WidgetTester tester) {
+    final finder = find.byWidgetPredicate((w) => w is PopupMenuButton);
+    if (finder.evaluate().isEmpty) return false;
+    return tester.widget<PopupMenuButton<dynamic>>(finder).enabled;
+  }
+
   Future<void> rename(
     WidgetTester tester,
     String name, {
     bool cancel = false,
   }) async {
-    await tester.tap(find.byTooltip('Rename activity'));
-    await tester.pumpAndSettle();
+    await menuAction(tester, 'Rename activity');
     await tester.enterText(find.byType(TextField), name);
     await tester.tap(
       find.widgetWithText(TextButton, cancel ? 'Cancel' : 'Rename'),
@@ -296,14 +313,12 @@ void main() {
     'delete cancellation keeps detail and a failed delete stays retryable',
     (tester) async {
       await pump(tester, detail());
-      await tester.tap(find.byTooltip('Delete activity'));
-      await tester.pumpAndSettle();
+      await menuAction(tester, 'Delete activity');
       await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
       await tester.pumpAndSettle();
       expect(bloc.events.whereType<DeleteActivity>(), isEmpty);
       bloc.mutationError = StateError('Delete rejected');
-      await tester.tap(find.byTooltip('Delete activity'));
-      await tester.pumpAndSettle();
+      await menuAction(tester, 'Delete activity');
       await tester.tap(find.widgetWithText(TextButton, 'Delete'));
       await tester.pumpAndSettle();
       expect(find.byType(ActivityDetailPage), findsOneWidget);
@@ -330,8 +345,7 @@ void main() {
     );
     await tester.tap(find.text('Open activity'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Delete activity'));
-    await tester.pumpAndSettle();
+    await menuAction(tester, 'Delete activity');
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
     expect(find.byType(ActivityDetailPage), findsNothing);
@@ -353,20 +367,19 @@ void main() {
           },
         ),
       );
-      await tester.tap(find.byTooltip('Export GPX'));
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Export GPX'));
+      // Not pumpAndSettle: the export is still pending, so the progress
+      // indicator never settles. Pump far enough for the menu route to
+      // finish popping and no further.
       await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
       expect(exported, 'run');
-      expect(
-        tester
-            .widget<IconButton>(
-              find.byWidgetPredicate(
-                (widget) =>
-                    widget is IconButton && widget.tooltip == 'Export GPX',
-              ),
-            )
-            .onPressed,
-        isNull,
-      );
+      // The menu is gone while the export runs — its own progress stands in
+      // its place, so a slow export still shows in the bar.
+      expect(menuOffered(tester), isFalse);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
       expect(
         tester
             .widget<IconButton>(
@@ -378,17 +391,7 @@ void main() {
       expect(find.text('No recorded route'), findsOneWidget);
       pending.complete();
       await tester.pumpAndSettle();
-      expect(
-        tester
-            .widget<IconButton>(
-              find.byWidgetPredicate(
-                (widget) =>
-                    widget is IconButton && widget.tooltip == 'Export GPX',
-              ),
-            )
-            .onPressed,
-        isNotNull,
-      );
+      expect(menuOffered(tester), isTrue);
       expect(find.byType(SnackBar), findsOneWidget);
     },
   );
@@ -406,24 +409,12 @@ void main() {
           },
         ),
       );
-      await tester.tap(find.byTooltip('Export GPX'));
-      await tester.pumpAndSettle();
+      await menuAction(tester, 'Export GPX');
       expect(find.byType(SnackBar), findsNothing);
       cancelled = false;
-      await tester.tap(find.byTooltip('Export GPX'));
-      await tester.pumpAndSettle();
+      await menuAction(tester, 'Export GPX');
       expect(find.textContaining('Storage unavailable'), findsOneWidget);
-      expect(
-        tester
-            .widget<IconButton>(
-              find.byWidgetPredicate(
-                (widget) =>
-                    widget is IconButton && widget.tooltip == 'Export GPX',
-              ),
-            )
-            .onPressed,
-        isNotNull,
-      );
+      expect(menuOffered(tester), isTrue);
     },
   );
 
@@ -441,17 +432,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.share_rounded));
     await tester.pumpAndSettle();
     expect(find.textContaining('Share unavailable'), findsOneWidget);
-    expect(
-      tester
-          .widget<IconButton>(
-            find.byWidgetPredicate(
-              (widget) =>
-                  widget is IconButton && widget.tooltip == 'Export GPX',
-            ),
-          )
-          .onPressed,
-      isNotNull,
-    );
+    expect(menuOffered(tester), isTrue);
   });
 
   testWidgets('failed map style still exposes empty route and statistics', (

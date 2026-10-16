@@ -20,6 +20,10 @@ import 'package:geo/geo.dart';
 import 'package:preferences/preferences.dart';
 import 'package:ui_kit/ui_kit.dart';
 
+/// What the activity menu can do. Share stays an icon; these three are
+/// management, which is what an overflow menu is for.
+enum _ActivityAction { rename, export, delete }
+
 class ActivityDetailPage extends StatefulWidget {
   final ActivityEntity activity;
 
@@ -132,17 +136,13 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(displayName),
+        // One icon and a menu, not four icons. An AppBar gives the title
+        // whatever the actions leave, and four of them left about 110dp on a
+        // 360dp screen: a renamed activity read "Sorti…". Measured on a
+        // 411dp Pixel the same name fits at the system font size and is cut
+        // to "Sortie du …" one notch up the accessibility slider, so the
+        // squeeze is not a small-phone problem — it is four actions.
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_outlined),
-            tooltip: l10n.activityRenameTooltip,
-            onPressed: _showRenameDialog,
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete_outline_rounded),
-            tooltip: l10n.activityDeleteTooltip,
-            onPressed: _showDeleteDialog,
-          ),
           IconButton(
             // Share + export DON'T need the map-tile style loaded — the
             // ShareCard draws its own polyline via CustomPainter and the
@@ -157,17 +157,65 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                   )
                 : const Icon(Icons.share_rounded),
           ),
-          IconButton(
-            onPressed: (_isExporting || _isSharing) ? null : _exportToGpx,
-            tooltip: l10n.activityExportTooltip,
-            icon: _isExporting
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(),
-                  )
-                : const Icon(Icons.file_download_outlined),
-          ),
+          // Export keeps its progress where it has always been — in the bar —
+          // by standing in for the menu button while it runs. Hiding it in a
+          // closed menu would have made a slow export look like nothing
+          // happened.
+          if (_isExporting)
+            const IconButton(
+              onPressed: null,
+              icon: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(),
+              ),
+            )
+          else
+            PopupMenuButton<_ActivityAction>(
+              // No tooltip: PopupMenuButton falls back to
+              // MaterialLocalizations.showMenuTooltip, which Flutter ships
+              // translated for every locale this app offers. A key of our
+              // own would have been one more string to translate 26 times,
+              // and worse in the locales that are behind.
+              enabled: !_isSharing,
+              onSelected: (action) => switch (action) {
+                _ActivityAction.rename => _showRenameDialog(),
+                _ActivityAction.export => _exportToGpx(),
+                _ActivityAction.delete => _showDeleteDialog(),
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: _ActivityAction.rename,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.edit_outlined),
+                    title: Text(l10n.activityRenameTooltip),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: _ActivityAction.export,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.file_download_outlined),
+                    title: Text(l10n.activityExportTooltip),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: _ActivityAction.delete,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: kDestructive,
+                    ),
+                    title: Text(
+                      l10n.activityDeleteTooltip,
+                      style: const TextStyle(color: kDestructive),
+                    ),
+                  ),
+                ),
+              ],
+            ),
         ],
       ),
       body: _isMapStyleLoading
