@@ -218,50 +218,60 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
             ),
         ],
       ),
+      // A column, not a stack. The button used to float over the map at full
+      // width, and the map puts its attribution badge in a bottom corner —
+      // both of them, so there was no corner left to move it to. The badge
+      // ended up under the button, and ODbL 4.3 asks for credit that is
+      // actually visible. Giving the button its own strip is the only
+      // arrangement that cannot cover it, whatever the button's height turns
+      // out to be at a large font scale.
       body: _isMapStyleLoading
           ? const Center(child: CircularProgressIndicator())
-          : Stack(
+          : Column(
               children: [
-                if (!widget.activity.points.any(
-                  (point) =>
-                      point.position.latitude.isFinite &&
-                      point.position.longitude.isFinite,
-                ))
-                  Center(child: Text(l10n.activityNoTrack))
-                else
-                  Container(
-                    color: AppColors.tertiary.background,
-                    // Always render the map so the recorded track is visible.
-                    // The tile layer is shown only when a style is available
-                    // (keyed build, online); on the keyless FOSS build or an
-                    // offline style fetch the polyline draws on a blank canvas
-                    // instead of an error.
-                    child: _mapView.build(
-                      styleUrl: _mapStyleUrl,
-                      track: widget.activity.asMapTrack(
-                        milestoneIntervalKm: _mapMilestoneIntervalKm,
-                      ),
-                      fitTrackBounds: true,
-                      initialCentre: _initialCenter(widget.activity),
-                      initialZoom: MapCamera.maxZoom,
-                      maxZoom: MapCamera.maxZoom,
-                      // A finished activity: no live position to show, and asking
-                      // for one would prompt for location permission on a page
-                      // that has no use for it.
-                      showUserLocation: false,
-                      // Nothing follows the user here, so a pan means nothing.
-                      onUserGesture: () {},
+                Expanded(
+                  child:
+                      !widget.activity.points.any(
+                        (point) =>
+                            point.position.latitude.isFinite &&
+                            point.position.longitude.isFinite,
+                      )
+                      ? Center(child: Text(l10n.activityNoTrack))
+                      : Container(
+                          color: AppColors.tertiary.background,
+                          // Always render the map so the recorded track is visible.
+                          // The tile layer is shown only when a style is available
+                          // (keyed build, online); on the keyless FOSS build or an
+                          // offline style fetch the polyline draws on a blank canvas
+                          // instead of an error.
+                          child: _mapView.build(
+                            styleUrl: _mapStyleUrl,
+                            track: widget.activity.asMapTrack(
+                              milestoneIntervalKm: _mapMilestoneIntervalKm,
+                            ),
+                            fitTrackBounds: true,
+                            initialCentre: _initialCenter(widget.activity),
+                            initialZoom: MapCamera.maxZoom,
+                            maxZoom: MapCamera.maxZoom,
+                            // A finished activity: no live position to show, and asking
+                            // for one would prompt for location permission on a page
+                            // that has no use for it.
+                            showUserLocation: false,
+                            // Nothing follows the user here, so a pan means nothing.
+                            onUserGesture: () {},
+                          ),
+                        ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(context.screenPadding),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () =>
+                          _showStatisticsBottomSheet(context, widget.activity),
+                      icon: const Icon(Icons.analytics_rounded),
+                      label: Text(AppLocalizations.of(context).btnViewStats),
                     ),
-                  ),
-                Positioned(
-                  bottom: context.screenPadding,
-                  left: context.screenPadding,
-                  right: context.screenPadding,
-                  child: ElevatedButton.icon(
-                    onPressed: () =>
-                        _showStatisticsBottomSheet(context, widget.activity),
-                    icon: const Icon(Icons.analytics_rounded),
-                    label: Text(AppLocalizations.of(context).btnViewStats),
                   ),
                 ),
               ],
