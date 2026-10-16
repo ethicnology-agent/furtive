@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Tlačítka sledovat, start, pauza a stop jsou u pravého okraje. Vypnutím je přesunete vlevo pro leváky. Popisek mapy se přesune do protilehlého rohu.",
   "prefMapMilestones": "Značky vzdálenosti",
   "prefMapMilestonesOff": "Vypnuto",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Offline mapy",
+  "offlineTitle": "Offline mapy",
+  "offlineExplainer": "Oblasti, které uložíš, zůstávají v zařízení a nikdy se nemažou. Mapa, na kterou ses jen podíval, se také ukládá do mezipaměti, ale její místo lze uvolnit.",
+  "offlineNone": "Zatím žádné uložené oblasti",
+  "offlineAroundMe": "Uložit oblast kolem mě",
+  "offlineRadius": "Poloměr: {km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Stáhnout",
+  "offlineDownloading": "{done} z {total} dlaždic · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Zatím žádná poloha — počkej na GPS",
+  "offlineNoTiles": "Dlaždice jsou vypnuté, takže není co ukládat",
+  "offlineUnsupported": "Offline oblasti nejsou na tomto zařízení k dispozici",
+  "offlineDelete": "Smazat",
+  "offlineFailed": "Stahování selhalo",
   "offlineStorageTitle": "Úložiště map",
   "offlineStorageOnDevice": "{mb} MB v tomto zařízení",
   "@offlineStorageOnDevice": {

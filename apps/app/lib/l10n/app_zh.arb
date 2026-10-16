@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "跟随、开始、暂停和停止按钮位于右边缘。关闭可将它们移到左侧，便于左手操作。地图署名会移到对角。",
   "prefMapMilestones": "距离标记",
   "prefMapMilestonesOff": "关闭",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "离线地图",
+  "offlineTitle": "离线地图",
+  "offlineExplainer": "你保留的区域会留在设备上，永远不会被清除。你只是看过的地图也会被缓存，但这部分空间可以回收。",
+  "offlineNone": "还没有保留的区域",
+  "offlineAroundMe": "保留我周围的区域",
+  "offlineRadius": "半径：{km} 公里",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "下载",
+  "offlineDownloading": "{total} 个瓦片中的 {done} 个 · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "尚未获取位置 — 请等待 GPS",
+  "offlineNoTiles": "瓦片已关闭，没有可保留的内容",
+  "offlineUnsupported": "此设备不支持离线区域",
+  "offlineDelete": "删除",
+  "offlineFailed": "下载失败",
   "offlineStorageTitle": "地图存储",
   "offlineStorageOnDevice": "本设备上 {mb} MB",
   "@offlineStorageOnDevice": {

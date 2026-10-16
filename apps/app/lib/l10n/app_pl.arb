@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Przyciski śledzenia, start, pauza i stop są przy prawej krawędzi. Wyłącz, by przenieść je na lewo, dla osób leworęcznych. Podpis mapy przechodzi do przeciwnego narożnika.",
   "prefMapMilestones": "Znaczniki odległości",
   "prefMapMilestonesOff": "Wyłączone",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Mapy offline",
+  "offlineTitle": "Mapy offline",
+  "offlineExplainer": "Obszary, które zachowasz, zostają na urządzeniu i nigdy nie są usuwane. Mapa, na którą tylko spojrzałeś, też trafia do pamięci podręcznej, ale jej miejsce można odzyskać.",
+  "offlineNone": "Brak zachowanych obszarów",
+  "offlineAroundMe": "Zachowaj obszar wokół mnie",
+  "offlineRadius": "Promień: {km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Pobierz",
+  "offlineDownloading": "{done} z {total} kafelków · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Brak pozycji — poczekaj na GPS",
+  "offlineNoTiles": "Kafelki są wyłączone, więc nie ma czego zachować",
+  "offlineUnsupported": "Obszary offline nie są dostępne na tym urządzeniu",
+  "offlineDelete": "Usuń",
+  "offlineFailed": "Pobieranie nie powiodło się",
   "offlineStorageTitle": "Pamięć map",
   "offlineStorageOnDevice": "{mb} MB na tym urządzeniu",
   "@offlineStorageOnDevice": {

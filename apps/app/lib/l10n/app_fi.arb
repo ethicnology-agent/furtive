@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Seuraa-, aloita-, tauko- ja lopeta-painikkeet ovat oikeassa reunassa. Poista käytöstä siirtääksesi ne vasemmalle vasenkätisille. Kartan lähdemerkintä siirtyy vastakkaiseen kulmaan.",
   "prefMapMilestones": "Matkamerkit",
   "prefMapMilestonesOff": "Pois käytöstä",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Offline-kartat",
+  "offlineTitle": "Offline-kartat",
+  "offlineExplainer": "Säilyttämäsi alueet pysyvät laitteessa eikä niitä koskaan poisteta. Myös kartta, jota vain katselit, tallentuu välimuistiin, mutta sen tila voidaan vapauttaa.",
+  "offlineNone": "Ei vielä säilytettyjä alueita",
+  "offlineAroundMe": "Säilytä ympärilläni oleva alue",
+  "offlineRadius": "Säde: {km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Lataa",
+  "offlineDownloading": "{done}/{total} ruutua · {mb} Mt",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Ei vielä sijaintia — odota GPS:ää",
+  "offlineNoTiles": "Ruudut ovat pois päältä, joten säilytettävää ei ole",
+  "offlineUnsupported": "Offline-alueet eivät ole käytettävissä tässä laitteessa",
+  "offlineDelete": "Poista",
+  "offlineFailed": "Lataus epäonnistui",
   "offlineStorageTitle": "Karttojen tallennustila",
   "offlineStorageOnDevice": "{mb} Mt tällä laitteella",
   "@offlineStorageOnDevice": {

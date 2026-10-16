@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Butoanele urmărire, start, pauză și stop sunt pe marginea din dreapta. Dezactivează pentru a le muta în stânga, pentru stângaci. Creditul hărții trece în colțul opus.",
   "prefMapMilestones": "Marcaje de distanță",
   "prefMapMilestonesOff": "Dezactivate",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Hărți offline",
+  "offlineTitle": "Hărți offline",
+  "offlineExplainer": "Zonele pe care le păstrezi rămân pe dispozitiv și nu sunt niciodată șterse. Harta pe care doar ai privit-o ajunge și ea în cache, dar spațiul ei poate fi recuperat.",
+  "offlineNone": "Nicio zonă păstrată încă",
+  "offlineAroundMe": "Păstrează zona din jurul meu",
+  "offlineRadius": "Rază: {km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Descarcă",
+  "offlineDownloading": "{done} din {total} dale · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Încă nicio poziție — așteaptă GPS-ul",
+  "offlineNoTiles": "Dalele sunt oprite, deci nu e nimic de păstrat",
+  "offlineUnsupported": "Zonele offline nu sunt disponibile pe acest dispozitiv",
+  "offlineDelete": "Șterge",
+  "offlineFailed": "Descărcarea a eșuat",
   "offlineStorageTitle": "Stocare hărți",
   "offlineStorageOnDevice": "{mb} MB pe acest dispozitiv",
   "@offlineStorageOnDevice": {

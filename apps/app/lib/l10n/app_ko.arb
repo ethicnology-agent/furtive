@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "따라가기, 시작, 일시정지, 정지 버튼이 오른쪽 가장자리에 있습니다. 끄면 왼쪽으로 옮겨져 왼손으로 쓰기 쉽습니다. 지도 저작자 표시는 반대쪽 모서리로 이동합니다.",
   "prefMapMilestones": "거리 표시",
   "prefMapMilestonesOff": "끄기",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "오프라인 지도",
+  "offlineTitle": "오프라인 지도",
+  "offlineExplainer": "보관한 지역은 기기에 남아 삭제되지 않습니다. 그냥 보기만 한 지도도 캐시에 담기지만, 그 공간은 회수할 수 있습니다.",
+  "offlineNone": "아직 보관한 지역이 없습니다",
+  "offlineAroundMe": "주변 지역 보관",
+  "offlineRadius": "반경: {km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "다운로드",
+  "offlineDownloading": "타일 {total}개 중 {done}개 · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "아직 위치가 없습니다 — GPS를 기다리세요",
+  "offlineNoTiles": "타일이 꺼져 있어 보관할 것이 없습니다",
+  "offlineUnsupported": "이 기기에서는 오프라인 지역을 사용할 수 없습니다",
+  "offlineDelete": "삭제",
+  "offlineFailed": "다운로드 실패",
   "offlineStorageTitle": "지도 저장 공간",
   "offlineStorageOnDevice": "이 기기에 {mb} MB",
   "@offlineStorageOnDevice": {

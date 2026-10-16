@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Τα κουμπιά παρακολούθησης, έναρξης, παύσης και τερματισμού βρίσκονται στο δεξί άκρο. Απενεργοποιήστε για μετακίνηση στα αριστερά για αριστερόχειρες. Η απόδοση του χάρτη πηγαίνει στην αντίθετη γωνία.",
   "prefMapMilestones": "Δείκτες απόστασης",
   "prefMapMilestonesOff": "Ανενεργό",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Χάρτες εκτός σύνδεσης",
+  "offlineTitle": "Χάρτες εκτός σύνδεσης",
+  "offlineExplainer": "Οι περιοχές που αποθηκεύεις μένουν στη συσκευή και δεν διαγράφονται ποτέ. Ο χάρτης που απλώς κοίταξες μπαίνει κι αυτός στην προσωρινή μνήμη, αλλά ο χώρος του μπορεί να ελευθερωθεί.",
+  "offlineNone": "Καμία αποθηκευμένη περιοχή ακόμη",
+  "offlineAroundMe": "Αποθήκευση περιοχής γύρω μου",
+  "offlineRadius": "Ακτίνα: {km} χλμ",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Λήψη",
+  "offlineDownloading": "{done} από {total} πλακίδια · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Καμία θέση ακόμη — περίμενε το GPS",
+  "offlineNoTiles": "Τα πλακίδια είναι κλειστά, οπότε δεν υπάρχει τίποτα να αποθηκευτεί",
+  "offlineUnsupported": "Οι περιοχές εκτός σύνδεσης δεν είναι διαθέσιμες σε αυτή τη συσκευή",
+  "offlineDelete": "Διαγραφή",
+  "offlineFailed": "Η λήψη απέτυχε",
   "offlineStorageTitle": "Αποθήκευση χαρτών",
   "offlineStorageOnDevice": "{mb} MB σε αυτή τη συσκευή",
   "@offlineStorageOnDevice": {

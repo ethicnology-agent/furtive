@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Vitufe vya kufuata, kuanza, kusitisha na kusimamisha viko upande wa kulia. Zima ili kuvihamisha kushoto, kwa watumiaji wa mkono wa kushoto. Sifa ya ramani huenda pembe ya pili.",
   "prefMapMilestones": "Alama za umbali",
   "prefMapMilestonesOff": "Imezimwa",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Ramani za nje ya mtandao",
+  "offlineTitle": "Ramani za nje ya mtandao",
+  "offlineExplainer": "Maeneo unayohifadhi hubaki kwenye kifaa na hayafutwi kamwe. Ramani uliyoiangalia tu nayo huwekwa kwenye akiba, lakini nafasi yake inaweza kurudishwa.",
+  "offlineNone": "Bado hakuna maeneo yaliyohifadhiwa",
+  "offlineAroundMe": "Hifadhi eneo lililo kando yangu",
+  "offlineRadius": "Nusu kipenyo: {km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Pakua",
+  "offlineDownloading": "vigae {done} kati ya {total} · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Bado hakuna mahali — subiri GPS",
+  "offlineNoTiles": "Vigae vimezimwa, hivyo hakuna cha kuhifadhi",
+  "offlineUnsupported": "Maeneo ya nje ya mtandao hayapatikani kwenye kifaa hiki",
+  "offlineDelete": "Futa",
+  "offlineFailed": "Upakuaji umeshindwa",
   "offlineStorageTitle": "Hifadhi ya ramani",
   "offlineStorageOnDevice": "{mb} MB kwenye kifaa hiki",
   "@offlineStorageOnDevice": {

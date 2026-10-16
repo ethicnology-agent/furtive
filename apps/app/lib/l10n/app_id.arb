@@ -192,11 +192,11 @@
   "prefMapControlsOnRightSubtitle": "Tombol ikuti, mulai, jeda dan berhenti ada di sisi kanan. Nonaktifkan untuk memindahkannya ke kiri untuk pengguna kiri. Kredit peta pindah ke sudut seberang.",
   "prefMapMilestones": "Penanda jarak",
   "prefMapMilestonesOff": "Nonaktif",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
+  "menuOfflineMaps": "Peta luring",
+  "offlineTitle": "Peta luring",
+  "offlineExplainer": "Area yang kamu simpan tetap di perangkat dan tidak pernah dihapus. Peta yang sekadar kamu lihat juga masuk cache, tapi ruangnya bisa diambil kembali.",
+  "offlineNone": "Belum ada area yang disimpan",
+  "offlineAroundMe": "Simpan area di sekitarku",
   "offlineRadius": "Radius: {km} km",
   "@offlineRadius": {
     "placeholders": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Unduh",
+  "offlineDownloading": "{done} dari {total} ubin · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Belum ada posisi — tunggu GPS",
+  "offlineNoTiles": "Ubin dimatikan, jadi tidak ada yang bisa disimpan",
+  "offlineUnsupported": "Area luring tidak tersedia di perangkat ini",
+  "offlineDelete": "Hapus",
+  "offlineFailed": "Unduhan gagal",
   "offlineStorageTitle": "Penyimpanan peta",
   "offlineStorageOnDevice": "{mb} MB di perangkat ini",
   "@offlineStorageOnDevice": {

@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "追従・開始・一時停止・停止のボタンは右端にあります。オフにすると左端に移動し、左手で使いやすくなります。地図のクレジットは反対の隅に移ります。",
   "prefMapMilestones": "距離マーカー",
   "prefMapMilestonesOff": "オフ",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "オフライン地図",
+  "offlineTitle": "オフライン地図",
+  "offlineExplainer": "保存したエリアはデバイスに残り、削除されることはありません。ただ眺めただけの地図もキャッシュされますが、その容量は回収できます。",
+  "offlineNone": "保存したエリアはまだありません",
+  "offlineAroundMe": "周囲のエリアを保存",
+  "offlineRadius": "半径：{km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "ダウンロード",
+  "offlineDownloading": "{total} タイル中 {done} · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "位置がまだ取得できていません — GPS をお待ちください",
+  "offlineNoTiles": "タイルがオフのため、保存するものがありません",
+  "offlineUnsupported": "このデバイスではオフラインエリアを利用できません",
+  "offlineDelete": "削除",
+  "offlineFailed": "ダウンロードに失敗しました",
   "offlineStorageTitle": "地図のストレージ",
   "offlineStorageOnDevice": "このデバイスに {mb} MB",
   "@offlineStorageOnDevice": {

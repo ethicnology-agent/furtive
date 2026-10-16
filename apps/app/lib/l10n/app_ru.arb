@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Кнопки слежения, старта, паузы и остановки находятся у правого края. Отключите, чтобы перенести их влево — для левшей. Указание источника карты уходит в противоположный угол.",
   "prefMapMilestones": "Метки расстояния",
   "prefMapMilestonesOff": "Отключены",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Офлайн-карты",
+  "offlineTitle": "Офлайн-карты",
+  "offlineExplainer": "Сохранённые области остаются на устройстве и никогда не удаляются. Карта, на которую ты просто посмотрел, тоже попадает в кэш, но его место можно освободить.",
+  "offlineNone": "Сохранённых областей пока нет",
+  "offlineAroundMe": "Сохранить область вокруг меня",
+  "offlineRadius": "Радиус: {km} км",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Скачать",
+  "offlineDownloading": "{done} из {total} тайлов · {mb} МБ",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Позиции пока нет — подожди GPS",
+  "offlineNoTiles": "Тайлы выключены, сохранять нечего",
+  "offlineUnsupported": "Офлайн-области недоступны на этом устройстве",
+  "offlineDelete": "Удалить",
+  "offlineFailed": "Не удалось скачать",
   "offlineStorageTitle": "Хранилище карт",
   "offlineStorageOnDevice": "{mb} МБ на этом устройстве",
   "@offlineStorageOnDevice": {

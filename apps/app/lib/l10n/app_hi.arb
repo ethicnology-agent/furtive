@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "फ़ॉलो, शुरू, रोकें और बंद करें बटन दाएं किनारे पर हैं। बाएं हाथ के उपयोग के लिए बाईं ओर ले जाने हेतु बंद करें। मैप श्रेय विपरीत कोने में चला जाता है।",
   "prefMapMilestones": "दूरी चिह्न",
   "prefMapMilestonesOff": "बंद",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "ऑफ़लाइन मानचित्र",
+  "offlineTitle": "ऑफ़लाइन मानचित्र",
+  "offlineExplainer": "आप जो क्षेत्र रखते हैं वे डिवाइस पर बने रहते हैं और कभी नहीं हटाए जाते। जिस मानचित्र को आपने केवल देखा वह भी कैश में रहता है, पर उसकी जगह वापस ली जा सकती है।",
+  "offlineNone": "अभी कोई क्षेत्र नहीं रखा गया",
+  "offlineAroundMe": "मेरे आसपास का क्षेत्र रखें",
+  "offlineRadius": "त्रिज्या: {km} किमी",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "डाउनलोड",
+  "offlineDownloading": "{total} में से {done} टाइलें · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "अभी कोई स्थिति नहीं — GPS की प्रतीक्षा करें",
+  "offlineNoTiles": "टाइलें बंद हैं, इसलिए रखने को कुछ नहीं है",
+  "offlineUnsupported": "ऑफ़लाइन क्षेत्र इस डिवाइस पर उपलब्ध नहीं हैं",
+  "offlineDelete": "हटाएँ",
+  "offlineFailed": "डाउनलोड विफल",
   "offlineStorageTitle": "मानचित्र भंडारण",
   "offlineStorageOnDevice": "इस डिवाइस पर {mb} MB",
   "@offlineStorageOnDevice": {

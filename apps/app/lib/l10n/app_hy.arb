@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Հետևել, սկսել, դադար և կանգնեցնել կոճակները աջ եզրին են։ Անջատեք՝ դրանք ձախ տեղափոխելու համար՝ ձախլիկների համար։ Քարտեզի հեղինակությունը անցնում է հակառակ անկյուն։",
   "prefMapMilestones": "Հեռավորության նշիչներ",
   "prefMapMilestonesOff": "Անջատված",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Անցանց քարտեզներ",
+  "offlineTitle": "Անցանց քարտեզներ",
+  "offlineExplainer": "Քո պահած տարածքները մնում են սարքում և երբեք չեն ջնջվում։ Այն քարտեզը, որին պարզապես նայել ես, նույնպես պահվում է քեշում, բայց նրա տեղը կարելի է ազատել։",
+  "offlineNone": "Դեռ պահված տարածք չկա",
+  "offlineAroundMe": "Պահել իմ շուրջը եղած տարածքը",
+  "offlineRadius": "Շառավիղ՝ {km} կմ",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Ներբեռնել",
+  "offlineDownloading": "{total}-ից {done} սալիկ · {mb} ՄԲ",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Դեռ դիրք չկա՝ սպասիր GPS-ին",
+  "offlineNoTiles": "Սալիկներն անջատված են, ուստի պահելու բան չկա",
+  "offlineUnsupported": "Անցանց տարածքներն այս սարքում հասանելի չեն",
+  "offlineDelete": "Ջնջել",
+  "offlineFailed": "Ներբեռնումը ձախողվեց",
   "offlineStorageTitle": "Քարտեզների պահոց",
   "offlineStorageOnDevice": "{mb} ՄԲ այս սարքում",
   "@offlineStorageOnDevice": {

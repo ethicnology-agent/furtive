@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "অনুসরণ, শুরু, বিরতি ও থামার বোতাম ডান প্রান্তে থাকে। বাঁ হাতে ব্যবহারের জন্য বাম দিকে সরাতে বন্ধ করুন। ম্যাপের কৃতিত্ব বিপরীত কোণে চলে যায়।",
   "prefMapMilestones": "দূরত্ব চিহ্ন",
   "prefMapMilestonesOff": "বন্ধ",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "অফলাইন মানচিত্র",
+  "offlineTitle": "অফলাইন মানচিত্র",
+  "offlineExplainer": "আপনি যে এলাকাগুলি রাখেন সেগুলি ডিভাইসে থেকে যায় এবং কখনও মুছে যায় না। যে মানচিত্র আপনি শুধু দেখেছেন সেটিও ক্যাশে থাকে, তবে তার জায়গা ফিরিয়ে নেওয়া যায়।",
+  "offlineNone": "এখনও কোনো এলাকা রাখা হয়নি",
+  "offlineAroundMe": "আমার চারপাশের এলাকা রাখুন",
+  "offlineRadius": "ব্যাসার্ধ: {km} কিমি",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "ডাউনলোড",
+  "offlineDownloading": "{total}টির মধ্যে {done}টি টাইল · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "এখনও অবস্থান নেই — GPS-এর জন্য অপেক্ষা করুন",
+  "offlineNoTiles": "টাইল বন্ধ, তাই রাখার কিছু নেই",
+  "offlineUnsupported": "এই ডিভাইসে অফলাইন এলাকা উপলব্ধ নয়",
+  "offlineDelete": "মুছুন",
+  "offlineFailed": "ডাউনলোড ব্যর্থ",
   "offlineStorageTitle": "মানচিত্র সঞ্চয়",
   "offlineStorageOnDevice": "এই ডিভাইসে {mb} MB",
   "@offlineStorageOnDevice": {

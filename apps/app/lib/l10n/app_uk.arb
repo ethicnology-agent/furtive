@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Кнопки стеження, запуску, паузи та зупинки розташовані біля правого краю. Вимкніть, щоб перенести їх ліворуч — для лівшів. Атрибуція карти переходить у протилежний кут.",
   "prefMapMilestones": "Позначки відстані",
   "prefMapMilestonesOff": "Вимкнено",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Офлайн-карти",
+  "offlineTitle": "Офлайн-карти",
+  "offlineExplainer": "Збережені області залишаються на пристрої й ніколи не видаляються. Карта, на яку ти просто подивився, теж потрапляє в кеш, але його місце можна звільнити.",
+  "offlineNone": "Збережених областей поки немає",
+  "offlineAroundMe": "Зберегти область навколо мене",
+  "offlineRadius": "Радіус: {km} км",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "Завантажити",
+  "offlineDownloading": "{done} з {total} тайлів · {mb} МБ",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Позиції поки немає — зачекай на GPS",
+  "offlineNoTiles": "Тайли вимкнені, зберігати нічого",
+  "offlineUnsupported": "Офлайн-області недоступні на цьому пристрої",
+  "offlineDelete": "Видалити",
+  "offlineFailed": "Не вдалося завантажити",
   "offlineStorageTitle": "Сховище карт",
   "offlineStorageOnDevice": "{mb} МБ на цьому пристрої",
   "@offlineStorageOnDevice": {

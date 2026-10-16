@@ -192,12 +192,12 @@
   "prefMapControlsOnRightSubtitle": "Takip, başlat, duraklat ve durdur düğmeleri sağ kenardadır. Sol elle kullanım için sola taşımak üzere kapatın. Harita künyesi karşı köşeye geçer.",
   "prefMapMilestones": "Mesafe işaretleri",
   "prefMapMilestonesOff": "Kapalı",
-  "menuOfflineMaps": "Offline maps",
-  "offlineTitle": "Offline maps",
-  "offlineExplainer": "Areas you keep stay on the device and are never evicted. What you simply looked at is cached too, but can be reclaimed.",
-  "offlineNone": "No areas kept yet",
-  "offlineAroundMe": "Keep the area around me",
-  "offlineRadius": "Radius: {km} km",
+  "menuOfflineMaps": "Çevrimdışı haritalar",
+  "offlineTitle": "Çevrimdışı haritalar",
+  "offlineExplainer": "Sakladığın alanlar cihazda kalır ve asla silinmez. Yalnızca baktığın harita da önbelleğe alınır, ama yeri geri kazanılabilir.",
+  "offlineNone": "Henüz saklanan alan yok",
+  "offlineAroundMe": "Çevremdeki alanı sakla",
+  "offlineRadius": "Yarıçap: {km} km",
   "@offlineRadius": {
     "placeholders": {
       "km": {
@@ -205,8 +205,8 @@
       }
     }
   },
-  "offlineDownload": "Download",
-  "offlineDownloading": "{done} of {total} tiles · {mb} MB",
+  "offlineDownload": "İndir",
+  "offlineDownloading": "{total} döşemeden {done} tanesi · {mb} MB",
   "@offlineDownloading": {
     "placeholders": {
       "done": {
@@ -220,11 +220,11 @@
       }
     }
   },
-  "offlineNoPosition": "No position yet — wait for GPS",
-  "offlineNoTiles": "Tiles are off, so there is nothing to keep",
-  "offlineUnsupported": "Offline areas are not available on this device",
-  "offlineDelete": "Delete",
-  "offlineFailed": "Download failed",
+  "offlineNoPosition": "Henüz konum yok — GPS'i bekle",
+  "offlineNoTiles": "Döşemeler kapalı, bu yüzden saklanacak bir şey yok",
+  "offlineUnsupported": "Çevrimdışı alanlar bu cihazda kullanılamıyor",
+  "offlineDelete": "Sil",
+  "offlineFailed": "İndirme başarısız",
   "offlineStorageTitle": "Harita depolama",
   "offlineStorageOnDevice": "Bu cihazda {mb} MB",
   "@offlineStorageOnDevice": {
