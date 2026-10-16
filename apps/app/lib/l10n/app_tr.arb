@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Geri kalanı, çevrimdışıyken hâlâ çizilsin diye saklanan, baktığınız haritadır; artı veritabanının kendi ek yüküdür."
+  "offlineStorageCached": "Geri kalanı, çevrimdışıyken hâlâ çizilsin diye saklanan, baktığınız haritadır; artı veritabanının kendi ek yüküdür.",
+  "offlineClearCache": "Önbelleği temizle"
 }

@@ -279,6 +279,20 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                               style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(color: kTextMuted),
                             ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                // Only what accumulated behind them: the
+                                // areas they asked for are not evictable and
+                                // are not touched.
+                                onPressed: state.progress != null
+                                    ? null
+                                    : () => context
+                                          .read<OfflineMapsCubit>()
+                                          .clearCache(),
+                                child: Text(l10n.offlineClearCache),
+                              ),
+                            ),
                           ],
                         ),
                       ),

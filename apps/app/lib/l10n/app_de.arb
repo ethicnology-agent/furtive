@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Der Rest ist Karte, die Sie angesehen haben, behalten damit sie offline weiter gezeichnet wird, plus der Overhead der Datenbank selbst."
+  "offlineStorageCached": "Der Rest ist Karte, die Sie angesehen haben, behalten damit sie offline weiter gezeichnet wird, plus der Overhead der Datenbank selbst.",
+  "offlineClearCache": "Cache leeren"
 }

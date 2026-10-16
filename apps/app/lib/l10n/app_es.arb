@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "El resto es el mapa que has consultado, conservado para que siga dibujándose sin conexión, más la sobrecarga propia de la base de datos."
+  "offlineStorageCached": "El resto es el mapa que has consultado, conservado para que siga dibujándose sin conexión, más la sobrecarga propia de la base de datos.",
+  "offlineClearCache": "Vaciar caché"
 }

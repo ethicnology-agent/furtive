@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "나머지는 오프라인에서도 그려지도록 보관된, 둘러본 지도와 데이터베이스 자체의 오버헤드입니다."
+  "offlineStorageCached": "나머지는 오프라인에서도 그려지도록 보관된, 둘러본 지도와 데이터베이스 자체의 오버헤드입니다.",
+  "offlineClearCache": "캐시 지우기"
 }

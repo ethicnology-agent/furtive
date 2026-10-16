@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Le reste est la carte que vous avez consultée, conservée pour qu'elle s'affiche encore hors ligne, plus la surcharge propre à la base de données."
+  "offlineStorageCached": "Le reste est la carte que vous avez consultée, conservée pour qu'elle s'affiche encore hors ligne, plus la surcharge propre à la base de données.",
+  "offlineClearCache": "Vider le cache"
 }

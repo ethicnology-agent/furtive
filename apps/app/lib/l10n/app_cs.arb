@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Zbytek je mapa, kterou jste si prohlíželi, uchovaná aby se stále vykreslovala offline, plus režie samotné databáze."
+  "offlineStorageCached": "Zbytek je mapa, kterou jste si prohlíželi, uchovaná aby se stále vykreslovala offline, plus režie samotné databáze.",
+  "offlineClearCache": "Vymazat mezipaměť"
 }

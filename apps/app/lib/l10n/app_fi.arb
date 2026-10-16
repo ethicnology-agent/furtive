@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Loput on karttaa, jota olet katsonut, säilytettynä niin että se piirtyy yhä offline-tilassa, sekä tietokannan oma ylimääräinen tila."
+  "offlineStorageCached": "Loput on karttaa, jota olet katsonut, säilytettynä niin että se piirtyy yhä offline-tilassa, sekä tietokannan oma ylimääräinen tila.",
+  "offlineClearCache": "Tyhjennä välimuisti"
 }

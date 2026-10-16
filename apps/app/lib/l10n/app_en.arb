@@ -326,5 +326,6 @@
       }
     }
   },
-  "offlineStorageCached": "The rest is map you looked at, kept so it still draws offline, plus the database's own overhead."
+  "offlineStorageCached": "The rest is map you looked at, kept so it still draws offline, plus the database's own overhead.",
+  "offlineClearCache": "Clear cache"
 }

@@ -13,12 +13,18 @@ import 'package:path_provider/path_provider.dart';
 /// run the same loop all month has already paid for those tiles, and should
 /// not have to download them again to run it without a signal.
 ///
-/// 512 MB against a measured 7.0 MB for a 10 km radius at z10-15 in open
+/// 1 GB against a measured 7.0 MB for a 10 km radius at z10-15 in open
 /// country, 57.0 MB for the same radius over Paris. Generous on purpose: it
 /// is a ceiling, not an allocation, and nothing is written until the map is
 /// actually looked at. Areas the user chose to keep are not evictable and do
 /// not count against it.
-const ambientCacheBudgetBytes = 512 * 1024 * 1024;
+///
+/// A ceiling at all, rather than none, because the cache fills without ever
+/// being asked for: no limit would let a map quietly take the device's last
+/// gigabytes. One that is effectively unreachable in ordinary use, paired
+/// with a screen that shows the figure and a way to throw it away, leaves
+/// the decision with whoever owns the phone.
+const ambientCacheBudgetBytes = 1024 * 1024 * 1024;
 
 /// Everything the renderer has stored for the map, in bytes, or null when it
 /// has stored nothing yet.

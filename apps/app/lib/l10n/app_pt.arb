@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "O resto é o mapa que consultou, guardado para continuar a ser desenhado offline, mais a sobrecarga da própria base de dados."
+  "offlineStorageCached": "O resto é o mapa que consultou, guardado para continuar a ser desenhado offline, mais a sobrecarga da própria base de dados.",
+  "offlineClearCache": "Limpar cache"
 }

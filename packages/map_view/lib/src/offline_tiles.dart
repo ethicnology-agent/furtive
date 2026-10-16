@@ -89,6 +89,19 @@ abstract interface class OfflineTiles {
   /// areas are not evicted and are not counted against this.
   Future<void> setMaximumCacheSize(int bytes);
 
+  /// Throws away the evictable cache, keeping the downloaded areas.
+  ///
+  /// The counterpart of a generous budget: the only way to get that space
+  /// back without also losing the areas the user deliberately kept.
+  ///
+  /// Compacts the store afterwards, because deleting rows does not shrink
+  /// the file — measured, clearing roughly twelve megabytes of cache moved
+  /// the file by two hundred kilobytes, so anything reporting disk use would
+  /// have shown the space as still taken. Compaction is best-effort: where
+  /// the platform does not offer it the cache is still gone, it is only the
+  /// file that stays big until the store reuses those pages.
+  Future<void> clearCache();
+
   void dispose();
 }
 
@@ -157,6 +170,17 @@ class _MapLibreOfflineTiles implements OfflineTiles {
 
   @override
   Future<void> delete(int id) => _manager.deleteRegion(regionId: id);
+
+  @override
+  Future<void> clearCache() async {
+    await _manager.clearAmbientCache();
+    try {
+      await _manager.packDatabase();
+    } on Object {
+      // Android-only in the renderer's plugin, and not worth failing a
+      // successful clear over.
+    }
+  }
 
   @override
   Future<void> setMaximumCacheSize(int bytes) =>

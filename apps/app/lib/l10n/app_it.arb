@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Il resto è la mappa che hai guardato, conservata perché continui a essere disegnata offline, più l'overhead del database stesso."
+  "offlineStorageCached": "Il resto è la mappa che hai guardato, conservata perché continui a essere disegnata offline, più l'overhead del database stesso.",
+  "offlineClearCache": "Svuota cache"
 }

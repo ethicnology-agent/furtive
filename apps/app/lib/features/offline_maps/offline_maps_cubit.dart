@@ -193,6 +193,12 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
     emit(state.copyWith(failed: false));
   }
 
+  /// Throws away what accumulated behind the user, keeping what they chose.
+  Future<void> clearCache() async {
+    await _tiles?.clearCache();
+    await refresh();
+  }
+
   Future<void> delete(int id) async {
     await _tiles?.delete(id);
     await refresh();

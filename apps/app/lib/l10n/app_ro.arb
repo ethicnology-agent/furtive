@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Restul este harta pe care ați consultat-o, păstrată ca să se deseneze în continuare offline, plus supraîncărcarea bazei de date."
+  "offlineStorageCached": "Restul este harta pe care ați consultat-o, păstrată ca să se deseneze în continuare offline, plus supraîncărcarea bazei de date.",
+  "offlineClearCache": "Golește cache-ul"
 }

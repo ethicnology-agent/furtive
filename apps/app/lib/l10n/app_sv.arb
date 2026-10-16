@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "Resten är karta du har tittat på, sparad så att den fortfarande ritas offline, plus databasens egen överhead."
+  "offlineStorageCached": "Resten är karta du har tittat på, sparad så att den fortfarande ritas offline, plus databasens egen överhead.",
+  "offlineClearCache": "Rensa cache"
 }

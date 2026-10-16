@@ -236,5 +236,6 @@
       }
     }
   },
-  "offlineStorageCached": "De rest is kaart die je hebt bekeken, bewaard zodat die offline nog wordt getekend, plus de overhead van de database zelf."
+  "offlineStorageCached": "De rest is kaart die je hebt bekeken, bewaard zodat die offline nog wordt getekend, plus de overhead van de database zelf.",
+  "offlineClearCache": "Cache wissen"
 }
