@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "Stocare hărți",
+  "offlineStorageOnDevice": "{mb} MB pe acest dispozitiv",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB în zonele păstrate · {tiles} dale",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Restul este harta pe care ați consultat-o, păstrată ca să se deseneze în continuare offline, plus supraîncărcarea bazei de date."
 }

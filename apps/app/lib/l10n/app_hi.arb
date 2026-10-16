@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "मानचित्र भंडारण",
+  "offlineStorageOnDevice": "इस डिवाइस पर {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "सहेजे गए क्षेत्रों में {mb} MB · {tiles} टाइलें",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "बाकी वह मानचित्र है जिसे आपने देखा, इसलिए रखा गया कि वह ऑफ़लाइन भी बने, साथ ही डेटाबेस का अपना ओवरहेड।"
 }

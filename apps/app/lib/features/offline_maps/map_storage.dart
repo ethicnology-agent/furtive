@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:diagnostics/diagnostics.dart';
 import 'package:map_view/map_view.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// How much room the renderer may keep for tiles nobody asked to keep.
 ///
@@ -16,6 +19,42 @@ import 'package:map_view/map_view.dart';
 /// actually looked at. Areas the user chose to keep are not evictable and do
 /// not count against it.
 const ambientCacheBudgetBytes = 512 * 1024 * 1024;
+
+/// Everything the renderer has stored for the map, in bytes, or null when it
+/// has stored nothing yet.
+///
+/// Read from the database file rather than asked of the renderer, because the
+/// renderer will not say: `OfflineRegion` carries no size, and nothing
+/// reports the ambient cache at all. The path is MapLibre's own, confirmed on
+/// an Android 12 device — a 1,313-tile download that reported 7,026,194 bytes
+/// left a 7,766,016-byte file at this path, the difference being the
+/// database's own overhead.
+///
+/// That difference is the reason this returns one number and not a split:
+/// subtracting what was deliberately downloaded would charge SQLite's
+/// overhead to the browsing cache and report megabytes of it on a device
+/// that has never browsed.
+Future<int?> mapStorageBytes() async {
+  try {
+    final support = await getApplicationSupportDirectory();
+    final file = File('${support.path}/mbgl-offline.db');
+    return await file.exists() ? await file.length() : null;
+  } on Object {
+    // A monitor that cannot read the file has nothing to say about it. It is
+    // not worth failing the screen it is shown on.
+    return null;
+  }
+}
+
+/// Where the record of what each kept area cost is written.
+///
+/// Beside the renderer's own database rather than in the documents
+/// directory: it is bookkeeping about that file, worthless without it, and
+/// the two should be cleared together.
+Future<File> offlineLedgerFile() async {
+  final support = await getApplicationSupportDirectory();
+  return File('${support.path}/offline_areas.json');
+}
 
 /// Gives the renderer its ambient cache budget for this process.
 ///

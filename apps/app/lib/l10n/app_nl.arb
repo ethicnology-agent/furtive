@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tegels staan uit",
   "offlineUnsupported": "Niet beschikbaar op dit apparaat",
   "offlineDelete": "Verwijderen",
-  "offlineFailed": "Download mislukt"
+  "offlineFailed": "Download mislukt",
+  "offlineStorageTitle": "Kaartopslag",
+  "offlineStorageOnDevice": "{mb} MB op dit apparaat",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB in bewaarde gebieden · {tiles} tegels",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "De rest is kaart die je hebt bekeken, bewaard zodat die offline nog wordt getekend, plus de overhead van de database zelf."
 }

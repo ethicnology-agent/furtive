@@ -215,5 +215,26 @@
   "offlineNoTiles": "Os mosaicos estão desativados",
   "offlineUnsupported": "Indisponível neste dispositivo",
   "offlineDelete": "Eliminar",
-  "offlineFailed": "Falha na transferência"
+  "offlineFailed": "Falha na transferência",
+  "offlineStorageTitle": "Armazenamento de mapas",
+  "offlineStorageOnDevice": "{mb} MB neste dispositivo",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB nas áreas guardadas · {tiles} blocos",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "O resto é o mapa que consultou, guardado para continuar a ser desenhado offline, mais a sobrecarga da própria base de dados."
 }

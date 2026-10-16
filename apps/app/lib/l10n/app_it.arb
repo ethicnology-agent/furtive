@@ -215,5 +215,26 @@
   "offlineNoTiles": "I tasselli sono disattivati",
   "offlineUnsupported": "Non disponibile su questo dispositivo",
   "offlineDelete": "Elimina",
-  "offlineFailed": "Download non riuscito"
+  "offlineFailed": "Download non riuscito",
+  "offlineStorageTitle": "Spazio mappe",
+  "offlineStorageOnDevice": "{mb} MB su questo dispositivo",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB nelle aree conservate · {tiles} tasselli",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Il resto è la mappa che hai guardato, conservata perché continui a essere disegnata offline, più l'overhead del database stesso."
 }

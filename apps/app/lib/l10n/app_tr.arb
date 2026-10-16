@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "Harita depolama",
+  "offlineStorageOnDevice": "Bu cihazda {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "Saklanan alanlarda {mb} MB · {tiles} döşeme",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Geri kalanı, çevrimdışıyken hâlâ çizilsin diye saklanan, baktığınız haritadır; artı veritabanının kendi ek yüküdür."
 }

@@ -215,5 +215,26 @@
   "offlineNoTiles": "Los mosaicos están desactivados",
   "offlineUnsupported": "No disponible en este dispositivo",
   "offlineDelete": "Eliminar",
-  "offlineFailed": "Error en la descarga"
+  "offlineFailed": "Error en la descarga",
+  "offlineStorageTitle": "Almacenamiento de mapas",
+  "offlineStorageOnDevice": "{mb} MB en este dispositivo",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB en áreas guardadas · {tiles} teselas",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "El resto es el mapa que has consultado, conservado para que siga dibujándose sin conexión, más la sobrecarga propia de la base de datos."
 }

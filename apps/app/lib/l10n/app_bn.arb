@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "মানচিত্র সঞ্চয়",
+  "offlineStorageOnDevice": "এই ডিভাইসে {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "সংরক্ষিত এলাকায় {mb} MB · {tiles}টি টাইল",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "বাকিটা আপনার দেখা মানচিত্র, অফলাইনেও যাতে আঁকা হয় সে জন্য রাখা, সঙ্গে ডেটাবেসের নিজস্ব ওভারহেড।"
 }

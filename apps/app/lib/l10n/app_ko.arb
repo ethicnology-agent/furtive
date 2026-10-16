@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "지도 저장 공간",
+  "offlineStorageOnDevice": "이 기기에 {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "보관한 지역에 {mb} MB · 타일 {tiles}개",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "나머지는 오프라인에서도 그려지도록 보관된, 둘러본 지도와 데이터베이스 자체의 오버헤드입니다."
 }

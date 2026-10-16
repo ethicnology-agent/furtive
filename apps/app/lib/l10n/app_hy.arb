@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "Քարտեզների պահոց",
+  "offlineStorageOnDevice": "{mb} ՄԲ այս սարքում",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} ՄԲ պահված տարածքներում · {tiles} սալիկ",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Մնացածը ձեր դիտած քարտեզն է, պահված որպեսզի այն դեռ գծվի անցանց, գումարած տվյալների բազայի սեփական ծախսը։"
 }

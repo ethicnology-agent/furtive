@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "Hifadhi ya ramani",
+  "offlineStorageOnDevice": "{mb} MB kwenye kifaa hiki",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB katika maeneo yaliyohifadhiwa · vigae {tiles}",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Iliyobaki ni ramani uliyoitazama, imehifadhiwa ili bado ichorwe nje ya mtandao, pamoja na gharama ya ziada ya hifadhidata yenyewe."
 }

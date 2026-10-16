@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "Karttojen tallennustila",
+  "offlineStorageOnDevice": "{mb} Mt tällä laitteella",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} Mt säilytetyillä alueilla · {tiles} ruutua",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Loput on karttaa, jota olet katsonut, säilytettynä niin että se piirtyy yhä offline-tilassa, sekä tietokannan oma ylimääräinen tila."
 }

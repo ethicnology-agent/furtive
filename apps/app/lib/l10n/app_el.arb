@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "Αποθήκευση χαρτών",
+  "offlineStorageOnDevice": "{mb} MB σε αυτή τη συσκευή",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB στις αποθηκευμένες περιοχές · {tiles} πλακίδια",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Τα υπόλοιπα είναι ο χάρτης που είδατε, διατηρημένος ώστε να σχεδιάζεται ακόμη εκτός σύνδεσης, συν την επιβάρυνση της ίδιας της βάσης δεδομένων."
 }

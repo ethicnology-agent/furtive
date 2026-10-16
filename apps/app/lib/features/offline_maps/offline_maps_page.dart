@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:furtive/features/offline_maps/map_storage.dart';
+import 'package:furtive/features/offline_maps/offline_ledger.dart';
 import 'package:furtive/features/offline_maps/superseded_areas.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
@@ -94,6 +95,9 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   static const _stepKm = 10.0;
 
   OfflineTiles? _tiles;
+  OfflineLedger? _ledger;
+  Map<String, OfflineAreaCost> _costs = const {};
+  int? _storageBytes;
   List<OfflineArea> _areas = const [];
   double _radiusKm = 10;
   OfflineProgress? _progress;
@@ -120,8 +124,21 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
     // Applied here as well as at startup, so a build that reaches this
     // screen has the budget even if the startup pass failed.
     unawaited(tiles.setMaximumCacheSize(ambientCacheBudgetBytes));
+    _ledger = OfflineLedger(await offlineLedgerFile());
+    if (!mounted) return;
     await _refresh();
   }
+
+  /// What the areas the user chose to keep cost, as recorded when each was
+  /// downloaded. Areas kept by a build that wrote no record contribute
+  /// nothing — which is why this is reported beside the device total rather
+  /// than subtracted from it.
+  int get _keptBytes => _costs.values.fold(0, (sum, cost) => sum + cost.bytes);
+
+  int get _keptTiles => _costs.values.fold(0, (sum, cost) => sum + cost.tiles);
+
+  static String _megabytes(int bytes) =>
+      (bytes / 1024 / 1024).toStringAsFixed(1);
 
   /// Deletes the earlier regions this download has just superseded.
   ///
@@ -141,9 +158,17 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
 
   Future<void> _refresh() async {
     final areas = await _tiles?.list() ?? const <OfflineArea>[];
+    // A region can leave by a route this screen did not take — deleted by an
+    // older build, or by the sweep after a retry. Dropping its row here is
+    // what keeps the total from counting storage that is gone.
+    await _ledger?.retainOnly({for (final a in areas) a.key});
+    final costs = await _ledger?.read() ?? const <String, OfflineAreaCost>{};
+    final bytes = await mapStorageBytes();
     if (!mounted) return;
     setState(() {
       _areas = areas;
+      _costs = costs;
+      _storageBytes = bytes;
       _loading = false;
     });
   }
@@ -210,7 +235,20 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
             setState(() => _progress = progress);
             if (progress.isComplete) {
               setState(() => _progress = null);
-              unawaited(_dropSupersededBy(key));
+              // The only moment these numbers exist: the renderer reports no
+              // size per region afterwards, so they are written down now or
+              // the monitor has nothing to show.
+              unawaited(
+                _ledger
+                    ?.record(
+                      key,
+                      OfflineAreaCost(
+                        tiles: progress.tilesDone,
+                        bytes: progress.bytes,
+                      ),
+                    )
+                    .then((_) => _dropSupersededBy(key)),
+              );
             }
           },
           onError: (Object error) {
@@ -297,6 +335,38 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                if (_storageBytes case final bytes?) ...[
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.offlineStorageTitle,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(l10n.offlineStorageOnDevice(_megabytes(bytes))),
+                          Text(
+                            l10n.offlineStorageKept(
+                              _megabytes(_keptBytes),
+                              _keptTiles.toString(),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            l10n.offlineStorageCached,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall?.copyWith(color: kTextMuted),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 if (_areas.isEmpty)
                   Padding(
                     padding: const EdgeInsets.all(16),

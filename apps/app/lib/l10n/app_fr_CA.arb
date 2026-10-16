@@ -215,5 +215,26 @@
   "offlineNoTiles": "Les tuiles sont désactivées, il n'y a rien à garder",
   "offlineUnsupported": "Les zones hors ligne ne sont pas disponibles sur cet appareil",
   "offlineDelete": "Supprimer",
-  "offlineFailed": "Échec du téléchargement"
+  "offlineFailed": "Échec du téléchargement",
+  "offlineStorageTitle": "Stockage des cartes",
+  "offlineStorageOnDevice": "{mb} Mo sur cet appareil",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} Mo dans les zones conservées · {tiles} tuiles",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Le reste est la carte que vous avez consultée, conservée pour qu'elle s'affiche encore hors ligne, plus la surcharge propre à la base de données."
 }

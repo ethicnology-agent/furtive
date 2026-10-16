@@ -215,5 +215,26 @@
   "offlineNoTiles": "Tiles are off, so there is nothing to keep",
   "offlineUnsupported": "Offline areas are not available on this device",
   "offlineDelete": "Delete",
-  "offlineFailed": "Download failed"
+  "offlineFailed": "Download failed",
+  "offlineStorageTitle": "تخزين الخرائط",
+  "offlineStorageOnDevice": "{mb} ميغابايت على هذا الجهاز",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} ميغابايت في المناطق المحفوظة · {tiles} بلاطة",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "الباقي هو الخريطة التي اطّلعت عليها، محفوظة لتظل تُرسم دون اتصال، بالإضافة إلى العبء الخاص بقاعدة البيانات."
 }

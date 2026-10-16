@@ -215,5 +215,26 @@
   "offlineNoTiles": "Kacheln sind deaktiviert",
   "offlineUnsupported": "Auf diesem Gerät nicht verfügbar",
   "offlineDelete": "Löschen",
-  "offlineFailed": "Download fehlgeschlagen"
+  "offlineFailed": "Download fehlgeschlagen",
+  "offlineStorageTitle": "Kartenspeicher",
+  "offlineStorageOnDevice": "{mb} MB auf diesem Gerät",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB in behaltenen Gebieten · {tiles} Kacheln",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Der Rest ist Karte, die Sie angesehen haben, behalten damit sie offline weiter gezeichnet wird, plus der Overhead der Datenbank selbst."
 }
