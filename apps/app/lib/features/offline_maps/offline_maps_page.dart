@@ -226,6 +226,37 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                     ).textTheme.bodySmall?.copyWith(color: kTextMuted),
                   ),
                   const SizedBox(height: 16),
+                  // The download belongs to neither card: only one runs at a
+                  // time, it outlives this screen, and it can have been
+                  // started by either. Showing it inside the radius card
+                  // labelled a country download "keep the area around me".
+                  if (state.progress case final progress?) ...[
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.downloadName,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 8),
+                            LinearProgressIndicator(value: progress.fraction),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.offlineDownloading(
+                                progress.tilesDone.toString(),
+                                progress.tilesTotal.toString(),
+                                _megabytes(progress.bytes),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -236,42 +267,27 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                             l10n.offlineAroundMe,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          // Hidden while a download runs rather than
-                          // disabled. The download outlives this screen, so
-                          // coming back builds a fresh slider at the default,
-                          // which would sit reading 10 km under the progress
-                          // bar of a 50 km download.
-                          if (state.progress == null) ...[
-                            Text(
-                              l10n.offlineRadius(_radiusKm.round().toString()),
+                          Text(
+                            l10n.offlineRadius(_radiusKm.round().toString()),
+                          ),
+                          Slider(
+                            value: _radiusKm,
+                            min: _stepKm,
+                            max: _maxRadiusKm,
+                            divisions: (_maxRadiusKm / _stepKm).round() - 1,
+                            onChanged: state.progress != null
+                                ? null
+                                : (value) => setState(() => _radiusKm = value),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: ElevatedButton(
+                              onPressed: state.progress != null
+                                  ? null
+                                  : _startAroundMe,
+                              child: Text(l10n.offlineDownload),
                             ),
-                            Slider(
-                              value: _radiusKm,
-                              min: _stepKm,
-                              max: _maxRadiusKm,
-                              divisions: (_maxRadiusKm / _stepKm).round() - 1,
-                              onChanged: (value) =>
-                                  setState(() => _radiusKm = value),
-                            ),
-                          ],
-                          if (state.progress case final progress?) ...[
-                            LinearProgressIndicator(value: progress.fraction),
-                            const SizedBox(height: 8),
-                            Text(
-                              l10n.offlineDownloading(
-                                progress.tilesDone.toString(),
-                                progress.tilesTotal.toString(),
-                                _megabytes(progress.bytes),
-                              ),
-                            ),
-                          ] else
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: ElevatedButton(
-                                onPressed: _startAroundMe,
-                                child: Text(l10n.offlineDownload),
-                              ),
-                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -409,6 +425,18 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                               title: Text(
                                 area.name.isEmpty ? '#${area.id}' : area.name,
                               ),
+                              // Absent for an area kept by a build that
+                              // wrote no record. Showing nothing is right;
+                              // showing 0.0 MB would be a measurement.
+                              subtitle: switch (state.costs[area.key]) {
+                                final cost? => Text(
+                                  l10n.offlineAreaCost(
+                                    _megabytes(cost.bytes),
+                                    cost.tiles.toString(),
+                                  ),
+                                ),
+                                _ => null,
+                              },
                               trailing: IconButton(
                                 tooltip: l10n.offlineDelete,
                                 icon: const Icon(Icons.delete_outline_rounded),

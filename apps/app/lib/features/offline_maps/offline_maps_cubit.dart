@@ -17,6 +17,7 @@ class OfflineMapsState {
     this.costs = const {},
     this.storageBytes,
     this.progress,
+    this.downloadName = '',
     this.failed = false,
   });
 
@@ -29,6 +30,11 @@ class OfflineMapsState {
   /// The download in flight, or null when none is.
   final OfflineProgress? progress;
 
+  /// What that download is of, as the user asked for it — "10 km" or
+  /// "France". Carried in the state because only one download runs at a
+  /// time and the screen has to say which one it is showing.
+  final String downloadName;
+
   /// Raised once when a download fails, cleared by whoever reported it.
   final bool failed;
 
@@ -40,6 +46,7 @@ class OfflineMapsState {
     int? storageBytes,
     OfflineProgress? progress,
     bool clearProgress = false,
+    String? downloadName,
     bool? failed,
   }) => OfflineMapsState(
     loading: loading ?? this.loading,
@@ -48,6 +55,7 @@ class OfflineMapsState {
     costs: costs ?? this.costs,
     storageBytes: storageBytes ?? this.storageBytes,
     progress: clearProgress ? null : progress ?? this.progress,
+    downloadName: clearProgress ? '' : downloadName ?? this.downloadName,
     failed: failed ?? this.failed,
   );
 
@@ -136,6 +144,7 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
     if (tiles == null || isDownloading) return;
     _downloadKey = key;
     emit(state.copyWith(clearProgress: true, failed: false));
+    emit(state.copyWith(downloadName: name));
     _download = tiles
         .download(
           styleUrl: styleUrl,
