@@ -4,13 +4,18 @@ import 'package:geo/geo.dart';
 
 /// How many resources a download of [bounds] between the two zooms will fetch.
 ///
-/// Exact, not an estimate. The renderer walks the standard slippy-map grid, so
-/// the count is geometry — and the arithmetic was checked against seven
-/// measured downloads on an Android 12 device, from 918 tiles to 180,685:
-/// every one of them fetched exactly this many plus 395. Those 395 are the
-/// style, its sprites and its glyph ranges, which are the same whatever area
-/// is asked for, and are counted here so the figure matches what the progress
-/// bar will show.
+/// The tiles are exact, not an estimate. The renderer walks the standard
+/// slippy-map grid, so that part is geometry — and the arithmetic was checked
+/// against seven measured downloads on an Android 12 device, from 918 tiles
+/// to 180,685: every one of them fetched exactly this many plus 395.
+///
+/// Those 395 are the style, its sprites and its glyph ranges. They do not
+/// vary with the area, which is what makes them a constant here — but they
+/// were measured against one style in one language, and the glyph ranges a
+/// style needs depend on the alphabet it labels in. Expect the constant to
+/// be wrong for a language that is not written in Latin script. It is a
+/// rounding error against any real download and the error does not grow with
+/// the area, so it is carried rather than modelled.
 ///
 /// Worth having because bytes cannot be predicted the same way: the same
 /// number of tiles measured 1.1 KB each over open country and 11 KB each over
@@ -28,7 +33,8 @@ int tilesForDownload({
   return total + _fixedResources;
 }
 
-/// Style, sprites and glyphs: constant, and measured.
+/// Style, sprites and glyphs: measured against a Latin-script style, and
+/// independent of the area asked for. See the note above.
 const _fixedResources = 395;
 
 int _tilesAtZoom(GeoBounds bounds, int z) {

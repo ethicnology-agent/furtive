@@ -4,11 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/features/offline_maps/countries.dart';
 import 'package:furtive/features/offline_maps/country_picker.dart';
+import 'package:furtive/features/offline_maps/offline_ledger.dart';
 import 'package:furtive/features/offline_maps/offline_maps_cubit.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
 import 'package:map_view/map_view.dart';
 import 'package:ui_kit/ui_kit.dart';
+
+const _minZoom = 10.0;
+const _maxZoom = 15.0;
+
+/// Bounded by the plugin's JNI leak, not by the renderer — see the
+/// measurements on [_OfflineMapsPageState].
+const _maxRadiusKm = 50.0;
+
+/// The slider moves in tens. Those measurements are what makes a finer step
+/// pointless: between 10 and 20 km a rural download grows by a couple of
+/// megabytes, and a dense one by tens — neither is a quantity a user picks
+/// to the kilometre, and offering 50 stops implied a precision the cost does
+/// not have.
+const _stepKm = 10.0;
 
 /// Choosing which map areas survive going offline.
 ///
@@ -86,18 +101,6 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   // seconds, an order of magnitude below where the abort has ever been
   // seen. The slider is not capped by the renderer, it is capped by the
   // plugin bug it has to survive. Raise it when that is fixed upstream.
-  static const _minZoom = 10.0;
-  static const _maxZoom = 15.0;
-
-  /// Bounded by the plugin's JNI leak, not by the renderer — see above.
-  static const _maxRadiusKm = 50.0;
-
-  /// The slider moves in tens. The measurements above are what makes a finer
-  /// step pointless: between 10 and 20 km a rural download grows by a couple
-  /// of megabytes, and a dense one by tens — neither is a quantity a user
-  /// picks to the kilometre, and offering 50 stops implied a precision the
-  /// cost does not have.
-  static const _stepKm = 10.0;
 
   /// The only things this screen still owns: where the slider is and which
   /// country is in the picker. Everything else outlives it.
@@ -117,9 +120,6 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   static void _show(ScaffoldMessengerState messenger, SnackBar bar) => messenger
     ..hideCurrentSnackBar()
     ..showSnackBar(bar);
-
-  static String _megabytes(int bytes) =>
-      (bytes / 1024 / 1024).toStringAsFixed(1);
 
   /// Resolves the style and hands the request over. Shared by both cards:
   /// which rectangle is wanted is their business, everything after it is not.
@@ -201,265 +201,354 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
       },
       builder: (context, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.offlineTitle)),
-        body: state.loading
-            ? const Center(child: CircularProgressIndicator())
-            : !state.supported
-            ? Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    l10n.offlineUnsupported,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
-            : ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                children: [
-                  Text(
-                    l10n.offlineExplainer,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: kTextMuted),
-                  ),
-                  const SizedBox(height: 16),
-                  // The download belongs to neither card: only one runs at a
-                  // time, it outlives this screen, and it can have been
-                  // started by either. Showing it inside the radius card
-                  // labelled a country download "keep the area around me".
-                  if (state.download case final download?) ...[
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              download.name,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 8),
-                            LinearProgressIndicator(
-                              value: download.progress.fraction,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              l10n.offlineDownloading(
-                                download.progress.tilesDone.toString(),
-                                download.progress.tilesTotal.toString(),
-                                _megabytes(download.progress.bytes),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.offlineAroundMe,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            l10n.offlineRadius(_radiusKm.round().toString()),
-                          ),
-                          Slider(
-                            value: _radiusKm,
-                            min: _stepKm,
-                            max: _maxRadiusKm,
-                            divisions: (_maxRadiusKm / _stepKm).round() - 1,
-                            onChanged: state.download != null
-                                ? null
-                                : (value) => setState(() => _radiusKm = value),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: ElevatedButton(
-                              onPressed: state.download != null
-                                  ? null
-                                  : _startAroundMe,
-                              child: Text(l10n.offlineDownload),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.offlineCountry,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            l10n.offlineCountryBox,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodySmall?.copyWith(color: kTextMuted),
-                          ),
-                          const SizedBox(height: 8),
-                          if (_country case final country?) ...[
-                            Text(country.name),
-                            // Exact, not an estimate — the count is geometry.
-                            // Bytes are not shown because they cannot be
-                            // predicted: the same tile measured 1.1 KB over
-                            // open country and 11 KB over Paris.
-                            Text(
-                              l10n.offlineCountryTiles(
-                                tilesForDownload(
-                                  bounds: country.bounds,
-                                  minZoom: _minZoom,
-                                  maxZoom: _maxZoom,
-                                ).toString(),
-                              ),
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(color: kTextMuted),
-                            ),
-                          ],
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: state.download != null
-                                    ? null
-                                    : () async {
-                                        final picked = await showCountryPicker(
-                                          context,
-                                        );
-                                        if (picked != null && mounted) {
-                                          setState(() => _country = picked);
-                                        }
-                                      },
-                                child: Text(l10n.offlineCountryPick),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                onPressed:
-                                    state.download != null || _country == null
-                                    ? null
-                                    : () => _startCountry(_country!),
-                                child: Text(l10n.offlineDownload),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (state.storageBytes case final bytes?) ...[
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.offlineStorageTitle,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              l10n.offlineStorageOnDevice(_megabytes(bytes)),
-                            ),
-                            Text(
-                              l10n.offlineStorageKept(
-                                _megabytes(state.keptBytes),
-                                state.keptTiles.toString(),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              l10n.offlineStorageCached,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(color: kTextMuted),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                // Only what accumulated behind them: the
-                                // areas they asked for are not evictable and
-                                // are not touched.
-                                onPressed: state.download != null
-                                    ? null
-                                    : () => context
-                                          .read<OfflineMapsCubit>()
-                                          .clearCache(),
-                                child: Text(l10n.offlineClearCache),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  if (state.areas.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        l10n.offlineNone,
-                        style: TextStyle(color: kTextMuted),
-                      ),
-                    )
-                  else
-                    Card(
-                      clipBehavior: Clip.antiAlias,
-                      child: Column(
-                        children: [
-                          for (final area in state.areas)
-                            ListTile(
-                              leading: const Icon(Icons.map_outlined),
-                              title: Text(
-                                area.name.isEmpty ? '#${area.id}' : area.name,
-                              ),
-                              // Absent for an area kept by a build that
-                              // wrote no record. Showing nothing is right;
-                              // showing 0.0 MB would be a measurement.
-                              subtitle: switch (state.costs[area.key]) {
-                                final cost? => Text(
-                                  cost.complete
-                                      ? l10n.offlineAreaCost(
-                                          _megabytes(cost.bytes),
-                                          cost.tiles.toString(),
-                                        )
-                                      // Asking for it again finishes it from
-                                      // the tiles already stored.
-                                      : l10n.offlineAreaCostPartial(
-                                          _megabytes(cost.bytes),
-                                          cost.tiles.toString(),
-                                        ),
-                                ),
-                                _ => null,
-                              },
-                              trailing: IconButton(
-                                tooltip: l10n.offlineDelete,
-                                icon: const Icon(Icons.delete_outline_rounded),
-                                onPressed: () => context
-                                    .read<OfflineMapsCubit>()
-                                    .delete(area.id),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+        body: switch (state) {
+          OfflineMapsState(loading: true) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          OfflineMapsState(supported: false) => Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.offlineUnsupported, textAlign: TextAlign.center),
+            ),
+          ),
+          _ => _Body(
+            state: state,
+            radiusKm: _radiusKm,
+            country: _country,
+            onRadiusChanged: (value) => setState(() => _radiusKm = value),
+            onPickCountry: () async {
+              final picked = await showCountryPicker(context);
+              if (picked != null && mounted) {
+                setState(() => _country = picked);
+              }
+            },
+            onDownloadAroundMe: _startAroundMe,
+            onDownloadCountry: _startCountry,
+          ),
+        },
       ),
     );
   }
 }
+
+class _Body extends StatelessWidget {
+  const _Body({
+    required this.state,
+    required this.radiusKm,
+    required this.country,
+    required this.onRadiusChanged,
+    required this.onPickCountry,
+    required this.onDownloadAroundMe,
+    required this.onDownloadCountry,
+  });
+
+  final OfflineMapsState state;
+  final double radiusKm;
+  final Country? country;
+  final ValueChanged<double> onRadiusChanged;
+  final VoidCallback onPickCountry;
+  final VoidCallback onDownloadAroundMe;
+  final ValueChanged<Country> onDownloadCountry;
+
+  /// Nothing may be asked for while something is being fetched: the store
+  /// runs one download at a time.
+  bool get _idle => state.download == null;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      children: [
+        Text(
+          l10n.offlineExplainer,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: kTextMuted),
+        ),
+        const SizedBox(height: 16),
+        // The download belongs to neither card below: only one runs at a
+        // time, it outlives this screen, and it can have been started by
+        // either. Showing it inside the radius card labelled a country
+        // download "keep the area around me".
+        if (state.download case final download?) ...[
+          _DownloadCard(download: download),
+          const SizedBox(height: 16),
+        ],
+        _AroundMeCard(
+          radiusKm: radiusKm,
+          enabled: _idle,
+          onChanged: onRadiusChanged,
+          onDownload: onDownloadAroundMe,
+        ),
+        const SizedBox(height: 16),
+        _CountryCard(
+          country: country,
+          enabled: _idle,
+          onPick: onPickCountry,
+          onDownload: onDownloadCountry,
+        ),
+        const SizedBox(height: 16),
+        if (state.storageBytes case final bytes?) ...[
+          _StorageCard(bytes: bytes, state: state, canClear: _idle),
+          const SizedBox(height: 16),
+        ],
+        _KeptAreas(state: state),
+      ],
+    );
+  }
+}
+
+/// The chrome every section on this screen shares.
+class _Section extends StatelessWidget {
+  const _Section({required this.title, required this.children});
+
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => Card(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          ...children,
+        ],
+      ),
+    ),
+  );
+}
+
+/// Muted explanatory text, as every section uses it.
+class _Note extends StatelessWidget {
+  const _Note(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: kTextMuted),
+  );
+}
+
+class _DownloadCard extends StatelessWidget {
+  const _DownloadCard({required this.download});
+
+  final OfflineDownload download;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final progress = download.progress;
+    return _Section(
+      title: download.name,
+      children: [
+        const SizedBox(height: 8),
+        LinearProgressIndicator(value: progress.fraction),
+        const SizedBox(height: 8),
+        Text(
+          l10n.offlineDownloading(
+            progress.tilesDone.toString(),
+            progress.tilesTotal.toString(),
+            _megabytes(progress.bytes),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AroundMeCard extends StatelessWidget {
+  const _AroundMeCard({
+    required this.radiusKm,
+    required this.enabled,
+    required this.onChanged,
+    required this.onDownload,
+  });
+
+  final double radiusKm;
+  final bool enabled;
+  final ValueChanged<double> onChanged;
+  final VoidCallback onDownload;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return _Section(
+      title: l10n.offlineAroundMe,
+      children: [
+        Text(l10n.offlineRadius(radiusKm.round().toString())),
+        Slider(
+          value: radiusKm,
+          min: _stepKm,
+          max: _maxRadiusKm,
+          divisions: (_maxRadiusKm / _stepKm).round() - 1,
+          onChanged: enabled ? onChanged : null,
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: ElevatedButton(
+            onPressed: enabled ? onDownload : null,
+            child: Text(l10n.offlineDownload),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CountryCard extends StatelessWidget {
+  const _CountryCard({
+    required this.country,
+    required this.enabled,
+    required this.onPick,
+    required this.onDownload,
+  });
+
+  final Country? country;
+  final bool enabled;
+  final VoidCallback onPick;
+  final ValueChanged<Country> onDownload;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final chosen = country;
+    return _Section(
+      title: l10n.offlineCountry,
+      children: [
+        _Note(l10n.offlineCountryBox),
+        const SizedBox(height: 8),
+        if (chosen != null) ...[
+          Text(chosen.name),
+          // Exact, not an estimate — the count is geometry. Bytes are not
+          // shown because they cannot be predicted: the same tile measured
+          // 1.1 KB over open country and 11 KB over Paris.
+          _Note(
+            l10n.offlineCountryTiles(
+              tilesForDownload(
+                bounds: chosen.bounds,
+                minZoom: _minZoom,
+                maxZoom: _maxZoom,
+              ).toString(),
+            ),
+          ),
+        ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: enabled ? onPick : null,
+              child: Text(l10n.offlineCountryPick),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              onPressed: enabled && chosen != null
+                  ? () => onDownload(chosen)
+                  : null,
+              child: Text(l10n.offlineDownload),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _StorageCard extends StatelessWidget {
+  const _StorageCard({
+    required this.bytes,
+    required this.state,
+    required this.canClear,
+  });
+
+  final int bytes;
+  final OfflineMapsState state;
+  final bool canClear;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return _Section(
+      title: l10n.offlineStorageTitle,
+      children: [
+        const SizedBox(height: 4),
+        Text(l10n.offlineStorageOnDevice(_megabytes(bytes))),
+        Text(
+          l10n.offlineStorageKept(
+            _megabytes(state.keptBytes),
+            state.keptTiles.toString(),
+          ),
+        ),
+        const SizedBox(height: 4),
+        _Note(l10n.offlineStorageCached),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            // Only what accumulated behind them: the areas they asked for
+            // are not evictable and are not touched.
+            onPressed: canClear
+                ? () => context.read<OfflineMapsCubit>().clearCache()
+                : null,
+            child: Text(l10n.offlineClearCache),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _KeptAreas extends StatelessWidget {
+  const _KeptAreas({required this.state});
+
+  final OfflineMapsState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    if (state.areas.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(l10n.offlineNone, style: TextStyle(color: kTextMuted)),
+      );
+    }
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          for (final area in state.areas)
+            ListTile(
+              leading: const Icon(Icons.map_outlined),
+              title: Text(area.name.isEmpty ? '#${area.id}' : area.name),
+              subtitle: _cost(l10n, state.costs[area.key]),
+              trailing: IconButton(
+                tooltip: l10n.offlineDelete,
+                icon: const Icon(Icons.delete_outline_rounded),
+                onPressed: () =>
+                    context.read<OfflineMapsCubit>().delete(area.id),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Null for an area kept by a build that wrote no record. Showing nothing
+  /// is right; showing 0.0 MB would be a measurement.
+  Widget? _cost(AppLocalizations l10n, OfflineAreaCost? cost) {
+    if (cost == null) return null;
+    final mb = _megabytes(cost.bytes);
+    final tiles = cost.tiles.toString();
+    return Text(
+      cost.complete
+          ? l10n.offlineAreaCost(mb, tiles)
+          // Asking for it again finishes it from the tiles already stored.
+          : l10n.offlineAreaCostPartial(mb, tiles),
+    );
+  }
+}
+
+String _megabytes(int bytes) => (bytes / 1024 / 1024).toStringAsFixed(1);
