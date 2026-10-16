@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "保存した範囲に {mb} MB · {tiles} タイル",
+  "offlineStorageKept": "保存した範囲のために {mb} MB 取得 · {tiles} タイル",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "残りは、オフラインでも描画できるよう保持された、あなたが見た地図と、データベース自体のオーバーヘッドです。",
+  "offlineStorageCached": "範囲が重なるとタイルを共有するため、この値は合計を上回ることがあります。どの範囲にも含まれない分は、見た地図とデータベース自体のオーバーヘッドです。",
   "offlineClearCache": "キャッシュを削除",
   "offlineCountry": "国を保存",
   "offlineCountryPick": "国を選択",

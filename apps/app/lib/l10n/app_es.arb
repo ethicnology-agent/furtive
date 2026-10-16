@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB en áreas guardadas · {tiles} teselas",
+  "offlineStorageKept": "{mb} MB descargados para las áreas guardadas · {tiles} teselas",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "El resto es el mapa que has consultado, conservado para que siga dibujándose sin conexión, más la sobrecarga propia de la base de datos.",
+  "offlineStorageCached": "Las áreas que se solapan comparten sus teselas, por lo que esa cifra puede superar el total. Lo que no está en ningún área es el mapa que has consultado, más la sobrecarga de la base de datos.",
   "offlineClearCache": "Vaciar caché",
   "offlineCountry": "Guardar un país",
   "offlineCountryPick": "Elegir un país",

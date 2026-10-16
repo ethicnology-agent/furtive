@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB nelle aree conservate · {tiles} tasselli",
+  "offlineStorageKept": "{mb} MB scaricati per le aree conservate · {tiles} tasselli",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Il resto è la mappa che hai guardato, conservata perché continui a essere disegnata offline, più l'overhead del database stesso.",
+  "offlineStorageCached": "Le aree che si sovrappongono condividono i tasselli, quindi quel valore può superare il totale. Ciò che non è in un'area è la mappa che hai guardato, più l'overhead del database.",
   "offlineClearCache": "Svuota cache",
   "offlineCountry": "Conservare un paese",
   "offlineCountryPick": "Scegliere un paese",

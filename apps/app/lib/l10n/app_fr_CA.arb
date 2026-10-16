@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} Mo dans les zones conservées · {tiles} tuiles",
+  "offlineStorageKept": "{mb} Mo téléchargés pour les zones conservées · {tiles} tuiles",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Le reste est la carte que vous avez consultée, conservée pour qu'elle s'affiche encore hors ligne, plus la surcharge propre à la base de données.",
+  "offlineStorageCached": "Des zones qui se chevauchent partagent leurs tuiles, donc ce chiffre peut dépasser le total. Ce qui n'est dans aucune zone est la carte que vous avez consultée, plus la surcharge propre à la base de données.",
   "offlineClearCache": "Vider le cache",
   "offlineCountry": "Conserver un pays",
   "offlineCountryPick": "Choisir un pays",

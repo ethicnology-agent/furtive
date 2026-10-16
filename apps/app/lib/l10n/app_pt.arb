@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB nas áreas guardadas · {tiles} blocos",
+  "offlineStorageKept": "{mb} MB transferidos para as áreas guardadas · {tiles} blocos",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "O resto é o mapa que consultou, guardado para continuar a ser desenhado offline, mais a sobrecarga da própria base de dados.",
+  "offlineStorageCached": "Áreas sobrepostas partilham os seus blocos, pelo que esse valor pode exceder o total. O que não está numa área é o mapa que consultou, mais a sobrecarga da base de dados.",
   "offlineClearCache": "Limpar cache",
   "offlineCountry": "Guardar um país",
   "offlineCountryPick": "Escolher um país",

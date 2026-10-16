@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB v uložených oblastech · {tiles} dlaždic",
+  "offlineStorageKept": "{mb} MB staženo pro uložené oblasti · {tiles} dlaždic",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Zbytek je mapa, kterou jste si prohlíželi, uchovaná aby se stále vykreslovala offline, plus režie samotné databáze.",
+  "offlineStorageCached": "Překrývající se oblasti sdílejí dlaždice, takže toto číslo může překročit celek. Co není v žádné oblasti, je mapa, kterou jste si prohlíželi, plus režie databáze.",
   "offlineClearCache": "Vymazat mezipaměť",
   "offlineCountry": "Uložit zemi",
   "offlineCountryPick": "Vyberte zemi",

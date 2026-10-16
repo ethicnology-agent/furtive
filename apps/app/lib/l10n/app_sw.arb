@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB katika maeneo yaliyohifadhiwa · vigae {tiles}",
+  "offlineStorageKept": "{mb} MB zimepakuliwa kwa maeneo yaliyohifadhiwa · vigae {tiles}",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Iliyobaki ni ramani uliyoitazama, imehifadhiwa ili bado ichorwe nje ya mtandao, pamoja na gharama ya ziada ya hifadhidata yenyewe.",
+  "offlineStorageCached": "Maeneo yanayoingiliana hushiriki vigae vyake, hivyo takwimu hiyo inaweza kuzidi jumla. Kisichomo katika eneo ni ramani uliyoitazama, pamoja na gharama ya hifadhidata.",
   "offlineClearCache": "Futa akiba",
   "offlineCountry": "Hifadhi nchi",
   "offlineCountryPick": "Chagua nchi",

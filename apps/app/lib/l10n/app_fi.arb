@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} Mt säilytetyillä alueilla · {tiles} ruutua",
+  "offlineStorageKept": "{mb} Mt haettu säilytetyille alueille · {tiles} ruutua",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Loput on karttaa, jota olet katsonut, säilytettynä niin että se piirtyy yhä offline-tilassa, sekä tietokannan oma ylimääräinen tila.",
+  "offlineStorageCached": "Päällekkäiset alueet jakavat ruutunsa, joten luku voi ylittää kokonaismäärän. Se mikä ei kuulu alueeseen on katsomaasi karttaa sekä tietokannan ylimääräinen tila.",
   "offlineClearCache": "Tyhjennä välimuisti",
   "offlineCountry": "Säilytä maa",
   "offlineCountryPick": "Valitse maa",

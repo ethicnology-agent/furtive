@@ -315,7 +315,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB in areas you keep · {tiles} tiles",
+  "offlineStorageKept": "{mb} MB fetched for areas you keep · {tiles} tiles",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -326,7 +326,7 @@
       }
     }
   },
-  "offlineStorageCached": "The rest is map you looked at, kept so it still draws offline, plus the database's own overhead.",
+  "offlineStorageCached": "Overlapping areas share their tiles, so that figure can exceed the total. Whatever is not in an area is map you looked at, plus the database's own overhead.",
   "offlineClearCache": "Clear cache",
   "offlineCountry": "Keep a country",
   "offlineCountryPick": "Choose a country",

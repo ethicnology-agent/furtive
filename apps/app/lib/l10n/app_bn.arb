@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "সংরক্ষিত এলাকায় {mb} MB · {tiles}টি টাইল",
+  "offlineStorageKept": "সংরক্ষিত এলাকার জন্য {mb} MB নামানো · {tiles}টি টাইল",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "বাকিটা আপনার দেখা মানচিত্র, অফলাইনেও যাতে আঁকা হয় সে জন্য রাখা, সঙ্গে ডেটাবেসের নিজস্ব ওভারহেড।",
+  "offlineStorageCached": "পরস্পর ছেদ করা এলাকা টাইল ভাগ করে, তাই এই সংখ্যা মোটের চেয়ে বেশি হতে পারে। কোনো এলাকায় নেই এমনটা আপনার দেখা মানচিত্র, সঙ্গে ডেটাবেসের ওভারহেড।",
   "offlineClearCache": "ক্যাশ মুছুন",
   "offlineCountry": "একটি দেশ রাখুন",
   "offlineCountryPick": "একটি দেশ বাছুন",

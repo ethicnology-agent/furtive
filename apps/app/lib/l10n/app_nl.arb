@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB in bewaarde gebieden · {tiles} tegels",
+  "offlineStorageKept": "{mb} MB opgehaald voor bewaarde gebieden · {tiles} tegels",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "De rest is kaart die je hebt bekeken, bewaard zodat die offline nog wordt getekend, plus de overhead van de database zelf.",
+  "offlineStorageCached": "Overlappende gebieden delen hun tegels, dus dat getal kan het totaal overschrijden. Wat in geen enkel gebied zit, is kaart die je hebt bekeken, plus de overhead van de database.",
   "offlineClearCache": "Cache wissen",
   "offlineCountry": "Een land bewaren",
   "offlineCountryPick": "Kies een land",

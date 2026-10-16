@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB în zonele păstrate · {tiles} dale",
+  "offlineStorageKept": "{mb} MB descărcați pentru zonele păstrate · {tiles} dale",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Restul este harta pe care ați consultat-o, păstrată ca să se deseneze în continuare offline, plus supraîncărcarea bazei de date.",
+  "offlineStorageCached": "Zonele suprapuse își împart dalele, deci acea cifră poate depăși totalul. Ce nu se află într-o zonă este harta pe care ați consultat-o, plus supraîncărcarea bazei de date.",
   "offlineClearCache": "Golește cache-ul",
   "offlineCountry": "Păstrează o țară",
   "offlineCountryPick": "Alegeți o țară",

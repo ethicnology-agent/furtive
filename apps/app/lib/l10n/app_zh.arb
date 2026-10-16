@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "保留区域共 {mb} MB · {tiles} 个瓦片",
+  "offlineStorageKept": "为保留区域下载了 {mb} MB · {tiles} 个瓦片",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "其余是你浏览过的地图，保留下来以便离线时仍能绘制，加上数据库本身的开销。",
+  "offlineStorageCached": "重叠的区域共享瓦片，因此该数字可能超过总量。不属于任何区域的部分，是你浏览过的地图以及数据库本身的开销。",
   "offlineClearCache": "清除缓存",
   "offlineCountry": "保留一个国家",
   "offlineCountryPick": "选择国家",

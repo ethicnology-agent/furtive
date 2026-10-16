@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "Saklanan alanlarda {mb} MB · {tiles} döşeme",
+  "offlineStorageKept": "Saklanan alanlar için {mb} MB indirildi · {tiles} döşeme",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Geri kalanı, çevrimdışıyken hâlâ çizilsin diye saklanan, baktığınız haritadır; artı veritabanının kendi ek yüküdür.",
+  "offlineStorageCached": "Üst üste binen alanlar döşemelerini paylaşır, bu yüzden bu sayı toplamı aşabilir. Hiçbir alanda olmayan, baktığınız harita ile veritabanının ek yüküdür.",
   "offlineClearCache": "Önbelleği temizle",
   "offlineCountry": "Bir ülkeyi sakla",
   "offlineCountryPick": "Bir ülke seçin",

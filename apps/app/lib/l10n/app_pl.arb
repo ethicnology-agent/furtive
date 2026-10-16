@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB w zachowanych obszarach · {tiles} kafelków",
+  "offlineStorageKept": "{mb} MB pobrane dla zachowanych obszarów · {tiles} kafelków",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Reszta to mapa, którą oglądano, zachowana aby nadal rysowała się offline, plus narzut samej bazy danych.",
+  "offlineStorageCached": "Nakładające się obszary współdzielą kafelki, więc ta liczba może przekroczyć całość. To, czego nie ma w żadnym obszarze, to oglądana mapa plus narzut bazy danych.",
   "offlineClearCache": "Wyczyść pamięć podręczną",
   "offlineCountry": "Zachowaj kraj",
   "offlineCountryPick": "Wybierz kraj",

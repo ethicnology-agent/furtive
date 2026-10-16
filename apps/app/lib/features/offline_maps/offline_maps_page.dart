@@ -126,12 +126,27 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   Future<void> _download({
     required GeoBounds bounds,
     required String name,
-    required String key,
+    required String what,
   }) async {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
     final cubit = context.read<OfflineMapsCubit>();
-    final style = await widget.styleUrl();
+    final String? style;
+    try {
+      style = await widget.styleUrl();
+    } on Object {
+      // Resolving the style reaches the network, and a failure there is a
+      // failed download like any other rather than an error nobody reports.
+      if (!mounted) return;
+      _show(
+        messenger,
+        SnackBar(
+          content: Text(l10n.offlineFailed),
+          backgroundColor: AppColors.destructive.background,
+        ),
+      );
+      return;
+    }
     if (!mounted) return;
     if (style == null) {
       _show(messenger, SnackBar(content: Text(l10n.offlineNoTiles)));
@@ -147,9 +162,21 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
       minZoom: _minZoom,
       maxZoom: _maxZoom,
       name: name,
-      key: key,
+      // The style is part of what was asked for, not just how it is drawn.
+      // Two themes, or two label languages, need different style documents,
+      // sprites and glyphs — so a download in one must not be swept away by
+      // the same area downloaded in the other.
+      key: '$what/$_minZoom-$_maxZoom@${_styleIdentity(style)}',
     );
   }
+
+  /// A short, stable stand-in for the style URL.
+  ///
+  /// The URL carries the API key, and the key goes into region metadata that
+  /// this application exports in its diagnostics. A hash identifies the
+  /// style just as well without writing the secret down.
+  static String _styleIdentity(String styleUrl) =>
+      styleUrl.hashCode.toRadixString(16);
 
   Future<void> _startAroundMe() async {
     final l10n = AppLocalizations.of(context);
@@ -169,18 +196,22 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
     // download — the renderer has no resume, it starts a second region that
     // reuses the tiles the first one already stored — and this is what lets
     // the leftover be recognised afterwards.
-    final key =
+    final what =
         '${centre.latitude.toStringAsFixed(3)},'
         '${centre.longitude.toStringAsFixed(3)}'
-        '@${_radiusKm.round()}/$_minZoom-$_maxZoom';
-    await _download(bounds: bounds, name: '${_radiusKm.round()} km', key: key);
+        '@${_radiusKm.round()}';
+    await _download(
+      bounds: bounds,
+      name: '${_radiusKm.round()} km',
+      what: what,
+    );
   }
 
   Future<void> _startCountry(Country country) => _download(
     bounds: country.bounds,
     name: country.name,
     // The box is fixed, so the code alone identifies the request.
-    key: 'country:${country.code}/$_minZoom-$_maxZoom',
+    what: 'country:${country.code}',
   );
 
   @override

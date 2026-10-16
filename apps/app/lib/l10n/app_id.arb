@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB di area tersimpan · {tiles} ubin",
+  "offlineStorageKept": "{mb} MB diunduh untuk area tersimpan · {tiles} ubin",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Sisanya adalah peta yang pernah Anda lihat, disimpan agar tetap tergambar offline, ditambah overhead basis data itu sendiri.",
+  "offlineStorageCached": "Area yang bertumpang tindih berbagi ubin, jadi angka itu bisa melebihi total. Yang tidak berada dalam area adalah peta yang Anda lihat, ditambah overhead basis data.",
   "offlineClearCache": "Hapus cache",
   "offlineCountry": "Simpan sebuah negara",
   "offlineCountryPick": "Pilih negara",

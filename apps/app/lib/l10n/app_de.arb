@@ -225,7 +225,7 @@
       }
     }
   },
-  "offlineStorageKept": "{mb} MB in behaltenen Gebieten · {tiles} Kacheln",
+  "offlineStorageKept": "{mb} MB für behaltene Gebiete geladen · {tiles} Kacheln",
   "@offlineStorageKept": {
     "placeholders": {
       "mb": {
@@ -236,7 +236,7 @@
       }
     }
   },
-  "offlineStorageCached": "Der Rest ist Karte, die Sie angesehen haben, behalten damit sie offline weiter gezeichnet wird, plus der Overhead der Datenbank selbst.",
+  "offlineStorageCached": "Überlappende Gebiete teilen sich ihre Kacheln, daher kann dieser Wert das Gesamtvolumen übersteigen. Was in keinem Gebiet liegt, ist angesehene Karte plus der Overhead der Datenbank.",
   "offlineClearCache": "Cache leeren",
   "offlineCountry": "Ein Land behalten",
   "offlineCountryPick": "Land auswählen",
