@@ -32,34 +32,57 @@ class OfflineMapsPage extends StatefulWidget {
 }
 
 class _OfflineMapsPageState extends State<OfflineMapsPage> {
-  // Measured on an Android 12 device over rural Quebec, z10-15:
+  // Measured on a Samsung SM-G970U1 (Android 12), z10-15, on two places
+  // chosen for how differently they are mapped:
   //
-  //      5 km     636 tiles    6.4 MB   10.1 KB/tile
-  //     10 km   1,213 tiles    8.2 MB    6.8 KB/tile
-  //     25 km   5,109 tiles   19.2 MB    3.8 KB/tile
+  //   rural Quebec (48.0, -71.5)        Paris (48.86, 2.35)
+  //     10 km    1,313 tiles    7.0 MB     5 km      676 tiles   27.9 MB
+  //     25 km    5,585 tiles   10.7 MB    10 km    1,331 tiles   57.0 MB
+  //     50 km   20,847 tiles   27.6 MB    25 km    5,887 tiles  146.2 MB
+  //    100 km   81,050 tiles   86.2 MB    50 km   21,611 tiles  238.2 MB
+  //    150 km  181,080 tiles  199.0 MB
   //
-  // Tiles get cheaper as the area grows, because the ones further out are
-  // emptier. The slider's 25 km maximum is 5,109 tiles — just under
-  // MapLibre's 6,000 cap, which is what makes raising that cap worth doing
-  // rather than theoretical: a second area of that size would cross it.
+  // Two things follow, and the second is why the maximum is what it is.
   //
-  // An earlier note here reasoned that tile count quadruples per zoom level
-  // and concluded a 10 km radius would be hundreds of megabytes. That is
-  // true of a full pyramid and false of a real vector tileset: most tiles at
-  // street zoom are empty and are never fetched, so doubling the radius cost
-  // under two megabytes rather than twenty-five times the download.
+  // Radius is a poor unit of cost. At the same radius and nearly the same
+  // tile count — 1,331 against 1,313 — Paris costs eight times what rural
+  // Quebec does, because a tile there carries eight times the detail. A
+  // figure derived from radius alone would mislead by that factor, so the
+  // screen reports megabytes as they arrive instead of predicting them.
   //
-  // The figures are one rural location and do not generalise: a dense city
-  // carries far more per tile.
+  // MapLibre's 6,000-tile cap is not the ceiling. It is Mapbox heritage —
+  // the Android method is `setOfflineMapboxTileCountLimit` and the C++
+  // header scopes it: "This limit does not apply to non-Mapbox tile
+  // sources." A single 150 km region downloaded all 181,080 of its tiles,
+  // thirty times that cap, and reported complete.
   //
-  // MapLibre's 6,000-tile cap is not among the limits here. It is Mapbox
-  // heritage — the Android method is `setOfflineMapboxTileCountLimit` and
-  // the C++ header scopes it: "This limit does not apply to non-Mapbox tile
-  // sources." Measured rather than taken on faith: with the cap set to 100,
-  // a region needing 636 tiles downloaded all 636 and reported complete.
-  // Nothing here raises it, because nothing here is bound by it.
+  // The real ceiling is a JNI leak in the renderer plugin. Every status
+  // event from a running download allocates JNI references that are never
+  // released: maplibre_android 0.3.5 releases them into the Arena of the
+  // `using` block that `downloadRegion` returns from, which has already
+  // closed by the time any callback fires. The global reference table caps
+  // at 51,200 entries, and when it fills the process aborts —
+  //
+  //   signal 6 (SIGABRT)
+  //   Abort message: 'JNI ERROR (app bug): global reference table overflow
+  //   (max=51200)'  #05 art::JNI<true>::NewGlobalRef  #07 libdartjni.so
+  //
+  // Reproduced twice, with identical abort messages, on 200 km regions. It
+  // is driven by status events and therefore by elapsed download time, not
+  // by tiles: the crashes came after roughly 20 and 28 minutes of
+  // cumulative downloading, while 181,080 fast tiles passed untouched.
+  // maplibre 0.3.6 fixes JNI leaks in StyleController and the map query
+  // methods, but not this path.
+  //
+  // Hence 50 km: the slowest measured download at that radius took 160
+  // seconds, an order of magnitude below where the abort has ever been
+  // seen. The slider is not capped by the renderer, it is capped by the
+  // plugin bug it has to survive. Raise it when that is fixed upstream.
   static const _minZoom = 10.0;
   static const _maxZoom = 15.0;
+
+  /// Bounded by the plugin's JNI leak, not by the renderer — see above.
+  static const _maxRadiusKm = 50.0;
 
   OfflineTiles? _tiles;
   List<OfflineArea> _areas = const [];
@@ -206,8 +229,8 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                         Slider(
                           value: _radiusKm,
                           min: 1,
-                          max: 25,
-                          divisions: 24,
+                          max: _maxRadiusKm,
+                          divisions: _maxRadiusKm.round() - 1,
                           onChanged: _progress != null
                               ? null
                               : (value) => setState(() => _radiusKm = value),
