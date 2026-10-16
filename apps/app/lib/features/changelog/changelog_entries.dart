@@ -17,8 +17,23 @@ class ChangelogRelease {
 ///
 /// On build numbers: the versionCode had stayed at 1 across every release up
 /// to 1.1.0+1, which F-Droid and Android both require to strictly increase
-/// between releases. It was bumped in place to 1.2.0+2, so 1.3.0 must be +3.
+/// between releases. It was bumped in place to 1.2.0+2, so 1.3.0 must be +3
+/// and 1.4.0 must be +4.
 List<ChangelogRelease> changelogReleases(AppLocalizations l10n) => [
+  ChangelogRelease(
+    version: '1.4.0',
+    bullets: [
+      l10n.changelogV140Offline,
+      l10n.changelogV140OfflineCost,
+      l10n.changelogV140Cache,
+      l10n.changelogV140Drift,
+      l10n.changelogV140Elevation,
+      l10n.changelogV140LocationOff,
+      l10n.changelogV140Markers,
+      l10n.changelogV140Stop,
+      l10n.changelogV140SmallScreens,
+    ],
+  ),
   ChangelogRelease(
     version: '1.3.0',
     bullets: [
