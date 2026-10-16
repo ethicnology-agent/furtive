@@ -252,13 +252,20 @@ class _ActivitiesListPageState extends State<ActivitiesListPage> {
                         );
                       }
                       final activity = activities[index];
-                      var title = dateFormat.format(
+                      final when = dateFormat.format(
                         activity.startedAt.toLocal(),
                       );
-                      if (activity.name.isNotEmpty &&
-                          activity.name != kDefaultActivityName) {
-                        title = activity.name;
-                      }
+                      final named =
+                          activity.name.isNotEmpty &&
+                          activity.name != kDefaultActivityName;
+                      // Naming an activity used to cost its date: the name
+                      // replaced it in the one line the card had, and nothing
+                      // else on the card said when. Two activities with the
+                      // same name — a recording and the GPX it was exported
+                      // and re-imported as — were then indistinguishable, and
+                      // the delete dialog says "this activity" without naming
+                      // it either.
+                      final title = named ? activity.name : when;
                       return Card(
                         margin: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -272,35 +279,55 @@ class _ActivitiesListPageState extends State<ActivitiesListPage> {
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 8),
-                            child: Wrap(
-                              spacing: 16,
-                              runSpacing: 4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                // Distance is the one stat emphasized in mint —
-                                // the rest stay muted so the row reads as one
-                                // headline number plus supporting detail instead
-                                // of four equally-loud pills.
-                                StatBlock.compact(
-                                  icon: Icons.straighten_rounded,
-                                  label: l10n.statDistance,
-                                  value:
-                                      '${activity.activeDistanceInKm.fmt2} km',
-                                  emphasize: true,
-                                ),
-                                StatBlock.compact(
-                                  icon: Icons.timer_outlined,
-                                  label: l10n.statDuration,
-                                  value: activity.activeDuration.toHHMMSS(),
-                                ),
-                                StatBlock.compact(
-                                  icon: Icons.speed_rounded,
-                                  label: l10n.statSpeed,
-                                  value: '${activity.activeSpeedKmh.fmt2} km/h',
-                                ),
-                                StatBlock.compact(
-                                  icon: Icons.timelapse_rounded,
-                                  label: l10n.statPace,
-                                  value: '${activity.activePaceMinPerKm} /km',
+                                // Only when the title is the name — an
+                                // unnamed activity is already titled by its
+                                // date and must not print it twice.
+                                if (named) ...[
+                                  Text(
+                                    when,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
+                                Wrap(
+                                  spacing: 16,
+                                  runSpacing: 4,
+                                  children: [
+                                    // Distance is the one stat emphasized in mint —
+                                    // the rest stay muted so the row reads as one
+                                    // headline number plus supporting detail instead
+                                    // of four equally-loud pills.
+                                    StatBlock.compact(
+                                      icon: Icons.straighten_rounded,
+                                      label: l10n.statDistance,
+                                      value:
+                                          '${activity.activeDistanceInKm.fmt2} km',
+                                      emphasize: true,
+                                    ),
+                                    StatBlock.compact(
+                                      icon: Icons.timer_outlined,
+                                      label: l10n.statDuration,
+                                      value: activity.activeDuration.toHHMMSS(),
+                                    ),
+                                    StatBlock.compact(
+                                      icon: Icons.speed_rounded,
+                                      label: l10n.statSpeed,
+                                      value:
+                                          '${activity.activeSpeedKmh.fmt2} km/h',
+                                    ),
+                                    StatBlock.compact(
+                                      icon: Icons.timelapse_rounded,
+                                      label: l10n.statPace,
+                                      value:
+                                          '${activity.activePaceMinPerKm} /km',
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

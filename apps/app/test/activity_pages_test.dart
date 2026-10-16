@@ -602,6 +602,51 @@ void main() {
     },
   );
 
+  testWidgets('a named activity still says when it happened', (tester) async {
+    bloc.show(
+      ActivitiesState(
+        activities: [
+          ActivitySummary(
+            id: 'named',
+            name: 'Lakeside run',
+            startedAt: start,
+            activeDistanceMeters: 5000,
+            activeDuration: const Duration(minutes: 30),
+          ),
+          ActivitySummary(
+            id: 'unnamed',
+            name: 'Track',
+            startedAt: start,
+            activeDistanceMeters: 5000,
+            activeDuration: const Duration(minutes: 30),
+          ),
+        ],
+      ),
+    );
+    await pump(tester, const ActivitiesListPage());
+    final named = find.ancestor(
+      of: find.text('Lakeside run'),
+      matching: find.byType(ListTile),
+    );
+    expect(named, findsOneWidget);
+    // The name titles the card and the date sits under it. Before, the name
+    // replaced the date outright and two identically named activities — a
+    // recording and the GPX it was re-imported as — were indistinguishable.
+    expect(
+      find.descendant(of: named, matching: find.textContaining('Sep 1, 2026')),
+      findsOneWidget,
+    );
+    // The unnamed one is titled by its date and must not print it twice.
+    final unnamed = find.byType(ListTile).last;
+    expect(
+      find.descendant(
+        of: unnamed,
+        matching: find.textContaining('Sep 1, 2026'),
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets(
     'scrolling near the end requests the next page only when available',
     (tester) async {
@@ -618,7 +663,17 @@ void main() {
       bloc.show(ActivitiesState(activities: summaries));
       await pump(tester, const ActivitiesListPage());
       expect(find.text('Track'), findsNothing);
-      expect(find.textContaining('Sep 1, 2026'), findsOneWidget);
+      // Index 0 carries the sentinel name, so its card is titled by its
+      // date. Every other card now shows its date too, under its name, so
+      // the date is no longer unique on the screen — assert where it is
+      // rather than how often it appears.
+      expect(
+        find.descendant(
+          of: find.byType(ListTile).first,
+          matching: find.textContaining('Sep 1, 2026'),
+        ),
+        findsOneWidget,
+      );
       await tester.drag(find.byType(ListView), const Offset(0, -5000));
       await tester.pumpAndSettle();
       expect(bloc.events.whereType<FetchMoreActivities>(), isNotEmpty);
