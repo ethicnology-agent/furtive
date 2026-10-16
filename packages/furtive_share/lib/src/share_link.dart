@@ -6,6 +6,16 @@ import 'share_wire.dart';
 /// Relays used when a distributor does not provide `SHARE_RELAYS`.
 const defaultShareRelayConfig = 'wss://nos.lol,wss://relay.primal.net';
 
+/// Viewer origin used when a distributor does not provide `SHARE_VIEWER_URL`.
+///
+/// Compiled in rather than left empty because the origin is the one part of a
+/// share link that can never change: every APK ever shipped mints links
+/// against the string it was built with, and a link outlives the build. The
+/// domain is therefore the seam — hosting can move behind it — and leaving the
+/// default empty only meant a build that forgot the define silently shipped
+/// with live sharing missing instead of working.
+const defaultShareViewerUrl = 'https://furtive.ethicnology.com/share/';
+
 /// The link handed to an observer, and its parser.
 ///
 /// ```

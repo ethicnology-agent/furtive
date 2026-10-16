@@ -11,7 +11,10 @@ import 'package:furtive_share/furtive_share.dart';
 import 'package:nostr/nostr.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-const shareViewerUrl = String.fromEnvironment('SHARE_VIEWER_URL');
+const shareViewerUrl = String.fromEnvironment(
+  'SHARE_VIEWER_URL',
+  defaultValue: defaultShareViewerUrl,
+);
 const _shareRelayConfig = String.fromEnvironment(
   'SHARE_RELAYS',
   defaultValue: defaultShareRelayConfig,
