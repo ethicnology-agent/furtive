@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:furtive/features/offline_maps/superseded_areas.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
 import 'package:map_view/map_view.dart';
@@ -111,6 +112,22 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
     await _refresh();
   }
 
+  /// Deletes the earlier regions this download has just superseded.
+  ///
+  /// Only ever the leftovers of the same request: an interrupted download
+  /// leaves a region that is indistinguishable from a finished one, because
+  /// the renderer reports no completion state per region. The newest id is
+  /// the one that just completed, and the tiles are shared, so dropping the
+  /// older rows frees the list without refetching anything.
+  Future<void> _dropSupersededBy(String key) async {
+    final tiles = _tiles;
+    if (tiles == null) return;
+    for (final id in supersededAreaIds(await tiles.list(), key)) {
+      await tiles.delete(id);
+    }
+    await _refresh();
+  }
+
   Future<void> _refresh() async {
     final areas = await _tiles?.list() ?? const <OfflineArea>[];
     if (!mounted) return;
@@ -156,6 +173,16 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
       return;
     }
 
+    // What was asked for, rounded so that asking again produces the same
+    // string. Asking again is the only way to finish an interrupted
+    // download — the renderer has no resume, it starts a second region that
+    // reuses the tiles the first one already stored — and this is what lets
+    // the leftover be recognised afterwards.
+    final key =
+        '${centre.latitude.toStringAsFixed(3)},'
+        '${centre.longitude.toStringAsFixed(3)}'
+        '@${_radiusKm.round()}/$_minZoom-$_maxZoom';
+
     setState(() => _progress = null);
     _download = tiles
         .download(
@@ -164,6 +191,7 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
           minZoom: _minZoom,
           maxZoom: _maxZoom,
           name: '${_radiusKm.round()} km',
+          key: key,
         )
         .listen(
           (progress) {
@@ -171,7 +199,7 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
             setState(() => _progress = progress);
             if (progress.isComplete) {
               setState(() => _progress = null);
-              unawaited(_refresh());
+              unawaited(_dropSupersededBy(key));
             }
           },
           onError: (Object error) {

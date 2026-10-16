@@ -3,13 +3,26 @@ import 'package:maplibre/maplibre.dart' as ml;
 
 /// An area the user chose to keep, and how much of it is on the device.
 class OfflineArea {
-  const OfflineArea({required this.id, required this.name});
+  const OfflineArea({required this.id, required this.name, this.key = ''});
 
   final int id;
 
   /// What the user called it, or empty when the metadata carries no name —
   /// a region downloaded by an older build, or by something else.
   final String name;
+
+  /// What the caller asked for, as an opaque identity it chose.
+  ///
+  /// Exists because asking for the same area twice does not resume the first
+  /// request: the renderer creates a second region, and the two are
+  /// indistinguishable by name. Measured — an interrupted 25 km download
+  /// followed by the same request again left two regions, both complete in
+  /// aggregate, because tiles are shared between regions rather than
+  /// refetched. The caller uses this to recognise and drop the leftover.
+  ///
+  /// Empty for a region written by an older build, which is why nothing may
+  /// treat empty as a match.
+  final String key;
 }
 
 /// Progress of one download, as the renderer reports it.
@@ -65,6 +78,7 @@ abstract interface class OfflineTiles {
     required double minZoom,
     required double maxZoom,
     required String name,
+    String key = '',
   });
 
   Future<List<OfflineArea>> list();
@@ -84,6 +98,7 @@ class _MapLibreOfflineTiles implements OfflineTiles {
   final ml.OfflineManager _manager;
 
   static const _nameKey = 'furtive.name';
+  static const _identityKey = 'furtive.key';
 
   @override
   Stream<OfflineProgress> download({
@@ -92,6 +107,7 @@ class _MapLibreOfflineTiles implements OfflineTiles {
     required double minZoom,
     required double maxZoom,
     required String name,
+    String key = '',
   }) => _manager
       .downloadRegion(
         mapStyleUrl: styleUrl,
@@ -108,7 +124,7 @@ class _MapLibreOfflineTiles implements OfflineTiles {
         // Asking for the device's ratio multiplies the download for no extra
         // detail on a vector basemap.
         pixelDensity: 1,
-        metadata: {_nameKey: name},
+        metadata: {_nameKey: name, _identityKey: key},
       )
       .map(
         (progress) => OfflineProgress(
@@ -129,6 +145,10 @@ class _MapLibreOfflineTiles implements OfflineTiles {
           id: region.id,
           name: switch (region.metadata[_nameKey]) {
             final String name => name,
+            _ => '',
+          },
+          key: switch (region.metadata[_identityKey]) {
+            final String key => key,
             _ => '',
           },
         ),
