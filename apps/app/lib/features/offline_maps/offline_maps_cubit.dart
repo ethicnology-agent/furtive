@@ -8,6 +8,24 @@ import 'package:furtive/features/offline_maps/superseded_areas.dart';
 import 'package:geo/geo.dart';
 import 'package:map_view/map_view.dart';
 
+/// A download in flight: what it is of, and how far it has got.
+///
+/// One object rather than two fields on the state, because the two have to
+/// agree. Held separately, clearing the progress had to remember to clear
+/// the name with it, and starting a download had to emit twice — once to
+/// clear, once to name — because a single copyWith could not express both.
+class OfflineDownload {
+  const OfflineDownload({required this.name, required this.progress});
+
+  /// As the user asked for it: "10 km", or "France".
+  final String name;
+
+  final OfflineProgress progress;
+
+  OfflineDownload at(OfflineProgress progress) =>
+      OfflineDownload(name: name, progress: progress);
+}
+
 /// What the offline maps screen shows, and the download it is watching.
 class OfflineMapsState {
   const OfflineMapsState({
@@ -16,8 +34,7 @@ class OfflineMapsState {
     this.areas = const [],
     this.costs = const {},
     this.storageBytes,
-    this.progress,
-    this.downloadName = '',
+    this.download,
     this.failed = false,
   });
 
@@ -28,12 +45,7 @@ class OfflineMapsState {
   final int? storageBytes;
 
   /// The download in flight, or null when none is.
-  final OfflineProgress? progress;
-
-  /// What that download is of, as the user asked for it — "10 km" or
-  /// "France". Carried in the state because only one download runs at a
-  /// time and the screen has to say which one it is showing.
-  final String downloadName;
+  final OfflineDownload? download;
 
   /// Raised once when a download fails, cleared by whoever reported it.
   final bool failed;
@@ -44,9 +56,8 @@ class OfflineMapsState {
     List<OfflineArea>? areas,
     Map<String, OfflineAreaCost>? costs,
     int? storageBytes,
-    OfflineProgress? progress,
-    bool clearProgress = false,
-    String? downloadName,
+    OfflineDownload? download,
+    bool clearDownload = false,
     bool? failed,
   }) => OfflineMapsState(
     loading: loading ?? this.loading,
@@ -54,8 +65,7 @@ class OfflineMapsState {
     areas: areas ?? this.areas,
     costs: costs ?? this.costs,
     storageBytes: storageBytes ?? this.storageBytes,
-    progress: clearProgress ? null : progress ?? this.progress,
-    downloadName: clearProgress ? '' : downloadName ?? this.downloadName,
+    download: clearDownload ? null : download ?? this.download,
     failed: failed ?? this.failed,
   );
 
@@ -153,8 +163,7 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
     if (tiles == null || isDownloading) return;
     _downloadKey = key;
     _lastRecorded = null;
-    emit(state.copyWith(clearProgress: true, failed: false));
-    emit(state.copyWith(downloadName: name));
+    emit(state.copyWith(clearDownload: true, failed: false));
     _download = tiles
         .download(
           styleUrl: styleUrl,
@@ -167,7 +176,11 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
         .listen(
           (progress) {
             if (isClosed) return;
-            emit(state.copyWith(progress: progress));
+            emit(
+              state.copyWith(
+                download: OfflineDownload(name: name, progress: progress),
+              ),
+            );
             if (progress.isComplete) {
               unawaited(_finish(progress));
             } else {
@@ -178,7 +191,7 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
             logs.severe('Offline download', error: error, trace: stack);
             if (isClosed) return;
             unawaited(_stop());
-            emit(state.copyWith(clearProgress: true, failed: true));
+            emit(state.copyWith(clearDownload: true, failed: true));
           },
         );
   }
@@ -218,7 +231,7 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
       }
     }
     if (isClosed) return;
-    emit(state.copyWith(clearProgress: true));
+    emit(state.copyWith(clearDownload: true));
     await refresh();
   }
 

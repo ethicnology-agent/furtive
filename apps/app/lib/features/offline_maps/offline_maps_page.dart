@@ -230,7 +230,7 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                   // time, it outlives this screen, and it can have been
                   // started by either. Showing it inside the radius card
                   // labelled a country download "keep the area around me".
-                  if (state.progress case final progress?) ...[
+                  if (state.download case final download?) ...[
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
@@ -238,17 +238,19 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              state.downloadName,
+                              download.name,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             const SizedBox(height: 8),
-                            LinearProgressIndicator(value: progress.fraction),
+                            LinearProgressIndicator(
+                              value: download.progress.fraction,
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               l10n.offlineDownloading(
-                                progress.tilesDone.toString(),
-                                progress.tilesTotal.toString(),
-                                _megabytes(progress.bytes),
+                                download.progress.tilesDone.toString(),
+                                download.progress.tilesTotal.toString(),
+                                _megabytes(download.progress.bytes),
                               ),
                             ),
                           ],
@@ -275,14 +277,14 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                             min: _stepKm,
                             max: _maxRadiusKm,
                             divisions: (_maxRadiusKm / _stepKm).round() - 1,
-                            onChanged: state.progress != null
+                            onChanged: state.download != null
                                 ? null
                                 : (value) => setState(() => _radiusKm = value),
                           ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: ElevatedButton(
-                              onPressed: state.progress != null
+                              onPressed: state.download != null
                                   ? null
                                   : _startAroundMe,
                               child: Text(l10n.offlineDownload),
@@ -332,7 +334,7 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: state.progress != null
+                                onPressed: state.download != null
                                     ? null
                                     : () async {
                                         final picked = await showCountryPicker(
@@ -347,7 +349,7 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                               const SizedBox(width: 8),
                               ElevatedButton(
                                 onPressed:
-                                    state.progress != null || _country == null
+                                    state.download != null || _country == null
                                     ? null
                                     : () => _startCountry(_country!),
                                 child: Text(l10n.offlineDownload),
@@ -392,7 +394,7 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                                 // Only what accumulated behind them: the
                                 // areas they asked for are not evictable and
                                 // are not touched.
-                                onPressed: state.progress != null
+                                onPressed: state.download != null
                                     ? null
                                     : () => context
                                           .read<OfflineMapsCubit>()

@@ -35,61 +35,60 @@ void main() {
       expect(state.keptTiles, 0);
     });
 
-    test('clearProgress wins over a progress passed in the same call', () {
+    test('clearDownload wins over a download passed in the same call', () {
       // Finishing emits both: the download is over and there is nothing left
       // to show. Honouring the value instead would leave a full progress bar
       // on screen for ever.
-      final state = const OfflineMapsState().copyWith(progress: progress());
-      expect(state.progress, isNotNull);
-      final cleared = state.copyWith(
-        progress: progress(done: 100),
-        clearProgress: true,
+      final state = const OfflineMapsState().copyWith(
+        download: OfflineDownload(name: '10 km', progress: progress()),
       );
-      expect(cleared.progress, isNull);
+      expect(state.download, isNotNull);
+      final cleared = state.copyWith(
+        download: OfflineDownload(name: '10 km', progress: progress(done: 100)),
+        clearDownload: true,
+      );
+      expect(cleared.download, isNull);
     });
 
     test('a download is labelled with what it is of, not where it started', () {
       // The bug this guards: progress was drawn inside the "keep the area
       // around me" card, so downloading France reported itself under that
       // heading. The name travels with the download instead.
-      const state = OfflineMapsState();
-      final running = state.copyWith(
-        progress: progress(done: 779, total: 2221390),
-        downloadName: 'France',
+      final running = const OfflineMapsState().copyWith(
+        download: OfflineDownload(
+          name: 'France',
+          progress: progress(done: 779, total: 2221390),
+        ),
       );
-      expect(running.downloadName, 'France');
+      expect(running.download?.name, 'France');
     });
 
-    test('the name goes away with the download that carried it', () {
-      // Otherwise the next screen would show a finished download's name
-      // above whatever starts next.
+    test('the name cannot outlive the download that carried it', () {
+      // They are one object, so there is no state in which a finished
+      // download's name sits above whatever starts next.
       final running = const OfflineMapsState().copyWith(
-        progress: progress(done: 10),
-        downloadName: 'France',
+        download: OfflineDownload(name: 'France', progress: progress(done: 10)),
       );
-      final done = running.copyWith(clearProgress: true);
-      expect(done.progress, isNull);
-      expect(done.downloadName, isEmpty);
+      expect(running.copyWith(clearDownload: true).download, isNull);
     });
 
     test('a refresh during a download keeps the name as well as the bar', () {
       final running = const OfflineMapsState().copyWith(
-        progress: progress(done: 40),
-        downloadName: '10 km',
+        download: OfflineDownload(name: '10 km', progress: progress(done: 40)),
       );
       final refreshed = running.copyWith(storageBytes: 123);
-      expect(refreshed.downloadName, '10 km');
-      expect(refreshed.progress?.tilesDone, 40);
+      expect(refreshed.download?.name, '10 km');
+      expect(refreshed.download?.progress.tilesDone, 40);
     });
 
     test('copyWith keeps the download when something else changes', () {
       // The screen refreshes its storage figures while a download runs, and
       // dropping the progress there would blank the bar mid-download.
       final running = const OfflineMapsState().copyWith(
-        progress: progress(done: 40),
+        download: OfflineDownload(name: '10 km', progress: progress(done: 40)),
       );
       final refreshed = running.copyWith(storageBytes: 123);
-      expect(refreshed.progress?.tilesDone, 40);
+      expect(refreshed.download?.progress.tilesDone, 40);
       expect(refreshed.storageBytes, 123);
     });
   });
