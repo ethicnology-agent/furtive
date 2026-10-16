@@ -300,9 +300,16 @@ class OfflineMapsCubit extends Cubit<OfflineMapsState> {
   bool isDownloadingInto(int id) =>
       _download != null && _downloadRegionId == id;
 
-  Future<void> delete(int id) async {
-    if (isDownloadingInto(id)) return;
-    await _tiles?.delete(id);
+  /// Removes every region holding one area.
+  ///
+  /// An interrupted download leaves a region per attempt, so an area the
+  /// user sees as one row can be several. Deleting one of them would leave
+  /// the row in place holding the rest.
+  Future<void> deleteArea(List<int> regionIds) async {
+    if (regionIds.any(isDownloadingInto)) return;
+    for (final id in regionIds) {
+      await _tiles?.delete(id);
+    }
     await refresh();
   }
 

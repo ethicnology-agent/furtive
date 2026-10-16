@@ -132,7 +132,7 @@ void main() {
       await cubit.open();
       // No platform under test, so there is no store to delete from; what
       // matters is that the guard is consulted before anything is removed.
-      await cubit.delete(1);
+      await cubit.deleteArea([1]);
       expect(cubit.state.areas, isEmpty);
     });
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/features/offline_maps/countries.dart';
 import 'package:furtive/features/offline_maps/country_picker.dart';
+import 'package:furtive/features/offline_maps/kept_areas.dart';
 import 'package:furtive/features/offline_maps/offline_ledger.dart';
 import 'package:furtive/features/offline_maps/offline_maps_cubit.dart';
 import 'package:furtive/l10n/app_localizations.dart';
@@ -546,14 +547,20 @@ class _KeptAreas extends StatelessWidget {
         child: Text(l10n.offlineNone, style: TextStyle(color: kTextMuted)),
       );
     }
+    final cubit = context.read<OfflineMapsCubit>();
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          for (final area in state.areas)
+          // Grouped, because a download that was interrupted and asked for
+          // again is held in several regions: listing those showed the same
+          // area twice, each row repeating its one recorded cost.
+          for (final area in keptAreas(state.areas))
             ListTile(
               leading: const Icon(Icons.map_outlined),
-              title: Text(area.name.isEmpty ? '#${area.id}' : area.name),
+              title: Text(
+                area.name.isEmpty ? '#${area.regionIds.first}' : area.name,
+              ),
               subtitle: _cost(l10n, state.costs[area.key]),
               // The running download's region is listed like any other, and
               // deleting it destroys the download without the renderer
@@ -561,10 +568,9 @@ class _KeptAreas extends StatelessWidget {
               trailing: IconButton(
                 tooltip: l10n.offlineDelete,
                 icon: const Icon(Icons.delete_outline_rounded),
-                onPressed:
-                    context.read<OfflineMapsCubit>().isDownloadingInto(area.id)
+                onPressed: area.regionIds.any(cubit.isDownloadingInto)
                     ? null
-                    : () => context.read<OfflineMapsCubit>().delete(area.id),
+                    : () => cubit.deleteArea(area.regionIds),
               ),
             ),
         ],
