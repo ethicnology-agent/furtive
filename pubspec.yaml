@@ -51,6 +51,37 @@ dev_dependencies:
 # version pinned in .fvmrc on the PATH:
 #
 #     fvm exec dart run melos run verify
+# Removed the day josxha/flutter-maplibre#584 reaches a release.
+#
+# OfflineManager.downloadRegion leaks a JNI global reference per status
+# event: its callbacks are async but release into the Arena of the `using`
+# block that returned the stream, which closed before any of them ran. The
+# global reference table fills at 51,200 entries and ART aborts the process.
+# Measured on an Android 12 device against a control, same harness and day:
+# 11,753 status events and a tombstone with the published package, 43,990
+# events and no abort with this fix.
+#
+# That ceiling is about 84,000 tiles in one process. Keeping a 10 km radius
+# never approaches it; keeping a country is 2.2 million tiles for France and
+# cannot avoid it, so the feature does not work at all on the published
+# package — 35 of 174 countries fit under it.
+#
+# A pinned git dependency rather than a copy in the tree: the package is
+# 4.4 MB, 4.3 MB of which is one generated bindings file of 132,126 lines.
+# The pin is a commit, held by the furtive-pin-1.4 tag on the fork so that
+# iterating on the pull request cannot strand it.
+#
+# This is cut from upstream main rather than from 0.3.5, so it also carries
+# the two Android leak fixes 0.3.6 brought and the removal of the ktlint
+# plugin that made 0.3.6 unbuildable for consumers — which is why
+# packages/map_view pins 0.3.5 in the first place.
+dependency_overrides:
+  maplibre_android:
+    git:
+      url: https://github.com/ethicnology-agent/flutter-maplibre.git
+      path: packages/maplibre_android
+      ref: 9a0a5724ab63826d5b9a4360c4aef523a489e809
+
 melos:
   ide:
     intellij: false

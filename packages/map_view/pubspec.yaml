@@ -26,6 +26,12 @@ dependencies:
   # maplibre's own constraint is ^0.3.5, which admits the broken 0.3.6, so
   # the implementation package is pinned where it is used rather than left
   # to the solver.
+  #
+  # Overridden at the workspace root onto a fork carrying an unreleased fix
+  # for the JNI leak that makes keeping a country impossible — see the
+  # dependency_overrides block in the root pubspec. That fork is cut from
+  # upstream main, which has already dropped the ktlint plugin this pin was
+  # written for, so both lift together when 0.3.7 lands.
   maplibre_android: 0.3.5
   ui_kit:
     path: ../ui_kit
