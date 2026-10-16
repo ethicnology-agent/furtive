@@ -85,6 +85,13 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   /// Bounded by the plugin's JNI leak, not by the renderer — see above.
   static const _maxRadiusKm = 50.0;
 
+  /// The slider moves in tens. The measurements above are what makes a finer
+  /// step pointless: between 10 and 20 km a rural download grows by a couple
+  /// of megabytes, and a dense one by tens — neither is a quantity a user
+  /// picks to the kilometre, and offering 50 stops implied a precision the
+  /// cost does not have.
+  static const _stepKm = 10.0;
+
   OfflineTiles? _tiles;
   List<OfflineArea> _areas = const [];
   double _radiusKm = 10;
@@ -256,9 +263,9 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                         Text(l10n.offlineRadius(_radiusKm.round().toString())),
                         Slider(
                           value: _radiusKm,
-                          min: 1,
+                          min: _stepKm,
                           max: _maxRadiusKm,
-                          divisions: _maxRadiusKm.round() - 1,
+                          divisions: (_maxRadiusKm / _stepKm).round() - 1,
                           onChanged: _progress != null
                               ? null
                               : (value) => setState(() => _radiusKm = value),
