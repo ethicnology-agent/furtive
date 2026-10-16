@@ -38,6 +38,7 @@ void main() {
             onOpenPreferences: () {},
             onOpenLogs: () {},
             onOpenOfflineMaps: () {},
+            onOpenChangelog: () {},
           ),
         ),
       );
@@ -47,4 +48,34 @@ void main() {
       expect(find.text('version 1.3.0+3').hitTestable(), findsOneWidget);
     });
   }
+
+  testWidgets('the changelog is reachable from the menu', (tester) async {
+    Global.app = PackageInfo(
+      appName: 'Furtive',
+      packageName: 'test',
+      version: '1.3.0',
+      buildNumber: '3',
+    );
+    var opened = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: appTheme,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: SettingsPage(
+          onOpenPermissions: () {},
+          onOpenPreferences: () {},
+          onOpenLogs: () {},
+          onOpenOfflineMaps: () {},
+          onOpenChangelog: () => opened++,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    // The row reuses the changelog page's own title rather than a label of
+    // its own, so this is the string the page is headed with.
+    await tester.tap(find.text("What's new"));
+    await tester.pumpAndSettle();
+    expect(opened, 1);
+  });
 }

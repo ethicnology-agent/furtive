@@ -11,6 +11,7 @@ class SettingsPage extends StatelessWidget {
     required this.onOpenPreferences,
     required this.onOpenLogs,
     required this.onOpenOfflineMaps,
+    required this.onOpenChangelog,
   });
 
   /// What each row opens.
@@ -22,6 +23,7 @@ class SettingsPage extends StatelessWidget {
   final VoidCallback onOpenPreferences;
   final VoidCallback onOpenLogs;
   final VoidCallback onOpenOfflineMaps;
+  final VoidCallback onOpenChangelog;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,21 @@ class SettingsPage extends StatelessWidget {
                     color: kTextMuted,
                   ),
                   onTap: onOpenLogs,
+                ),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                // Until now the changelog was shown once, by the startup
+                // gate, and never again: dismissing it was the only thing
+                // standing between the user and never reading what changed.
+                // The row reuses the page's own title rather than inventing
+                // a label, so it needed no new string in 26 languages.
+                ListTile(
+                  leading: const Icon(Icons.auto_awesome_outlined),
+                  title: Text(l10n.changelogTitle),
+                  trailing: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: kTextMuted,
+                  ),
+                  onTap: onOpenChangelog,
                 ),
               ],
             ),

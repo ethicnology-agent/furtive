@@ -13,6 +13,8 @@ import 'package:basemap/basemap.dart';
 import 'package:furtive/features/map/bloc/map_bloc.dart';
 import 'package:furtive/features/settings/settings_page.dart';
 import 'package:furtive/features/share/live_share_control.dart';
+import 'package:furtive/features/changelog/changelog_entries.dart';
+import 'package:furtive/features/changelog/pages/changelog_page.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:map_view/map_view.dart';
 
@@ -70,6 +72,14 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         ),
         onOpenPreferences: (() => _push((_) => const PreferencesPage())),
         onOpenLogs: () => _push((_) => const LogsPage()),
+        // Every release, not just the ones newer than the user's last-seen
+        // version: this is the archive, where the startup gate is the
+        // announcement.
+        onOpenChangelog: () => _push(
+          (context) => ChangelogPage(
+            releases: changelogReleases(AppLocalizations.of(context)),
+          ),
+        ),
         // The page downloads a style and centres on a position; neither is
         // the settings menu's to know, and neither is the page's to go and
         // fetch from another feature. The shell holds both and hands them
