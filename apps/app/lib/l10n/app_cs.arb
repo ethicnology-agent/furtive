@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Zbytek je mapa, kterou jste si prohlíželi, uchovaná aby se stále vykreslovala offline, plus režie samotné databáze.",
-  "offlineClearCache": "Vymazat mezipaměť"
+  "offlineClearCache": "Vymazat mezipaměť",
+  "offlineCountry": "Uložit zemi",
+  "offlineCountryPick": "Vyberte zemi",
+  "offlineCountryTiles": "{tiles} dlaždic",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Země se ukládá jako obdélník kolem ní, takže sousedé a moře přijdou také."
 }

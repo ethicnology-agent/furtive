@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Der Rest ist Karte, die Sie angesehen haben, behalten damit sie offline weiter gezeichnet wird, plus der Overhead der Datenbank selbst.",
-  "offlineClearCache": "Cache leeren"
+  "offlineClearCache": "Cache leeren",
+  "offlineCountry": "Ein Land behalten",
+  "offlineCountryPick": "Land auswählen",
+  "offlineCountryTiles": "{tiles} Kacheln",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Ein Land wird als Rechteck darum behalten, Nachbarn und Meer kommen also mit."
 }

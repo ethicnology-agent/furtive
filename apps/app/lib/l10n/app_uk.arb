@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Решта — карта, яку ви переглядали, збережена щоб вона досі малювалася офлайн, плюс накладні витрати самої бази даних.",
-  "offlineClearCache": "Очистити кеш"
+  "offlineClearCache": "Очистити кеш",
+  "offlineCountry": "Зберегти країну",
+  "offlineCountryPick": "Виберіть країну",
+  "offlineCountryTiles": "{tiles} тайлів",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Країна зберігається як прямокутник навколо неї, тож сусіди й море теж."
 }

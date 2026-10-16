@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Iliyobaki ni ramani uliyoitazama, imehifadhiwa ili bado ichorwe nje ya mtandao, pamoja na gharama ya ziada ya hifadhidata yenyewe.",
-  "offlineClearCache": "Futa akiba"
+  "offlineClearCache": "Futa akiba",
+  "offlineCountry": "Hifadhi nchi",
+  "offlineCountryPick": "Chagua nchi",
+  "offlineCountryTiles": "vigae {tiles}",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Nchi huhifadhiwa kama mstatili unaoizunguka, hivyo majirani na bahari huja pia."
 }

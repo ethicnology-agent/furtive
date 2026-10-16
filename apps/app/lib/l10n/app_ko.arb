@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "나머지는 오프라인에서도 그려지도록 보관된, 둘러본 지도와 데이터베이스 자체의 오버헤드입니다.",
-  "offlineClearCache": "캐시 지우기"
+  "offlineClearCache": "캐시 지우기",
+  "offlineCountry": "국가 보관",
+  "offlineCountryPick": "국가 선택",
+  "offlineCountryTiles": "타일 {tiles}개",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "국가는 그 주변의 직사각형으로 보관되므로 인접국과 바다도 함께 포함됩니다."
 }

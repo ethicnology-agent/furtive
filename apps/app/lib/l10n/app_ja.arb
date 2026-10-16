@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "残りは、オフラインでも描画できるよう保持された、あなたが見た地図と、データベース自体のオーバーヘッドです。",
-  "offlineClearCache": "キャッシュを削除"
+  "offlineClearCache": "キャッシュを削除",
+  "offlineCountry": "国を保存",
+  "offlineCountryPick": "国を選択",
+  "offlineCountryTiles": "{tiles} タイル",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "国はその周囲の長方形として保存されるため、隣国や海も含まれます。"
 }

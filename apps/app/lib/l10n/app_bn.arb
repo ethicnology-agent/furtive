@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "বাকিটা আপনার দেখা মানচিত্র, অফলাইনেও যাতে আঁকা হয় সে জন্য রাখা, সঙ্গে ডেটাবেসের নিজস্ব ওভারহেড।",
-  "offlineClearCache": "ক্যাশ মুছুন"
+  "offlineClearCache": "ক্যাশ মুছুন",
+  "offlineCountry": "একটি দেশ রাখুন",
+  "offlineCountryPick": "একটি দেশ বাছুন",
+  "offlineCountryTiles": "{tiles}টি টাইল",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "একটি দেশ তার চারপাশের আয়তক্ষেত্র হিসেবে রাখা হয়, তাই প্রতিবেশী ও সমুদ্রও আসে।"
 }

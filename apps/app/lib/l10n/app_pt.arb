@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "O resto é o mapa que consultou, guardado para continuar a ser desenhado offline, mais a sobrecarga da própria base de dados.",
-  "offlineClearCache": "Limpar cache"
+  "offlineClearCache": "Limpar cache",
+  "offlineCountry": "Guardar um país",
+  "offlineCountryPick": "Escolher um país",
+  "offlineCountryTiles": "{tiles} blocos",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Um país é guardado como um retângulo à sua volta, pelo que os vizinhos e o mar vêm também."
 }

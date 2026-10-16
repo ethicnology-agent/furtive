@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Մնացածը ձեր դիտած քարտեզն է, պահված որպեսզի այն դեռ գծվի անցանց, գումարած տվյալների բազայի սեփական ծախսը։",
-  "offlineClearCache": "Մաքրել քեշը"
+  "offlineClearCache": "Մաքրել քեշը",
+  "offlineCountry": "Պահել երկիր",
+  "offlineCountryPick": "Ընտրեք երկիր",
+  "offlineCountryTiles": "{tiles} սալիկ",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Երկիրը պահվում է որպես իր շուրջ ուղղանկյուն, ուստի հարևաններն ու ծովը նույնպես գալիս են։"
 }

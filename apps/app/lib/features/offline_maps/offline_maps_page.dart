@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furtive/features/offline_maps/countries.dart';
+import 'package:furtive/features/offline_maps/country_picker.dart';
 import 'package:furtive/features/offline_maps/offline_maps_cubit.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
+import 'package:map_view/map_view.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 /// Choosing which map areas survive going offline.
@@ -96,9 +99,10 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   /// cost does not have.
   static const _stepKm = 10.0;
 
-  /// The only thing this screen still owns: where the slider is. Everything
-  /// else outlives it.
+  /// The only things this screen still owns: where the slider is and which
+  /// country is in the picker. Everything else outlives it.
   double _radiusKm = 10;
+  Country? _country;
 
   @override
   void initState() {
@@ -117,27 +121,49 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   static String _megabytes(int bytes) =>
       (bytes / 1024 / 1024).toStringAsFixed(1);
 
-  Future<void> _start() async {
+  /// Resolves the style and hands the request over. Shared by both cards:
+  /// which rectangle is wanted is their business, everything after it is not.
+  Future<void> _download({
+    required GeoBounds bounds,
+    required String name,
+    required String key,
+  }) async {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
     final cubit = context.read<OfflineMapsCubit>();
-    final centre = widget.currentPosition();
-    if (centre == null) {
-      _show(messenger, SnackBar(content: Text(l10n.offlineNoPosition)));
-      return;
-    }
     final style = await widget.styleUrl();
     if (!mounted) return;
     if (style == null) {
       _show(messenger, SnackBar(content: Text(l10n.offlineNoTiles)));
       return;
     }
-    final bounds = boundsAround(centre, _radiusKm * 1000);
-    if (bounds == null || bounds.isEmpty) {
+    if (bounds.isEmpty) {
       _show(messenger, SnackBar(content: Text(l10n.offlineNoPosition)));
       return;
     }
+    await cubit.download(
+      styleUrl: style,
+      bounds: bounds,
+      minZoom: _minZoom,
+      maxZoom: _maxZoom,
+      name: name,
+      key: key,
+    );
+  }
 
+  Future<void> _startAroundMe() async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final centre = widget.currentPosition();
+    if (centre == null) {
+      _show(messenger, SnackBar(content: Text(l10n.offlineNoPosition)));
+      return;
+    }
+    final bounds = boundsAround(centre, _radiusKm * 1000);
+    if (bounds == null) {
+      _show(messenger, SnackBar(content: Text(l10n.offlineNoPosition)));
+      return;
+    }
     // What was asked for, rounded so that asking again produces the same
     // string. Asking again is the only way to finish an interrupted
     // download — the renderer has no resume, it starts a second region that
@@ -147,16 +173,15 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
         '${centre.latitude.toStringAsFixed(3)},'
         '${centre.longitude.toStringAsFixed(3)}'
         '@${_radiusKm.round()}/$_minZoom-$_maxZoom';
-
-    await cubit.download(
-      styleUrl: style,
-      bounds: bounds,
-      minZoom: _minZoom,
-      maxZoom: _maxZoom,
-      name: '${_radiusKm.round()} km',
-      key: key,
-    );
+    await _download(bounds: bounds, name: '${_radiusKm.round()} km', key: key);
   }
+
+  Future<void> _startCountry(Country country) => _download(
+    bounds: country.bounds,
+    name: country.name,
+    // The box is fixed, so the code alone identifies the request.
+    key: 'country:${country.code}/$_minZoom-$_maxZoom',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -243,10 +268,76 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: ElevatedButton(
-                                onPressed: _start,
+                                onPressed: _startAroundMe,
                                 child: Text(l10n.offlineDownload),
                               ),
                             ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.offlineCountry,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            l10n.offlineCountryBox,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall?.copyWith(color: kTextMuted),
+                          ),
+                          const SizedBox(height: 8),
+                          if (_country case final country?) ...[
+                            Text(country.name),
+                            // Exact, not an estimate — the count is geometry.
+                            // Bytes are not shown because they cannot be
+                            // predicted: the same tile measured 1.1 KB over
+                            // open country and 11 KB over Paris.
+                            Text(
+                              l10n.offlineCountryTiles(
+                                tilesForDownload(
+                                  bounds: country.bounds,
+                                  minZoom: _minZoom,
+                                  maxZoom: _maxZoom,
+                                ).toString(),
+                              ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: kTextMuted),
+                            ),
+                          ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: state.progress != null
+                                    ? null
+                                    : () async {
+                                        final picked = await showCountryPicker(
+                                          context,
+                                        );
+                                        if (picked != null && mounted) {
+                                          setState(() => _country = picked);
+                                        }
+                                      },
+                                child: Text(l10n.offlineCountryPick),
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                onPressed:
+                                    state.progress != null || _country == null
+                                    ? null
+                                    : () => _startCountry(_country!),
+                                child: Text(l10n.offlineDownload),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

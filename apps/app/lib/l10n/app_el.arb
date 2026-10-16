@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Τα υπόλοιπα είναι ο χάρτης που είδατε, διατηρημένος ώστε να σχεδιάζεται ακόμη εκτός σύνδεσης, συν την επιβάρυνση της ίδιας της βάσης δεδομένων.",
-  "offlineClearCache": "Εκκαθάριση προσωρινής μνήμης"
+  "offlineClearCache": "Εκκαθάριση προσωρινής μνήμης",
+  "offlineCountry": "Αποθήκευση χώρας",
+  "offlineCountryPick": "Επιλέξτε χώρα",
+  "offlineCountryTiles": "{tiles} πλακίδια",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Μια χώρα αποθηκεύεται ως ορθογώνιο γύρω της, οπότε έρχονται και οι γείτονες και η θάλασσα."
 }

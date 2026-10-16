@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "बाकी वह मानचित्र है जिसे आपने देखा, इसलिए रखा गया कि वह ऑफ़लाइन भी बने, साथ ही डेटाबेस का अपना ओवरहेड।",
-  "offlineClearCache": "कैश साफ़ करें"
+  "offlineClearCache": "कैश साफ़ करें",
+  "offlineCountry": "एक देश रखें",
+  "offlineCountryPick": "देश चुनें",
+  "offlineCountryTiles": "{tiles} टाइलें",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "देश को उसके चारों ओर एक आयत के रूप में रखा जाता है, इसलिए पड़ोसी और समुद्र भी आते हैं।"
 }

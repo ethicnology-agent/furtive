@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Loput on karttaa, jota olet katsonut, säilytettynä niin että se piirtyy yhä offline-tilassa, sekä tietokannan oma ylimääräinen tila.",
-  "offlineClearCache": "Tyhjennä välimuisti"
+  "offlineClearCache": "Tyhjennä välimuisti",
+  "offlineCountry": "Säilytä maa",
+  "offlineCountryPick": "Valitse maa",
+  "offlineCountryTiles": "{tiles} ruutua",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Maa säilytetään sen ympärille piirrettynä suorakulmiona, joten naapurit ja meri tulevat mukana."
 }

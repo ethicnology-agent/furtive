@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Il resto è la mappa che hai guardato, conservata perché continui a essere disegnata offline, più l'overhead del database stesso.",
-  "offlineClearCache": "Svuota cache"
+  "offlineClearCache": "Svuota cache",
+  "offlineCountry": "Conservare un paese",
+  "offlineCountryPick": "Scegliere un paese",
+  "offlineCountryTiles": "{tiles} tasselli",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Un paese è conservato come un rettangolo attorno, quindi vengono anche i vicini e il mare."
 }

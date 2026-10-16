@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Reszta to mapa, którą oglądano, zachowana aby nadal rysowała się offline, plus narzut samej bazy danych.",
-  "offlineClearCache": "Wyczyść pamięć podręczną"
+  "offlineClearCache": "Wyczyść pamięć podręczną",
+  "offlineCountry": "Zachowaj kraj",
+  "offlineCountryPick": "Wybierz kraj",
+  "offlineCountryTiles": "{tiles} kafelków",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Kraj jest zachowywany jako prostokąt wokół niego, więc sąsiedzi i morze też."
 }

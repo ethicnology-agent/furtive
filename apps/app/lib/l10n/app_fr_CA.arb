@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Le reste est la carte que vous avez consultée, conservée pour qu'elle s'affiche encore hors ligne, plus la surcharge propre à la base de données.",
-  "offlineClearCache": "Vider le cache"
+  "offlineClearCache": "Vider le cache",
+  "offlineCountry": "Conserver un pays",
+  "offlineCountryPick": "Choisir un pays",
+  "offlineCountryTiles": "{tiles} tuiles",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Un pays est conservé sous forme de rectangle, donc les voisins et la mer viennent avec."
 }

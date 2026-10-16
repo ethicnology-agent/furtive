@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Geri kalanı, çevrimdışıyken hâlâ çizilsin diye saklanan, baktığınız haritadır; artı veritabanının kendi ek yüküdür.",
-  "offlineClearCache": "Önbelleği temizle"
+  "offlineClearCache": "Önbelleği temizle",
+  "offlineCountry": "Bir ülkeyi sakla",
+  "offlineCountryPick": "Bir ülke seçin",
+  "offlineCountryTiles": "{tiles} döşeme",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Bir ülke etrafındaki dikdörtgen olarak saklanır, komşular ve deniz de gelir."
 }

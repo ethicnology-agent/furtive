@@ -327,5 +327,16 @@
     }
   },
   "offlineStorageCached": "The rest is map you looked at, kept so it still draws offline, plus the database's own overhead.",
-  "offlineClearCache": "Clear cache"
+  "offlineClearCache": "Clear cache",
+  "offlineCountry": "Keep a country",
+  "offlineCountryPick": "Choose a country",
+  "offlineCountryTiles": "{tiles} tiles",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "A country is kept as a rectangle around it, so neighbours and sea come too."
 }

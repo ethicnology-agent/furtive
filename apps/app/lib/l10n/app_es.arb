@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "El resto es el mapa que has consultado, conservado para que siga dibujándose sin conexión, más la sobrecarga propia de la base de datos.",
-  "offlineClearCache": "Vaciar caché"
+  "offlineClearCache": "Vaciar caché",
+  "offlineCountry": "Guardar un país",
+  "offlineCountryPick": "Elegir un país",
+  "offlineCountryTiles": "{tiles} teselas",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Un país se guarda como un rectángulo a su alrededor, así que los vecinos y el mar vienen también."
 }

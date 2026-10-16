@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "De rest is kaart die je hebt bekeken, bewaard zodat die offline nog wordt getekend, plus de overhead van de database zelf.",
-  "offlineClearCache": "Cache wissen"
+  "offlineClearCache": "Cache wissen",
+  "offlineCountry": "Een land bewaren",
+  "offlineCountryPick": "Kies een land",
+  "offlineCountryTiles": "{tiles} tegels",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Een land wordt bewaard als een rechthoek eromheen, dus buurlanden en zee komen mee."
 }

@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Остальное — карта, которую вы просматривали, сохранённая чтобы она по-прежнему отображалась офлайн, плюс накладные расходы самой базы данных.",
-  "offlineClearCache": "Очистить кэш"
+  "offlineClearCache": "Очистить кэш",
+  "offlineCountry": "Сохранить страну",
+  "offlineCountryPick": "Выберите страну",
+  "offlineCountryTiles": "{tiles} тайлов",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Страна сохраняется как прямоугольник вокруг неё, поэтому соседи и море тоже."
 }

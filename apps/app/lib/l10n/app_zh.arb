@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "其余是你浏览过的地图，保留下来以便离线时仍能绘制，加上数据库本身的开销。",
-  "offlineClearCache": "清除缓存"
+  "offlineClearCache": "清除缓存",
+  "offlineCountry": "保留一个国家",
+  "offlineCountryPick": "选择国家",
+  "offlineCountryTiles": "{tiles} 个瓦片",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "国家以其外接矩形保存，因此邻国和海域也会一并下载。"
 }

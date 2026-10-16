@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Resten är karta du har tittat på, sparad så att den fortfarande ritas offline, plus databasens egen överhead.",
-  "offlineClearCache": "Rensa cache"
+  "offlineClearCache": "Rensa cache",
+  "offlineCountry": "Spara ett land",
+  "offlineCountryPick": "Välj ett land",
+  "offlineCountryTiles": "{tiles} rutor",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Ett land sparas som en rektangel runt det, så grannar och hav följer med."
 }

@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "الباقي هو الخريطة التي اطّلعت عليها، محفوظة لتظل تُرسم دون اتصال، بالإضافة إلى العبء الخاص بقاعدة البيانات.",
-  "offlineClearCache": "مسح ذاكرة التخزين المؤقت"
+  "offlineClearCache": "مسح ذاكرة التخزين المؤقت",
+  "offlineCountry": "حفظ دولة",
+  "offlineCountryPick": "اختر دولة",
+  "offlineCountryTiles": "{tiles} بلاطة",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "تُحفظ الدولة كمستطيل حولها، لذا يأتي الجيران والبحر أيضًا."
 }

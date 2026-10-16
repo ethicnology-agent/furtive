@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Restul este harta pe care ați consultat-o, păstrată ca să se deseneze în continuare offline, plus supraîncărcarea bazei de date.",
-  "offlineClearCache": "Golește cache-ul"
+  "offlineClearCache": "Golește cache-ul",
+  "offlineCountry": "Păstrează o țară",
+  "offlineCountryPick": "Alegeți o țară",
+  "offlineCountryTiles": "{tiles} dale",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "O țară este păstrată ca un dreptunghi în jurul ei, deci vin și vecinii și marea."
 }

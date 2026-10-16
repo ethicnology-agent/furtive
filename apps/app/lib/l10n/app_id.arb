@@ -237,5 +237,16 @@
     }
   },
   "offlineStorageCached": "Sisanya adalah peta yang pernah Anda lihat, disimpan agar tetap tergambar offline, ditambah overhead basis data itu sendiri.",
-  "offlineClearCache": "Hapus cache"
+  "offlineClearCache": "Hapus cache",
+  "offlineCountry": "Simpan sebuah negara",
+  "offlineCountryPick": "Pilih negara",
+  "offlineCountryTiles": "{tiles} ubin",
+  "@offlineCountryTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineCountryBox": "Sebuah negara disimpan sebagai persegi panjang di sekitarnya, jadi tetangga dan laut ikut serta."
 }
