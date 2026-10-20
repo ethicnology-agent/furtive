@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furtive/features/offline_maps/countries.dart';
-import 'package:furtive/features/offline_maps/country_picker.dart';
 import 'package:furtive/features/offline_maps/kept_areas.dart';
 import 'package:furtive/features/offline_maps/offline_ledger.dart';
 import 'package:furtive/features/offline_maps/offline_maps_cubit.dart';
@@ -103,10 +101,9 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   // seen. The slider is not capped by the renderer, it is capped by the
   // plugin bug it has to survive. Raise it when that is fixed upstream.
 
-  /// The only things this screen still owns: where the slider is and which
-  /// country is in the picker. Everything else outlives it.
+  /// The only thing this screen still owns: where the slider is. Everything
+  /// else outlives it.
   double _radiusKm = 10;
-  Country? _country;
 
   @override
   void initState() {
@@ -179,6 +176,19 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   static String _styleIdentity(String styleUrl) =>
       styleUrl.hashCode.toRadixString(16);
 
+  /// What the current radius would cost, or null with no position yet.
+  int? _tilesForRadius() {
+    final centre = widget.currentPosition();
+    if (centre == null) return null;
+    final bounds = boundsAround(centre, _radiusKm * 1000);
+    if (bounds == null) return null;
+    return tilesForDownload(
+      bounds: bounds,
+      minZoom: _minZoom,
+      maxZoom: _maxZoom,
+    );
+  }
+
   Future<void> _startAroundMe() async {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
@@ -207,13 +217,6 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
       what: what,
     );
   }
-
-  Future<void> _startCountry(Country country) => _download(
-    bounds: country.bounds,
-    name: country.name,
-    // The box is fixed, so the code alone identifies the request.
-    what: 'country:${country.code}',
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -246,16 +249,12 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
           _ => _Body(
             state: state,
             radiusKm: _radiusKm,
-            country: _country,
+            // Exact, not an estimate: the count is geometry. Null before a
+            // fix, because the rectangle is centred on the user and there is
+            // nothing to count without one.
+            tiles: _tilesForRadius(),
             onRadiusChanged: (value) => setState(() => _radiusKm = value),
-            onPickCountry: () async {
-              final picked = await showCountryPicker(context);
-              if (picked != null && mounted) {
-                setState(() => _country = picked);
-              }
-            },
             onDownloadAroundMe: _startAroundMe,
-            onDownloadCountry: _startCountry,
           ),
         },
       ),
@@ -267,20 +266,16 @@ class _Body extends StatelessWidget {
   const _Body({
     required this.state,
     required this.radiusKm,
-    required this.country,
+    required this.tiles,
     required this.onRadiusChanged,
-    required this.onPickCountry,
     required this.onDownloadAroundMe,
-    required this.onDownloadCountry,
   });
 
   final OfflineMapsState state;
   final double radiusKm;
-  final Country? country;
+  final int? tiles;
   final ValueChanged<double> onRadiusChanged;
-  final VoidCallback onPickCountry;
   final VoidCallback onDownloadAroundMe;
-  final ValueChanged<Country> onDownloadCountry;
 
   /// Nothing may be asked for while something is being fetched: the store
   /// runs one download at a time.
@@ -299,26 +294,20 @@ class _Body extends StatelessWidget {
           ).textTheme.bodySmall?.copyWith(color: kTextMuted),
         ),
         const SizedBox(height: 16),
-        // The download belongs to neither card below: only one runs at a
-        // time, it outlives this screen, and it can have been started by
-        // either. Showing it inside the radius card labelled a country
-        // download "keep the area around me".
+        // Its own card rather than part of the one below: a download
+        // outlives this screen, so it can still be running when the screen
+        // is opened again and nothing on the card that started it would
+        // know.
         if (state.download case final download?) ...[
           _DownloadCard(download: download),
           const SizedBox(height: 16),
         ],
         _AroundMeCard(
           radiusKm: radiusKm,
+          tiles: tiles,
           enabled: _idle,
           onChanged: onRadiusChanged,
           onDownload: onDownloadAroundMe,
-        ),
-        const SizedBox(height: 16),
-        _CountryCard(
-          country: country,
-          enabled: _idle,
-          onPick: onPickCountry,
-          onDownload: onDownloadCountry,
         ),
         const SizedBox(height: 16),
         if (state.storageBytes case final bytes?) ...[
@@ -396,12 +385,14 @@ class _DownloadCard extends StatelessWidget {
 class _AroundMeCard extends StatelessWidget {
   const _AroundMeCard({
     required this.radiusKm,
+    required this.tiles,
     required this.enabled,
     required this.onChanged,
     required this.onDownload,
   });
 
   final double radiusKm;
+  final int? tiles;
   final bool enabled;
   final ValueChanged<double> onChanged;
   final VoidCallback onDownload;
@@ -413,6 +404,9 @@ class _AroundMeCard extends StatelessWidget {
       title: l10n.offlineAroundMe,
       children: [
         Text(l10n.offlineRadius(radiusKm.round().toString())),
+        // Bytes are deliberately not predicted: the same tile measured
+        // 1.1 KB over open country and 11 KB over Paris.
+        if (tiles case final count?) _Note(l10n.offlineRadiusTiles('$count')),
         Slider(
           value: radiusKm,
           min: _stepKm,
@@ -426,64 +420,6 @@ class _AroundMeCard extends StatelessWidget {
             onPressed: enabled ? onDownload : null,
             child: Text(l10n.offlineDownload),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class _CountryCard extends StatelessWidget {
-  const _CountryCard({
-    required this.country,
-    required this.enabled,
-    required this.onPick,
-    required this.onDownload,
-  });
-
-  final Country? country;
-  final bool enabled;
-  final VoidCallback onPick;
-  final ValueChanged<Country> onDownload;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final chosen = country;
-    return _Section(
-      title: l10n.offlineCountry,
-      children: [
-        _Note(l10n.offlineCountryBox),
-        const SizedBox(height: 8),
-        if (chosen != null) ...[
-          Text(chosen.name),
-          // Exact, not an estimate — the count is geometry. Bytes are not
-          // shown because they cannot be predicted: the same tile measured
-          // 1.1 KB over open country and 11 KB over Paris.
-          _Note(
-            l10n.offlineCountryTiles(
-              tilesForDownload(
-                bounds: chosen.bounds,
-                minZoom: _minZoom,
-                maxZoom: _maxZoom,
-              ).toString(),
-            ),
-          ),
-        ],
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              onPressed: enabled ? onPick : null,
-              child: Text(l10n.offlineCountryPick),
-            ),
-            const SizedBox(width: 8),
-            ElevatedButton(
-              onPressed: enabled && chosen != null
-                  ? () => onDownload(chosen)
-                  : null,
-              child: Text(l10n.offlineDownload),
-            ),
-          ],
         ),
       ],
     );

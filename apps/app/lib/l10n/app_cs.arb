@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Překrývající se oblasti sdílejí dlaždice, takže toto číslo může překročit celek. Co není v žádné oblasti, je mapa, kterou jste si prohlíželi, plus režie databáze.",
   "offlineClearCache": "Vymazat mezipaměť",
-  "offlineCountry": "Uložit zemi",
-  "offlineCountryPick": "Vyberte zemi",
-  "offlineCountryTiles": "{tiles} dlaždic",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} dlaždic",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Země se ukládá jako obdélník kolem ní, takže sousedé a moře přijdou také.",
   "offlineAreaCost": "{mb} MB · {tiles} dlaždic",
   "@offlineAreaCost": {
     "placeholders": {

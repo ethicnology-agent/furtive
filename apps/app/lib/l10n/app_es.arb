@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Las áreas que se solapan comparten sus teselas, por lo que esa cifra puede superar el total. Lo que no está en ningún área es el mapa que has consultado, más la sobrecarga de la base de datos.",
   "offlineClearCache": "Vaciar caché",
-  "offlineCountry": "Guardar un país",
-  "offlineCountryPick": "Elegir un país",
-  "offlineCountryTiles": "{tiles} teselas",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} teselas",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Un país se guarda como un rectángulo a su alrededor, así que los vecinos y el mar vienen también.",
   "offlineAreaCost": "{mb} MB · {tiles} teselas",
   "@offlineAreaCost": {
     "placeholders": {

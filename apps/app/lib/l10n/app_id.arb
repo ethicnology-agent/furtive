@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Area yang bertumpang tindih berbagi ubin, jadi angka itu bisa melebihi total. Yang tidak berada dalam area adalah peta yang Anda lihat, ditambah overhead basis data.",
   "offlineClearCache": "Hapus cache",
-  "offlineCountry": "Simpan sebuah negara",
-  "offlineCountryPick": "Pilih negara",
-  "offlineCountryTiles": "{tiles} ubin",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} ubin",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Sebuah negara disimpan sebagai persegi panjang di sekitarnya, jadi tetangga dan laut ikut serta.",
   "offlineAreaCost": "{mb} MB · {tiles} ubin",
   "@offlineAreaCost": {
     "placeholders": {

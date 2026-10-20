@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Overlappende gebieden delen hun tegels, dus dat getal kan het totaal overschrijden. Wat in geen enkel gebied zit, is kaart die je hebt bekeken, plus de overhead van de database.",
   "offlineClearCache": "Cache wissen",
-  "offlineCountry": "Een land bewaren",
-  "offlineCountryPick": "Kies een land",
-  "offlineCountryTiles": "{tiles} tegels",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} tegels",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Een land wordt bewaard als een rechthoek eromheen, dus buurlanden en zee komen mee.",
   "offlineAreaCost": "{mb} MB · {tiles} tegels",
   "@offlineAreaCost": {
     "placeholders": {

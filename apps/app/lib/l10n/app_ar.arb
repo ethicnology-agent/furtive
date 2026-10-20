@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "المناطق المتداخلة تتشارك بلاطاتها، لذا قد يتجاوز هذا الرقم الإجمالي. وما ليس ضمن منطقة هو الخريطة التي اطّلعت عليها، بالإضافة إلى عبء قاعدة البيانات.",
   "offlineClearCache": "مسح ذاكرة التخزين المؤقت",
-  "offlineCountry": "حفظ دولة",
-  "offlineCountryPick": "اختر دولة",
-  "offlineCountryTiles": "{tiles} بلاطة",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} بلاطة",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "تُحفظ الدولة كمستطيل حولها، لذا يأتي الجيران والبحر أيضًا.",
   "offlineAreaCost": "{mb} ميغابايت · {tiles} بلاطة",
   "@offlineAreaCost": {
     "placeholders": {

@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Пересекающиеся области делят тайлы, поэтому это число может превышать общее. То, что не входит ни в одну область, — просмотренная карта плюс накладные расходы базы данных.",
   "offlineClearCache": "Очистить кэш",
-  "offlineCountry": "Сохранить страну",
-  "offlineCountryPick": "Выберите страну",
-  "offlineCountryTiles": "{tiles} тайлов",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} тайлов",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Страна сохраняется как прямоугольник вокруг неё, поэтому соседи и море тоже.",
   "offlineAreaCost": "{mb} МБ · {tiles} тайлов",
   "@offlineAreaCost": {
     "placeholders": {

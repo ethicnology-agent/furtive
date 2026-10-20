@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Nakładające się obszary współdzielą kafelki, więc ta liczba może przekroczyć całość. To, czego nie ma w żadnym obszarze, to oglądana mapa plus narzut bazy danych.",
   "offlineClearCache": "Wyczyść pamięć podręczną",
-  "offlineCountry": "Zachowaj kraj",
-  "offlineCountryPick": "Wybierz kraj",
-  "offlineCountryTiles": "{tiles} kafelków",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} kafelków",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Kraj jest zachowywany jako prostokąt wokół niego, więc sąsiedzi i morze też.",
   "offlineAreaCost": "{mb} MB · {tiles} kafelków",
   "@offlineAreaCost": {
     "placeholders": {

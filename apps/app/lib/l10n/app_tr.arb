@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Üst üste binen alanlar döşemelerini paylaşır, bu yüzden bu sayı toplamı aşabilir. Hiçbir alanda olmayan, baktığınız harita ile veritabanının ek yüküdür.",
   "offlineClearCache": "Önbelleği temizle",
-  "offlineCountry": "Bir ülkeyi sakla",
-  "offlineCountryPick": "Bir ülke seçin",
-  "offlineCountryTiles": "{tiles} döşeme",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} döşeme",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Bir ülke etrafındaki dikdörtgen olarak saklanır, komşular ve deniz de gelir.",
   "offlineAreaCost": "{mb} MB · {tiles} döşeme",
   "@offlineAreaCost": {
     "placeholders": {

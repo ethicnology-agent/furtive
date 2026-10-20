@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "겹치는 지역은 타일을 공유하므로 이 값이 전체를 넘을 수 있습니다. 어느 지역에도 없는 것은 둘러본 지도와 데이터베이스의 오버헤드입니다.",
   "offlineClearCache": "캐시 지우기",
-  "offlineCountry": "국가 보관",
-  "offlineCountryPick": "국가 선택",
-  "offlineCountryTiles": "타일 {tiles}개",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "타일 {tiles}개",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "국가는 그 주변의 직사각형으로 보관되므로 인접국과 바다도 함께 포함됩니다.",
   "offlineAreaCost": "{mb} MB · 타일 {tiles}개",
   "@offlineAreaCost": {
     "placeholders": {

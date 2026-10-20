@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Áreas sobrepostas partilham os seus blocos, pelo que esse valor pode exceder o total. O que não está numa área é o mapa que consultou, mais a sobrecarga da base de dados.",
   "offlineClearCache": "Limpar cache",
-  "offlineCountry": "Guardar um país",
-  "offlineCountryPick": "Escolher um país",
-  "offlineCountryTiles": "{tiles} blocos",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} blocos",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Um país é guardado como um retângulo à sua volta, pelo que os vizinhos e o mar vêm também.",
   "offlineAreaCost": "{mb} MB · {tiles} blocos",
   "@offlineAreaCost": {
     "placeholders": {

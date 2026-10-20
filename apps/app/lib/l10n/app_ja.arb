@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "範囲が重なるとタイルを共有するため、この値は合計を上回ることがあります。どの範囲にも含まれない分は、見た地図とデータベース自体のオーバーヘッドです。",
   "offlineClearCache": "キャッシュを削除",
-  "offlineCountry": "国を保存",
-  "offlineCountryPick": "国を選択",
-  "offlineCountryTiles": "{tiles} タイル",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} タイル",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "国はその周囲の長方形として保存されるため、隣国や海も含まれます。",
   "offlineAreaCost": "{mb} MB · {tiles} タイル",
   "@offlineAreaCost": {
     "placeholders": {

@@ -137,18 +137,49 @@ void main() {
     expect(find.widgetWithText(ElevatedButton, 'Download'), findsNothing);
   });
 
-  testWidgets('an empty store offers both ways in and keeps nothing', (
+  testWidgets('an empty store offers a radius and keeps nothing', (
     tester,
   ) async {
     await pump(tester);
     cubit.show(idle);
     await tester.pumpAndSettle();
     expect(find.text('Keep the area around me'), findsOneWidget);
-    expect(find.text('Keep a country'), findsOneWidget);
     expect(find.text('Radius: 10 km'), findsOneWidget);
     expect(find.text('No areas kept yet'), findsOneWidget);
     expect(find.text('Map storage'), findsOneWidget);
     expect(find.text('1.0 MB on this device'), findsOneWidget);
+  });
+
+  testWidgets('the radius states its cost, and only once there is a fix', (
+    tester,
+  ) async {
+    await pump(tester);
+    cubit.show(idle);
+    await tester.pumpAndSettle();
+    // No position: nothing to count, because the rectangle is centred on the
+    // user. Saying 0 would be a measurement. Scoped to the card, because the
+    // storage card below counts tiles for a different reason.
+    final card = find.ancestor(
+      of: find.text('Keep the area around me'),
+      matching: find.byType(Card),
+    );
+    expect(
+      find.descendant(of: card, matching: find.textContaining('tiles')),
+      findsNothing,
+    );
+  });
+
+  testWidgets('the cost stated for the radius is exact', (tester) async {
+    await pump(
+      tester,
+      position: () =>
+          PositionEntity(latitude: 45.5, longitude: -73.6, elevation: 20),
+    );
+    cubit.show(idle);
+    await tester.pumpAndSettle();
+    // Geometry, not an estimate: 823 tiles in the pyramid plus the 395 fixed
+    // resources every download carries.
+    expect(find.text('1218 tiles'), findsOneWidget);
   });
 
   testWidgets('asking without a fix reports it rather than downloading', (
@@ -415,28 +446,5 @@ void main() {
     await tester.tapAt(Offset(slider.right - 1, slider.center.dy));
     await tester.pumpAndSettle();
     expect(find.text('Radius: 50 km'), findsOneWidget);
-  });
-
-  testWidgets('choosing a country states its exact cost before downloading', (
-    tester,
-  ) async {
-    await pump(tester);
-    cubit.show(idle);
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Choose a country'));
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), 'Luxem');
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Luxembourg').last);
-    await tester.pumpAndSettle();
-    expect(find.text('Luxembourg'), findsOneWidget);
-    // Exact, not an estimate: the count is geometry, so it is the same
-    // number every time and the same one the device reported.
-    expect(find.text('7217 tiles'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ElevatedButton, 'Download').last);
-    await tester.pumpAndSettle();
-    final sent = cubit.downloads.single;
-    expect(sent['name'], 'Luxembourg');
-    expect(sent['key'], startsWith('country:LU/10.0-15.0@'));
   });
 }

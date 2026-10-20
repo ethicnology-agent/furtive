@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Області, що перетинаються, спільно використовують тайли, тож це число може перевищувати загальне. Те, що не належить жодній області, — переглянута карта плюс накладні витрати бази даних.",
   "offlineClearCache": "Очистити кеш",
-  "offlineCountry": "Зберегти країну",
-  "offlineCountryPick": "Виберіть країну",
-  "offlineCountryTiles": "{tiles} тайлів",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} тайлів",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Країна зберігається як прямокутник навколо неї, тож сусіди й море теж.",
   "offlineAreaCost": "{mb} МБ · {tiles} тайлів",
   "@offlineAreaCost": {
     "placeholders": {

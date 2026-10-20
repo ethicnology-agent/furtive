@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Überlappende Gebiete teilen sich ihre Kacheln, daher kann dieser Wert das Gesamtvolumen übersteigen. Was in keinem Gebiet liegt, ist angesehene Karte plus der Overhead der Datenbank.",
   "offlineClearCache": "Cache leeren",
-  "offlineCountry": "Ein Land behalten",
-  "offlineCountryPick": "Land auswählen",
-  "offlineCountryTiles": "{tiles} Kacheln",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} Kacheln",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Ein Land wird als Rechteck darum behalten, Nachbarn und Meer kommen also mit.",
   "offlineAreaCost": "{mb} MB · {tiles} Kacheln",
   "@offlineAreaCost": {
     "placeholders": {

@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Päällekkäiset alueet jakavat ruutunsa, joten luku voi ylittää kokonaismäärän. Se mikä ei kuulu alueeseen on katsomaasi karttaa sekä tietokannan ylimääräinen tila.",
   "offlineClearCache": "Tyhjennä välimuisti",
-  "offlineCountry": "Säilytä maa",
-  "offlineCountryPick": "Valitse maa",
-  "offlineCountryTiles": "{tiles} ruutua",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} ruutua",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Maa säilytetään sen ympärille piirrettynä suorakulmiona, joten naapurit ja meri tulevat mukana.",
   "offlineAreaCost": "{mb} Mt · {tiles} ruutua",
   "@offlineAreaCost": {
     "placeholders": {

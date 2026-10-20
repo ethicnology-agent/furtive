@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Överlappande områden delar sina rutor, så den siffran kan överstiga totalen. Det som inte ligger i ett område är karta du tittat på, plus databasens överhead.",
   "offlineClearCache": "Rensa cache",
-  "offlineCountry": "Spara ett land",
-  "offlineCountryPick": "Välj ett land",
-  "offlineCountryTiles": "{tiles} rutor",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} rutor",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Ett land sparas som en rektangel runt det, så grannar och hav följer med.",
   "offlineAreaCost": "{mb} MB · {tiles} rutor",
   "@offlineAreaCost": {
     "placeholders": {

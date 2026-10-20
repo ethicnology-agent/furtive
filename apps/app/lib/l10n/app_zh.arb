@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "重叠的区域共享瓦片，因此该数字可能超过总量。不属于任何区域的部分，是你浏览过的地图以及数据库本身的开销。",
   "offlineClearCache": "清除缓存",
-  "offlineCountry": "保留一个国家",
-  "offlineCountryPick": "选择国家",
-  "offlineCountryTiles": "{tiles} 个瓦片",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} 个瓦片",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "国家以其外接矩形保存，因此邻国和海域也会一并下载。",
   "offlineAreaCost": "{mb} MB · {tiles} 个瓦片",
   "@offlineAreaCost": {
     "placeholders": {

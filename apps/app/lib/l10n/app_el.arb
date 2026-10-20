@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Οι περιοχές που επικαλύπτονται μοιράζονται τα πλακίδιά τους, οπότε το νούμερο μπορεί να ξεπερνά το σύνολο. Ό,τι δεν ανήκει σε περιοχή είναι χάρτης που είδατε, συν την επιβάρυνση της βάσης δεδομένων.",
   "offlineClearCache": "Εκκαθάριση προσωρινής μνήμης",
-  "offlineCountry": "Αποθήκευση χώρας",
-  "offlineCountryPick": "Επιλέξτε χώρα",
-  "offlineCountryTiles": "{tiles} πλακίδια",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} πλακίδια",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Μια χώρα αποθηκεύεται ως ορθογώνιο γύρω της, οπότε έρχονται και οι γείτονες και η θάλασσα.",
   "offlineAreaCost": "{mb} MB · {tiles} πλακίδια",
   "@offlineAreaCost": {
     "placeholders": {

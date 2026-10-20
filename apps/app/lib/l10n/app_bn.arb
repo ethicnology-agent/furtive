@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "পরস্পর ছেদ করা এলাকা টাইল ভাগ করে, তাই এই সংখ্যা মোটের চেয়ে বেশি হতে পারে। কোনো এলাকায় নেই এমনটা আপনার দেখা মানচিত্র, সঙ্গে ডেটাবেসের ওভারহেড।",
   "offlineClearCache": "ক্যাশ মুছুন",
-  "offlineCountry": "একটি দেশ রাখুন",
-  "offlineCountryPick": "একটি দেশ বাছুন",
-  "offlineCountryTiles": "{tiles}টি টাইল",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles}টি টাইল",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "একটি দেশ তার চারপাশের আয়তক্ষেত্র হিসেবে রাখা হয়, তাই প্রতিবেশী ও সমুদ্রও আসে।",
   "offlineAreaCost": "{mb} MB · {tiles}টি টাইল",
   "@offlineAreaCost": {
     "placeholders": {

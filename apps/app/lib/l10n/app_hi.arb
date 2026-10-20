@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "ओवरलैप करने वाले क्षेत्र अपनी टाइलें साझा करते हैं, इसलिए यह संख्या कुल से अधिक हो सकती है। जो किसी क्षेत्र में नहीं है वह आपका देखा मानचित्र है, साथ ही डेटाबेस का ओवरहेड।",
   "offlineClearCache": "कैश साफ़ करें",
-  "offlineCountry": "एक देश रखें",
-  "offlineCountryPick": "देश चुनें",
-  "offlineCountryTiles": "{tiles} टाइलें",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} टाइलें",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "देश को उसके चारों ओर एक आयत के रूप में रखा जाता है, इसलिए पड़ोसी और समुद्र भी आते हैं।",
   "offlineAreaCost": "{mb} MB · {tiles} टाइलें",
   "@offlineAreaCost": {
     "placeholders": {

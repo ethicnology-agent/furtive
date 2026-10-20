@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Maeneo yanayoingiliana hushiriki vigae vyake, hivyo takwimu hiyo inaweza kuzidi jumla. Kisichomo katika eneo ni ramani uliyoitazama, pamoja na gharama ya hifadhidata.",
   "offlineClearCache": "Futa akiba",
-  "offlineCountry": "Hifadhi nchi",
-  "offlineCountryPick": "Chagua nchi",
-  "offlineCountryTiles": "vigae {tiles}",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "vigae {tiles}",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Nchi huhifadhiwa kama mstatili unaoizunguka, hivyo majirani na bahari huja pia.",
   "offlineAreaCost": "{mb} MB · vigae {tiles}",
   "@offlineAreaCost": {
     "placeholders": {

@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Des zones qui se chevauchent partagent leurs tuiles, donc ce chiffre peut dépasser le total. Ce qui n'est dans aucune zone est la carte que vous avez consultée, plus la surcharge propre à la base de données.",
   "offlineClearCache": "Vider le cache",
-  "offlineCountry": "Conserver un pays",
-  "offlineCountryPick": "Choisir un pays",
-  "offlineCountryTiles": "{tiles} tuiles",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} tuiles",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Un pays est conservé sous forme de rectangle, donc les voisins et la mer viennent avec.",
   "offlineAreaCost": "{mb} Mo · {tiles} tuiles",
   "@offlineAreaCost": {
     "placeholders": {

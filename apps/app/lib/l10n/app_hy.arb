@@ -248,17 +248,14 @@
   },
   "offlineStorageCached": "Համընկնող տարածքները կիսում են իրենց սալիկները, ուստի այդ թիվը կարող է գերազանցել ընդհանուրը։ Ինչ որ տարածքում չէ՝ ձեր դիտած քարտեզն է, գումարած տվյալների բազայի ծախսը։",
   "offlineClearCache": "Մաքրել քեշը",
-  "offlineCountry": "Պահել երկիր",
-  "offlineCountryPick": "Ընտրեք երկիր",
-  "offlineCountryTiles": "{tiles} սալիկ",
-  "@offlineCountryTiles": {
+  "offlineRadiusTiles": "{tiles} սալիկ",
+  "@offlineRadiusTiles": {
     "placeholders": {
       "tiles": {
         "type": "String"
       }
     }
   },
-  "offlineCountryBox": "Երկիրը պահվում է որպես իր շուրջ ուղղանկյուն, ուստի հարևաններն ու ծովը նույնպես գալիս են։",
   "offlineAreaCost": "{mb} ՄԲ · {tiles} սալիկ",
   "@offlineAreaCost": {
     "placeholders": {
