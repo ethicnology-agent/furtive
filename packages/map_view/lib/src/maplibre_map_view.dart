@@ -87,11 +87,25 @@ class MapLibreMapView implements MapView {
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
+    VoidCallback? onStyleLoaded,
   }) {
     final centre = initialCentre;
     final me = showUserLocation ? userPosition : null;
     return ml.MapLibreMap(
       options: ml.MapOptions(
+        // Hybrid composition, not the plugin's `tlhc_vd` default.
+        //
+        // The map is an Android platform view, and Flutter composes it with
+        // Impeller. Texture Layer Hybrid Composition hands the view's content
+        // over as a texture, which is faster and which some drivers do not
+        // produce: the map comes out black while the rest of the interface
+        // draws, and the style loads without complaint. Reported on a Pixel 9a
+        // (Tensor G4) on the build that moved to Flutter 3.47, against a
+        // Pixel 6a (Tensor G1) that renders the same build correctly.
+        //
+        // Hybrid composition puts the real Android view in the hierarchy
+        // instead. It costs a little and it is the mode that works everywhere.
+        androidMode: ml.AndroidPlatformViewMode.hc,
         // An empty style renders MapLibre's own blank canvas, which is exactly
         // the tile-less mode: the track still draws over it.
         initStyle: styleUrl ?? '',
@@ -161,6 +175,12 @@ class MapLibreMapView implements MapView {
       // puck is now drawn below from MapState.userLocation, the same value
       // Follow uses, which makes the two incapable of disagreeing.
       onEvent: (event) {
+        // The renderer's own verdict on the style, which nothing else can
+        // give. `getStyleUrl` only says which URL was handed over; whether
+        // MapLibre could load it is a different question, and when the answer
+        // was no the map went black in silence. Two hours were spent guessing
+        // at that silence.
+        if (event is ml.MapEventStyleLoaded) onStyleLoaded?.call();
         // Telling a user gesture apart from our own moveCamera is what stops
         // follow-mode fighting the user. `MapEventUserInput` would be the
         // obvious choice but does not fire on pan/drag as of 0.3.5 (upstream
