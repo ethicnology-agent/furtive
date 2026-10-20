@@ -153,7 +153,7 @@
   "changelogV130Detail": "Detalhe de gravação: escolhe amostragem GPS precisa, equilibrada ou de resistência para equilibrar precisão e bateria por atividade.",
   "changelogV130Left": "Modo canhoto: os controlos do mapa podem passar para o lado esquerdo do ecrã (Definições).",
   "changelogV130CarFix": "Corrigido: um carro acima de 126 km/h não gravava nada — o filtro de velocidade agora adapta-se a cada atividade em vez de rejeitar cada ponto.",
-  "changelogV140Offline": "Mapas offline: guarde a área à sua volta — de 10 a 50 km — ou um país inteiro, para que o mapa continue a funcionar onde não há sinal (Configurações).",
+  "changelogV140Offline": "Mapas offline: guarde a área à sua volta, de 10 a 100 km, para que o mapa continue a funcionar onde não há sinal (Configurações).",
   "changelogV140OfflineCost": "Cada área guardada indica quanto custou em blocos e megabytes, e uma interrompida indica até onde chegou — peça-a de novo para terminá-la.",
   "changelogV140Cache": "O mapa que você apenas consultou também fica guardado, até 1 GB, e pode ser esvaziado sozinho sem tocar nas áreas que você escolheu manter.",
   "changelogV140Drift": "Corrigido: um telefone parado já não acumula distância por desvio do GPS — uma gravação imóvel agora marca zero em vez de inventar metros.",

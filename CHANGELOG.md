@@ -8,21 +8,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.4.0] - 2026-10-18
 
 ### Added
-- **Offline maps.** Keep the area around you — 10 to 50 km, in tens — or a whole
-  country, so the map still works where there is no signal. Settings → Offline
-  maps. A country is kept as the rectangle around it, so neighbours and sea come
-  with it; the alternative was a request per landmass, which costs more than the
-  surplus it saves.
+- **Offline maps.** Keep the area around you — 10 to 100 km, in tens — so the
+  map still works where there is no signal. Settings → Offline maps. The card
+  states the exact tile count before anything is fetched, because the count is
+  geometry; bytes are reported as they arrive rather than predicted, since the
+  same tile measured 1.1 KB over open country and 11 KB over Paris.
 
-  The radius stops at 50 km because of a JNI leak in the renderer plugin, not
-  because of the renderer. MapLibre's 6,000-tile cap is Mapbox heritage and does
-  not apply here — a single 150 km region downloaded all 181,080 of its tiles
-  and reported complete. What does apply is `maplibre_android` 0.3.5 releasing
-  the JNI references from every download status event into an `Arena` that has
-  already closed, which overflows the 51,200-entry global reference table and
-  aborts the process. Reproduced twice, after roughly 20 and 28 minutes of
-  cumulative downloading. The fix is vendored (see Internal) and 50 km is an
-  order of magnitude below where the abort has ever been seen.
+  A radius becomes the rectangle around it, which covers 1.27 times the disc —
+  the surplus is accepted rather than paid for with a request per shape.
+
+  Keeping a whole country was built and then dropped before release. A country
+  was kept as the box around its main landmass, and the arithmetic does not
+  survive contact with the list: of 174 countries, 139 exceed 84,000 tiles at
+  z10-15 and 126 exceed the 181,080 of the largest region ever downloaded to
+  completion here. Russia is 180 million tiles — 434 GB at the density measured
+  in open country. Luxembourg, the one that was tested, is the smallest of the
+  174.
+
+  The radius reaches 100 km rather than 50 because the ceiling was never about
+  the map. `maplibre_android` 0.3.5 released the JNI references from every
+  download status event into an `Arena` that had already closed, overflowing the
+  51,200-entry global reference table and aborting the process after roughly 20
+  and 28 minutes of cumulative downloading. MapLibre's 6,000-tile cap is Mapbox
+  heritage and does not apply — a single 150 km region downloaded all 181,080 of
+  its tiles and reported complete. The leak is fixed in the vendored fork (see
+  Internal), so cost is now the only limit, and 100 km is 81,050 tiles.
 - **What each kept area cost.** Tiles and megabytes per area, and a running
   total for the device. An area that was cut short says how far it got as a
   percentage; asking for it again finishes it from the tiles already stored,

@@ -153,7 +153,7 @@
   "changelogV130Detail": "Tallennuksen tarkkuus: valitse tarkka, tasapainoinen tai säästö GPS-näytteistys tasapainottaaksesi tarkkuuden ja akun aktiviteetitain.",
   "changelogV130Left": "Vasenkätinen tila: kartan säätimet voivat siirtyä näytön vasemmalle puolelle (Asetukset).",
   "changelogV130CarFix": "Korjattu: yli 126 km/h ajava auto ei tallentanut mitään — nopeussuodatin mukautuu nyt jokaiseen aktiviteettiin sen sijaan että se hylkäisi jokaisen sijainnin.",
-  "changelogV140Offline": "Offline-kartat: säilytä ympärilläsi oleva alue — 10–50 km — tai kokonainen maa, jotta kartta toimii myös ilman kenttää (Asetukset).",
+  "changelogV140Offline": "Offline-kartat: säilytä ympärilläsi oleva alue, 10–100 km, jotta kartta toimii myös ilman kenttää (Asetukset).",
   "changelogV140OfflineCost": "Jokainen säilytetty alue kertoo, mitä se maksoi ruutuina ja megatavuina, ja keskeytynyt kertoo, kuinka pitkälle se ehti — pyydä se uudelleen viimeistelläksesi sen.",
   "changelogV140Cache": "Myös kartta, jota vain katselit, säilyy, enintään 1 Gt, ja sen voi tyhjentää erikseen koskematta alueisiin, jotka valitsit säilytettäväksi.",
   "changelogV140Drift": "Korjattu: paikallaan oleva puhelin ei enää kerää matkaa GPS-ajautumasta — liikkumaton tallennus näyttää nyt nollaa eikä keksi metrejä.",

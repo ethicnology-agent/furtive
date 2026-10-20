@@ -153,7 +153,7 @@
   "changelogV130Detail": "Dettaglio registrazione: scegli campionamento GPS preciso, bilanciato o resistenza per bilanciare precisione e batteria per attività.",
   "changelogV130Left": "Modalità mancina: i controlli della mappa possono spostarsi sul lato sinistro dello schermo (Impostazioni).",
   "changelogV130CarFix": "Risolto: un'auto oltre i 126 km/h non registrava nulla — il filtro di velocità ora si adatta a ogni attività invece di scartare ogni fix.",
-  "changelogV140Offline": "Mappe offline: conserva l'area intorno a te — da 10 a 50 km — o un paese intero, così la mappa funziona anche dove non c'è segnale (Impostazioni).",
+  "changelogV140Offline": "Mappe offline: conserva l'area intorno a te, da 10 a 100 km, così la mappa funziona anche dove non c'è segnale (Impostazioni).",
   "changelogV140OfflineCost": "Ogni area conservata dice quanto è costata in tasselli e megabyte, e una interrotta dice fin dove è arrivata — richiedila per completarla.",
   "changelogV140Cache": "Anche la mappa che hai semplicemente guardato viene conservata, fino a 1 GB, e può essere svuotata da sola senza toccare le aree che hai scelto di tenere.",
   "changelogV140Drift": "Risolto: un telefono fermo non accumula più distanza per la deriva del GPS — una registrazione immobile ora segna zero invece di inventare metri.",

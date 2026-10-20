@@ -153,7 +153,7 @@
   "changelogV130Detail": "Inspelningsdetalj: välj exakt, balanserad eller sparsam GPS-sampling för att balansera noggrannhet mot batteri per aktivitet.",
   "changelogV130Left": "Vänsterhänt läge: kartkontrollerna kan flytta till vänster sida av skärmen (Inställningar).",
   "changelogV130CarFix": "Fixat: en bil över 126 km/h spelade inte in någonting — hastighetsfiltret anpassar sig nu till varje aktivitet istället för att avvisa varje fix.",
-  "changelogV140Offline": "Offlinekartor: spara området omkring dig — 10 till 50 km — eller ett helt land, så att kartan fungerar även utan täckning (Inställningar).",
+  "changelogV140Offline": "Offlinekartor: spara området omkring dig, 10 till 100 km, så att kartan fungerar även utan täckning (Inställningar).",
   "changelogV140OfflineCost": "Varje sparat område anger vad det kostade i rutor och megabyte, och ett avbrutet anger hur långt det hann — begär det igen för att slutföra det.",
   "changelogV140Cache": "Kartan du bara tittat på sparas också, upp till 1 GB, och kan slängas för sig utan att röra de områden du valt att spara.",
   "changelogV140Drift": "Fixat: en telefon som ligger still samlar inte längre på sig sträcka från GPS-drift — en stillastående inspelning visar nu noll i stället för att hitta på meter.",

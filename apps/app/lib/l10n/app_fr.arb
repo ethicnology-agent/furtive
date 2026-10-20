@@ -153,7 +153,7 @@
   "changelogV130Detail": "Détail d'enregistrement : choisis un échantillonnage GPS précis, équilibré ou endurance pour arbitrer entre précision et batterie selon l'activité.",
   "changelogV130Left": "Mode gaucher : les contrôles de la carte peuvent passer à gauche de l'écran (Paramètres).",
   "changelogV130CarFix": "Corrigé : une voiture au-delà de 126 km/h n'enregistrait plus rien du tout — le filtre de vitesse s'adapte désormais à chaque activité au lieu de rejeter chaque relevé.",
-  "changelogV140Offline": "Cartes hors ligne : garde la zone autour de toi — de 10 à 50 km — ou un pays entier, pour que la carte fonctionne encore là où il n'y a pas de réseau (Paramètres).",
+  "changelogV140Offline": "Cartes hors ligne : garde la zone autour de toi, de 10 à 100 km, pour que la carte fonctionne encore là où il n'y a pas de réseau (Paramètres).",
   "changelogV140OfflineCost": "Chaque zone gardée indique ce qu'elle a coûté en tuiles et en mégaoctets, et une zone interrompue indique où elle s'est arrêtée — redemande-la pour la terminer.",
   "changelogV140Cache": "La carte que tu as simplement consultée est gardée aussi, jusqu'à 1 Go, et peut être vidée seule sans toucher aux zones que tu as choisi de garder.",
   "changelogV140Drift": "Corrigé : un téléphone posé n'accumule plus de distance à cause de la dérive GPS — un enregistrement immobile affiche désormais zéro au lieu d'inventer des mètres.",

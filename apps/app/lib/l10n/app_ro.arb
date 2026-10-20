@@ -153,7 +153,7 @@
   "changelogV130Detail": "Detaliu de înregistrare: alege eșantionare GPS precisă, echilibrată sau economică pentru a echilibra precizia și bateria pe activitate.",
   "changelogV130Left": "Mod stângaci: controalele hărții pot trece pe partea stângă a ecranului (Setări).",
   "changelogV130CarFix": "Reparat: o mașină peste 126 km/h nu înregistra nimic — filtrul de viteză se adaptează acum la fiecare activitate în loc să respingă fiecare măsurătoare.",
-  "changelogV140Offline": "Hărți offline: păstrează zona din jurul tău — de la 10 la 50 km — sau o țară întreagă, ca harta să meargă și unde nu e semnal (Setări).",
+  "changelogV140Offline": "Hărți offline: păstrează zona din jurul tău, de la 10 la 100 km, ca harta să meargă și unde nu e semnal (Setări).",
   "changelogV140OfflineCost": "Fiecare zonă păstrată spune cât a costat în dale și megaocteți, iar una întreruptă spune până unde a ajuns — cere-o din nou ca să o termini.",
   "changelogV140Cache": "Și harta pe care doar ai privit-o se păstrează, până la 1 GB, și poate fi aruncată separat fără a atinge zonele pe care ai ales să le păstrezi.",
   "changelogV140Drift": "Reparat: un telefon lăsat pe loc nu mai adună distanță din deriva GPS — o înregistrare imobilă arată acum zero în loc să inventeze metri.",

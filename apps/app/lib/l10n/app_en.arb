@@ -243,7 +243,7 @@
   "changelogV130Detail": "Recording detail: pick precise, balanced or endurance GPS sampling to trade accuracy against battery per activity.",
   "changelogV130Left": "Left-handed mode: the map controls can move to the left side of the screen (Settings).",
   "changelogV130CarFix": "Fixed: a car above 126 km/h recorded nothing at all — the speed filter now adapts to each activity instead of rejecting every fix.",
-  "changelogV140Offline": "Offline maps: keep the area around you — 10 to 50 km — or a whole country, so the map still works where there is no signal (Settings).",
+  "changelogV140Offline": "Offline maps: keep the area around you — 10 to 100 km — so the map still works where there is no signal (Settings).",
   "changelogV140OfflineCost": "Each kept area says what it cost in tiles and megabytes, and one that was cut short says how far it got — ask for it again to finish it.",
   "changelogV140Cache": "The map you simply looked at is kept too, up to 1 GB, and can be thrown away on its own without touching the areas you chose to keep.",
   "changelogV140Drift": "Fixed: a phone left standing no longer piles up distance from GPS drift — a stationary recording now reads zero instead of inventing metres.",

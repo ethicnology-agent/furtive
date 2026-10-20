@@ -153,7 +153,7 @@
   "changelogV130Detail": "Opnamedetail: kies precieze, gebalanceerde of zuinige GPS-bemonstering om per activiteit nauwkeurigheid tegen batterij af te wegen.",
   "changelogV130Left": "Linkshandige modus: de kaartbediening kan naar de linkerkant van het scherm verhuizen (Instellingen).",
   "changelogV130CarFix": "Opgelost: een auto boven 126 km/h nam helemaal niets op — het snelheidsfilter past zich nu aan elke activiteit aan in plaats van elke fix te verwerpen.",
-  "changelogV140Offline": "Offline kaarten: bewaar het gebied om je heen — 10 tot 50 km — of een heel land, zodat de kaart ook zonder bereik werkt (Instellingen).",
+  "changelogV140Offline": "Offline kaarten: bewaar het gebied om je heen, 10 tot 100 km, zodat de kaart ook zonder bereik werkt (Instellingen).",
   "changelogV140OfflineCost": "Elk bewaard gebied vermeldt wat het kostte aan tegels en megabytes, en een afgebroken gebied vermeldt hoe ver het kwam — vraag het opnieuw aan om het af te maken.",
   "changelogV140Cache": "De kaart die je alleen bekeken hebt wordt ook bewaard, tot 1 GB, en kan apart worden weggegooid zonder de gebieden te raken die je bewust hebt bewaard.",
   "changelogV140Drift": "Opgelost: een stilliggende telefoon stapelt geen afstand meer op door GPS-drift — een stilstaande opname leest nu nul in plaats van meters te verzinnen.",
