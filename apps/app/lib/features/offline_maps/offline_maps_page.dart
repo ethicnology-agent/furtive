@@ -13,15 +13,16 @@ import 'package:ui_kit/ui_kit.dart';
 const _minZoom = 10.0;
 const _maxZoom = 15.0;
 
-/// Bounded by the plugin's JNI leak, not by the renderer — see the
-/// measurements on [_OfflineMapsPageState].
-const _maxRadiusKm = 50.0;
+/// Bounded by what someone will sit through and what a phone will hold, now
+/// that the plugin's JNI leak no longer bounds it — see the measurements on
+/// [_OfflineMapsPageState].
+const _maxRadiusKm = 100.0;
 
 /// The slider moves in tens. Those measurements are what makes a finer step
 /// pointless: between 10 and 20 km a rural download grows by a couple of
 /// megabytes, and a dense one by tens — neither is a quantity a user picks
-/// to the kilometre, and offering 50 stops implied a precision the cost does
-/// not have.
+/// to the kilometre, and offering a hundred stops implied a precision the
+/// cost does not have.
 const _stepKm = 10.0;
 
 /// Choosing which map areas survive going offline.
@@ -96,10 +97,15 @@ class _OfflineMapsPageState extends State<OfflineMapsPage> {
   // maplibre 0.3.6 fixes JNI leaks in StyleController and the map query
   // methods, but not this path.
   //
-  // Hence 50 km: the slowest measured download at that radius took 160
-  // seconds, an order of magnitude below where the abort has ever been
-  // seen. The slider is not capped by the renderer, it is capped by the
-  // plugin bug it has to survive. Raise it when that is fixed upstream.
+  // That leak is fixed in the fork this application pins, so it no longer
+  // sets the ceiling — which is why the slider now reaches 100 km, where it
+  // stopped at 50 for exactly that reason.
+  //
+  // What bounds it now is the cost, which the card states before anything is
+  // fetched: 81,050 tiles for 100 km in open country, around 86 MB, and the
+  // same radius over a city closer to a gigabyte. Past that the figure stops
+  // being something a person weighs and starts being something they regret,
+  // and the tile count climbs with the square of the radius.
 
   /// The only thing this screen still owns: where the slider is. Everything
   /// else outlives it.

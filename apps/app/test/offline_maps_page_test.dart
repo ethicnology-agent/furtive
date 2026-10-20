@@ -169,7 +169,9 @@ void main() {
     );
   });
 
-  testWidgets('the cost stated for the radius is exact', (tester) async {
+  testWidgets('the cost is exact and grows with the square of the radius', (
+    tester,
+  ) async {
     await pump(
       tester,
       position: () =>
@@ -180,6 +182,13 @@ void main() {
     // Geometry, not an estimate: 823 tiles in the pyramid plus the 395 fixed
     // resources every download carries.
     expect(find.text('1218 tiles'), findsOneWidget);
+    final slider = tester.getRect(find.byType(Slider));
+    await tester.tapAt(Offset(slider.right - 1, slider.center.dy));
+    await tester.pumpAndSettle();
+    // Ten times the radius is a hundred times the area, and the figure has
+    // to say so before anyone commits to it.
+    expect(find.text('Radius: 100 km'), findsOneWidget);
+    expect(find.text('73627 tiles'), findsOneWidget);
   });
 
   testWidgets('asking without a fix reports it rather than downloading', (
@@ -438,13 +447,13 @@ void main() {
     expect(cubit.calls, contains('failureReported'));
   });
 
-  testWidgets('the radius moves in tens', (tester) async {
+  testWidgets('the radius moves in tens, up to a hundred', (tester) async {
     await pump(tester);
     cubit.show(idle);
     await tester.pumpAndSettle();
     final slider = tester.getRect(find.byType(Slider));
     await tester.tapAt(Offset(slider.right - 1, slider.center.dy));
     await tester.pumpAndSettle();
-    expect(find.text('Radius: 50 km'), findsOneWidget);
+    expect(find.text('Radius: 100 km'), findsOneWidget);
   });
 }
