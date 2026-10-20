@@ -102,6 +102,7 @@ class _Renderer implements MapView {
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
+    VoidCallback? onStyleLoaded,
   }) {
     builds++;
     centre = initialCentre;

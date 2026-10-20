@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:diagnostics/diagnostics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furtive/views/map_camera.dart';
@@ -336,6 +337,12 @@ class _MapPageState extends State<MapPage> with AutomaticKeepAliveClientMixin {
                     builder: (context, rec) {
                       final activity = rec.activity;
                       return _mapView.build(
+                        // The renderer's verdict, which the style URL alone
+                        // does not give: a map can be handed a good URL and
+                        // still draw nothing, and when that happened the only
+                        // evidence was a screenshot of a black rectangle.
+                        onStyleLoaded: () =>
+                            logs.info('Map style loaded by the renderer'),
                         styleUrl: state.styleUrl,
                         track: activity == null || activity.points.isEmpty
                             ? null

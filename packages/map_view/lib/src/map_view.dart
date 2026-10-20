@@ -120,6 +120,13 @@ abstract class MapView {
   /// legally required to stay visible, and it was already covered once by the
   /// button column — mirroring the buttons without mirroring the badge would
   /// reintroduce exactly that.
+  /// Called when the renderer has actually loaded the style.
+  ///
+  /// Distinct from being handed a style URL, which is all the caller knows on
+  /// its own. A style that never loads leaves a blank map and says nothing —
+  /// the renderer reports no failure — so this is the only signal that tells
+  /// a blank map caused by the platform apart from the deliberate tile-less
+  /// one. The port reports; whoever owns logging decides what to do with it.
   Widget build({
     required String? styleUrl,
     required MapTrack? track,
@@ -132,6 +139,7 @@ abstract class MapView {
     bool fitTrackBounds = false,
     PositionEntity? userPosition,
     double? deviceHeading,
+    VoidCallback? onStyleLoaded,
   });
 
   /// Recentres the camera. A no-op before the map has attached, so callers do
