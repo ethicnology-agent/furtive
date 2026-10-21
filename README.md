@@ -128,7 +128,7 @@ container produce byte-identical output. The repository pins the major inputs:
 - Flutter `3.47.6` via `.fvmrc`
 - Android NDK / SDK / build-tools / JVM in `apps/app/android/gradle.properties`
 - `pubspec.lock` enforced via `flutter pub get --enforce-lockfile`
-- Gradle distribution, FVM installer, and Android command-line tools checksums
+- Gradle distribution, the FVM release asset, and Android command-line tools checksums
 - `SOURCE_DATE_EPOCH = $(git log -1 --format=%ct)` passed to the container
   so Gradle/AGP/Kotlin emit deterministic timestamps
 
