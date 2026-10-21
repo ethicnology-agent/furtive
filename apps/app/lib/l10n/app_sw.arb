@@ -12,6 +12,8 @@
   "liveSharePreparing": "Inaandaa…",
   "liveShareConnected": "Mubashara imeunganishwa",
   "liveShareDisconnected": "Inaunganisha tena…",
+  "liveShareConnecting": "Inaunganisha…",
+  "liveShareNotPublished": "Bado hakuna kilichochapishwa — kiungo kitabaki tupu hadi relay ijibu.",
   "liveShareStillActive": "Kushiriki mubashara bado kunaendelea.",
   "showPassword": "Onyesha nenosiri",
   "hidePassword": "Ficha nenosiri",

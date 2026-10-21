@@ -12,6 +12,8 @@
   "liveSharePreparing": "准备中…",
   "liveShareConnected": "直播已连接",
   "liveShareDisconnected": "正在重新连接…",
+  "liveShareConnecting": "正在连接…",
+  "liveShareNotPublished": "尚未发布任何内容 — 在中继响应之前，链接将保持空白。",
   "liveShareStillActive": "实时分享仍在进行。",
   "showPassword": "显示密码",
   "hidePassword": "隐藏密码",

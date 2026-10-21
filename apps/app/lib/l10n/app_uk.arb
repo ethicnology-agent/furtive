@@ -12,6 +12,8 @@
   "liveSharePreparing": "Підготовка…",
   "liveShareConnected": "Ефір підключено",
   "liveShareDisconnected": "Перепідключення…",
+  "liveShareConnecting": "Підключення…",
+  "liveShareNotPublished": "Поки нічого не опубліковано — посилання лишатиметься порожнім, доки не відповість якийсь релей.",
   "liveShareStillActive": "Трансляція все ще триває.",
   "showPassword": "Показати пароль",
   "hidePassword": "Сховати пароль",

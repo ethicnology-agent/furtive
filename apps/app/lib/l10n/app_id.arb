@@ -12,6 +12,8 @@
   "liveSharePreparing": "Menyiapkan…",
   "liveShareConnected": "Langsung tersambung",
   "liveShareDisconnected": "Menyambung ulang…",
+  "liveShareConnecting": "Menghubungkan…",
+  "liveShareNotPublished": "Belum ada yang dipublikasikan — tautan tetap kosong sampai ada relay yang menjawab.",
   "liveShareStillActive": "Berbagi langsung masih aktif.",
   "showPassword": "Tampilkan kata sandi",
   "hidePassword": "Sembunyikan kata sandi",

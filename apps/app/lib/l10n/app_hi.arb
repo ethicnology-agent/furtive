@@ -12,6 +12,8 @@
   "liveSharePreparing": "तैयार हो रहा है…",
   "liveShareConnected": "लाइव जुड़ा",
   "liveShareDisconnected": "फिर से जुड़ रहा है…",
+  "liveShareConnecting": "कनेक्ट हो रहा है…",
+  "liveShareNotPublished": "अभी कुछ भी प्रकाशित नहीं हुआ — जब तक कोई रिले जवाब नहीं देता, लिंक खाली रहेगा।",
   "liveShareStillActive": "लाइव साझाकरण अब भी चालू है।",
   "showPassword": "पासवर्ड दिखाएँ",
   "hidePassword": "पासवर्ड छिपाएँ",

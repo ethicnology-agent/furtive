@@ -12,6 +12,8 @@
   "liveSharePreparing": "Preparing…",
   "liveShareConnected": "Live connected",
   "liveShareDisconnected": "Reconnecting…",
+  "liveShareConnecting": "Connecting…",
+  "liveShareNotPublished": "Nothing is published yet — the link stays blank until a relay answers.",
   "liveShareStillActive": "Live sharing is still active.",
   "showPassword": "Show password",
   "hidePassword": "Hide password",

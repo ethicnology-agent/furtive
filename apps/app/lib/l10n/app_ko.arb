@@ -12,6 +12,8 @@
   "liveSharePreparing": "준비 중…",
   "liveShareConnected": "라이브 연결됨",
   "liveShareDisconnected": "다시 연결하는 중…",
+  "liveShareConnecting": "연결 중…",
+  "liveShareNotPublished": "아직 아무것도 게시되지 않았습니다. 릴레이가 응답할 때까지 링크는 비어 있습니다.",
   "liveShareStillActive": "라이브 공유가 아직 켜져 있습니다.",
   "showPassword": "비밀번호 표시",
   "hidePassword": "비밀번호 숨기기",

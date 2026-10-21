@@ -12,6 +12,8 @@
   "liveSharePreparing": "Hazırlanıyor…",
   "liveShareConnected": "Canlı bağlandı",
   "liveShareDisconnected": "Yeniden bağlanıyor…",
+  "liveShareConnecting": "Bağlanıyor…",
+  "liveShareNotPublished": "Henüz hiçbir şey yayınlanmadı — bir relay yanıt verene kadar bağlantı boş kalır.",
   "liveShareStillActive": "Canlı paylaşım hâlâ açık.",
   "showPassword": "Parolayı göster",
   "hidePassword": "Parolayı gizle",

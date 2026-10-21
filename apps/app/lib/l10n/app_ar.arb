@@ -12,6 +12,8 @@
   "liveSharePreparing": "جارٍ التحضير…",
   "liveShareConnected": "متصل مباشرةً",
   "liveShareDisconnected": "إعادة الاتصال…",
+  "liveShareConnecting": "جارٍ الاتصال…",
+  "liveShareNotPublished": "لم يُنشر شيء بعد — يبقى الرابط فارغًا حتى يستجيب أحد المرحّلات.",
   "liveShareStillActive": "المشاركة المباشرة لا تزال نشطة.",
   "showPassword": "إظهار كلمة المرور",
   "hidePassword": "إخفاء كلمة المرور",

@@ -12,6 +12,8 @@
   "liveSharePreparing": "Se pregătește…",
   "liveShareConnected": "Conectat în direct",
   "liveShareDisconnected": "Se reconectează…",
+  "liveShareConnecting": "Se conectează…",
+  "liveShareNotPublished": "Încă nu s-a publicat nimic — linkul rămâne gol până când răspunde un releu.",
   "liveShareStillActive": "Transmisia în direct este încă activă.",
   "showPassword": "Arată parola",
   "hidePassword": "Ascunde parola",

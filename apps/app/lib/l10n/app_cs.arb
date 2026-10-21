@@ -12,6 +12,8 @@
   "liveSharePreparing": "Připravuje se…",
   "liveShareConnected": "Živě připojeno",
   "liveShareDisconnected": "Připojuji znovu…",
+  "liveShareConnecting": "Připojování…",
+  "liveShareNotPublished": "Zatím není nic zveřejněno — odkaz zůstane prázdný, dokud neodpoví některý relay.",
   "liveShareStillActive": "Živé sdílení stále běží.",
   "showPassword": "Zobrazit heslo",
   "hidePassword": "Skrýt heslo",

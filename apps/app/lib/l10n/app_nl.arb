@@ -12,6 +12,8 @@
   "liveSharePreparing": "Voorbereiden…",
   "liveShareConnected": "Live verbonden",
   "liveShareDisconnected": "Opnieuw verbinden…",
+  "liveShareConnecting": "Verbinden…",
+  "liveShareNotPublished": "Er is nog niets gepubliceerd — de link blijft leeg tot een relay antwoordt.",
   "liveShareStillActive": "Live delen is nog actief.",
   "showPassword": "Wachtwoord tonen",
   "hidePassword": "Wachtwoord verbergen",

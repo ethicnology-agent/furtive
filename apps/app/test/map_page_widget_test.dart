@@ -20,6 +20,7 @@ import 'package:furtive/app/recording_bloc.dart';
 import 'package:furtive/app/recording_event.dart';
 import 'package:recording_session/recording_session.dart';
 import 'package:furtive/features/share/live_share_cubit.dart';
+import 'package:share_plus_platform_interface/share_plus_platform_interface.dart';
 import 'package:furtive/l10n/app_localizations.dart';
 import 'package:geo/geo.dart';
 
@@ -69,6 +70,25 @@ class _Sharing extends Cubit<LiveShareState> implements LiveShareCubit {
   void clearError() => cleared++;
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+/// Stands in for the OS share sheet, which a widget test has none of.
+///
+/// Extends the platform class rather than mocking a channel because
+/// `SharePlus.instance` reads `SharePlatform.instance` once, and the token
+/// check refuses anything that is not a real subclass.
+class _FakeSharePlatform extends SharePlatform {
+  /// Mutable, and installed once: `SharePlus.instance` is a static final that
+  /// reads `SharePlatform.instance` the first time anything shares, so a
+  /// second instance assigned later would never be reached.
+  ShareResultStatus status = ShareResultStatus.success;
+  var calls = 0;
+
+  @override
+  Future<ShareResult> share(ShareParams params) async {
+    calls++;
+    return ShareResult('test', status);
+  }
 }
 
 class _Renderer implements MapView {
@@ -138,7 +158,10 @@ void main() {
         : [],
   );
 
+  final sheet = _FakeSharePlatform();
+  setUpAll(() => SharePlatform.instance = sheet);
   setUp(() {
+    sheet.calls = 0;
     map = _Map(MapState(styleUrl: 'test-style', userLocation: position));
     recording = _Recording();
     activities = _Activities();
@@ -360,7 +383,7 @@ void main() {
   );
 
   testWidgets(
-    'live share distinguishes preparation, disconnection and connection and can stop',
+    'live share distinguishes preparation, a first connection, a lost one and a live one, and can stop',
     (tester) async {
       await mount(tester);
       sharing.update(const LiveShareState(status: LiveShareStatus.starting));
@@ -370,11 +393,21 @@ void main() {
       expect(tester.widget<FloatingActionButton>(preparing).onPressed, isNull);
       sharing.update(const LiveShareState(status: LiveShareStatus.active));
       await tester.pumpAndSettle();
+      // Nothing has answered yet, so there is nothing to reconnect to.
+      expect(find.text('Connecting…'), findsOneWidget);
+      sharing.update(
+        const LiveShareState(
+          status: LiveShareStatus.active,
+          everConnected: true,
+        ),
+      );
+      await tester.pumpAndSettle();
       expect(find.text('Reconnecting…'), findsOneWidget);
       sharing.update(
         const LiveShareState(
           status: LiveShareStatus.active,
           connectedRelays: 1,
+          everConnected: true,
         ),
       );
       await tester.pumpAndSettle();
@@ -386,6 +419,59 @@ void main() {
       expect(find.text('Share'), findsOneWidget);
     },
   );
+
+  testWidgets('a link handed over before any relay answers says so', (
+    tester,
+  ) async {
+    sheet.status = ShareResultStatus.success;
+    await mount(tester);
+    sharing.update(
+      const LiveShareState(
+        status: LiveShareStatus.active,
+        link: 'https://viewer.example/share/#v1.test',
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Connecting…'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Share activity'));
+    await tester.pumpAndSettle();
+
+    expect(sheet.calls, 1);
+    // The sheet reported a successful send, so nothing here is about the
+    // sheet: the link left the device while no relay had it.
+    expect(
+      find.text(
+        'Nothing is published yet — the link stays blank until a relay answers.',
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('a link handed over while a relay has it only says it is live', (
+    tester,
+  ) async {
+    sheet.status = ShareResultStatus.dismissed;
+    await mount(tester);
+    sharing.update(
+      const LiveShareState(
+        status: LiveShareStatus.active,
+        link: 'https://viewer.example/share/#v1.test',
+        connectedRelays: 1,
+        everConnected: true,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Live connected'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Share activity'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Live sharing is still active.'), findsOneWidget);
+    expect(find.textContaining('Nothing is published yet'), findsNothing);
+  });
 
   testWidgets('the shell refreshes the list and opens the finished recording', (
     tester,

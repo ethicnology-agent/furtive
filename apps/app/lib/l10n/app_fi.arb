@@ -12,6 +12,8 @@
   "liveSharePreparing": "Valmistellaan…",
   "liveShareConnected": "Suora yhdistetty",
   "liveShareDisconnected": "Yhdistetään uudelleen…",
+  "liveShareConnecting": "Yhdistetään…",
+  "liveShareNotPublished": "Mitään ei ole vielä julkaistu – linkki pysyy tyhjänä, kunnes jokin välityspalvelin vastaa.",
   "liveShareStillActive": "Suora jako on yhä käynnissä.",
   "showPassword": "Näytä salasana",
   "hidePassword": "Piilota salasana",

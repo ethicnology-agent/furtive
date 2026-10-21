@@ -248,6 +248,44 @@ void main() {
     expect(updates.map((update) => update.startedAt), {startedAt});
   });
 
+  test('a share that no relay has answered is not reconnecting', () async {
+    await startRecording();
+    final cubit = LiveShareCubit(
+      recording: recording,
+      relayConnector: (_) async => throw StateError('no network'),
+      clock: clock,
+      random: Random(7),
+      viewerBase: 'http://localhost:8080',
+      relayUrls: const ['wss://relay.example'],
+    );
+    addTearDown(cubit.close);
+
+    await cubit.start();
+    await Future<void>.delayed(const Duration(milliseconds: 40));
+
+    expect(cubit.state.isActive, isTrue);
+    expect(cubit.state.connectedRelays, 0);
+    // The distinction the button reads: nothing has ever had this link.
+    expect(cubit.state.everConnected, isFalse);
+  });
+
+  test('a relay that answered once leaves the share reconnecting', () async {
+    await startRecording();
+    final cubit = buildCubit();
+    addTearDown(cubit.close);
+
+    await cubit.start();
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(cubit.state.connectedRelays, 1);
+    expect(cubit.state.everConnected, isTrue);
+
+    await relay.close();
+    await Future<void>.delayed(const Duration(milliseconds: 40));
+
+    expect(cubit.state.connectedRelays, 0);
+    expect(cubit.state.everConnected, isTrue);
+  });
+
   test('rejects a relay that requests NIP-42 authentication', () async {
     await startRecording();
     final cubit = buildCubit();

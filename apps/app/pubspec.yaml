@@ -99,6 +99,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Only so a test can stand in for the platform share sheet: share_plus
+  # exports the result types but not the platform class its own fake needs.
+  share_plus_platform_interface: ^7.2.0
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

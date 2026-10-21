@@ -12,6 +12,8 @@
   "liveSharePreparing": "Προετοιμασία…",
   "liveShareConnected": "Συνδέθηκε ζωντανά",
   "liveShareDisconnected": "Επανασύνδεση…",
+  "liveShareConnecting": "Σύνδεση…",
+  "liveShareNotPublished": "Δεν έχει δημοσιευτεί τίποτα ακόμη — ο σύνδεσμος μένει κενός μέχρι να απαντήσει κάποιο relay.",
   "liveShareStillActive": "Η ζωντανή κοινοποίηση είναι ακόμη ενεργή.",
   "showPassword": "Εμφάνιση κωδικού",
   "hidePassword": "Απόκρυψη κωδικού",

@@ -12,6 +12,8 @@
   "liveSharePreparing": "Przygotowywanie…",
   "liveShareConnected": "Na żywo połączono",
   "liveShareDisconnected": "Ponowne łączenie…",
+  "liveShareConnecting": "Łączenie…",
+  "liveShareNotPublished": "Nic jeszcze nie zostało opublikowane — link pozostanie pusty, dopóki któryś przekaźnik nie odpowie.",
   "liveShareStillActive": "Udostępnianie na żywo nadal działa.",
   "showPassword": "Pokaż hasło",
   "hidePassword": "Ukryj hasło",

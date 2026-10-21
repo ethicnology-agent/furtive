@@ -12,6 +12,8 @@
   "liveSharePreparing": "Նախապատրաստվում է…",
   "liveShareConnected": "Ուղիղ միացված է",
   "liveShareDisconnected": "Վերամիանում…",
+  "liveShareConnecting": "Միանում է…",
+  "liveShareNotPublished": "Դեռ ոչինչ հրապարակված չէ — հղումը դատարկ կմնա, մինչև ռելեներից որևէ մեկը պատասխանի։",
   "liveShareStillActive": "Ուղիղ հեռարձակումը դեռ ակտիվ է։",
   "showPassword": "Ցույց տալ գաղտնաբառը",
   "hidePassword": "Թաքցնել գաղտնաբառը",

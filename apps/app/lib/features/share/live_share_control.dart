@@ -59,8 +59,9 @@ class LiveShareControl extends StatelessWidget {
           sharing.state.link ?? await sharing.start(password: password);
       final result = await SharePlus.instance.share(ShareParams(text: link));
       if (context.mounted &&
-          result.status == ShareResultStatus.dismissed &&
-          sharing.state.isActive) {
+          sharing.state.isActive &&
+          (result.status == ShareResultStatus.dismissed ||
+              sharing.state.connectedRelays == 0)) {
         _showShareStillActive(context, sharing);
       }
     } catch (error) {
@@ -79,12 +80,23 @@ class LiveShareControl extends StatelessWidget {
     }
   }
 
+  /// Says the share is running — and, when no relay has answered, says the
+  /// link carries nothing yet.
+  ///
+  /// Worth telling because the link is minted on the device and handed over
+  /// whether or not a relay ever answered: sent with the network down, it
+  /// opens on a blank viewer, and neither the sender nor whoever receives it
+  /// has any way to tell that from a share that is simply quiet.
   void _showShareStillActive(BuildContext context, LiveShareCubit sharing) {
     final l10n = AppLocalizations.of(context);
     showSingleSnackBar(
       context,
       SnackBar(
-        content: Text(l10n.liveShareStillActive),
+        content: Text(
+          sharing.state.connectedRelays > 0
+              ? l10n.liveShareStillActive
+              : l10n.liveShareNotPublished,
+        ),
         duration: const Duration(seconds: 10),
         action: SnackBarAction(
           label: l10n.btnStop,
@@ -129,7 +141,13 @@ class LiveShareControl extends StatelessWidget {
                 : share.isActive
                 ? share.connectedRelays > 0
                       ? l10n.liveShareConnected
-                      : l10n.liveShareDisconnected
+                      // A share that has never reached a relay is not
+                      // reconnecting, it is still trying for the first time —
+                      // and saying "reconnecting" when nothing was ever
+                      // connected reads as if the link had been working.
+                      : share.everConnected
+                      ? l10n.liveShareDisconnected
+                      : l10n.liveShareConnecting
                 : l10n.liveShareButton,
             overflow: TextOverflow.ellipsis,
           ),

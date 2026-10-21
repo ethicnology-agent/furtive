@@ -12,6 +12,8 @@
   "liveSharePreparing": "Förbereder…",
   "liveShareConnected": "Live ansluten",
   "liveShareDisconnected": "Återansluter…",
+  "liveShareConnecting": "Ansluter…",
+  "liveShareNotPublished": "Inget har publicerats än – länken förblir tom tills ett relä svarar.",
   "liveShareStillActive": "Livedelningen är fortfarande igång.",
   "showPassword": "Visa lösenord",
   "hidePassword": "Dölj lösenord",

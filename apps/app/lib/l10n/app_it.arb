@@ -12,6 +12,8 @@
   "liveSharePreparing": "Preparazione…",
   "liveShareConnected": "In diretta",
   "liveShareDisconnected": "Riconnessione…",
+  "liveShareConnecting": "Connessione…",
+  "liveShareNotPublished": "Non è ancora pubblicato nulla: il link resta vuoto finché un relay non risponde.",
   "liveShareStillActive": "La condivisione in diretta è ancora attiva.",
   "showPassword": "Mostra password",
   "hidePassword": "Nascondi password",

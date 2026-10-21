@@ -29,6 +29,7 @@ class LiveShareState {
     this.connectedRelays = 0,
     this.totalRelays = 0,
     this.rejectedRelays = 0,
+    this.everConnected = false,
     this.error,
   });
 
@@ -37,6 +38,14 @@ class LiveShareState {
   final int connectedRelays;
   final int totalRelays;
   final int rejectedRelays;
+
+  /// Whether any relay has accepted this share since it started.
+  ///
+  /// Separate from [connectedRelays] because zero connections means two
+  /// different things to whoever is watching: a link that has never reached
+  /// anyone, and one that was live a moment ago. Only the second is
+  /// reconnecting.
+  final bool everConnected;
   final String? error;
 
   bool get isActive => status == LiveShareStatus.active;
@@ -246,6 +255,7 @@ class LiveShareCubit extends Cubit<LiveShareState> {
         connectedRelays: state.connectedRelays,
         totalRelays: state.totalRelays,
         rejectedRelays: state.rejectedRelays,
+        everConnected: state.everConnected,
       ),
     );
   }
@@ -577,6 +587,7 @@ class LiveShareCubit extends Cubit<LiveShareState> {
         connectedRelays: _relays.length,
         totalRelays: relayUrls.length,
         rejectedRelays: _rejectedRelays.length,
+        everConnected: state.everConnected || _relays.isNotEmpty,
         error: error,
       ),
     );

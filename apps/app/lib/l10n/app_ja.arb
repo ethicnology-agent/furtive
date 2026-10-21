@@ -12,6 +12,8 @@
   "liveSharePreparing": "準備中…",
   "liveShareConnected": "ライブ接続済み",
   "liveShareDisconnected": "再接続中…",
+  "liveShareConnecting": "接続中…",
+  "liveShareNotPublished": "まだ何も公開されていません。リレーが応答するまでリンクは空のままです。",
   "liveShareStillActive": "ライブ共有はまだ有効です。",
   "showPassword": "パスワードを表示",
   "hidePassword": "パスワードを隠す",
