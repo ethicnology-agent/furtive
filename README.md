@@ -16,16 +16,16 @@ The Obtainium button opens on a device with [Obtainium](https://github.com/Imran
 
 <table>
 <tr>
-<td><img src="assets/readme/map.png" width="100%" /></td>
-<td><img src="assets/readme/activity_started.png" width="100%" /></td>
+<td><img src="assets/readme/recording.png" width="100%" /></td>
+<td><img src="assets/readme/track_splits.png" width="100%" /></td>
 </tr>
 <tr>
-<td><img src="assets/readme/activity_stats_pace.png" width="100%" /></td>
-<td><img src="assets/readme/activity_stats_speed.png" width="100%" /></td>
-</tr>
-<tr>
-<td><img src="assets/readme/settings.png" width="100%" /></td>
 <td><img src="assets/readme/activities.png" width="100%" /></td>
+<td><img src="assets/readme/settings.png" width="100%" /></td>
+</tr>
+<tr>
+<td><img src="assets/readme/permissions.png" width="100%" /></td>
+<td><img src="assets/readme/preferences.png" width="100%" /></td>
 </tr>
 </table>
 
