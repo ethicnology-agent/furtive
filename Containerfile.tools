@@ -13,7 +13,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG USERNAME="furtive"
 ENV USER=$USERNAME
 ARG FVM_VERSION="4.1.0"
-ARG FVM_INSTALL_SHA256="5fe3892efea5454822e148d4f768190e089f02fac2268b113d8098aec1128653"
+ARG FVM_SHA256_ARM64="f31774d9b5899009a583ae3b4d526169ee13b75aa6f4fe4ad4c882fa495a1717"
+ARG FVM_SHA256_X64="fc3965eacb67ea8e326503cf79cad35cc6534ab8aca22f352ece3eddeaec8829"
 ARG FLUTTER_VERSION="3.44.9"
 ARG ANDROID_CMDLINE_TOOLS_VERSION="14742923"
 ARG ANDROID_CMDLINE_TOOLS_SHA1="48833c34b761c10cb20bcd16582129395d121b27"
@@ -51,11 +52,27 @@ RUN adduser --disabled-password --gecos '' $USER \
  && chown -R $USER:$USER ${ANDROID_HOME}
 USER $USER
 
-# Install FVM
-RUN curl -fsSL https://fvm.app/install.sh -o /tmp/fvm-install.sh \
- && printf '%s  %s\n' "${FVM_INSTALL_SHA256}" /tmp/fvm-install.sh | sha256sum -c - \
- && bash /tmp/fvm-install.sh ${FVM_VERSION} \
- && rm /tmp/fvm-install.sh
+# Install FVM from the release asset rather than from fvm.app/install.sh.
+#
+# That script is served from a URL with no version in it, so its content is a
+# moving target: upstream edited it and the pinned digest stopped matching,
+# which failed every container build at this step. A release asset is immutable
+# — the digests below can only stop matching if the tag is rewritten — and the
+# script did nothing here but fetch this same tarball and copy it into place.
+RUN set -eu; \
+    case "$(dpkg --print-architecture)" in \
+      arm64) fvm_arch=arm64; fvm_sum="${FVM_SHA256_ARM64}";; \
+      amd64) fvm_arch=x64;   fvm_sum="${FVM_SHA256_X64}";; \
+      *) echo "unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1;; \
+    esac; \
+    curl -fsSL -o /tmp/fvm.tar.gz \
+      "https://github.com/leoafarias/fvm/releases/download/${FVM_VERSION}/fvm-${FVM_VERSION}-linux-${fvm_arch}.tar.gz"; \
+    printf '%s  %s\n' "${fvm_sum}" /tmp/fvm.tar.gz | sha256sum -c -; \
+    mkdir -p "$HOME/fvm/bin" /tmp/fvm-unpack; \
+    tar -xzf /tmp/fvm.tar.gz -C /tmp/fvm-unpack; \
+    cp -a /tmp/fvm-unpack/fvm/. "$HOME/fvm/bin/"; \
+    chmod +x "$HOME/fvm/bin/fvm"; \
+    rm -rf /tmp/fvm.tar.gz /tmp/fvm-unpack
 ENV PATH="/home/$USER/fvm/bin:${PATH}"
 
 # Install Flutter via FVM
