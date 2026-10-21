@@ -25,7 +25,11 @@ The Obtainium button opens on a device with [Obtainium](https://github.com/Imran
 </tr>
 <tr>
 <td><img src="assets/readme/permissions.png" width="100%" /></td>
+<td><img src="assets/readme/offline_maps.png" width="100%" /></td>
+</tr>
+<tr>
 <td><img src="assets/readme/preferences.png" width="100%" /></td>
+<td><img src="assets/readme/whats_new.png" width="100%" /></td>
 </tr>
 </table>
 
