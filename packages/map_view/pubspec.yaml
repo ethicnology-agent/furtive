@@ -1,0 +1,42 @@
+name: map_view
+description: "The rendering port for a map, and its MapLibre implementation."
+publish_to: none
+resolution: workspace
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  geo:
+    path: ../geo
+  # Pinned, not ranged. maplibre_android 0.3.6 declares the ktlint Gradle
+  # plugin with no version and ships no pluginManagement, so it cannot be
+  # built as a subproject by any consumer: `assembleRelease` dies with
+  # "Plugin [id: 'org.jlleitschuh.gradle.ktlint'] was not found".
+  # Upstream removed the plugin in josxha/flutter-maplibre#557 (merged
+  # 2026-09-23) after issue #565, but 0.3.6 was published on 2026-08-25 and
+  # nothing has been released since. Lift both pins when 0.3.7 lands; the
+  # version it brings back includes two Android leak fixes we are forgoing
+  # here (a FrameLayout and native map state per create/dispose cycle, and
+  # StyleController's native reference on dispose).
+  maplibre: 0.3.5
+  # maplibre's own constraint is ^0.3.5, which admits the broken 0.3.6, so
+  # the implementation package is pinned where it is used rather than left
+  # to the solver.
+  #
+  # Overridden at the workspace root onto a fork carrying an unreleased fix
+  # for the JNI leak that makes keeping a country impossible — see the
+  # dependency_overrides block in the root pubspec. That fork is cut from
+  # upstream main, which has already dropped the ktlint plugin this pin was
+  # written for, so both lift together when 0.3.7 lands.
+  maplibre_android: 0.3.5
+  ui_kit:
+    path: ../ui_kit
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter

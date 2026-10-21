@@ -67,32 +67,68 @@ publishes sampled, already-accepted recording points to the configured Nostr
 relays. No account or long-term Nostr key is created. An optional password is
 derived with Argon2id and must be sent separately from the link.
 
-The viewer and threat model live in [`viewer/`](viewer/) and
+The viewer and threat model live in [`apps/viewer/`](apps/viewer/) and
 [`docs/SHARE-TRACKING.md`](docs/SHARE-TRACKING.md). A full process kill ends a
 share because its ephemeral keys are deliberately never persisted; recording
 resume remains independent.
 
+## Development
+
+The repository is a Dart pub workspace: `apps/app` is the Flutter
+application, `apps/viewer` the static web viewer, and `packages/furtive_share`
+the pure-Dart wire format and cryptography both of them share. One lockfile
+resolves all three, and each declares what it may depend on in its
+`module.yaml`.
+
+Melos runs every task, defined in the `melos:` section of the root
+`pubspec.yaml`. The scripts call `flutter` and `dart` from the PATH, so they
+are identical in CI, which installs Flutter directly, and locally, where
+`fvm exec` puts the version pinned in `.fvmrc` on the PATH:
+
+```sh
+fvm install                                  # once, installs the pinned SDK
+fvm exec dart pub get --enforce-lockfile
+fvm exec dart run melos bootstrap
+fvm exec dart run melos run verify
+```
+
+`verify` is exactly what CI runs: generation, ARB key parity across every
+locale, module boundaries, the dependency graph, formatting, analysis with
+`--fatal-infos`, the share-layer boundary, every member's tests with
+coverage, the coverage floor, and both viewer packagings.
+`fvm exec dart run melos run --list` shows the individual scripts; the
+useful ones during development are `generate`, `analyze`, `test`,
+`architecture` and `app`.
+
+Generated sources — ARB output and drift code — are not committed. Run
+`melos run generate` in a fresh clone, modify the generator inputs rather
+than their output, and never edit a generated file.
+
+The container build, the release artefacts and the dev container are Melos
+scripts too: `apk`, `reproducible`, `devcontainer:create` and
+`devcontainer:start`.
+
 ## Releases
 
 Release artifacts are produced unsigned by Flutter (`signingConfig = null`
-in `android/app/build.gradle.kts`) and signed out-of-band with
+in `apps/app/android/app/build.gradle.kts`) and signed out-of-band with
 `apksigner` / `zipalign`. Keystores never enter this repository — do
 not add a `key.properties` or wire signing into Gradle.
 
 ## Reproducible builds
 
-`make verify-reproducible` verifies that two clean APK builds in the same pinned
+`fvm exec dart run melos run reproducible` verifies that two clean APK builds in the same pinned
 container produce byte-identical output. The repository pins the major inputs:
 
 - `debian:trixie@sha256:…` (multi-arch index digest, in `Containerfile.tools`)
-- Flutter `3.44.9` via `.fvmrc`
-- Android NDK / SDK / build-tools / JVM in `android/gradle.properties`
+- Flutter `3.47.6` via `.fvmrc`
+- Android NDK / SDK / build-tools / JVM in `apps/app/android/gradle.properties`
 - `pubspec.lock` enforced via `flutter pub get --enforce-lockfile`
 - Gradle distribution, FVM installer, and Android command-line tools checksums
 - `SOURCE_DATE_EPOCH = $(git log -1 --format=%ct)` passed to the container
   so Gradle/AGP/Kotlin emit deterministic timestamps
 
-Verify locally with `make verify-reproducible` (builds twice, compares
+Verify locally with `fvm exec dart run melos run reproducible` (builds twice, compares
 SHA-256, fails with a diffoscope hint on mismatch).
 
 This is not a timeless guarantee across arbitrary future package mirrors:

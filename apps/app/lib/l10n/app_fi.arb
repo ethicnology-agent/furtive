@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "GPX-tiedostonvalitsinta ei voitu avata. Yritä uudelleen.",
+  "mapRecordingProblem": "Tallennuksen aikana meni jotain pieleen.",
+  "mapRecordingStateActive": "Aktiviteettiasi tallennetaan yhä.",
+  "mapRecordingStatePaused": "Aktiviteettisi on yhä tauolla.",
+  "mapRecordingStateIdle": "Mitään aktiviteettia ei tallenneta juuri nyt.",
+  "mapFollowing": "Seuraa",
+  "mapWaitingForLocation": "Odotetaan GPS:ää",
+  "mapLocationServiceOff": "Sijainti on pois päältä — kytke se järjestelmäasetuksista",
+  "mapOpenLocationSettings": "Avaa asetukset",
+  "mapHoldStopProgress": "Pidä pohjassa · {seconds}",
+  "liveSharePreparing": "Valmistellaan…",
+  "liveShareConnected": "Suora yhdistetty",
+  "liveShareDisconnected": "Yhdistetään uudelleen…",
+  "liveShareConnecting": "Yhdistetään…",
+  "liveShareNotPublished": "Mitään ei ole vielä julkaistu – linkki pysyy tyhjänä, kunnes jokin välityspalvelin vastaa.",
+  "liveShareStillActive": "Suora jako on yhä käynnissä.",
+  "showPassword": "Näytä salasana",
+  "hidePassword": "Piilota salasana",
+  "statsActive": "Aktiivinen",
+  "statsPaused": "Tauot",
+  "statsElapsed": "Kulunut aika",
+  "activityRenameTooltip": "Nimeä aktiviteetti uudelleen",
+  "activityDeleteTooltip": "Poista aktiviteetti",
+  "activityExportTooltip": "Vie GPX",
+  "activityNoTrack": "Ei tallennettua reittiä",
+  "importInProgress": "Tuodaan GPX:ää…",
+  "btnBack": "Takaisin",
+  "btnCopy": "Kopioi",
+  "prefLoadFailed": "Asetuksiasi ei voitu ladata.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "fi",
+  "appTitle": "Furtive",
+  "btnNext": "Seuraava",
+  "btnFinish": "Valmis",
+  "btnGrant": "Salli",
+  "btnGrantPermission": "Myönnä lupa",
+  "btnFollow": "Seuraa",
+  "btnPause": "Tauko",
+  "btnResume": "Jatka",
+  "btnStart": "Aloita",
+  "btnStarting": "Käynnistyy",
+  "btnStop": "Pysäytä",
+  "btnContinue": "Jatka",
+  "btnGrantToContinue": "Myönnä vaaditut luvat jatkaaksesi",
+  "btnViewStats": "Näytä tilastot",
+  "btnCancel": "Peruuta",
+  "btnUndo": "Kumoa",
+  "btnRetry": "Yritä uudelleen",
+  "btnRename": "Nimeä uudelleen",
+  "btnDelete": "Poista",
+  "prefSaveFailed": "Asetusten tallentaminen ei onnistunut.",
+  "btnStarGitHub": "Tähti GitHubissa",
+  "btnSponsor": "Tue",
+  "linkOpenFailed": "Linkin {url} avaaminen epäonnistui",
+  "shareSummary": "{distance} km ajassa {duration} Furtivella",
+  "shareFailed": "Aktiviteetin jakaminen epäonnistui: {error}",
+  "shareTooltip": "Jaa aktiviteetti",
+  "liveShareTitle": "Jaa reaaliaikainen sijainti",
+  "liveShareButton": "Jaa",
+  "liveSharePassword": "Valinnainen salasana",
+  "liveSharePasswordHelp": "Lähetä salasana erikseen. Jätä tyhjäksi, jos pelkkä linkki riittää.",
+  "navMap": "Kartta",
+  "navActivities": "Aktiviteetit",
+  "navSettings": "Asetukset",
+  "menuPermissions": "Käyttöoikeudet",
+  "menuPreferences": "Asetukset",
+  "menuLogs": "Lokit",
+  "onboardWelcomeTitle": "Tervetuloa Furtiveen",
+  "onboardWelcomeSubtitle": "Yksityisyyttä kunnioittava aktiviteettien seuranta. Ei tilejä, ei telemetriaa, ei Google-palveluja. Valitaan muutama oletusasetus.",
+  "onboardSettingsTitle": "Kartan asetukset",
+  "onboardSettingsSubtitle": "Valitse oletusasetuksesi — voit muuttaa niitä myöhemmin asetuksista.",
+  "onboardPermissionsTitle": "Käyttöoikeudet",
+  "onboardPermissionsSubtitle": "Anna sijainnin käyttöoikeus juoksujesi seuraamiseen. Ilmoitukset ja taustakäyttö ovat valinnaisia.",
+  "onboardSaveError": "Valintojen tallennus epäonnistui: {error}",
+  "settingsThemeLabel": "Teema",
+  "settingsUiLanguageLabel": "Sovelluksen kieli",
+  "settingsUiLanguageSystem": "Järjestelmän oletus",
+  "preferencesTitle": "Asetukset",
+  "prefMapTheme": "Kartan teema",
+  "prefAppLanguage": "Sovelluksen kieli",
+  "permissionsTitle": "Käyttöoikeudet",
+  "permissionsInstructions": "Sovellus tarvitsee seuraavat käyttöoikeudet toimiakseen oikein",
+  "permOptional": "Valinnainen",
+  "permDeniedMsg": "Estetty — ota käyttöön sovelluksen asetuksista.",
+  "permPermanentlyDenied": "Tämä käyttöoikeus on otettava käyttöön sovelluksen asetuksista.",
+  "permLocationWhileUsingName": "Sijainti käytön aikana",
+  "permLocationWhileUsingDesc": "Tarvitaan sijaintisi seuraamiseen ja näyttämiseen kartalla.",
+  "permLocationAlwaysName": "Sijainti aina",
+  "permLocationAlwaysDesc": "Valinnainen: pitää seurannan tarkkana pitkien aktiviteettien aikana, vaikka käyttöjärjestelmä keskeyttäisi sovelluksen.",
+  "permNotificationName": "Ilmoitukset",
+  "permNotificationDesc": "Valinnainen: näyttää jatkuvan ”Tallennetaan aktiviteettia” -ilmoituksen, joka myös auttaa Androidia välttämään seurannan pysäyttämisen taustalla.",
+  "mapTrackingGapMsg": "Seuranta keskeytyi {seconds} s ajaksi, kun sovellus oli taustalla — osa reitistäsi puuttuu. Salli furtiveelle ”rajoittamaton akunkäyttö” tämän estämiseksi.",
+  "mapActivityStartedMsg": "Aktiviteetti aloitettu",
+  "mapStopHint": "Pidä Pysäytä-painiketta 3 sekuntia lopettaaksesi aktiviteetin",
+  "statsRecordingTitle": "Tallentaa aktiviteettia",
+  "statSignalLost": "GPS-signaali katosi {duration} ajaksi (~{meters} m linnuntietä) — tätä aikaa ei lasketa aktiivisiin tilastoihin.",
+  "statDistance": "Matka",
+  "statDuration": "Kesto",
+  "statPace": "Tahti",
+  "statSpeed": "Nopeus",
+  "statElevation": "Nousu",
+  "splitsTitle": "Väliajat",
+  "splitsNotEnoughData": "Ei vielä riittävästi dataa väliaikoihin.",
+  "metricPace": "Tahti",
+  "metricSpeed": "Nopeus",
+  "activitiesEmpty": "Ei aktiviteetteja",
+  "activitiesImportTooltip": "Tuo GPX-tiedosto",
+  "importStarted": "Tuonti käynnissä…",
+  "importSuccess": "Aktiviteetti tuotu",
+  "activityNameLabel": "Aktiviteetin nimi",
+  "activityDeleteSuccess": "Aktiviteetti poistettu",
+  "dlgRenameTitle": "Nimeä uudelleen",
+  "dlgDeleteTitle": "Poista",
+  "dlgDeleteConfirm": "Haluatko varmasti poistaa tämän aktiviteetin?",
+  "gpxExportSuccess": "GPX viety onnistuneesti",
+  "gpxExportFailed": "Vienti epäonnistui: {error}",
+  "logsTitle": "Lokit",
+  "logsEmpty": "Ei lokeja",
+  "logsTooltipClear": "Tyhjennä lokit",
+  "logsTooltipFilterDate": "Suodata päivämäärän mukaan",
+  "logsTooltipClearFilter": "Tyhjennä suodatin",
+  "logsTooltipShare": "Jaa",
+  "logsFiltered": "Suodatettu: {start} - {end}",
+  "logsShowingCount": "Näytetään {shown}/{total}",
+  "activityDefaultName": "Lenkki",
+  "logsLoadError": "Lokien lataus epäonnistui: {error}",
+  "logCopiedMsg": "Loki kopioitu leikepöydälle",
+  "logsCopiedMsg": "{count} lokia kopioitu leikepöydälle",
+  "dlgDeleteLogsTitle": "Poista lokit",
+  "dlgDeleteLogsConfirm": "Haluatko varmasti poistaa kaikki lokit? Tätä toimintoa ei voi peruuttaa.",
+  "supportTitle": "Tue kehitystä",
+  "supportDescription": "Tämä sovellus on rakennettu ja ylläpidetty vapaa-ajallani. Tukesi auttaa pitämään sen elossa ja kasvamassa.",
+  "changelogTitle": "Uutta",
+  "changelogGotIt": "Selvä",
+  "changelogV120I18n": "Monikielisyys: sovelluksen käyttöliittymä 26 kielellä, kartan tekstit 41 kielellä, päivämäärämuodot seuraavat aluetietoasi. Muutettavissa asetuksista tai ohjatusta toiminnosta.",
+  "changelogV120Wizard": "Ensimmäisen käynnistyksen ohjattu toiminto: valitse oletusasetukset (teema, kieli) ja anna sijainnin käyttöoikeudet yhdellä kertaa.",
+  "changelogV120Recording": "Aktiviteetin tallennus: animoitu sijaintimerkki sykkivällä pulssilla ja tarkkuusympyrällä, kilometrimerkit kartalla, pidä Pysäytä-painiketta 3 sekuntia lopettaaksesi (ei vahinkopainalluksia), automaattinen ohjaus tilastoihin.",
+  "changelogV120Stats": "Aktiviteetin tilastot: kilometriväliaikojen kaavio tahti ⇄ nopeus -kytkimellä, D+ nousu (Strava/Garmin-käytäntö).",
+  "changelogV120Share": "Jaa aktiviteetti korttina kartalla ja tilastoilla järjestelmän jakovalikon kautta.",
+  "changelogV120GpxImport": "Tuo GPX-tiedostoja muista sovelluksista (Garmin, Strava jne.) — sekä reitti- että rata-pisteet tuetaan.",
+  "changelogV120MapThemes": "Viisi karttateemaa: Vaalea, Tumma, Valkoinen, Harmaasävy, Musta — valitse sinulle sopiva asetuksista.",
+  "changelogV120Reproducible": "Toistettavat koonnit: kuka tahansa voi rakentaa uudelleen lähdekoodista ja varmistaa, että julkaistu APK on tavu tavulta identtinen — ei piilotettua koodia, ei peukalointia.",
+  "changelogV120Stability": "Vakaus: suojattu virheellisiltä GPS-lukemilta, luotettava taustatallennus, joka jatkuu sen jälkeen, kun järjestelmä sulkee sovelluksen, automaattinen lokien kierto, tiukempi GPX-validointi, HTTP-aikakatkaisut.",
+  "changelogV130LiveShare": "Live-jako: jaa tallennuksen aikana päästä-päähän-salattu linkki ja anna läheistesi seurata sijaintiasi heidän selaimessaan — ei tilejä kummallakaan puolella, avain ei koskaan lähde linkistä.",
+  "changelogV130Profiles": "Aktiviteettiprofiilit: kävely, juoksu, pyöräily, auto, uinti, lentokone tai muu — valinta mitoittaa GPS-näytteistyksen ja tarkkuustoleranssin, ja tallentuu aktiviteetin mukana.",
+  "changelogV130Map": "Uusi karttamoottori: zoomauksen ja panoroinnin renderöi nyt MapLibre Native — aiemmin nykivä zoomaus on nyt sujuvaa.",
+  "changelogV130Puck": "Sijaintimerkin piirtää nyt itse sovellus: piste paikallaan, nuoli kulkusuuntaasi, tosi-pohjoiskompassi Androidissa.",
+  "changelogV130Detail": "Tallennuksen tarkkuus: valitse tarkka, tasapainoinen tai säästö GPS-näytteistys tasapainottaaksesi tarkkuuden ja akun aktiviteetitain.",
+  "changelogV130Left": "Vasenkätinen tila: kartan säätimet voivat siirtyä näytön vasemmalle puolelle (Asetukset).",
+  "changelogV130CarFix": "Korjattu: yli 126 km/h ajava auto ei tallentanut mitään — nopeussuodatin mukautuu nyt jokaiseen aktiviteettiin sen sijaan että se hylkäisi jokaisen sijainnin.",
+  "changelogV140Offline": "Offline-kartat: säilytä ympärilläsi oleva alue, 10–100 km, jotta kartta toimii myös ilman kenttää (Asetukset).",
+  "changelogV140OfflineCost": "Jokainen säilytetty alue kertoo, mitä se maksoi ruutuina ja megatavuina, ja keskeytynyt kertoo, kuinka pitkälle se ehti — pyydä se uudelleen viimeistelläksesi sen.",
+  "changelogV140Cache": "Myös kartta, jota vain katselit, säilyy, enintään 1 Gt, ja sen voi tyhjentää erikseen koskematta alueisiin, jotka valitsit säilytettäväksi.",
+  "changelogV140Drift": "Korjattu: paikallaan oleva puhelin ei enää kerää matkaa GPS-ajautumasta — liikkumaton tallennus näyttää nyt nollaa eikä keksi metrejä.",
+  "changelogV140Elevation": "Korjattu: nousumetrit laskevat varmistetut nousut sen sijaan, että pyöristäisivät jokaisen lukeman kymmeneen metriin, joten pienet mäet eivät enää katoa eikä tasamaa nouse.",
+  "changelogV140LocationOff": "Kun sijaintipalvelut ovat pois päältä, kartta kertoo sen nyt ja tarjoaa asetuksen avaamista, ja seuranta jatkuu itsestään heti kun ne palaavat.",
+  "changelogV140Markers": "Reitin varrella olevat etäisyysmerkit voi asettaa haluamaasi väliin tai kytkeä pois (Asetukset).",
+  "changelogV140Stop": "Tallennusta pysäytettäessä painalluksen eteneminen piirretään peukalon yläpuolelle eikä alle, jotta näet, kuinka kauan vielä pitää painaa.",
+  "changelogV140SmallScreens": "Korjattu: käyttöönoton vaiheet ja asetusnäkymät pysyvät käytettävinä lyhyillä ja kapeilla näytöillä.",
+  "prefThemeLight": "Vaalea",
+  "prefThemeDark": "Tumma",
+  "prefThemeWhite": "Valkoinen",
+  "prefThemeGrayscale": "Harmaasävy",
+  "prefThemeBlack": "Musta",
+  "prefMapTiles": "Kartan laatat",
+  "prefMapTilesSubtitle": "Kartan lataaminen paljastaa likimääräisen sijaintisi laattojen tarjoajalle. Poista käytöstä tyhjää, toimivaa karttaa varten ilman verkkopyyntöjä.",
+  "prefShowOnLockScreen": "Näytä lukitusnäytöllä",
+  "prefShowOnLockScreenSubtitle": "Pitää kartan/sijainnin näkyvissä lukitun näytön päällä tallennuksen aikana (vain Android). Poista käytöstä piilottaaksesi sen lukitun puhelimesi vilkaisijoilta.",
+  "mapLoadingLocalizing": "Alustetaan GPS…",
+  "mapLoadingMap": "Ladataan karttaa…",
+  "mapStartingActivity": "Aloitetaan aktiviteetti…",
+  "activitiesLoadError": "Tätä aktiviteettia ei voitu avata",
+  "activityPickerTitle": "Mitä teet?",
+  "activityWalk": "Kävely",
+  "activityRun": "Juoksu",
+  "activityBike": "Pyöräily",
+  "activityCar": "Auto",
+  "activitySwim": "Uinti",
+  "activityAircraft": "Lentokone",
+  "activityOther": "Muu",
+  "activityUnknown": "Tuntematon",
+  "prefRecordingDetail": "Tallennuksen tarkkuus",
+  "prefRecordingDetailSubtitle": "Kuinka usein sijaintia pyydetään suhteessa lajin omaan oletukseen. Tiheämpi tarkoittaa terävämpiä mutkia ja enemmän akun kulutusta.",
+  "prefDetailPrecise": "Tarkka",
+  "prefDetailBalanced": "Tasapainoinen",
+  "prefDetailEndurance": "Kestävyys",
+  "prefMapControlsOnRight": "Kartan säätimet oikealla",
+  "prefMapControlsOnRightSubtitle": "Seuraa-, aloita-, tauko- ja lopeta-painikkeet ovat oikeassa reunassa. Poista käytöstä siirtääksesi ne vasemmalle vasenkätisille. Kartan lähdemerkintä siirtyy vastakkaiseen kulmaan.",
+  "prefMapMilestones": "Matkamerkit",
+  "prefMapMilestonesOff": "Pois käytöstä",
+  "menuOfflineMaps": "Offline-kartat",
+  "offlineTitle": "Offline-kartat",
+  "offlineExplainer": "Säilyttämäsi alueet pysyvät laitteessa eikä niitä koskaan poisteta. Myös kartta, jota vain katselit, tallentuu välimuistiin, mutta sen tila voidaan vapauttaa.",
+  "offlineNone": "Ei vielä säilytettyjä alueita",
+  "offlineAroundMe": "Säilytä ympärilläni oleva alue",
+  "offlineRadius": "Säde: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Lataa",
+  "offlineDownloading": "{done}/{total} ruutua · {mb} Mt",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Ei vielä sijaintia — odota GPS:ää",
+  "offlineNoTiles": "Ruudut ovat pois päältä, joten säilytettävää ei ole",
+  "offlineUnsupported": "Offline-alueet eivät ole käytettävissä tässä laitteessa",
+  "offlineDelete": "Poista",
+  "offlineFailed": "Lataus epäonnistui",
+  "offlineStorageTitle": "Karttojen tallennustila",
+  "offlineStorageOnDevice": "{mb} Mt tällä laitteella",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} Mt haettu säilytetyille alueille · {tiles} ruutua",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Päällekkäiset alueet jakavat ruutunsa, joten luku voi ylittää kokonaismäärän. Se mikä ei kuulu alueeseen on katsomaasi karttaa sekä tietokannan ylimääräinen tila.",
+  "offlineClearCache": "Tyhjennä välimuisti",
+  "offlineRadiusTiles": "{tiles} ruutua",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} Mt · {tiles} ruutua",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} Mt · {tiles} ruutua · kesken",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent} % · {mb} Mt · {tiles} ruutua",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

@@ -40,22 +40,23 @@ jobs:
 
       - name: Resolve configuration validator dependencies
         if: inputs.mode == 'release'
-        run: flutter pub get --enforce-lockfile
+        run: dart pub get --enforce-lockfile
 
       - name: Validate live-share release configuration
         if: inputs.mode == 'release'
         env:
           SHARE_VIEWER_URL: ${{ vars.SHARE_VIEWER_URL }}
           SHARE_RELAYS: ${{ vars.SHARE_RELAYS }}
-        run: dart run tool/validate_share_config.dart
+        run: dart run melos run share:config
 
       - name: Build APK
-        # makefile uses `podman` directly; ubuntu-24.04 ships podman 4.9.3 preinstalled.
+        # The script uses `podman` directly; ubuntu-24.04 ships podman 4.9.3 preinstalled.
         env:
+          MODE: ${{ inputs.mode }}
           PROTOMAPS_KEY: ${{ secrets.PROTOMAPS_KEY }}
           SHARE_VIEWER_URL: ${{ vars.SHARE_VIEWER_URL }}
           SHARE_RELAYS: ${{ vars.SHARE_RELAYS }}
-        run: make apk ${{ inputs.mode }}
+        run: dart run melos run apk
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:

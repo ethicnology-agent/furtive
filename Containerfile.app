@@ -1,7 +1,7 @@
 FROM furtive-tools
 
 # Default "furtive" matches the user baked into Containerfile.tools so canonical
-# container builds (make container-app with no --build-arg) are unaffected.
+# container builds (no --build-arg) are unaffected.
 # The dev container passes USERNAME=${localEnv:USER} so SSH / gitconfig mounts
 # at /home/$USER/... inside the container resolve correctly.
 ARG USERNAME="furtive"
@@ -24,9 +24,10 @@ WORKDIR /app
 # Install Flutter version specified in .fvmrc (no-op if it matches tools stage)
 RUN fvm install
 
-# Reuse makefile targets so container build matches local setup
-RUN make deps
-RUN make build-runner
+# Reuse the workspace's own tasks so the container build matches local setup
+RUN fvm exec dart pub get --enforce-lockfile
+RUN fvm exec dart run melos bootstrap
+RUN fvm exec dart run melos run generate
 
 # Configure Gradle for containerized builds
 RUN mkdir -p $HOME/.gradle \

@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "Не вдалося відкрити вибір файлу GPX. Спробуй ще раз.",
+  "mapRecordingProblem": "Під час запису щось пішло не так.",
+  "mapRecordingStateActive": "Твоя активність усе ще записується.",
+  "mapRecordingStatePaused": "Твоя активність усе ще на паузі.",
+  "mapRecordingStateIdle": "Зараз нічого не записується.",
+  "mapFollowing": "Стеження",
+  "mapWaitingForLocation": "Очікування GPS",
+  "mapLocationServiceOff": "Геолокацію вимкнено — увімкни її в налаштуваннях системи",
+  "mapOpenLocationSettings": "Відкрити налаштування",
+  "mapHoldStopProgress": "Тримай далі · {seconds}",
+  "liveSharePreparing": "Підготовка…",
+  "liveShareConnected": "Ефір підключено",
+  "liveShareDisconnected": "Перепідключення…",
+  "liveShareConnecting": "Підключення…",
+  "liveShareNotPublished": "Поки нічого не опубліковано — посилання лишатиметься порожнім, доки не відповість якийсь релей.",
+  "liveShareStillActive": "Трансляція все ще триває.",
+  "showPassword": "Показати пароль",
+  "hidePassword": "Сховати пароль",
+  "statsActive": "Активно",
+  "statsPaused": "Паузи",
+  "statsElapsed": "Минуло часу",
+  "activityRenameTooltip": "Перейменувати активність",
+  "activityDeleteTooltip": "Видалити активність",
+  "activityExportTooltip": "Експорт GPX",
+  "activityNoTrack": "Маршрут не записано",
+  "importInProgress": "Імпорт GPX…",
+  "btnBack": "Назад",
+  "btnCopy": "Копіювати",
+  "prefLoadFailed": "Не вдалося завантажити твої налаштування.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "uk",
+  "appTitle": "Furtive",
+  "btnNext": "Далі",
+  "btnFinish": "Готово",
+  "btnGrant": "Дозволити",
+  "btnGrantPermission": "Дозволити",
+  "btnFollow": "За мною",
+  "btnPause": "Пауза",
+  "btnResume": "Відновити",
+  "btnStart": "Старт",
+  "btnStarting": "Запуск",
+  "btnStop": "Стоп",
+  "btnContinue": "Продовжити",
+  "btnGrantToContinue": "Дозволь обов'язкові доступи, щоб продовжити",
+  "btnViewStats": "Статистика",
+  "btnCancel": "Скасувати",
+  "btnUndo": "Скасувати",
+  "btnRetry": "Повторити",
+  "btnRename": "Перейменувати",
+  "btnDelete": "Видалити",
+  "prefSaveFailed": "Не вдалося зберегти налаштування.",
+  "btnStarGitHub": "Зірка на GitHub",
+  "btnSponsor": "Підтримати",
+  "linkOpenFailed": "Не вдалося відкрити {url}",
+  "shareSummary": "{distance} км за {duration} з Furtive",
+  "shareFailed": "Не вдалося поділитися тренуванням: {error}",
+  "shareTooltip": "Поділитися тренуванням",
+  "liveShareTitle": "Поділитися геопозицією наживо",
+  "liveShareButton": "Поділитися",
+  "liveSharePassword": "Необов’язковий пароль",
+  "liveSharePasswordHelp": "Надішліть пароль окремо. Залиште порожнім для доступу лише за посиланням.",
+  "navMap": "Мапа",
+  "navActivities": "Тренування",
+  "navSettings": "Налаштування",
+  "menuPermissions": "Дозволи",
+  "menuPreferences": "Параметри",
+  "menuLogs": "Журнали",
+  "onboardWelcomeTitle": "Вітаємо у Furtive",
+  "onboardWelcomeSubtitle": "Відстеження активності з повагою до приватності. Без акаунтів, телеметрії та сервісів Google. Оберімо кілька налаштувань.",
+  "onboardSettingsTitle": "Налаштування мапи",
+  "onboardSettingsSubtitle": "Обери налаштування за замовчуванням — їх можна змінити пізніше в налаштуваннях.",
+  "onboardPermissionsTitle": "Дозволи",
+  "onboardPermissionsSubtitle": "Дозволь доступ до геолокації, щоб відстежувати свої тренування. Сповіщення та фоновий доступ — необов'язково.",
+  "onboardSaveError": "Не вдалося зберегти налаштування: {error}",
+  "settingsThemeLabel": "Тема",
+  "settingsUiLanguageLabel": "Мова застосунку",
+  "settingsUiLanguageSystem": "Системна",
+  "preferencesTitle": "Параметри",
+  "prefMapTheme": "Тема мапи",
+  "prefAppLanguage": "Мова застосунку",
+  "permissionsTitle": "Дозволи",
+  "permissionsInstructions": "Цей застосунок потребує наступних дозволів для коректної роботи",
+  "permOptional": "Необов'язково",
+  "permDeniedMsg": "Відхилено — увімкни в налаштуваннях застосунку.",
+  "permPermanentlyDenied": "Цей дозвіл потрібно увімкнути в налаштуваннях застосунку.",
+  "permLocationWhileUsingName": "Геолокація під час використання",
+  "permLocationWhileUsingDesc": "Потрібно для відстеження твоєї позиції та її відображення на мапі.",
+  "permLocationAlwaysName": "Геолокація завжди",
+  "permLocationAlwaysDesc": "Необов'язково: тримає точне відстеження під час довгих тренувань, навіть коли система призупиняє застосунок.",
+  "permNotificationName": "Сповіщення",
+  "permNotificationDesc": "Необов'язково: показує постійне сповіщення «Триває запис активності», що також допомагає Android не зупиняти відстеження у фоні.",
+  "mapTrackingGapMsg": "Відстеження зупинилося на {seconds}с, поки застосунок був у фоні — частина твого маршруту відсутня. Дозволь furtive «необмежене використання батареї», щоб уникнути цього.",
+  "mapActivityStartedMsg": "Тренування розпочато",
+  "mapStopHint": "Утримуй Стоп 3 секунди, щоб завершити тренування",
+  "statsRecordingTitle": "Запис",
+  "statSignalLost": "Сигнал GPS втрачено на {duration} (~{meters} м по прямій) — цей час виключено з активної статистики.",
+  "statDistance": "Відстань",
+  "statDuration": "Час",
+  "statPace": "Темп",
+  "statSpeed": "Швидкість",
+  "statElevation": "Набір висоти",
+  "splitsTitle": "Відрізки",
+  "splitsNotEnoughData": "Поки що недостатньо даних для відрізків.",
+  "metricPace": "Темп",
+  "metricSpeed": "Швидкість",
+  "activitiesEmpty": "Тренувань немає",
+  "activitiesImportTooltip": "Імпорт GPX-файлу",
+  "importStarted": "Імпорт…",
+  "importSuccess": "Тренування імпортовано",
+  "activityNameLabel": "Назва тренування",
+  "activityDeleteSuccess": "Тренування видалено",
+  "dlgRenameTitle": "Перейменувати",
+  "dlgDeleteTitle": "Видалити",
+  "dlgDeleteConfirm": "Точно хочеш видалити це тренування?",
+  "gpxExportSuccess": "GPX успішно експортовано",
+  "gpxExportFailed": "Помилка експорту: {error}",
+  "logsTitle": "Журнали",
+  "logsEmpty": "Журналів немає",
+  "logsTooltipClear": "Очистити журнали",
+  "logsTooltipFilterDate": "Фільтр за датою",
+  "logsTooltipClearFilter": "Скинути фільтр",
+  "logsTooltipShare": "Поділитися",
+  "logsFiltered": "Фільтр: {start} - {end}",
+  "logsShowingCount": "{shown} з {total}",
+  "activityDefaultName": "Тренування",
+  "logsLoadError": "Не вдалося завантажити журнали: {error}",
+  "logCopiedMsg": "Запис скопійовано в буфер обміну",
+  "logsCopiedMsg": "{count} записів скопійовано в буфер обміну",
+  "dlgDeleteLogsTitle": "Видалити журнали",
+  "dlgDeleteLogsConfirm": "Точно хочеш видалити всі журнали? Цю дію неможливо скасувати.",
+  "supportTitle": "Підтримати розробку",
+  "supportDescription": "Цей застосунок створюється та підтримується у вільний час. Твоя підтримка допомагає йому розвиватися.",
+  "changelogTitle": "Що нового",
+  "changelogGotIt": "Зрозуміло",
+  "changelogV120I18n": "Багатомовність: інтерфейс застосунку 26 мовами, мітки мапи 41 мовою, формати дати відповідають твоїй локалі. Перевизначення в налаштуваннях або майстрі.",
+  "changelogV120Wizard": "Майстер першого запуску: обери стандартні значення (тема, мова) та надай дозволи геолокації за один прохід.",
+  "changelogV120Recording": "Запис тренування: анімований маркер позиції з пульсацією та колом точності, маркери кілометрів на мапі, утримуй Стоп 3 секунди для завершення (без випадкових натискань), автоперехід до статистики.",
+  "changelogV120Stats": "Статистика тренування: графік відрізків по кілометрах із перемикачем темп ⇄ швидкість, набір висоти D+ (як у Strava/Garmin).",
+  "changelogV120Share": "Поділися тренуванням як карточкою з мапою та статистикою через системне меню.",
+  "changelogV120GpxImport": "Імпорт GPX-файлів з інших застосунків (Garmin, Strava тощо) — підтримуються і треки, і маршрути.",
+  "changelogV120MapThemes": "П'ять тем мапи: Світла, Темна, Біла, Відтінки сірого, Чорна — обери в налаштуваннях ту, що тобі підходить.",
+  "changelogV120Reproducible": "Відтворювані збірки: будь-хто може перебудувати з вихідного коду та перевірити, що опублікований APK ідентичний байт у байт — без прихованого коду, без втручання.",
+  "changelogV120Stability": "Стабільність: захист від сміттєвих GPS-координат, надійний фоновий запис, який відновлюється після того, як система закриває застосунок, автоматична ротація журналів, суворіша валідація GPX, тайм-аути HTTP.",
+  "changelogV130LiveShare": "Пряма трансляція: під час запису поділіться наскрізним зашифрованим посиланням і дозвольте близьким стежити за вашою позицією в їхньому браузері — без акаунтів з обох боків, ключ ніколи не залишає посилання.",
+  "changelogV130Profiles": "Профілі активності: ходьба, біг, велосипед, автомобіль, плавання, літак або інше — вибір визначає частоту GPS-замірів і допуск точності і зберігається з активністю.",
+  "changelogV130Map": "Новий рушій карти: масштабування та панорамування тепер рендерить MapLibre Native — зум, який раніше смикався, тепер плавний.",
+  "changelogV130Puck": "Маркер позиції тепер малює сам застосунок: крапка на місці, шеврон за напрямком руху, компас істинної півночі на Android.",
+  "changelogV130Detail": "Деталізація запису: оберіть точну, збалансовану або ощадну частоту GPS-замірів, щоб збалансувати точність і батарею для кожної активності.",
+  "changelogV130Left": "Режим для лівшів: елементи керування картою можуть переміститися на лівий бік екрана (Налаштування).",
+  "changelogV130CarFix": "Виправлено: автомобіль швидше 126 км/год не записував нічого — фільтр швидкості тепер підлаштовується під кожну активність замість відхилення кожного заміру.",
+  "changelogV140Offline": "Офлайн-карти: збережи область навколо себе, від 10 до 100 км, щоб карта працювала й там, де немає зв'язку (Налаштування).",
+  "changelogV140OfflineCost": "Кожна збережена область повідомляє, у скільки обійшлася в тайлах і мегабайтах, а перервана — докуди дійшла; попроси її знову, щоб завершити.",
+  "changelogV140Cache": "Карта, на яку ти просто подивився, теж зберігається — до 1 ГБ — і її можна викинути окремо, не чіпаючи областей, які ти вирішив лишити.",
+  "changelogV140Drift": "Виправлено: телефон, що лежить, більше не накопичує відстань через дрейф GPS — нерухомий запис тепер показує нуль замість вигаданих метрів.",
+  "changelogV140Elevation": "Виправлено: набір висоти рахує підтверджені підйоми замість округлення кожного заміру до десяти метрів, тож невеликі пагорби перестають зникати, а рівнина — рости.",
+  "changelogV140LocationOff": "Коли служби геолокації вимкнені, карта тепер це каже й пропонує відкрити налаштування, а запис продовжується сам, щойно вони повертаються.",
+  "changelogV140Markers": "Позначки відстані вздовж маршруту можна задати з потрібним кроком або вимкнути (Налаштування).",
+  "changelogV140Stop": "При зупинці запису поступ утримання малюється над великим пальцем, а не під ним, щоб було видно, скільки ще тримати.",
+  "changelogV140SmallScreens": "Виправлено: кроки налаштування та екрани параметрів лишаються придатними на низьких і вузьких екранах.",
+  "prefThemeLight": "Світла",
+  "prefThemeDark": "Темна",
+  "prefThemeWhite": "Біла",
+  "prefThemeGrayscale": "Відтінки сірого",
+  "prefThemeBlack": "Чорна",
+  "prefMapTiles": "Тайли карти",
+  "prefMapTilesSubtitle": "Завантаження карти розкриває твоє приблизне місцезнаходження постачальнику тайлів. Вимкни для порожньої, але робочої карти без мережевих запитів.",
+  "prefShowOnLockScreen": "Показувати на заблокованому екрані",
+  "prefShowOnLockScreenSubtitle": "Тримає карту/позицію видимою над заблокованим екраном під час запису (лише Android). Вимкни, щоб приховати це від будь-кого, хто дивиться на твій заблокований телефон.",
+  "mapLoadingLocalizing": "Ініціалізація GPS…",
+  "mapLoadingMap": "Завантаження карти…",
+  "mapStartingActivity": "Запуск активності…",
+  "activitiesLoadError": "Не вдалося відкрити цю активність",
+  "activityPickerTitle": "Чим ти займаєшся?",
+  "activityWalk": "Ходьба",
+  "activityRun": "Біг",
+  "activityBike": "Велосипед",
+  "activityCar": "Автомобіль",
+  "activitySwim": "Плавання",
+  "activityAircraft": "Літак",
+  "activityOther": "Інше",
+  "activityUnknown": "Невідомо",
+  "prefRecordingDetail": "Деталізація запису",
+  "prefRecordingDetailSubtitle": "Як часто запитується позиція відносно типового значення для самої активності. Щільніше — чіткіші повороти й більша витрата батареї.",
+  "prefDetailPrecise": "Точно",
+  "prefDetailBalanced": "Збалансовано",
+  "prefDetailEndurance": "Витривалість",
+  "prefMapControlsOnRight": "Керування картою праворуч",
+  "prefMapControlsOnRightSubtitle": "Кнопки стеження, запуску, паузи та зупинки розташовані біля правого краю. Вимкніть, щоб перенести їх ліворуч — для лівшів. Атрибуція карти переходить у протилежний кут.",
+  "prefMapMilestones": "Позначки відстані",
+  "prefMapMilestonesOff": "Вимкнено",
+  "menuOfflineMaps": "Офлайн-карти",
+  "offlineTitle": "Офлайн-карти",
+  "offlineExplainer": "Збережені області залишаються на пристрої й ніколи не видаляються. Карта, на яку ти просто подивився, теж потрапляє в кеш, але його місце можна звільнити.",
+  "offlineNone": "Збережених областей поки немає",
+  "offlineAroundMe": "Зберегти область навколо мене",
+  "offlineRadius": "Радіус: {km} км",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Завантажити",
+  "offlineDownloading": "{done} з {total} тайлів · {mb} МБ",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Позиції поки немає — зачекай на GPS",
+  "offlineNoTiles": "Тайли вимкнені, зберігати нічого",
+  "offlineUnsupported": "Офлайн-області недоступні на цьому пристрої",
+  "offlineDelete": "Видалити",
+  "offlineFailed": "Не вдалося завантажити",
+  "offlineStorageTitle": "Сховище карт",
+  "offlineStorageOnDevice": "{mb} МБ на цьому пристрої",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} МБ завантажено для збережених областей · {tiles} тайлів",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Області, що перетинаються, спільно використовують тайли, тож це число може перевищувати загальне. Те, що не належить жодній області, — переглянута карта плюс накладні витрати бази даних.",
+  "offlineClearCache": "Очистити кеш",
+  "offlineRadiusTiles": "{tiles} тайлів",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} МБ · {tiles} тайлів",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} МБ · {tiles} тайлів · незавершено",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent} % · {mb} МБ · {tiles} тайлів",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

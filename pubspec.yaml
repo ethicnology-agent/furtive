@@ -1,197 +1,275 @@
-name: furtive
-description: "Le terme s'applique à un comportement ou à un mouvement rapide et secret"
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
-version: 1.3.0+3
+# Workspace root. It holds no application code: its job is to resolve every
+# member against one dependency solution and one lockfile, so the app, the
+# shared share layer and the web viewer can never drift onto different
+# versions of `nostr`, `pointycastle` or the SDK itself. Before this, three
+# independent lockfiles made that drift possible and invisible.
+#
+# It is still a package, not just a manifest: `tool/validate_share_config.dart`
+# runs from the root and imports `package:furtive_share`, so the root needs a
+# resolvable dependency on it.
+name: furtive_workspace
+description: "Workspace root for the Furtive application, its share layer and its web viewer."
+publish_to: 'none'
 
 environment:
   sdk: ^3.10.0
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-  intl: any # version pinned by flutter_localizations
-  collection: ^1.19.1 # stable mergeSort, used directly by activity_entity.dart
-
-  # Map rendering, via MapLibre Native. Replaced the flutter_map +
-  # vector_map_tiles stack, which janked on zoom and could not parse the
-  # `format` expressions Protomaps uses for its labels — see the rationale in
-  # lib/core/map/maplibre_map_view.dart.
-  #
-  # The native SDK version this pulls is pinned in android/app/build.gradle.kts;
-  # upstream publishes pre-releases into the `13.0.+` range, so leaving it open
-  # is a reproducibility hazard. Two further constraints live in that file's
-  # comments: R8/minify must stay off, and the GMS exclusion stays as a guard.
-  maplibre: ^0.3.5
-
-  flutter_bloc: ^9.1.1
-  bloc_concurrency: ^0.3.0 # sequential()/droppable() transformers for MapBloc
-  get_it: ^9.2.1
-  geolocator: ^14.0.2
-  permission_handler: ^12.0.3
-  http: ^1.6.0
-  xml: ^7.0.1
-  drift: ^2.34.2
-  path_provider: ^2.1.6
-  path: ^1.9.1
-  dart_mappable: ^4.8.0
-  logging_colorful: ^1.3.2
-  package_info_plus: ^10.2.1
-  url_launcher: ^6.3.2
-  device_info_plus: ^13.2.0
-  file_selector: ^1.1.0
-  share_plus: ^13.3.0
-  web_socket_channel: ^3.0.3
-
-  # Shared live-tracking format and cryptography. Kept in a pure-Dart package so
-  # the mobile app and the sensor-free web viewer compile the same source.
-  furtive_share:
-    path: packages/furtive_share
-  nostr: ^2.0.0
+workspace:
+  - apps/app
+  - apps/viewer
+  - packages/activities
+  - packages/activity_profile
+  - packages/basemap
+  - packages/wall_clock
+  - packages/diagnostics
+  - packages/furtive_share
+  - packages/geo
+  - packages/location
+  - packages/map_view
+  - packages/platform_services
+  - packages/preferences
+  - packages/recording_session
+  - packages/ui_kit
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  furtive_share:
+    path: packages/furtive_share
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^6.0.0
-  # ---------------------------------------------------------------------
-  # THE ANALYZER-13 WALL — why the three codegen packages below are pinned
-  # to older versions even though newer ones exist.
-  #
-  # Every newer release of build_runner (>=2.15.2), drift_dev (>2.34.0) and
-  # dart_mappable_builder (>=4.9.0) requires analyzer ^13.0.0 (build_runner
-  # additionally needs meta ^1.18.3). Flutter 3.44.9 ships Dart 3.12.2, which
-  # caps analyzer at 12.1.0 and pins meta 1.18.0; flutter_test additionally
-  # pins test_api 0.7.11 and matcher 0.12.19, so pulling analyzer 13 drags in
-  # a `test` version that conflicts with bloc_test.
-  #
-  # These bumps resolve cleanly in a bare Dart project — they fail HERE
-  # specifically because of the Flutter SDK's own pins. Nothing to fix on our
-  # side: re-attempt all three together the first time a Flutter stable ships
-  # analyzer >= 13 / meta >= 1.18.3.
-  # ---------------------------------------------------------------------
-  build_runner: ^2.15.1
-  # Blocked by the analyzer-13 wall above — and this pin has a visible cost:
-  # against drift 2.34.2, drift_dev 2.34.0's CLI does not compile, so
-  # `dart run drift_dev schema <dump|export|generate|steps>` dies on
-  # `allSchemaEntities` (removed from drift3_preview's GeneratedDatabase).
-  # The whole schema-migration verification toolchain (SchemaVerifier,
-  # step-by-step migration tests) is therefore unavailable. build_runner
-  # codegen is unaffected, which is why it goes unnoticed day to day.
-  # Until the wall lifts, migrations are covered only by the hand-written
-  # tests in test/database_test.dart.
-  drift_dev: ^2.34.0
-  sqlite3: ^3.5.0 # already a drift transitive; declared for the migration test
-  # Both are already path_provider transitives; declared explicitly because
-  # test/file_system_facade_test.dart imports them directly to substitute a fake
-  # temp directory, which is what makes the location-bearing-temp-file purge
-  # testable at all.
-  path_provider_platform_interface: ^2.1.3
-  plugin_platform_interface: ^2.1.8
-  bloc_test: ^10.0.0
-  dart_mappable_builder: ^4.8.0 # blocked by the analyzer-13 wall above
-  flutter_launcher_icons: "^0.14.4"
+  # Task orchestration across the workspace members.
+  melos: ^8.9.0
 
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/logo.png"
-  min_sdk_android: 24 # android min sdk min:16, default 21
-  windows:
-    generate: true
-    image_path: "assets/logo.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "assets/logo.png"
+  # tool/check_architecture.dart parses every member's imports.
+  analyzer: ^13.0.0
+  path: ^1.9.1
+  yaml: ^3.1.4
 
-# The following section is specific to Flutter packages.
-flutter:
+  # tool/format_dart_coverage.dart converts pure-Dart hitmaps to lcov.
+  coverage: ^1.15.1
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
-  uses-material-design: true
+# Every task below runs the SDK from the PATH, so it is identical in CI,
+# which installs Flutter directly, and locally, where `fvm exec` puts the
+# version pinned in .fvmrc on the PATH:
+#
+#     fvm exec dart run melos run verify
+# Removed the day josxha/flutter-maplibre#584 reaches a release.
+#
+# OfflineManager.downloadRegion leaks a JNI global reference per status
+# event: its callbacks are async but release into the Arena of the `using`
+# block that returned the stream, which closed before any of them ran. The
+# global reference table fills at 51,200 entries and ART aborts the process.
+# Measured on an Android 12 device against a control, same harness and day:
+# 11,753 status events and a tombstone with the published package, 43,990
+# events and no abort with this fix.
+#
+# That ceiling is about 84,000 tiles in one process. Keeping a 10 km radius
+# never approaches it; keeping a country is 2.2 million tiles for France and
+# cannot avoid it, so the feature does not work at all on the published
+# package — 35 of 174 countries fit under it.
+#
+# A pinned git dependency rather than a copy in the tree: the package is
+# 4.4 MB, 4.3 MB of which is one generated bindings file of 132,126 lines.
+# The pin is a commit, held by the furtive-pin-1.4 tag on the fork so that
+# iterating on the pull request cannot strand it.
+#
+# This is cut from upstream main rather than from 0.3.5, so it also carries
+# the two Android leak fixes 0.3.6 brought and the removal of the ktlint
+# plugin that made 0.3.6 unbuildable for consumers — which is why
+# packages/map_view pins 0.3.5 in the first place.
+dependency_overrides:
+  maplibre_android:
+    git:
+      url: https://github.com/ethicnology-agent/flutter-maplibre.git
+      path: packages/maplibre_android
+      ref: 9a0a5724ab63826d5b9a4360c4aef523a489e809
 
-  # Wires `flutter gen-l10n` (configured in l10n.yaml) into the build —
-  # the generated AppLocalizations is reachable as
-  # `package:flutter_gen/gen_l10n/app_localizations.dart`.
-  generate: true
+melos:
+  ide:
+    intellij: false
+  categories:
+    apps:
+      - apps/**
+    packages:
+      - packages/**
+  command:
+    run:
+      noSelect: true
+    bootstrap:
+      enforceLockfile: true
+  scripts:
+    prepare:
+      description: Install locked dependencies and generate every member's sources.
+      run: dart run melos bootstrap && dart run melos run generate --no-select
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+    generate:
+      description: Generate translations and private database code.
+      dependsOn:
+        - generate:l10n
+        - generate:database
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
+    generate:l10n:
+      description: Generate localized messages from each member's ARB files.
+      exec:
+        command: flutter gen-l10n
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        fileExists: l10n.yaml
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/to/asset-from-package
+    generate:database:
+      description: Generate drift and dart_mappable sources in dependency order.
+      exec:
+        command: dart run build_runner build --delete-conflicting-outputs --force-jit
+        concurrency: 1
+        failFast: true
+        orderDependents: true
+      packageFilters:
+        dependsOn: build_runner
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+    l10n:parity:
+      description: Reject a locale whose ARB keys have drifted from English.
+      run: python3 tool/check_arb_parity.py
 
-  assets:
-    - assets/logo.png
+    analyze:
+      description: Analyze every member.
+      dependsOn:
+        - analyze:flutter
+        - analyze:dart
 
-  # Space Grotesk (SIL OFL 1.1, assets/fonts/SpaceGrotesk-OFL.txt), bundled
-  # locally as a variable font — no runtime fetching, unlike the
-  # `google_fonts` package, which would download glyphs over the network on
-  # first use and conflicts with this app's "no network calls beyond what
-  # you can see in the source" stance. One variable-font file covers every
-  # weight the theme uses (400/500/700); Flutter/Skia selects the weight via
-  # the font's wght axis, so every `weight:` entry below points at the same
-  # file.
-  fonts:
-    - family: SpaceGrotesk
-      fonts:
-        - asset: assets/fonts/SpaceGrotesk-Variable.ttf
-        - asset: assets/fonts/SpaceGrotesk-Variable.ttf
-          weight: 500
-        - asset: assets/fonts/SpaceGrotesk-Variable.ttf
-          weight: 700
+    analyze:flutter:
+      exec:
+        command: flutter analyze --no-pub --fatal-infos
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: true
+
+    analyze:dart:
+      exec:
+        command: dart analyze --fatal-infos
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: false
+
+    format:check:
+      description: Check formatting across every workspace member.
+      run: dart run tool/check_format.dart
+
+    architecture:
+      description: Check module contracts, allowed dependencies, cycles and imports.
+      run: dart run tool/check_architecture.dart
+
+    graph:
+      description: Regenerate the dependency diagram.
+      run: dart run tool/graph.dart
+
+    graph:check:
+      description: Reject a stale dependency diagram.
+      run: dart run tool/graph.dart --check
+
+    test:
+      description: Run every member's tests.
+      dependsOn:
+        - test:flutter
+        - test:dart
+
+    test:flutter:
+      exec:
+        command: dart run "$MELOS_ROOT_PATH/tool/test_module.dart" flutter --coverage
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: true
+        dirExists: test
+
+    test:dart:
+      # `dart test` emits a VM hitmap, not lcov, so the figure a pure-Dart
+      # member contributes would otherwise be invisible to the coverage
+      # floor — and a well-tested module leaving the application would lower
+      # the measured total. format_coverage resolves from the workspace root,
+      # which every member shares.
+      exec:
+        command: >-
+          dart run "$MELOS_ROOT_PATH/tool/test_module.dart" dart --coverage=coverage &&
+          dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info
+          --base-directory=. --report-on=lib
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: false
+        dirExists: test
+
+    coverage:
+      description: Fail if line coverage drops below the ratcheted floor.
+      run: python3 tool/coverage_threshold.py --report
+
+    share:boundary:
+      description: Reject an import that would drag Flutter, storage or sensors into the shared package.
+      run: python3 tool/check_share_boundary.py
+
+    share:config:
+      description: Validate the live-share release configuration from the environment.
+      run: dart run tool/validate_share_config.dart
+
+    viewer:build:
+      description: Compile and package the static web viewer.
+      run: dart run tool/build_viewer.dart
+
+    viewer:build:deployed:
+      description: Package the viewer against the basemap the deployment ships.
+      run: >-
+        VIEWER_TILE_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+        dart run tool/build_viewer.dart build/viewer-basemap &&
+        grep -q "img-src 'self' data: https://tile.openstreetmap.org"
+        build/viewer-basemap/index.html
+
+    app:
+      description: Run the application on an available device.
+      run: dart run tool/run_app.dart apps/app
+      stdio: inherit
+
+    ios:pods:
+      description: Fetch the iOS pods for the application.
+      run: flutter precache --ios && cd apps/app/ios && pod install --repo-update
+      stdio: inherit
+
+    apk:
+      description: >-
+        Build the release artefact inside the pinned container. Honours
+        CONTAINER, MODE, FORMAT, GRADLE_HEAP, SOURCE_DATE_EPOCH and the
+        PROTOMAPS/SHARE dart-defines.
+      run: dart run tool/build_release.dart
+      stdio: inherit
+
+    reproducible:
+      description: Build the release artefact twice and compare SHA-256.
+      run: dart run tool/verify_reproducible.dart
+      stdio: inherit
+
+    devcontainer:create:
+      description: Create the dev container.
+      run: devcontainer up --workspace-folder . --config ./.devcontainer/devcontainer.json
+      stdio: inherit
+
+    devcontainer:start:
+      description: Start the dev container and open a shell in it.
+      run: >-
+        "${CONTAINER:-podman}" start "$(basename "$MELOS_ROOT_PATH")" &&
+        "${CONTAINER:-podman}" exec -it "$(basename "$MELOS_ROOT_PATH")" bash
+      stdio: inherit
+
+    verify:
+      description: Everything CI runs on a push.
+      dependsOn:
+        - generate
+        - l10n:parity
+        - architecture
+        - graph:check
+        - format:check
+        - analyze
+        - share:boundary
+        - test
+        - coverage
+        - viewer:build
+        - viewer:build:deployed
+

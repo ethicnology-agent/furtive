@@ -32,85 +32,35 @@ jobs:
           channel: stable
           cache: true
 
-      - name: pub get (enforce lockfile)
-        run: flutter pub get --enforce-lockfile
-
-      - name: viewer pub get (enforce lockfile)
-        run: dart pub get --directory viewer --enforce-lockfile
-
-      - name: shared package pub get (enforce lockfile)
-        run: dart pub get --directory packages/furtive_share --enforce-lockfile
-
-      # dart_mappable (*mapper.dart) and drift (*.g.dart) generated sources
-      # are gitignored — analyze/test can't resolve without them.
-      - name: build_runner (generate *.g.dart / *mapper.dart)
-        run: dart run build_runner build --delete-conflicting-outputs --force-jit
-
-      - name: Generate localizations + check ARB parity
+      - name: Bootstrap the workspace
         run: |
-          flutter gen-l10n
-          python3 -c "import json, os, sys; \
-          d = 'lib/l10n'; \
-          arbs = {f[4:-4]: {k for k in json.load(open(os.path.join(d,f))).keys() if not k.startswith('@')} \
-                  for f in sorted(os.listdir(d)) if f.startswith('app_') and f.endswith('.arb')}; \
-          en = arbs['en']; \
-          bad = [(loc, sorted(en - keys), sorted(keys - en)) for loc, keys in arbs.items() if loc != 'en' and (en - keys or keys - en)]; \
-          print(f'  {len(arbs)} locales, {len(en)} keys each'); \
-          sys.exit(0) if not bad else (print('PARITY ISSUES:'), [print(f'  {loc}: missing={m} extra={e}') for loc,m,e in bad], sys.exit(1))"
+          dart pub get --enforce-lockfile
+          dart run melos bootstrap
 
-      - name: dart format --set-exit-if-changed
-        run: dart format --set-exit-if-changed lib test packages/furtive_share/lib packages/furtive_share/test viewer/lib viewer/test viewer/web
+      # One script, defined in the root pubspec, so that what CI runs and what
+      # `fvm exec dart run melos run verify` runs locally cannot drift apart.
+      # It covers generation, ARB parity across every locale, module
+      # boundaries, the dependency graph, formatting, analysis with
+      # --fatal-infos, the share-layer boundary, every member's tests with
+      # coverage, the coverage floor, and both viewer packagings.
+      - name: Verify
+        run: dart run melos run verify
 
-      - name: flutter analyze
-        run: flutter analyze
-
-      - name: Analyze shared package and web viewer
-        run: |
-          dart analyze packages/furtive_share
-          dart analyze viewer
-
-      - name: Compile web viewer
-        run: |
-          mkdir -p build/viewer
-          dart compile js -O4 -o build/viewer/main.dart.js viewer/web/main.dart
-          python3 tool/package_viewer.py build/viewer
-
-      # The step above packages the same-origin default, which exercises neither
-      # the CSP widening nor the Referer guard. Re-package the compiled bundle
-      # against the tile URL the deployment actually ships, so a regression on
-      # either surfaces on the pull request instead of at deploy time.
-      - name: Package the viewer against the deployed basemap
-        run: |
-          mkdir -p build/viewer-basemap
-          cp build/viewer/main.*.js build/viewer-basemap/main.dart.js
-          python3 tool/package_viewer.py build/viewer-basemap \
-            --tile-url 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-          grep -q "img-src 'self' data: https://tile.openstreetmap.org" \
-            build/viewer-basemap/index.html
-
-      # Fails on an import that would drag Flutter, storage, or sensors into the
-      # pure-Dart package shared with the web viewer.
-      - name: Share-layer boundary
-        run: python3 tool/check_share_boundary.py
-
-      # --coverage rather than a bare `flutter test`: the threshold check below
-      # is what stops the suite from silently rotting. Without a measured floor
-      # in CI, coverage only ever moves in one direction.
-      - name: flutter test (with coverage)
-        run: flutter test --coverage
-
-      - name: Shared package tests
-        working-directory: packages/furtive_share
-        run: dart test
-
-      - name: Viewer logic tests
-        working-directory: viewer
-        run: dart test
-
-      - name: Coverage floor
-        run: python3 tool/coverage_threshold.py --report
+      # A golden comparison writes the expected image, what was rendered and
+      # their masked difference next to the test. Without them, a CI-only
+      # failure is a percentage and nothing to look at, and the one machine
+      # that can reproduce it is the runner.
+      - name: Upload golden failures
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: golden-failures
+          path: '**/test/failures/**'
+          if-no-files-found: ignore
+          retention-days: 7
 
       # Analyze/test cannot compile Kotlin, merge the Android manifest, resolve
       # MapLibre Native, or exercise release-only Gradle configuration.
       - name: Compile release APK
+        working-directory: apps/app
         run: flutter build apk --release

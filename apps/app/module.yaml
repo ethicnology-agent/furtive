@@ -1,0 +1,22 @@
+role: shell
+responsibility: >-
+  Compose the journeys into an application: wire them together, own what is
+  application-wide rather than feature-local, and carry the one-time
+  handover out of the pre-1.4 storage layout.
+storage: none — the recordings and the settings each own their own
+allowed_dependencies:
+  [
+    activities,
+    activity_profile,
+    basemap,
+    diagnostics,
+    furtive_share,
+    geo,
+    location,
+    map_view,
+    platform_services,
+    preferences,
+    recording_session,
+    ui_kit,
+    wall_clock,
+  ]

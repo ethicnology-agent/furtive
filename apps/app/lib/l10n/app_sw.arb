@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "Imeshindwa kufungua kichagua faili za GPX. Jaribu tena.",
+  "mapRecordingProblem": "Kuna kitu kimeharibika wakati wa kurekodi.",
+  "mapRecordingStateActive": "Shughuli yako bado inarekodiwa.",
+  "mapRecordingStatePaused": "Shughuli yako bado imesitishwa.",
+  "mapRecordingStateIdle": "Hakuna shughuli inayorekodiwa kwa sasa.",
+  "mapFollowing": "Inafuata",
+  "mapWaitingForLocation": "Inasubiri GPS",
+  "mapLocationServiceOff": "Eneo limezimwa — liwashe katika mipangilio ya mfumo",
+  "mapOpenLocationSettings": "Fungua mipangilio",
+  "mapHoldStopProgress": "Endelea kushikilia · {seconds}",
+  "liveSharePreparing": "Inaandaa…",
+  "liveShareConnected": "Mubashara imeunganishwa",
+  "liveShareDisconnected": "Inaunganisha tena…",
+  "liveShareConnecting": "Inaunganisha…",
+  "liveShareNotPublished": "Bado hakuna kilichochapishwa — kiungo kitabaki tupu hadi relay ijibu.",
+  "liveShareStillActive": "Kushiriki mubashara bado kunaendelea.",
+  "showPassword": "Onyesha nenosiri",
+  "hidePassword": "Ficha nenosiri",
+  "statsActive": "Inaendelea",
+  "statsPaused": "Mapumziko",
+  "statsElapsed": "Muda uliopita",
+  "activityRenameTooltip": "Badilisha jina la shughuli",
+  "activityDeleteTooltip": "Futa shughuli",
+  "activityExportTooltip": "Hamisha GPX",
+  "activityNoTrack": "Hakuna njia iliyorekodiwa",
+  "importInProgress": "Inaingiza GPX…",
+  "btnBack": "Rudi",
+  "btnCopy": "Nakili",
+  "prefLoadFailed": "Imeshindwa kupakia mapendeleo yako.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "sw",
+  "appTitle": "Furtive",
+  "btnNext": "Endelea",
+  "btnFinish": "Maliza",
+  "btnGrant": "Ruhusu",
+  "btnGrantPermission": "Toa idhini",
+  "btnFollow": "Fuata",
+  "btnPause": "Sitisha",
+  "btnResume": "Endelea",
+  "btnStart": "Anza",
+  "btnStarting": "Inaanza",
+  "btnStop": "Simamisha",
+  "btnContinue": "Endelea",
+  "btnGrantToContinue": "Toa idhini zinazohitajika ili kuendelea",
+  "btnViewStats": "Tazama takwimu",
+  "btnCancel": "Ghairi",
+  "btnUndo": "Tendua",
+  "btnRetry": "Jaribu tena",
+  "btnRename": "Badilisha jina",
+  "btnDelete": "Futa",
+  "prefSaveFailed": "Imeshindwa kuhifadhi mapendeleo yako.",
+  "btnStarGitHub": "Mpe nyota GitHub",
+  "btnSponsor": "Saidia",
+  "linkOpenFailed": "Imeshindwa kufungua {url}",
+  "shareSummary": "{distance} km kwa {duration} na Furtive",
+  "shareFailed": "Imeshindwa kushiriki shughuli: {error}",
+  "shareTooltip": "Shiriki shughuli",
+  "liveShareTitle": "Shiriki eneo la moja kwa moja",
+  "liveShareButton": "Shiriki",
+  "liveSharePassword": "Nenosiri la hiari",
+  "liveSharePasswordHelp": "Tuma nenosiri kando. Acha wazi kwa ufikiaji wa kiungo pekee.",
+  "navMap": "Ramani",
+  "navActivities": "Shughuli",
+  "navSettings": "Mipangilio",
+  "menuPermissions": "Idhini",
+  "menuPreferences": "Mapendeleo",
+  "menuLogs": "Kumbukumbu",
+  "onboardWelcomeTitle": "Karibu Furtive",
+  "onboardWelcomeSubtitle": "Ufuatiliaji wa shughuli wenye kuheshimu faragha. Hakuna akaunti, hakuna telemetri, hakuna huduma za Google. Tuchague mapendeleo machache.",
+  "onboardSettingsTitle": "Mipangilio ya ramani",
+  "onboardSettingsSubtitle": "Chagua mapendeleo yako — unaweza kuyabadilisha baadaye katika mipangilio.",
+  "onboardPermissionsTitle": "Idhini",
+  "onboardPermissionsSubtitle": "Toa idhini ya eneo ili kufuatilia mbio zako. Arifa na ufikiaji wa nyuma ya pazia ni hiari.",
+  "onboardSaveError": "Imeshindwa kuhifadhi chaguo zako: {error}",
+  "settingsThemeLabel": "Mandhari",
+  "settingsUiLanguageLabel": "Lugha ya programu",
+  "settingsUiLanguageSystem": "Chaguomsingi la mfumo",
+  "preferencesTitle": "Mapendeleo",
+  "prefMapTheme": "Mandhari ya ramani",
+  "prefAppLanguage": "Lugha ya programu",
+  "permissionsTitle": "Idhini",
+  "permissionsInstructions": "Programu hii inahitaji idhini zifuatazo ili kufanya kazi vizuri",
+  "permOptional": "Hiari",
+  "permDeniedMsg": "Imekataliwa — wezesha kwenye mipangilio ya programu.",
+  "permPermanentlyDenied": "Idhini hii lazima iwezeshwe kwenye mipangilio ya programu.",
+  "permLocationWhileUsingName": "Eneo wakati wa kutumia",
+  "permLocationWhileUsingDesc": "Inahitajika kufuatilia eneo lako na kulionyesha kwenye ramani.",
+  "permLocationAlwaysName": "Eneo daima",
+  "permLocationAlwaysDesc": "Hiari: huweka ufuatiliaji sahihi wakati wa shughuli ndefu, hata kama mfumo unasimamisha programu.",
+  "permNotificationName": "Arifa",
+  "permNotificationDesc": "Hiari: huonyesha arifa endelevu ya \"Inarekodi shughuli\", ambayo pia husaidia Android kutozuia ufuatiliaji nyuma ya pazia.",
+  "mapTrackingGapMsg": "Ufuatiliaji ulisimama kwa sekunde {seconds} wakati programu ilikuwa nyuma ya pazia — kipande cha njia yako kimekosekana. Ruhusu \"betri isiyo na kikomo\" kwa furtive ili kuzuia hili.",
+  "mapActivityStartedMsg": "Shughuli imeanza",
+  "mapStopHint": "Shikilia Simamisha kwa sekunde 3 ili kumaliza shughuli",
+  "statsRecordingTitle": "Inarekodi shughuli",
+  "statSignalLost": "Mawimbi ya GPS yalipotea kwa {duration} (~{meters} m kwa mstari ulionyooka) — muda huu haujumuishwi katika takwimu za shughuli.",
+  "statDistance": "Umbali",
+  "statDuration": "Muda",
+  "statPace": "Mwendo",
+  "statSpeed": "Kasi",
+  "statElevation": "Mwinuko",
+  "splitsTitle": "Migawanyiko",
+  "splitsNotEnoughData": "Bado data haitoshi kwa migawanyiko.",
+  "metricPace": "Mwendo",
+  "metricSpeed": "Kasi",
+  "activitiesEmpty": "Hakuna shughuli",
+  "activitiesImportTooltip": "Ingiza faili ya GPX",
+  "importStarted": "Inaingiza…",
+  "importSuccess": "Shughuli imeingizwa",
+  "activityNameLabel": "Jina la shughuli",
+  "activityDeleteSuccess": "Shughuli imefutwa",
+  "dlgRenameTitle": "Badilisha jina",
+  "dlgDeleteTitle": "Futa",
+  "dlgDeleteConfirm": "Una uhakika unataka kufuta shughuli hii?",
+  "gpxExportSuccess": "GPX imetolewa kwa mafanikio",
+  "gpxExportFailed": "Imeshindwa kutoa: {error}",
+  "logsTitle": "Kumbukumbu",
+  "logsEmpty": "Hakuna kumbukumbu",
+  "logsTooltipClear": "Futa kumbukumbu",
+  "logsTooltipFilterDate": "Chuja kwa tarehe",
+  "logsTooltipClearFilter": "Futa kichujio",
+  "logsTooltipShare": "Shiriki",
+  "logsFiltered": "Kichujio: {start} - {end}",
+  "logsShowingCount": "Inaonyesha {shown} kati ya {total}",
+  "activityDefaultName": "Njia",
+  "logsLoadError": "Imeshindwa kupakia kumbukumbu: {error}",
+  "logCopiedMsg": "Kumbukumbu imenakiliwa kwenye ubao wa kunakili",
+  "logsCopiedMsg": "Kumbukumbu {count} zimenakiliwa kwenye ubao wa kunakili",
+  "dlgDeleteLogsTitle": "Futa kumbukumbu",
+  "dlgDeleteLogsConfirm": "Una uhakika unataka kufuta kumbukumbu zote? Kitendo hiki hakiwezi kutenduliwa.",
+  "supportTitle": "Saidia maendeleo",
+  "supportDescription": "Programu hii inajengwa na kudumishwa katika muda wangu wa ziada. Msaada wako unasaidia kuiweka hai na kukua.",
+  "changelogTitle": "Mpya",
+  "changelogGotIt": "Sawa",
+  "changelogV120I18n": "Lugha nyingi: kiolesura cha programu katika lugha 26, lebo za ramani 41, muundo wa tarehe hufuata eneo lako. Badilisha kwenye Mipangilio au msaidizi.",
+  "changelogV120Wizard": "Msaidizi wa uzinduzi wa kwanza: chagua chaguomsingi zako (mandhari, lugha) na toa idhini za eneo katika mtiririko mmoja.",
+  "changelogV120Recording": "Kurekodi shughuli: alama ya eneo iliyohuishwa na mapigo na duara la usahihi, alama za kilomita kwenye ramani, shikilia Simamisha sekunde 3 kumaliza (hakuna kugusa bila kukusudia), kuelekezwa kiotomatiki kwenye takwimu.",
+  "changelogV120Stats": "Takwimu za shughuli: chati ya migawanyiko ya kilomita na kibadilishaji mwendo ⇄ kasi, mwinuko D+ (kanuni ya Strava/Garmin).",
+  "changelogV120Share": "Shiriki shughuli kama kadi yenye ramani na takwimu kupitia menyu ya kushiriki ya mfumo.",
+  "changelogV120GpxImport": "Ingiza faili za GPX kutoka programu zingine (Garmin, Strava, n.k.) — pointi za track na route zinatumika.",
+  "changelogV120MapThemes": "Mada tano za ramani: Mwanga, Giza, Nyeupe, Kijivu, Nyeusi — chagua inayokufaa kwenye Mipangilio.",
+  "changelogV120Reproducible": "Ujenzi unaoweza kurudiwa: mtu yeyote anaweza kujenga upya kutoka kwa msimbo wa chanzo na kuthibitisha kuwa APK iliyochapishwa ni ya sawa baiti kwa baiti — hakuna msimbo wa siri, hakuna uharibifu.",
+  "changelogV120Stability": "Uthabiti: ulinzi dhidi ya usomaji mbaya wa GPS, kurekodi kwa uhakika chinichini kunakoendelea baada ya mfumo kufunga programu, mzunguko wa kumbukumbu kiotomatiki, uthibitishaji mkali wa GPX, muda wa HTTP.",
+  "changelogV130LiveShare": "Kushiriki moja kwa moja: wakati wa kurekodi, shiriki kiungo kilichosimbwa kutoka-mwisho-hadi-mwisho na waache wapendwa wako kufuatilia nafasi yako katika kivinjari chao — hakuna akaunti upande wowote, ufunguo hautoki kamwe kwenye kiungo.",
+  "changelogV130Profiles": "Profaili za shughuli: kutembea, kukimbia, baiskeli, gari, kuogelea, ndege au nyingine — chaguo huamua sampuli ya GPS na uvumilivu wa usahihi, na huhifadhiwa na shughuli.",
+  "changelogV130Map": "Injini mpya ya ramani: kukuza na kusogeza sasa hutolewa na MapLibre Native — kukuza kulikwama sasa ni laini.",
+  "changelogV130Puck": "Kialamishi cha nafasi sasa huchorwa na programu yenyewe: nukta wakati wa kusimama, chevron katika mwelekeo wako wa safari, dira ya kaskazini ya kweli kwenye Android.",
+  "changelogV130Detail": "Undani wa kurekodi: chagua sampuli ya GPS sahihi, yenye usawa au ya kuokoa ili kusawazisha usahihi na betri kwa kila shughuli.",
+  "changelogV130Left": "Hali ya mkono wa kushoto: vidhibiti vya ramani vinaweza kuhamia upande wa kushoto wa skrini (Mipangilio).",
+  "changelogV130CarFix": "Imerekebishwa: gari zaidi ya 126 km/h halikurekodi chochote — kichujio cha kasi sasa kinajifunga na kila shughuli badala ya kukataa kila usomaji.",
+  "changelogV140Offline": "Ramani za nje ya mtandao: hifadhi eneo lililo kando yako, kilomita 10 hadi 100, ili ramani ifanye kazi hata pasipo mtandao (Mipangilio).",
+  "changelogV140OfflineCost": "Kila eneo lililohifadhiwa huonyesha gharama yake kwa vigae na megabaiti, na lililokatizwa huonyesha lilipofikia — liombe tena ili ulikamilishe.",
+  "changelogV140Cache": "Ramani uliyoiangalia tu nayo huhifadhiwa, hadi GB 1, na inaweza kutupwa peke yake bila kugusa maeneo uliyochagua kuhifadhi.",
+  "changelogV140Drift": "Imerekebishwa: simu iliyowekwa chini haikusanyi tena umbali kutokana na mwendo wa GPS — rekodi isiyosonga sasa inaonyesha sufuri badala ya kubuni mita.",
+  "changelogV140Elevation": "Imerekebishwa: mwinuko huhesabu mipando iliyothibitishwa badala ya kuzungusha kila usomaji hadi mita kumi, hivyo vilima vidogo havipotei tena na uwanda tambarare hauzidi kupanda.",
+  "changelogV140LocationOff": "Huduma za eneo zikiwa zimezimwa, ramani sasa inasema hivyo na kutoa njia ya kufungua mpangilio, na ufuatiliaji unaendelea wenyewe zinaporudi.",
+  "changelogV140Markers": "Alama za umbali kwenye njia zinaweza kuwekwa kwa nafasi unayotaka, au kuzimwa (Mipangilio).",
+  "changelogV140Stop": "Unaposimamisha rekodi, maendeleo ya kushikilia huchorwa juu ya kidole gumba badala ya chini yake, ili uone umebakiza muda gani.",
+  "changelogV140SmallScreens": "Imerekebishwa: hatua za usanidi na skrini za mipangilio zinabaki zikitumika kwenye skrini fupi na nyembamba.",
+  "prefThemeLight": "Angavu",
+  "prefThemeDark": "Giza",
+  "prefThemeWhite": "Nyeupe",
+  "prefThemeGrayscale": "Kijivu",
+  "prefThemeBlack": "Nyeusi",
+  "prefMapTiles": "Vigae vya ramani",
+  "prefMapTilesSubtitle": "Kupakia ramani hufichua mahali pako pa takriban kwa mtoa vigae. Zima ili kupata ramani tupu inayofanya kazi bila maombi ya mtandao.",
+  "prefShowOnLockScreen": "Onyesha kwenye skrini iliyofungwa",
+  "prefShowOnLockScreenSubtitle": "Huweka ramani/mahali ikionekana juu ya skrini iliyofungwa wakati wa kurekodi (Android tu). Zima ili kuificha kutoka kwa yeyote anayeangalia simu yako iliyofungwa.",
+  "mapLoadingLocalizing": "Inaanzisha GPS…",
+  "mapLoadingMap": "Inapakia ramani…",
+  "mapStartingActivity": "Inaanza shughuli…",
+  "activitiesLoadError": "Imeshindwa kufungua shughuli hii",
+  "activityPickerTitle": "Unafanya nini?",
+  "activityWalk": "Kutembea",
+  "activityRun": "Kukimbia",
+  "activityBike": "Baiskeli",
+  "activityCar": "Gari",
+  "activitySwim": "Kuogelea",
+  "activityAircraft": "Ndege",
+  "activityOther": "Nyingine",
+  "activityUnknown": "Haijulikani",
+  "prefRecordingDetail": "Kina cha kurekodi",
+  "prefRecordingDetailSubtitle": "Mara ngapi nafasi inaombwa, kulingana na chaguo-msingi la shughuli yenyewe. Kwa wingi zaidi, kona zinakuwa wazi na betri hutumika zaidi.",
+  "prefDetailPrecise": "Sahihi",
+  "prefDetailBalanced": "Uwiano",
+  "prefDetailEndurance": "Uvumilivu",
+  "prefMapControlsOnRight": "Vidhibiti vya ramani kulia",
+  "prefMapControlsOnRightSubtitle": "Vitufe vya kufuata, kuanza, kusitisha na kusimamisha viko upande wa kulia. Zima ili kuvihamisha kushoto, kwa watumiaji wa mkono wa kushoto. Sifa ya ramani huenda pembe ya pili.",
+  "prefMapMilestones": "Alama za umbali",
+  "prefMapMilestonesOff": "Imezimwa",
+  "menuOfflineMaps": "Ramani za nje ya mtandao",
+  "offlineTitle": "Ramani za nje ya mtandao",
+  "offlineExplainer": "Maeneo unayohifadhi hubaki kwenye kifaa na hayafutwi kamwe. Ramani uliyoiangalia tu nayo huwekwa kwenye akiba, lakini nafasi yake inaweza kurudishwa.",
+  "offlineNone": "Bado hakuna maeneo yaliyohifadhiwa",
+  "offlineAroundMe": "Hifadhi eneo lililo kando yangu",
+  "offlineRadius": "Nusu kipenyo: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Pakua",
+  "offlineDownloading": "vigae {done} kati ya {total} · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Bado hakuna mahali — subiri GPS",
+  "offlineNoTiles": "Vigae vimezimwa, hivyo hakuna cha kuhifadhi",
+  "offlineUnsupported": "Maeneo ya nje ya mtandao hayapatikani kwenye kifaa hiki",
+  "offlineDelete": "Futa",
+  "offlineFailed": "Upakuaji umeshindwa",
+  "offlineStorageTitle": "Hifadhi ya ramani",
+  "offlineStorageOnDevice": "{mb} MB kwenye kifaa hiki",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB zimepakuliwa kwa maeneo yaliyohifadhiwa · vigae {tiles}",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Maeneo yanayoingiliana hushiriki vigae vyake, hivyo takwimu hiyo inaweza kuzidi jumla. Kisichomo katika eneo ni ramani uliyoitazama, pamoja na gharama ya hifadhidata.",
+  "offlineClearCache": "Futa akiba",
+  "offlineRadiusTiles": "vigae {tiles}",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · vigae {tiles}",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · vigae {tiles} · haijakamilika",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · vigae {tiles}",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

@@ -5,7 +5,13 @@ import 'package:furtive_share/furtive_share.dart';
 
 void main() {
   try {
-    final viewerBase = (Platform.environment['SHARE_VIEWER_URL'] ?? '').trim();
+    // Falls back to the same constant the app compiles in, so the check
+    // validates what a build without the define actually ships.
+    final configuredViewer = (Platform.environment['SHARE_VIEWER_URL'] ?? '')
+        .trim();
+    final viewerBase = configuredViewer.isEmpty
+        ? defaultShareViewerUrl
+        : configuredViewer;
     final configuredRelays = (Platform.environment['SHARE_RELAYS'] ?? '')
         .trim();
     final relayConfig = configuredRelays.isEmpty

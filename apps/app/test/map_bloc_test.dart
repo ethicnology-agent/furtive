@@ -1,0 +1,527 @@
+import 'dart:async';
+import 'package:activity_profile/activity_profile.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:location/testing.dart';
+import 'package:recording_session/recording_session.dart';
+import 'package:wall_clock/wall_clock.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:activities/testing.dart';
+import 'package:flutter/foundation.dart';
+import 'package:activities/activities.dart';
+import 'package:location/location.dart';
+import 'package:basemap/basemap.dart';
+import 'package:furtive/features/map/bloc/map_bloc.dart';
+import 'package:furtive/features/map/bloc/map_event.dart';
+import 'package:furtive/features/map/bloc/map_state.dart';
+import 'package:preferences/preferences.dart';
+
+import 'support/fakes.dart';
+
+/// MapBloc is now map presentation plus the wiring between the position stream
+/// and the recorder. These tests cover that wiring; the recording rules live in
+/// recording_bloc_test.dart and the stream lifecycle in
+/// position_stream_controller_test.dart.
+///
+/// The real GetMapStyleUrlUseCase is used rather than a stub: with no
+/// PROTOMAPS_KEY compiled in (the case under `flutter test`) it takes the
+/// genuine tileless path and returns a null style, which is exactly what the
+/// keyless FOSS build does at runtime.
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late LocalDatabase db;
+  late PreferencesRepository preferences;
+  late FixedClock clock;
+  late FakeLocationRepository location;
+  late RecordingSession recording;
+  final start = DateTime.utc(2026, 7, 26, 10);
+
+  setUp(() {
+    db = inMemoryDatabase();
+    // Settings live in their own store now; each test gets an isolated
+    // in-memory one so nothing reaches the production database.
+    preferences = PreferencesRepository.inMemory();
+    clock = FixedClock(start);
+    location = FakeLocationRepository(currentLocation: fixAt(start));
+    final repo = ActivityRepository(
+      local: ActivityLocalDataSource(db: db, clock: clock),
+      clock: clock,
+    );
+    recording = RecordingSession(
+      activities: repo,
+      score: ScoreActivityUseCase(activities: repo, clock: clock),
+      ensureBackgroundTracking: EnsureBackgroundTrackingUseCase(
+        location: location,
+      ),
+      clock: clock,
+    );
+  });
+
+  tearDown(() async {
+    await recording.close();
+    await location.dispose();
+    await preferences.close();
+    await db.close();
+  });
+
+  MapBloc buildBloc({GetMapStyleUrlUseCase? style}) => MapBloc(
+    recording: recording,
+    getMapStyleUrl: style ?? GetMapStyleUrlUseCase(preferences: preferences),
+    location: location,
+    positionStream: PositionStreamController(location: location, clock: clock),
+    // The same isolated store the style use case above reads: MapBloc reads
+    // the recording preferences on InitMap, and the default constructor would
+    // reach for the real settings database.
+    preferences: preferences,
+    // Reported as a non-Android platform so the facade short-circuits: the
+    // compass is a native sensor stream with no meaning in a unit test, and
+    // its own suite covers the smoothing.
+    compass: CompassFacade(platform: TargetPlatform.linux),
+  );
+
+  Future<void> seedOngoing(String id, DateTime startedAt) {
+    return ActivityLocalDataSource(db: db, clock: clock).store(
+      ActivityModel(
+        id: id,
+        name: 'Track',
+        description: '',
+        createdAt: startedAt,
+        startedAt: startedAt,
+        stoppedAt: null,
+        points: [
+          ActivityPointModel(
+            latitude: 48.85,
+            longitude: 2.35,
+            elevation: 0,
+            time: startedAt,
+            status: ActivityPointsStatusColumn.active,
+          ),
+        ],
+      ),
+    );
+  }
+
+  test(
+    'watching the settings never opens the location stream by itself',
+    () async {
+      // InitMap asks the OS for location permission. The map subscribes to the
+      // settings when it is built, and that subscription emits immediately —
+      // so the first emission has to be a baseline and never a trigger, or
+      // launching the app would prompt before the user asked for anything.
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(location.positionStreamOpenAttempts, 0);
+      expect(bloc.state.styleUrl, isNull);
+    },
+  );
+
+  test('a style-affecting setting re-resolves; another one does not', () async {
+    // Counting resolutions rather than watching the URL: this build has no
+    // tile key, so the answer is null either way — null is a first-class
+    // answer here, which makes it useless as a probe.
+    final style = _CountingStyle(preferences);
+    final bloc = buildBloc(style: style);
+    addTearDown(bloc.close);
+    bloc.add(const InitMap());
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    final afterInit = style.calls;
+
+    await preferences.store(
+      (await preferences.fetch()).copyWith(mapControlsOnLeft: true),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    expect(
+      style.calls,
+      afterInit,
+      reason: 'moving the controls must not re-resolve the style',
+    );
+    expect(bloc.state.mapControlsOnLeft, isTrue);
+
+    await preferences.store(
+      (await preferences.fetch()).copyWith(mapTheme: MapThemeEntity.white),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    expect(
+      style.calls,
+      greaterThan(afterInit),
+      reason: 'a new theme is a new style',
+    );
+  });
+
+  blocTest<MapBloc, MapState>(
+    'InitMap opens the stream, fetches a fix and settles with no loading status',
+    build: buildBloc,
+    act: (bloc) => bloc.add(const InitMap()),
+    wait: const Duration(milliseconds: 100),
+    verify: (bloc) {
+      expect(location.positionStreamOpenCount, 1);
+      expect(bloc.state.userLocation, isNotNull);
+      expect(bloc.state.loadingStatus, isNull);
+      expect(bloc.state.styleUrl, isNull, reason: 'tileless build');
+    },
+  );
+
+  blocTest<MapBloc, MapState>(
+    'InitMap still resumes an ongoing activity when the one-shot GPS fix fails '
+    '— cold GPS right after an unlock must not strand a live recording',
+    setUp: () => seedOngoing('ongoing1', start),
+    build: () {
+      location.failCurrentLocation = true;
+      return buildBloc();
+    },
+    act: (bloc) => bloc.add(const InitMap()),
+    wait: const Duration(milliseconds: 150),
+    verify: (bloc) {
+      expect(recording.state.activity?.id, 'ongoing1');
+      expect(bloc.state.userLocation, isNull);
+      expect(bloc.state.loadingStatus, isNull);
+    },
+  );
+
+  blocTest<MapBloc, MapState>(
+    'two InitMap events in quick succession do not double-open the stream',
+    build: buildBloc,
+    act: (bloc) {
+      bloc.add(const InitMap());
+      bloc.add(const InitMap());
+    },
+    wait: const Duration(milliseconds: 150),
+    verify: (bloc) => expect(location.positionStreamOpenCount, 1),
+    errors: () => isEmpty,
+  );
+
+  test('a fix is scored only when a recording is running', () async {
+    final bloc = buildBloc();
+    addTearDown(bloc.close);
+    bloc.add(const InitMap());
+    await Future<void>.delayed(const Duration(milliseconds: 120));
+
+    // Nothing recording: the fix updates the map but is not persisted.
+    location.fixes.add(fixAt(start.add(const Duration(seconds: 1))));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    expect(bloc.state.userLocation, isNotNull);
+    expect(recording.state.activity, isNull);
+
+    // Now record, and the next fix must reach the activity.
+    unawaited(recording.start());
+    await Future<void>.delayed(const Duration(milliseconds: 60));
+    location.fixes.add(fixAt(start.add(const Duration(seconds: 6))));
+    await Future<void>.delayed(const Duration(milliseconds: 80));
+    expect(recording.state.activity!.points, isNotEmpty);
+  });
+
+  test('a vague fix updates the cursor but not the active trace', () async {
+    final bloc = buildBloc();
+    addTearDown(bloc.close);
+    bloc.add(const InitMap());
+    await Future<void>.delayed(const Duration(milliseconds: 120));
+
+    unawaited(recording.start(activityType: ActivityTypeEntity.run));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+
+    final vague = fixAt(start.add(const Duration(seconds: 5)), accuracy: 150);
+    location.fixes.add(vague);
+    await Future<void>.delayed(const Duration(milliseconds: 80));
+
+    expect(bloc.state.userLocation, vague, reason: 'the cursor may degrade');
+    expect(
+      recording.state.activity!.points,
+      isEmpty,
+      reason: '150 m is outside the running profile recording tolerance',
+    );
+
+    location.fixes.add(
+      fixAt(start.add(const Duration(seconds: 10)), accuracy: 5),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 80));
+    expect(recording.state.activity!.points, hasLength(1));
+  });
+
+  test('a vague paused fix is kept as a pause boundary', () async {
+    final bloc = buildBloc();
+    addTearDown(bloc.close);
+    bloc.add(const InitMap());
+    await Future<void>.delayed(const Duration(milliseconds: 120));
+
+    unawaited(recording.start(activityType: ActivityTypeEntity.run));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    unawaited(recording.pause());
+    await Future<void>.delayed(const Duration(milliseconds: 40));
+
+    location.fixes.add(
+      fixAt(start.add(const Duration(seconds: 5)), accuracy: 150),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 80));
+
+    expect(recording.state.activity!.points, hasLength(1));
+    expect(
+      recording.state.activity!.points.single.status,
+      ActivityPointStatusEntity.paused,
+      reason: 'pause boundaries are excluded from active distance',
+    );
+  });
+
+  group('activity profile reaches the GPS stream', () {
+    test('starting a recording re-opens the stream with the activity profile, '
+        'and stopping returns it to the idle one', () async {
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+      bloc.add(const InitMap());
+      await Future<void>.delayed(const Duration(milliseconds: 120));
+
+      // Idle: the map's own stream, on the permissive generic profile.
+      expect(
+        location.lastTuning?.plausibleSpeedMps,
+        MovementProfileEntity.generic.tuning.plausibleSpeedMps,
+      );
+      final openedWhileIdle = location.positionStreamOpenCount;
+
+      unawaited(recording.start(activityType: ActivityTypeEntity.car));
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      // Without this the activity would carry a label and nothing else: the
+      // sampling interval and the quality gate are properties of the platform
+      // request, so they only change if the stream is actually reopened.
+      expect(
+        location.positionStreamOpenCount,
+        greaterThan(openedWhileIdle),
+        reason: 'the stream must be reopened for the new profile to apply',
+      );
+      expect(
+        location.lastTuning?.plausibleSpeedMps,
+        MovementProfileEntity.road.tuning.plausibleSpeedMps,
+      );
+
+      unawaited(recording.stop());
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+      expect(
+        location.lastTuning?.plausibleSpeedMps,
+        MovementProfileEntity.generic.tuning.plausibleSpeedMps,
+      );
+    });
+
+    test('the recording-detail preference reaches the GPS layer', () async {
+      // A setting that is stored and displayed but changes nothing is how the
+      // dead `accuracy_in_meters` column happened. This one has to bite.
+      final prefs = preferences;
+      await prefs.store(
+        (await prefs.fetch()).copyWith(
+          recordingDetail: RecordingDetailEntity.precise,
+        ),
+      );
+
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+      bloc.add(const InitMap());
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(location.lastDetail, RecordingDetailEntity.precise);
+    });
+
+    test(
+      'a preferences change is picked up without re-initialising the map',
+      () async {
+        // Found on device: the control side and the sampling detail were only
+        // read at InitMap, so flipping the switch in Preferences appeared to do
+        // nothing until the app was restarted. InitMap is the wrong hammer here
+        // — it re-resolves the basemap style and flashes the loading UI for a
+        // change that only moves buttons.
+        final prefs = preferences;
+        final bloc = buildBloc();
+        addTearDown(bloc.close);
+        bloc.add(const InitMap());
+        await Future<void>.delayed(const Duration(milliseconds: 150));
+        expect(bloc.state.mapControlsOnLeft, isFalse);
+        final styleAfterInit = bloc.state.styleUrl;
+
+        await prefs.store(
+          (await prefs.fetch()).copyWith(
+            mapControlsOnLeft: true,
+            mapMilestoneIntervalKm: 50,
+          ),
+        );
+        bloc.add(const RefreshRecordingPreferences());
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        expect(bloc.state.mapControlsOnLeft, isTrue);
+        expect(bloc.state.mapMilestoneIntervalKm, 50);
+        expect(bloc.state.styleUrl, styleAfterInit);
+        expect(bloc.state.loadingStatus, isNull, reason: 'no loading flash');
+      },
+    );
+
+    test('the chosen type is stamped on the stored activity', () async {
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+      bloc.add(const InitMap());
+      await Future<void>.delayed(const Duration(milliseconds: 120));
+
+      unawaited(recording.start(activityType: ActivityTypeEntity.swim));
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(recording.state.activity!.activityType, ActivityTypeEntity.swim);
+    });
+
+    test(
+      'a failed profile reopen is surfaced and retried immediately',
+      () async {
+        final bloc = buildBloc();
+        addTearDown(bloc.close);
+        bloc.add(const InitMap());
+        await Future<void>.delayed(const Duration(milliseconds: 120));
+
+        location.positionStreamFailuresRemaining = 1;
+        unawaited(recording.start(activityType: ActivityTypeEntity.car));
+        await Future<void>.delayed(const Duration(milliseconds: 180));
+
+        expect(
+          bloc.state.error,
+          isNotNull,
+          reason: 'trace loss must be visible',
+        );
+        expect(
+          location.positionStreamOpenAttempts,
+          3,
+          reason: 'initial open, failed profile open, immediate watchdog retry',
+        );
+        expect(location.positionStreamOpenCount, 2);
+        expect(
+          location.lastTuning?.plausibleSpeedMps,
+          MovementProfileEntity.road.tuning.plausibleSpeedMps,
+        );
+      },
+    );
+  });
+
+  group('EnsureTracking', () {
+    test('a healthy stream is left alone', () async {
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+      bloc.add(const InitMap());
+      await Future<void>.delayed(const Duration(milliseconds: 120));
+      location.fixes.add(fixAt(start));
+      await Future<void>.delayed(const Duration(milliseconds: 30));
+
+      bloc.add(const EnsureTracking());
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+      expect(location.positionStreamOpenCount, 1);
+    });
+
+    test('a silently suspended stream is reopened', () async {
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+      bloc.add(const InitMap());
+      await Future<void>.delayed(const Duration(milliseconds: 120));
+      location.fixes.add(fixAt(start));
+      await Future<void>.delayed(const Duration(milliseconds: 30));
+
+      clock.advance(
+        PositionStreamController.minimumStaleThreshold +
+            const Duration(seconds: 5),
+      );
+      bloc.add(const EnsureTracking());
+      await Future<void>.delayed(const Duration(milliseconds: 80));
+      expect(location.positionStreamOpenCount, 2);
+    });
+
+    test(
+      'a stale stream during an active recording raises the tracking-gap banner',
+      () async {
+        final bloc = buildBloc();
+        addTearDown(bloc.close);
+        bloc.add(const InitMap());
+        await Future<void>.delayed(const Duration(milliseconds: 120));
+        location.fixes.add(fixAt(start));
+        await Future<void>.delayed(const Duration(milliseconds: 30));
+
+        unawaited(recording.start());
+        await Future<void>.delayed(const Duration(milliseconds: 60));
+
+        clock.advance(const Duration(minutes: 5));
+        bloc.add(const EnsureTracking());
+        await Future<void>.delayed(const Duration(milliseconds: 80));
+
+        expect(recording.state.trackingGap, isNotNull);
+        expect(recording.state.trackingGap!.inMinutes, 5);
+      },
+    );
+
+    test('no banner when nothing is being recorded — a frozen blue dot alone '
+        'is reopened silently', () async {
+      final bloc = buildBloc();
+      addTearDown(bloc.close);
+      bloc.add(const InitMap());
+      await Future<void>.delayed(const Duration(milliseconds: 120));
+      location.fixes.add(fixAt(start));
+      await Future<void>.delayed(const Duration(milliseconds: 30));
+
+      clock.advance(const Duration(minutes: 5));
+      bloc.add(const EnsureTracking());
+      await Future<void>.delayed(const Duration(milliseconds: 80));
+
+      expect(recording.state.trackingGap, isNull);
+      expect(location.positionStreamOpenCount, 2);
+    });
+  });
+
+  blocTest<MapBloc, MapState>(
+    'follow-user toggles',
+    build: buildBloc,
+    act: (bloc) {
+      bloc.add(const ToggleFollowUser());
+      bloc.add(const StopFollowingUser());
+    },
+    wait: const Duration(milliseconds: 40),
+    verify: (bloc) => expect(bloc.state.isFollowingUser, isFalse),
+  );
+
+  group('a switched-off location service is reported, not waited through', () {
+    // The symptom this closes: the application logged "The location service
+    // on the device is disabled." on every launch for days while showing the
+    // user an empty map and no explanation. Silence is correct for a cold
+    // GPS — the open stream delivers — but this failure never resolves on its
+    // own, so it has to reach the screen.
+    test('InitMap surfaces it instead of swallowing it', () async {
+      location.locationServiceDisabled = true;
+      final map = buildBloc();
+      addTearDown(map.close);
+
+      map.add(const InitMap());
+      await map.stream.firstWhere((s) => s.locationServiceEnabled == false);
+
+      expect(map.state.locationServiceEnabled, isFalse);
+    });
+
+    test('a cold GPS is still silent — the two are not conflated', () async {
+      location
+        ..locationServiceDisabled = false
+        ..failCurrentLocation = true;
+      final map = buildBloc();
+      addTearDown(map.close);
+
+      map.add(const InitMap());
+      await map.stream.firstWhere((s) => s.loadingStatus == null);
+
+      expect(map.state.locationServiceEnabled, isNot(false));
+    });
+  });
+}
+
+/// Counts how often the style is resolved, which is what distinguishes a
+/// full re-init from the lighter refresh.
+class _CountingStyle extends GetMapStyleUrlUseCase {
+  _CountingStyle(PreferencesRepository preferences)
+    : super(preferences: preferences);
+
+  int calls = 0;
+
+  @override
+  Future<String?> call() {
+    calls++;
+    return super.call();
+  }
+}

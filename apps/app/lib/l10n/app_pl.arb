@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "Nie udało się otworzyć okna wyboru pliku GPX. Spróbuj ponownie.",
+  "mapRecordingProblem": "Coś poszło nie tak podczas nagrywania.",
+  "mapRecordingStateActive": "Twoja aktywność nadal się nagrywa.",
+  "mapRecordingStatePaused": "Twoja aktywność nadal jest wstrzymana.",
+  "mapRecordingStateIdle": "Żadna aktywność nie jest teraz nagrywana.",
+  "mapFollowing": "Śledzi",
+  "mapWaitingForLocation": "Czekam na GPS",
+  "mapLocationServiceOff": "Lokalizacja jest wyłączona — włącz ją w ustawieniach systemu",
+  "mapOpenLocationSettings": "Otwórz ustawienia",
+  "mapHoldStopProgress": "Trzymaj dalej · {seconds}",
+  "liveSharePreparing": "Przygotowywanie…",
+  "liveShareConnected": "Na żywo połączono",
+  "liveShareDisconnected": "Ponowne łączenie…",
+  "liveShareConnecting": "Łączenie…",
+  "liveShareNotPublished": "Nic jeszcze nie zostało opublikowane — link pozostanie pusty, dopóki któryś przekaźnik nie odpowie.",
+  "liveShareStillActive": "Udostępnianie na żywo nadal działa.",
+  "showPassword": "Pokaż hasło",
+  "hidePassword": "Ukryj hasło",
+  "statsActive": "Aktywne",
+  "statsPaused": "Pauzy",
+  "statsElapsed": "Czas, który minął",
+  "activityRenameTooltip": "Zmień nazwę aktywności",
+  "activityDeleteTooltip": "Usuń aktywność",
+  "activityExportTooltip": "Eksportuj GPX",
+  "activityNoTrack": "Brak nagranej trasy",
+  "importInProgress": "Importowanie GPX…",
+  "btnBack": "Wstecz",
+  "btnCopy": "Kopiuj",
+  "prefLoadFailed": "Nie udało się wczytać twoich preferencji.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "pl",
+  "appTitle": "Furtive",
+  "btnNext": "Dalej",
+  "btnFinish": "Zakończ",
+  "btnGrant": "Zezwól",
+  "btnGrantPermission": "Udziel uprawnienia",
+  "btnFollow": "Śledź",
+  "btnPause": "Pauza",
+  "btnResume": "Wznów",
+  "btnStart": "Start",
+  "btnStarting": "Uruchamianie",
+  "btnStop": "Stop",
+  "btnContinue": "Kontynuuj",
+  "btnGrantToContinue": "Udziel wymaganych uprawnień, aby kontynuować",
+  "btnViewStats": "Zobacz statystyki",
+  "btnCancel": "Anuluj",
+  "btnUndo": "Cofnij",
+  "btnRetry": "Ponów",
+  "btnRename": "Zmień nazwę",
+  "btnDelete": "Usuń",
+  "prefSaveFailed": "Nie udało się zapisać preferencji.",
+  "btnStarGitHub": "Gwiazdka na GitHub",
+  "btnSponsor": "Wesprzyj",
+  "linkOpenFailed": "Nie można otworzyć {url}",
+  "shareSummary": "{distance} km w {duration} z Furtive",
+  "shareFailed": "Nie udało się udostępnić aktywności: {error}",
+  "shareTooltip": "Udostępnij aktywność",
+  "liveShareTitle": "Udostępnij lokalizację na żywo",
+  "liveShareButton": "Udostępnij",
+  "liveSharePassword": "Opcjonalne hasło",
+  "liveSharePasswordHelp": "Wyślij hasło osobno. Pozostaw puste, aby dostęp wymagał tylko linku.",
+  "navMap": "Mapa",
+  "navActivities": "Aktywności",
+  "navSettings": "Ustawienia",
+  "menuPermissions": "Uprawnienia",
+  "menuPreferences": "Preferencje",
+  "menuLogs": "Logi",
+  "onboardWelcomeTitle": "Witaj w Furtive",
+  "onboardWelcomeSubtitle": "Śledzenie aktywności z poszanowaniem prywatności. Bez kont, bez telemetrii, bez usług Google. Wybierzmy kilka ustawień.",
+  "onboardSettingsTitle": "Ustawienia mapy",
+  "onboardSettingsSubtitle": "Wybierz swoje ustawienia — możesz je zmienić później w ustawieniach.",
+  "onboardPermissionsTitle": "Uprawnienia",
+  "onboardPermissionsSubtitle": "Udziel dostępu do lokalizacji, aby śledzić swoje biegi. Powiadomienia i dostęp w tle są opcjonalne.",
+  "onboardSaveError": "Nie udało się zapisać wyborów: {error}",
+  "settingsThemeLabel": "Motyw",
+  "settingsUiLanguageLabel": "Język aplikacji",
+  "settingsUiLanguageSystem": "Domyślny systemowy",
+  "preferencesTitle": "Preferencje",
+  "prefMapTheme": "Motyw mapy",
+  "prefAppLanguage": "Język aplikacji",
+  "permissionsTitle": "Uprawnienia",
+  "permissionsInstructions": "Ta aplikacja wymaga następujących uprawnień do prawidłowego działania",
+  "permOptional": "Opcjonalne",
+  "permDeniedMsg": "Odrzucone — włącz w ustawieniach aplikacji.",
+  "permPermanentlyDenied": "To uprawnienie musi być włączone w ustawieniach aplikacji.",
+  "permLocationWhileUsingName": "Lokalizacja podczas używania",
+  "permLocationWhileUsingDesc": "Wymagane do śledzenia twojej pozycji i wyświetlania jej na mapie.",
+  "permLocationAlwaysName": "Lokalizacja zawsze",
+  "permLocationAlwaysDesc": "Opcjonalne: utrzymuje dokładne śledzenie podczas długich aktywności, nawet gdy system zawiesza aplikację.",
+  "permNotificationName": "Powiadomienia",
+  "permNotificationDesc": "Opcjonalne: wyświetla trwałe powiadomienie „Nagrywanie aktywności”, co pomaga też Androidowi nie zatrzymywać śledzenia w tle.",
+  "mapTrackingGapMsg": "Śledzenie zostało przerwane na {seconds}s, gdy aplikacja była w tle — brakuje fragmentu twojej trasy. Zezwól furtive na „nieograniczone użycie baterii”, aby tego uniknąć.",
+  "mapActivityStartedMsg": "Aktywność rozpoczęta",
+  "mapStopHint": "Przytrzymaj Stop przez 3 sekundy, aby zakończyć aktywność",
+  "statsRecordingTitle": "Nagrywanie aktywności",
+  "statSignalLost": "Utracono sygnał GPS na {duration} (~{meters} m w linii prostej) — ten czas jest wyłączony z aktywnych statystyk.",
+  "statDistance": "Dystans",
+  "statDuration": "Czas",
+  "statPace": "Tempo",
+  "statSpeed": "Prędkość",
+  "statElevation": "Przewyższenie",
+  "splitsTitle": "Odcinki",
+  "splitsNotEnoughData": "Za mało danych do odcinków.",
+  "metricPace": "Tempo",
+  "metricSpeed": "Prędkość",
+  "activitiesEmpty": "Brak aktywności",
+  "activitiesImportTooltip": "Importuj plik GPX",
+  "importStarted": "Importowanie…",
+  "importSuccess": "Aktywność zaimportowana",
+  "activityNameLabel": "Nazwa aktywności",
+  "activityDeleteSuccess": "Aktywność usunięta",
+  "dlgRenameTitle": "Zmień nazwę",
+  "dlgDeleteTitle": "Usuń",
+  "dlgDeleteConfirm": "Czy na pewno chcesz usunąć tę aktywność?",
+  "gpxExportSuccess": "GPX wyeksportowany pomyślnie",
+  "gpxExportFailed": "Eksport nie powiódł się: {error}",
+  "logsTitle": "Logi",
+  "logsEmpty": "Brak logów",
+  "logsTooltipClear": "Wyczyść logi",
+  "logsTooltipFilterDate": "Filtruj po dacie",
+  "logsTooltipClearFilter": "Wyczyść filtr",
+  "logsTooltipShare": "Udostępnij",
+  "logsFiltered": "Filtr: {start} - {end}",
+  "logsShowingCount": "{shown} z {total}",
+  "activityDefaultName": "Trasa",
+  "logsLoadError": "Nie udało się załadować logów: {error}",
+  "logCopiedMsg": "Log skopiowany do schowka",
+  "logsCopiedMsg": "{count} logów skopiowano do schowka",
+  "dlgDeleteLogsTitle": "Usuń logi",
+  "dlgDeleteLogsConfirm": "Czy na pewno chcesz usunąć wszystkie logi? Tej akcji nie można cofnąć.",
+  "supportTitle": "Wesprzyj rozwój",
+  "supportDescription": "Ta aplikacja jest tworzona i utrzymywana w moim wolnym czasie. Twoje wsparcie pomaga utrzymać ją przy życiu i rozwijać.",
+  "changelogTitle": "Nowości",
+  "changelogGotIt": "Rozumiem",
+  "changelogV120I18n": "Wielojęzyczność: interfejs aplikacji w 26 językach, etykiety mapy w 41, formaty dat zgodnie z twoją lokalizacją. Zmiana w Ustawieniach lub kreatorze.",
+  "changelogV120Wizard": "Kreator pierwszego uruchomienia: wybierz domyślne ustawienia (motyw, język) i udziel uprawnień lokalizacji w jednym przepływie.",
+  "changelogV120Recording": "Nagrywanie aktywności: animowany znacznik pozycji z pulsem i kołem dokładności, znaczniki kilometrów na mapie, przytrzymaj Stop przez 3 sekundy, aby zakończyć (bez przypadkowych dotknięć), automatyczne przekierowanie do statystyk.",
+  "changelogV120Stats": "Statystyki aktywności: wykres odcinków kilometrowych z przełącznikiem tempo ⇄ prędkość, przewyższenie D+ (konwencja Strava/Garmin).",
+  "changelogV120Share": "Udostępniaj aktywność jako kartę z mapą i statystykami przez systemowe menu udostępniania.",
+  "changelogV120GpxImport": "Importuj pliki GPX z innych aplikacji (Garmin, Strava itp.) — obsługa zarówno punktów trasy, jak i punktów drogowych.",
+  "changelogV120MapThemes": "Pięć motywów mapy: Jasny, Ciemny, Biały, Skala szarości, Czarny — wybierz w Ustawieniach ten, który Ci pasuje.",
+  "changelogV120Reproducible": "Powtarzalne kompilacje: każdy może odbudować ze źródła i zweryfikować, że opublikowany APK jest identyczny bajt po bajcie — bez ukrytego kodu, bez manipulacji.",
+  "changelogV120Stability": "Stabilność: ochrona przed błędnymi odczytami GPS, niezawodne nagrywanie w tle, które wznawia się po zamknięciu aplikacji przez system, automatyczna rotacja logów, ściślejsza walidacja GPX, limity czasu HTTP.",
+  "changelogV130LiveShare": "Udostępnianie na żywo: podczas nagrywania udostępnij link szyfrowany end-to-end i pozwól bliskim śledzić Twoją pozycję w ich przeglądarce — bez kont po obu stronach, klucz nigdy nie opuszcza linku.",
+  "changelogV130Profiles": "Profile aktywności: spacer, bieg, rower, samochód, pływanie, samolot lub inne — wybór determinuje próbkowanie GPS i tolerancję dokładności i jest zapisany z aktywnością.",
+  "changelogV130Map": "Nowy silnik mapy: zoom i przesuwanie renderuje teraz MapLibre Native — zoom, który się zacinał, jest teraz płynny.",
+  "changelogV130Puck": "Znacznik pozycji jest teraz rysowany przez samą aplikację: kropka w bezruchu, szewron w kierunku jazdy, kompas prawdziwej północy na Androidzie.",
+  "changelogV130Detail": "Szczegółowość nagrywania: wybierz precyzyjne, zbalansowane lub oszczędne próbkowanie GPS, by wyważyć dokładność i baterię na aktywność.",
+  "changelogV130Left": "Tryb leworęczny: kontrolki mapy mogą przenieść się na lewą stronę ekranu (Ustawienia).",
+  "changelogV130CarFix": "Naprawiono: samochód powyżej 126 km/h nie nagrywał niczego — filtr prędkości teraz dostosowuje się do każdej aktywności zamiast odrzucać każdy pomiar.",
+  "changelogV140Offline": "Mapy offline: zachowaj obszar wokół siebie, od 10 do 100 km, żeby mapa działała też tam, gdzie nie ma zasięgu (Ustawienia).",
+  "changelogV140OfflineCost": "Każdy zachowany obszar podaje, ile kosztował w kafelkach i megabajtach, a przerwany podaje, dokąd dotarł — poproś o niego ponownie, aby go dokończyć.",
+  "changelogV140Cache": "Mapa, na którą tylko spojrzałeś, też jest zachowywana, do 1 GB, i można ją wyrzucić osobno, nie ruszając obszarów wybranych do zachowania.",
+  "changelogV140Drift": "Naprawiono: odłożony telefon nie zbiera już dystansu z dryfu GPS — nieruchome nagranie pokazuje teraz zero zamiast wymyślać metry.",
+  "changelogV140Elevation": "Naprawiono: przewyższenie liczy potwierdzone podejścia zamiast zaokrąglać każdy odczyt do dziesięciu metrów, więc małe górki przestają znikać, a płaski teren przestaje rosnąć.",
+  "changelogV140LocationOff": "Gdy usługi lokalizacji są wyłączone, mapa teraz to mówi i proponuje otwarcie ustawienia, a śledzenie samo rusza dalej, gdy tylko wrócą.",
+  "changelogV140Markers": "Znaczniki odległości wzdłuż trasy można ustawić na wybrany odstęp albo wyłączyć (Ustawienia).",
+  "changelogV140Stop": "Przy zatrzymywaniu nagrania postęp przytrzymania rysuje się nad kciukiem, a nie pod nim, więc widzisz, ile jeszcze trzymać.",
+  "changelogV140SmallScreens": "Naprawiono: kroki konfiguracji i ekrany ustawień pozostają używalne na niskich i wąskich ekranach.",
+  "prefThemeLight": "Jasny",
+  "prefThemeDark": "Ciemny",
+  "prefThemeWhite": "Biały",
+  "prefThemeGrayscale": "Odcienie szarości",
+  "prefThemeBlack": "Czarny",
+  "prefMapTiles": "Kafelki mapy",
+  "prefMapTilesSubtitle": "Wczytanie mapy ujawnia twoją przybliżoną pozycję dostawcy kafelków. Wyłącz, aby mieć puste, ale funkcjonalne mapę bez żadnych żądań sieciowych.",
+  "prefShowOnLockScreen": "Pokazuj na ekranie blokady",
+  "prefShowOnLockScreenSubtitle": "Utrzymuje mapę/pozycję widoczną nad zablokowanym ekranem podczas nagrywania (tylko Android). Wyłącz, aby ukryć ją przed kimkolwiek zerkającym na twój zablokowany telefon.",
+  "mapLoadingLocalizing": "Inicjowanie GPS…",
+  "mapLoadingMap": "Ładowanie mapy…",
+  "mapStartingActivity": "Rozpoczynanie aktywności…",
+  "activitiesLoadError": "Nie można otworzyć tej aktywności",
+  "activityPickerTitle": "Co robisz?",
+  "activityWalk": "Spacer",
+  "activityRun": "Bieg",
+  "activityBike": "Rower",
+  "activityCar": "Samochód",
+  "activitySwim": "Pływanie",
+  "activityAircraft": "Samolot",
+  "activityOther": "Inne",
+  "activityUnknown": "Nieznane",
+  "prefRecordingDetail": "Szczegółowość zapisu",
+  "prefRecordingDetailSubtitle": "Jak często pobierana jest pozycja, względem domyślnej wartości danej aktywności. Gęściej oznacza dokładniejsze zakręty i większe zużycie baterii.",
+  "prefDetailPrecise": "Dokładnie",
+  "prefDetailBalanced": "Zrównoważone",
+  "prefDetailEndurance": "Wytrzymałość",
+  "prefMapControlsOnRight": "Sterowanie mapą po prawej",
+  "prefMapControlsOnRightSubtitle": "Przyciski śledzenia, start, pauza i stop są przy prawej krawędzi. Wyłącz, by przenieść je na lewo, dla osób leworęcznych. Podpis mapy przechodzi do przeciwnego narożnika.",
+  "prefMapMilestones": "Znaczniki odległości",
+  "prefMapMilestonesOff": "Wyłączone",
+  "menuOfflineMaps": "Mapy offline",
+  "offlineTitle": "Mapy offline",
+  "offlineExplainer": "Obszary, które zachowasz, zostają na urządzeniu i nigdy nie są usuwane. Mapa, na którą tylko spojrzałeś, też trafia do pamięci podręcznej, ale jej miejsce można odzyskać.",
+  "offlineNone": "Brak zachowanych obszarów",
+  "offlineAroundMe": "Zachowaj obszar wokół mnie",
+  "offlineRadius": "Promień: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Pobierz",
+  "offlineDownloading": "{done} z {total} kafelków · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Brak pozycji — poczekaj na GPS",
+  "offlineNoTiles": "Kafelki są wyłączone, więc nie ma czego zachować",
+  "offlineUnsupported": "Obszary offline nie są dostępne na tym urządzeniu",
+  "offlineDelete": "Usuń",
+  "offlineFailed": "Pobieranie nie powiodło się",
+  "offlineStorageTitle": "Pamięć map",
+  "offlineStorageOnDevice": "{mb} MB na tym urządzeniu",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB pobrane dla zachowanych obszarów · {tiles} kafelków",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Nakładające się obszary współdzielą kafelki, więc ta liczba może przekroczyć całość. To, czego nie ma w żadnym obszarze, to oglądana mapa plus narzut bazy danych.",
+  "offlineClearCache": "Wyczyść pamięć podręczną",
+  "offlineRadiusTiles": "{tiles} kafelków",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · {tiles} kafelków",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles} kafelków · niedokończone",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · {tiles} kafelków",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

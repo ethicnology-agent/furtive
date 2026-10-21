@@ -1,0 +1,36 @@
+name: activities
+description: "Recorded activities: their statistics, and the database they live in."
+publish_to: none
+resolution: workspace
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  activity_profile:
+    path: ../activity_profile
+  collection: ^1.19.1
+  dart_mappable: ^4.8.0
+  diagnostics:
+    path: ../diagnostics
+  drift: ^2.34.2
+  # Transitively unavoidable: diagnostics depends on Flutter, so this module
+  # cannot be pure Dart whatever its own code needs.
+  flutter:
+    sdk: flutter
+  geo:
+    path: ../geo
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  wall_clock:
+    path: ../wall_clock
+
+dev_dependencies:
+  build_runner: ^2.15.2
+  dart_mappable_builder: ^4.9.1
+  drift_dev: ^2.34.6
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  sqlite3: ^3.5.0

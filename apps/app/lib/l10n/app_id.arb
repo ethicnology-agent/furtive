@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "Tidak bisa membuka pemilih berkas GPX. Coba lagi.",
+  "mapRecordingProblem": "Ada yang tidak beres saat merekam.",
+  "mapRecordingStateActive": "Aktivitasmu masih direkam.",
+  "mapRecordingStatePaused": "Aktivitasmu masih dijeda.",
+  "mapRecordingStateIdle": "Tidak ada aktivitas yang sedang direkam.",
+  "mapFollowing": "Mengikuti",
+  "mapWaitingForLocation": "Menunggu GPS",
+  "mapLocationServiceOff": "Lokasi mati — nyalakan di pengaturan sistem",
+  "mapOpenLocationSettings": "Buka pengaturan",
+  "mapHoldStopProgress": "Terus tahan · {seconds}",
+  "liveSharePreparing": "Menyiapkan…",
+  "liveShareConnected": "Langsung tersambung",
+  "liveShareDisconnected": "Menyambung ulang…",
+  "liveShareConnecting": "Menghubungkan…",
+  "liveShareNotPublished": "Belum ada yang dipublikasikan — tautan tetap kosong sampai ada relay yang menjawab.",
+  "liveShareStillActive": "Berbagi langsung masih aktif.",
+  "showPassword": "Tampilkan kata sandi",
+  "hidePassword": "Sembunyikan kata sandi",
+  "statsActive": "Aktif",
+  "statsPaused": "Jeda",
+  "statsElapsed": "Waktu berjalan",
+  "activityRenameTooltip": "Ganti nama aktivitas",
+  "activityDeleteTooltip": "Hapus aktivitas",
+  "activityExportTooltip": "Ekspor GPX",
+  "activityNoTrack": "Tidak ada rute terekam",
+  "importInProgress": "Mengimpor GPX…",
+  "btnBack": "Kembali",
+  "btnCopy": "Salin",
+  "prefLoadFailed": "Preferensimu tidak bisa dimuat.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "id",
+  "appTitle": "Furtive",
+  "btnNext": "Lanjut",
+  "btnFinish": "Selesai",
+  "btnGrant": "Izinkan",
+  "btnGrantPermission": "Beri izin",
+  "btnFollow": "Ikuti",
+  "btnPause": "Jeda",
+  "btnResume": "Lanjutkan",
+  "btnStart": "Mulai",
+  "btnStarting": "Memulai",
+  "btnStop": "Berhenti",
+  "btnContinue": "Lanjutkan",
+  "btnGrantToContinue": "Beri izin yang diperlukan untuk melanjutkan",
+  "btnViewStats": "Lihat statistik",
+  "btnCancel": "Batal",
+  "btnUndo": "Urungkan",
+  "btnRetry": "Coba lagi",
+  "btnRename": "Ganti nama",
+  "btnDelete": "Hapus",
+  "prefSaveFailed": "Tidak dapat menyimpan preferensi Anda.",
+  "btnStarGitHub": "Bintangi di GitHub",
+  "btnSponsor": "Dukung",
+  "linkOpenFailed": "Tidak dapat membuka {url}",
+  "shareSummary": "{distance} km dalam {duration} dengan Furtive",
+  "shareFailed": "Tidak dapat membagikan aktivitas: {error}",
+  "shareTooltip": "Bagikan aktivitas",
+  "liveShareTitle": "Bagikan lokasi langsung",
+  "liveShareButton": "Bagikan",
+  "liveSharePassword": "Kata sandi opsional",
+  "liveSharePasswordHelp": "Kirim kata sandi secara terpisah. Kosongkan untuk akses hanya dengan tautan.",
+  "navMap": "Peta",
+  "navActivities": "Aktivitas",
+  "navSettings": "Pengaturan",
+  "menuPermissions": "Izin",
+  "menuPreferences": "Preferensi",
+  "menuLogs": "Log",
+  "onboardWelcomeTitle": "Selamat datang di Furtive",
+  "onboardWelcomeSubtitle": "Pelacakan aktivitas yang mengutamakan privasi. Tanpa akun, tanpa telemetri, tanpa layanan Google. Mari pilih beberapa preferensi.",
+  "onboardSettingsTitle": "Pengaturan peta",
+  "onboardSettingsSubtitle": "Pilih preferensimu — kamu bisa mengubahnya nanti di pengaturan.",
+  "onboardPermissionsTitle": "Izin",
+  "onboardPermissionsSubtitle": "Beri akses lokasi untuk melacak larianmu. Notifikasi dan akses latar belakang opsional.",
+  "onboardSaveError": "Tidak dapat menyimpan pilihanmu: {error}",
+  "settingsThemeLabel": "Tema",
+  "settingsUiLanguageLabel": "Bahasa aplikasi",
+  "settingsUiLanguageSystem": "Standar sistem",
+  "preferencesTitle": "Preferensi",
+  "prefMapTheme": "Tema peta",
+  "prefAppLanguage": "Bahasa aplikasi",
+  "permissionsTitle": "Izin",
+  "permissionsInstructions": "Aplikasi ini membutuhkan izin berikut agar berfungsi dengan baik",
+  "permOptional": "Opsional",
+  "permDeniedMsg": "Ditolak — aktifkan di pengaturan aplikasi.",
+  "permPermanentlyDenied": "Izin ini harus diaktifkan di pengaturan aplikasi.",
+  "permLocationWhileUsingName": "Lokasi saat digunakan",
+  "permLocationWhileUsingDesc": "Diperlukan untuk melacak posisimu dan menampilkannya di peta.",
+  "permLocationAlwaysName": "Lokasi selalu",
+  "permLocationAlwaysDesc": "Opsional: menjaga pelacakan akurat selama aktivitas panjang, bahkan jika OS menangguhkan aplikasi.",
+  "permNotificationName": "Notifikasi",
+  "permNotificationDesc": "Opsional: menampilkan notifikasi \"Merekam aktivitas\" yang terus berjalan, yang juga membantu Android agar tidak menghentikan pelacakan di latar belakang.",
+  "mapTrackingGapMsg": "Pelacakan berhenti selama {seconds}dtk saat aplikasi berada di latar belakang — sebagian rutemu hilang. Izinkan \"baterai tak terbatas\" untuk furtive agar ini tidak terjadi lagi.",
+  "mapActivityStartedMsg": "Aktivitas dimulai",
+  "mapStopHint": "Tahan Berhenti selama 3 detik untuk mengakhiri aktivitas",
+  "statsRecordingTitle": "Merekam aktivitas",
+  "statSignalLost": "Sinyal GPS hilang selama {duration} (~{meters} m garis lurus) — waktu ini tidak dihitung dalam statistik aktif.",
+  "statDistance": "Jarak",
+  "statDuration": "Durasi",
+  "statPace": "Pace",
+  "statSpeed": "Kecepatan",
+  "statElevation": "Elevasi",
+  "splitsTitle": "Split",
+  "splitsNotEnoughData": "Data belum cukup untuk split.",
+  "metricPace": "Pace",
+  "metricSpeed": "Kecepatan",
+  "activitiesEmpty": "Tidak ada aktivitas",
+  "activitiesImportTooltip": "Impor file GPX",
+  "importStarted": "Mengimpor…",
+  "importSuccess": "Aktivitas diimpor",
+  "activityNameLabel": "Nama aktivitas",
+  "activityDeleteSuccess": "Aktivitas dihapus",
+  "dlgRenameTitle": "Ganti nama",
+  "dlgDeleteTitle": "Hapus",
+  "dlgDeleteConfirm": "Yakin ingin menghapus aktivitas ini?",
+  "gpxExportSuccess": "GPX berhasil diekspor",
+  "gpxExportFailed": "Ekspor gagal: {error}",
+  "logsTitle": "Log",
+  "logsEmpty": "Tidak ada log",
+  "logsTooltipClear": "Bersihkan log",
+  "logsTooltipFilterDate": "Filter berdasarkan tanggal",
+  "logsTooltipClearFilter": "Bersihkan filter",
+  "logsTooltipShare": "Bagikan",
+  "logsFiltered": "Filter: {start} - {end}",
+  "logsShowingCount": "Menampilkan {shown} dari {total}",
+  "activityDefaultName": "Rute",
+  "logsLoadError": "Gagal memuat log: {error}",
+  "logCopiedMsg": "Log disalin ke clipboard",
+  "logsCopiedMsg": "{count} log disalin ke clipboard",
+  "dlgDeleteLogsTitle": "Hapus log",
+  "dlgDeleteLogsConfirm": "Yakin ingin menghapus semua log? Tindakan ini tidak dapat dibatalkan.",
+  "supportTitle": "Dukung pengembangan",
+  "supportDescription": "Aplikasi ini dibangun dan dipelihara di waktu luang saya. Dukunganmu membantu menjaganya tetap hidup dan berkembang.",
+  "changelogTitle": "Apa yang baru",
+  "changelogGotIt": "Mengerti",
+  "changelogV120I18n": "Multibahasa: antarmuka aplikasi dalam 26 bahasa, label peta dalam 41, format tanggal mengikuti locale-mu. Ubah di Pengaturan atau wizard.",
+  "changelogV120Wizard": "Wizard pertama kali: pilih defaultmu (tema, bahasa) dan beri izin lokasi dalam satu alur.",
+  "changelogV120Recording": "Rekaman aktivitas: penanda posisi beranimasi dengan denyut dan lingkaran akurasi, penanda kilometer di peta, tahan Berhenti 3 detik untuk mengakhiri (tanpa ketukan tak sengaja), pengalihan otomatis ke statistik.",
+  "changelogV120Stats": "Statistik aktivitas: grafik split per kilometer dengan tombol pace ⇄ kecepatan, kenaikan elevasi D+ (konvensi Strava/Garmin).",
+  "changelogV120Share": "Bagikan aktivitas sebagai kartu dengan peta dan statistik melalui menu berbagi sistem.",
+  "changelogV120GpxImport": "Impor file GPX dari aplikasi lain (Garmin, Strava, dll.) — titik track dan route didukung.",
+  "changelogV120MapThemes": "Lima tema peta: Terang, Gelap, Putih, Skala abu-abu, Hitam — pilih yang paling sesuai di Pengaturan.",
+  "changelogV120Reproducible": "Build reproduktif: siapa pun dapat membangun ulang dari sumber dan memverifikasi bahwa APK yang diterbitkan identik byte demi byte — tanpa kode tersembunyi, tanpa manipulasi.",
+  "changelogV120Stability": "Stabilitas: tahan terhadap data GPS yang buruk, perekaman latar belakang yang andal yang dilanjutkan setelah sistem menutup aplikasi, rotasi log otomatis, validasi GPX lebih ketat, batas waktu HTTP.",
+  "changelogV130LiveShare": "Berbagi langsung: saat merekam, bagikan tautan terenkripsi ujung-ke-ujung dan biarkan orang tersayang mengikuti posisi Anda di browser mereka — tanpa akun di kedua sisi, kunci tidak pernah meninggalkan tautan.",
+  "changelogV130Profiles": "Profil aktivitas: jalan, lari, sepeda, mobil, berenang, pesawat atau lainnya — pilihan menentukan pengambilan sampel GPS dan toleransi akurasi, dan disimpan bersama aktivitas.",
+  "changelogV130Map": "Mesin peta baru: zoom dan geser kini dirender oleh MapLibre Native — zoom yang dulu tersendat kini mulus.",
+  "changelogV130Puck": "Penanda lokasi kini digambar oleh aplikasi itu sendiri: titik saat diam, chevron searah perjalanan Anda, kompas utara sejati di Android.",
+  "changelogV130Detail": "Detail perekaman: pilih pengambilan sampel GPS presisi, seimbang, atau hemat untuk menyeimbangkan akurasi dan baterai per aktivitas.",
+  "changelogV130Left": "Mode kidal: kontrol peta dapat pindah ke sisi kiri layar (Pengaturan).",
+  "changelogV130CarFix": "Diperbaiki: mobil di atas 126 km/jam tidak merekam apa pun — filter kecepatan kini beradaptasi dengan setiap aktivitas alih-alih menolak setiap fix.",
+  "changelogV140Offline": "Peta luring: simpan area di sekitarmu, 10 sampai 100 km, supaya peta tetap bekerja di tempat tanpa sinyal (Pengaturan).",
+  "changelogV140OfflineCost": "Setiap area yang disimpan menyebutkan biayanya dalam ubin dan megabita, dan yang terputus menyebutkan sejauh mana ia sampai — minta lagi untuk menyelesaikannya.",
+  "changelogV140Cache": "Peta yang sekadar kamu lihat juga disimpan, sampai 1 GB, dan bisa dibuang sendiri tanpa menyentuh area yang kamu pilih untuk disimpan.",
+  "changelogV140Drift": "Diperbaiki: ponsel yang tergeletak tidak lagi menumpuk jarak dari hanyutan GPS — rekaman yang diam kini menunjukkan nol alih-alih mengarang meter.",
+  "changelogV140Elevation": "Diperbaiki: elevasi menghitung tanjakan yang terkonfirmasi alih-alih membulatkan setiap pembacaan ke sepuluh meter, jadi bukit kecil berhenti menghilang dan tanah datar berhenti naik.",
+  "changelogV140LocationOff": "Saat layanan lokasi dimatikan, peta kini mengatakannya dan menawarkan membuka pengaturannya, dan pelacakan berjalan lagi sendiri begitu layanan kembali.",
+  "changelogV140Markers": "Penanda jarak di sepanjang rute bisa diatur ke jarak yang kamu mau, atau dimatikan (Pengaturan).",
+  "changelogV140Stop": "Saat menghentikan rekaman, kemajuan tahanan digambar di atas ibu jarimu alih-alih di bawahnya, jadi kamu bisa melihat berapa lama lagi harus ditahan.",
+  "changelogV140SmallScreens": "Diperbaiki: langkah penyiapan dan layar pengaturan tetap bisa dipakai di layar pendek dan sempit.",
+  "prefThemeLight": "Terang",
+  "prefThemeDark": "Gelap",
+  "prefThemeWhite": "Putih",
+  "prefThemeGrayscale": "Skala abu-abu",
+  "prefThemeBlack": "Hitam",
+  "prefMapTiles": "Ubin peta",
+  "prefMapTilesSubtitle": "Memuat peta mengungkapkan posisi perkiraanmu ke penyedia ubin. Matikan untuk peta kosong yang tetap berfungsi tanpa permintaan jaringan.",
+  "prefShowOnLockScreen": "Tampilkan di layar kunci",
+  "prefShowOnLockScreenSubtitle": "Membuat peta/posisi tetap terlihat di atas layar terkunci saat merekam (hanya Android). Matikan untuk menyembunyikannya dari siapa pun yang melihat ponsel terkuncimu.",
+  "mapLoadingLocalizing": "Menginisialisasi GPS…",
+  "mapLoadingMap": "Memuat peta…",
+  "mapStartingActivity": "Memulai aktivitas…",
+  "activitiesLoadError": "Tidak dapat membuka aktivitas ini",
+  "activityPickerTitle": "Kamu sedang apa?",
+  "activityWalk": "Jalan",
+  "activityRun": "Lari",
+  "activityBike": "Sepeda",
+  "activityCar": "Mobil",
+  "activitySwim": "Renang",
+  "activityAircraft": "Pesawat",
+  "activityOther": "Lainnya",
+  "activityUnknown": "Tidak diketahui",
+  "prefRecordingDetail": "Detail perekaman",
+  "prefRecordingDetailSubtitle": "Seberapa sering posisi diminta, relatif terhadap bawaan aktivitas itu sendiri. Lebih rapat berarti tikungan lebih tajam dan baterai lebih terpakai.",
+  "prefDetailPrecise": "Presisi",
+  "prefDetailBalanced": "Seimbang",
+  "prefDetailEndurance": "Daya tahan",
+  "prefMapControlsOnRight": "Kontrol peta di kanan",
+  "prefMapControlsOnRightSubtitle": "Tombol ikuti, mulai, jeda dan berhenti ada di sisi kanan. Nonaktifkan untuk memindahkannya ke kiri untuk pengguna kiri. Kredit peta pindah ke sudut seberang.",
+  "prefMapMilestones": "Penanda jarak",
+  "prefMapMilestonesOff": "Nonaktif",
+  "menuOfflineMaps": "Peta luring",
+  "offlineTitle": "Peta luring",
+  "offlineExplainer": "Area yang kamu simpan tetap di perangkat dan tidak pernah dihapus. Peta yang sekadar kamu lihat juga masuk cache, tapi ruangnya bisa diambil kembali.",
+  "offlineNone": "Belum ada area yang disimpan",
+  "offlineAroundMe": "Simpan area di sekitarku",
+  "offlineRadius": "Radius: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Unduh",
+  "offlineDownloading": "{done} dari {total} ubin · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Belum ada posisi — tunggu GPS",
+  "offlineNoTiles": "Ubin dimatikan, jadi tidak ada yang bisa disimpan",
+  "offlineUnsupported": "Area luring tidak tersedia di perangkat ini",
+  "offlineDelete": "Hapus",
+  "offlineFailed": "Unduhan gagal",
+  "offlineStorageTitle": "Penyimpanan peta",
+  "offlineStorageOnDevice": "{mb} MB di perangkat ini",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB diunduh untuk area tersimpan · {tiles} ubin",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Area yang bertumpang tindih berbagi ubin, jadi angka itu bisa melebihi total. Yang tidak berada dalam area adalah peta yang Anda lihat, ditambah overhead basis data.",
+  "offlineClearCache": "Hapus cache",
+  "offlineRadiusTiles": "{tiles} ubin",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · {tiles} ubin",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles} ubin · belum selesai",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · {tiles} ubin",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

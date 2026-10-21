@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "GPX 파일 선택기를 열지 못했습니다. 다시 시도하세요.",
+  "mapRecordingProblem": "기록 중에 문제가 발생했습니다.",
+  "mapRecordingStateActive": "활동이 아직 기록 중입니다.",
+  "mapRecordingStatePaused": "활동이 아직 일시정지 상태입니다.",
+  "mapRecordingStateIdle": "현재 기록 중인 활동이 없습니다.",
+  "mapFollowing": "따라가는 중",
+  "mapWaitingForLocation": "GPS 대기 중",
+  "mapLocationServiceOff": "위치가 꺼져 있습니다 — 시스템 설정에서 켜세요",
+  "mapOpenLocationSettings": "설정 열기",
+  "mapHoldStopProgress": "계속 누르기 · {seconds}",
+  "liveSharePreparing": "준비 중…",
+  "liveShareConnected": "라이브 연결됨",
+  "liveShareDisconnected": "다시 연결하는 중…",
+  "liveShareConnecting": "연결 중…",
+  "liveShareNotPublished": "아직 아무것도 게시되지 않았습니다. 릴레이가 응답할 때까지 링크는 비어 있습니다.",
+  "liveShareStillActive": "라이브 공유가 아직 켜져 있습니다.",
+  "showPassword": "비밀번호 표시",
+  "hidePassword": "비밀번호 숨기기",
+  "statsActive": "활동",
+  "statsPaused": "일시정지",
+  "statsElapsed": "경과 시간",
+  "activityRenameTooltip": "활동 이름 바꾸기",
+  "activityDeleteTooltip": "활동 삭제",
+  "activityExportTooltip": "GPX 내보내기",
+  "activityNoTrack": "기록된 경로 없음",
+  "importInProgress": "GPX 가져오는 중…",
+  "btnBack": "뒤로",
+  "btnCopy": "복사",
+  "prefLoadFailed": "환경설정을 불러오지 못했습니다.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "ko",
+  "appTitle": "Furtive",
+  "btnNext": "다음",
+  "btnFinish": "완료",
+  "btnGrant": "허용",
+  "btnGrantPermission": "권한 부여",
+  "btnFollow": "따라가기",
+  "btnPause": "일시정지",
+  "btnResume": "재개",
+  "btnStart": "시작",
+  "btnStarting": "시작 중",
+  "btnStop": "정지",
+  "btnContinue": "계속",
+  "btnGrantToContinue": "계속하려면 필요한 권한을 부여하세요",
+  "btnViewStats": "통계 보기",
+  "btnCancel": "취소",
+  "btnUndo": "실행 취소",
+  "btnRetry": "다시 시도",
+  "btnRename": "이름 변경",
+  "btnDelete": "삭제",
+  "prefSaveFailed": "환경설정을 저장할 수 없습니다.",
+  "btnStarGitHub": "GitHub에서 별 주기",
+  "btnSponsor": "후원",
+  "linkOpenFailed": "{url}을(를) 열 수 없습니다",
+  "shareSummary": "Furtive와 함께 {duration} 동안 {distance}km",
+  "shareFailed": "활동을 공유할 수 없습니다: {error}",
+  "shareTooltip": "활동 공유",
+  "liveShareTitle": "실시간 위치 공유",
+  "liveShareButton": "공유",
+  "liveSharePassword": "선택적 비밀번호",
+  "liveSharePasswordHelp": "비밀번호는 별도로 보내세요. 링크만으로 접근하려면 비워 두세요.",
+  "navMap": "지도",
+  "navActivities": "활동",
+  "navSettings": "설정",
+  "menuPermissions": "권한",
+  "menuPreferences": "환경설정",
+  "menuLogs": "로그",
+  "onboardWelcomeTitle": "Furtive에 오신 것을 환영합니다",
+  "onboardWelcomeSubtitle": "프라이버시 우선의 활동 추적. 계정 없음, 텔레메트리 없음, Google 서비스 없음. 몇 가지 기본 설정을 선택해 봅시다.",
+  "onboardSettingsTitle": "지도 설정",
+  "onboardSettingsSubtitle": "기본값을 선택하세요 — 나중에 설정에서 변경할 수 있습니다.",
+  "onboardPermissionsTitle": "권한",
+  "onboardPermissionsSubtitle": "달리기를 추적하려면 위치 액세스 권한을 부여하세요. 알림과 백그라운드 액세스는 선택 사항입니다.",
+  "onboardSaveError": "선택 사항을 저장할 수 없습니다: {error}",
+  "settingsThemeLabel": "테마",
+  "settingsUiLanguageLabel": "앱 언어",
+  "settingsUiLanguageSystem": "시스템 기본값",
+  "preferencesTitle": "환경설정",
+  "prefMapTheme": "지도 테마",
+  "prefAppLanguage": "앱 언어",
+  "permissionsTitle": "권한",
+  "permissionsInstructions": "이 앱이 올바르게 작동하려면 다음 권한이 필요합니다",
+  "permOptional": "선택 사항",
+  "permDeniedMsg": "거부됨 — 앱 설정에서 활성화하세요.",
+  "permPermanentlyDenied": "이 권한은 앱 설정에서 활성화해야 합니다.",
+  "permLocationWhileUsingName": "사용 중 위치",
+  "permLocationWhileUsingDesc": "위치를 추적하고 지도에 표시하는 데 필요합니다.",
+  "permLocationAlwaysName": "항상 위치",
+  "permLocationAlwaysDesc": "선택 사항: OS가 앱을 일시 중단하더라도 장시간 활동 중에 정확한 추적을 유지합니다.",
+  "permNotificationName": "알림",
+  "permNotificationDesc": "선택 사항: \"활동 기록 중\" 알림을 지속적으로 표시하며, 이는 Android가 백그라운드에서 추적을 중지하지 않도록 돕습니다.",
+  "mapTrackingGapMsg": "앱이 백그라운드에 있는 동안 {seconds}초간 추적이 중단되어 경로의 일부가 누락되었습니다. 이를 방지하려면 furtive에 \"배터리 사용 제한 없음\"을 허용하세요.",
+  "mapActivityStartedMsg": "활동이 시작되었습니다",
+  "mapStopHint": "활동을 종료하려면 정지를 3초간 길게 누르세요",
+  "statsRecordingTitle": "활동 기록 중",
+  "statSignalLost": "GPS 신호가 {duration} 동안 끊겼습니다(직선거리 약 {meters}m) — 이 시간은 활동 통계에서 제외됩니다.",
+  "statDistance": "거리",
+  "statDuration": "시간",
+  "statPace": "페이스",
+  "statSpeed": "속도",
+  "statElevation": "고도",
+  "splitsTitle": "스플릿",
+  "splitsNotEnoughData": "스플릿을 표시할 데이터가 아직 부족합니다.",
+  "metricPace": "페이스",
+  "metricSpeed": "속도",
+  "activitiesEmpty": "활동을 찾을 수 없습니다",
+  "activitiesImportTooltip": "GPX 파일 가져오기",
+  "importStarted": "가져오는 중…",
+  "importSuccess": "활동을 가져왔습니다",
+  "activityNameLabel": "활동 이름",
+  "activityDeleteSuccess": "활동이 삭제되었습니다",
+  "dlgRenameTitle": "이름 변경",
+  "dlgDeleteTitle": "삭제",
+  "dlgDeleteConfirm": "이 활동을 정말 삭제하시겠습니까?",
+  "gpxExportSuccess": "GPX를 성공적으로 내보냈습니다",
+  "gpxExportFailed": "내보내기 실패: {error}",
+  "logsTitle": "로그",
+  "logsEmpty": "로그가 없습니다",
+  "logsTooltipClear": "로그 지우기",
+  "logsTooltipFilterDate": "날짜로 필터링",
+  "logsTooltipClearFilter": "필터 지우기",
+  "logsTooltipShare": "공유",
+  "logsFiltered": "필터: {start} - {end}",
+  "logsShowingCount": "{total}개 중 {shown}개 표시",
+  "activityDefaultName": "코스",
+  "logsLoadError": "로그를 불러올 수 없습니다: {error}",
+  "logCopiedMsg": "로그를 클립보드에 복사했습니다",
+  "logsCopiedMsg": "{count}개의 로그를 클립보드에 복사했습니다",
+  "dlgDeleteLogsTitle": "로그 삭제",
+  "dlgDeleteLogsConfirm": "모든 로그를 정말 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+  "supportTitle": "개발 지원",
+  "supportDescription": "이 앱은 제가 여가 시간에 만들고 유지 관리합니다. 여러분의 지원이 앱을 살아 숨 쉬게 합니다.",
+  "changelogTitle": "새로운 기능",
+  "changelogGotIt": "확인",
+  "changelogV120I18n": "다국어 지원: 앱 인터페이스 26개 언어, 지도 라벨 41개 언어, 날짜 형식이 로케일을 따릅니다. 설정 또는 마법사에서 재정의 가능.",
+  "changelogV120Wizard": "첫 실행 마법사: 기본값(테마, 언어)을 선택하고 한 흐름으로 위치 권한을 부여하세요.",
+  "changelogV120Recording": "활동 기록: 펄스와 정확도 원이 있는 애니메이션 위치 마커, 지도의 킬로미터 마커, 종료하려면 정지를 3초간 길게 누르기(실수로 탭하지 않음), 통계로 자동 이동.",
+  "changelogV120Stats": "활동 통계: 페이스 ⇄ 속도 토글과 함께 킬로미터별 스플릿 차트, D+ 고도 상승(Strava/Garmin 표준).",
+  "changelogV120Share": "시스템 공유 시트를 통해 지도와 통계가 포함된 카드 형태로 활동 공유.",
+  "changelogV120GpxImport": "다른 앱(Garmin, Strava 등)에서 GPX 파일을 가져오세요 — 트랙과 루트 포인트 모두 지원합니다.",
+  "changelogV120MapThemes": "5가지 지도 테마: 라이트, 다크, 화이트, 그레이스케일, 블랙 — 설정에서 마음에 드는 것을 선택하세요.",
+  "changelogV120Reproducible": "재현 가능한 빌드: 누구나 소스에서 다시 빌드하여 게시된 APK가 바이트 단위로 동일함을 확인할 수 있습니다 — 숨겨진 코드 없음, 변조 없음.",
+  "changelogV120Stability": "안정성: 잘못된 GPS 값에 대한 강화, 시스템이 앱을 종료한 후에도 다시 시작되는 안정적인 백그라운드 기록, 자동 로그 회전, 더 엄격한 GPX 검증, HTTP 타임아웃.",
+  "changelogV130LiveShare": "라이브 공유: 기록 중에 종단간 암호화된 링크를 공유하고 사랑하는 사람들이 브라우저에서 당신의 위치를 따라갈 수 있게 하세요 — 어느 쪽도 계정 불필요, 키는 링크를 떠나지 않습니다.",
+  "changelogV130Profiles": "활동 프로필: 걷기, 달리기, 라이드, 자동차, 수영, 항공기 또는 기타 — 선택이 GPS 샘플링과 정확도 허용 오차를 결정하고 활동과 함께 저장됩니다.",
+  "changelogV130Map": "새 지도 엔진: 줌과 패닝은 이제 MapLibre Native가 렌더링 — 끊기던 줌이 이제 부드럽습니다.",
+  "changelogV130Puck": "위치 마커는 이제 앱이 직접 그립니다: 정지 시 점, 이동 방향의 셰브론, Android에서 진북 나침반.",
+  "changelogV130Detail": "기록 세부 수준: 활동별로 정확도와 배터리의 균형을 맞추기 위해 정밀, 균형 또는 절전 GPS 샘플링을 선택하세요.",
+  "changelogV130Left": "왼손잡이 모드: 지도 컨트롤을 화면 왼쪽으로 옮길 수 있습니다 (설정).",
+  "changelogV130CarFix": "수정됨: 126 km/h 이상의 차량은 아무것도 기록되지 않았습니다 — 속도 필터가 이제 모든 측위를 거부하는 대신 각 활동에 적응합니다.",
+  "changelogV140Offline": "오프라인 지도: 주변 지역(10~100 km)을 보관해, 신호가 없는 곳에서도 지도가 동작합니다(설정).",
+  "changelogV140OfflineCost": "보관한 각 지역은 타일 수와 메가바이트를 알려주고, 중단된 지역은 어디까지 받았는지 알려줍니다 — 다시 요청하면 이어서 마칩니다.",
+  "changelogV140Cache": "그냥 보기만 한 지도도 최대 1 GB까지 보관되며, 보관하기로 고른 지역은 건드리지 않고 따로 비울 수 있습니다.",
+  "changelogV140Drift": "수정됨: 놓아둔 휴대폰이 더 이상 GPS 표류로 거리를 쌓지 않습니다 — 정지한 기록은 미터를 지어내는 대신 0을 표시합니다.",
+  "changelogV140Elevation": "수정됨: 고도는 모든 측정을 10미터로 반올림하는 대신 확인된 오르막을 셉니다. 작은 언덕이 사라지지 않고 평지가 올라가지 않습니다.",
+  "changelogV140LocationOff": "위치 서비스가 꺼져 있으면 지도가 이제 그 사실을 알리고 해당 설정을 열 수 있게 하며, 서비스가 돌아오면 기록이 저절로 다시 이어집니다.",
+  "changelogV140Markers": "경로를 따라 표시되는 거리 표식은 원하는 간격으로 설정하거나 끌 수 있습니다(설정).",
+  "changelogV140Stop": "기록을 멈출 때 길게 누르는 진행 표시가 엄지 아래가 아니라 위에 그려져, 얼마나 더 눌러야 하는지 보입니다.",
+  "changelogV140SmallScreens": "수정됨: 설정 마법사의 단계와 설정 화면이 세로로 짧고 가로로 좁은 화면에서도 쓸 수 있게 되었습니다.",
+  "prefThemeLight": "라이트",
+  "prefThemeDark": "다크",
+  "prefThemeWhite": "화이트",
+  "prefThemeGrayscale": "그레이스케일",
+  "prefThemeBlack": "블랙",
+  "prefMapTiles": "지도 타일",
+  "prefMapTilesSubtitle": "지도를 불러오면 대략적인 위치가 타일 제공자에게 노출됩니다. 네트워크 요청이 없는 빈 지도를 사용하려면 꺼두세요.",
+  "prefShowOnLockScreen": "잠금 화면에 표시",
+  "prefShowOnLockScreenSubtitle": "녹화 중 잠금 화면 위에 지도/위치를 계속 표시합니다(Android만 해당). 잠긴 휴대폰을 보는 사람에게 숨기려면 꺼두세요.",
+  "mapLoadingLocalizing": "GPS 초기화 중…",
+  "mapLoadingMap": "지도 불러오는 중…",
+  "mapStartingActivity": "활동 시작 중…",
+  "activitiesLoadError": "이 활동을 열 수 없습니다",
+  "activityPickerTitle": "무엇을 하고 있나요?",
+  "activityWalk": "걷기",
+  "activityRun": "달리기",
+  "activityBike": "자전거",
+  "activityCar": "자동차",
+  "activitySwim": "수영",
+  "activityAircraft": "항공기",
+  "activityOther": "기타",
+  "activityUnknown": "알 수 없음",
+  "prefRecordingDetail": "기록 상세도",
+  "prefRecordingDetailSubtitle": "활동별 기본값을 기준으로 위치를 얼마나 자주 요청할지 정합니다. 촘촘할수록 코너가 선명해지고 배터리 소모가 늘어납니다.",
+  "prefDetailPrecise": "정밀",
+  "prefDetailBalanced": "균형",
+  "prefDetailEndurance": "장시간",
+  "prefMapControlsOnRight": "지도 컨트롤을 오른쪽에",
+  "prefMapControlsOnRightSubtitle": "따라가기, 시작, 일시정지, 정지 버튼이 오른쪽 가장자리에 있습니다. 끄면 왼쪽으로 옮겨져 왼손으로 쓰기 쉽습니다. 지도 저작자 표시는 반대쪽 모서리로 이동합니다.",
+  "prefMapMilestones": "거리 표시",
+  "prefMapMilestonesOff": "끄기",
+  "menuOfflineMaps": "오프라인 지도",
+  "offlineTitle": "오프라인 지도",
+  "offlineExplainer": "보관한 지역은 기기에 남아 삭제되지 않습니다. 그냥 보기만 한 지도도 캐시에 담기지만, 그 공간은 회수할 수 있습니다.",
+  "offlineNone": "아직 보관한 지역이 없습니다",
+  "offlineAroundMe": "주변 지역 보관",
+  "offlineRadius": "반경: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "다운로드",
+  "offlineDownloading": "타일 {total}개 중 {done}개 · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "아직 위치가 없습니다 — GPS를 기다리세요",
+  "offlineNoTiles": "타일이 꺼져 있어 보관할 것이 없습니다",
+  "offlineUnsupported": "이 기기에서는 오프라인 지역을 사용할 수 없습니다",
+  "offlineDelete": "삭제",
+  "offlineFailed": "다운로드 실패",
+  "offlineStorageTitle": "지도 저장 공간",
+  "offlineStorageOnDevice": "이 기기에 {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "보관한 지역을 위해 {mb} MB 내려받음 · 타일 {tiles}개",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "겹치는 지역은 타일을 공유하므로 이 값이 전체를 넘을 수 있습니다. 어느 지역에도 없는 것은 둘러본 지도와 데이터베이스의 오버헤드입니다.",
+  "offlineClearCache": "캐시 지우기",
+  "offlineRadiusTiles": "타일 {tiles}개",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · 타일 {tiles}개",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · 타일 {tiles}개 · 미완료",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · 타일 {tiles}개",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

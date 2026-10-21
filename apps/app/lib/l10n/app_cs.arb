@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "Výběr souboru GPX se nepodařilo otevřít. Zkus to znovu.",
+  "mapRecordingProblem": "Při nahrávání se něco pokazilo.",
+  "mapRecordingStateActive": "Tvoje aktivita se stále nahrává.",
+  "mapRecordingStatePaused": "Tvoje aktivita je stále pozastavená.",
+  "mapRecordingStateIdle": "Žádná aktivita se právě nenahrává.",
+  "mapFollowing": "Sleduje",
+  "mapWaitingForLocation": "Čekání na GPS",
+  "mapLocationServiceOff": "Poloha je vypnutá — zapni ji v nastavení systému",
+  "mapOpenLocationSettings": "Otevřít nastavení",
+  "mapHoldStopProgress": "Drž dál · {seconds}",
+  "liveSharePreparing": "Připravuje se…",
+  "liveShareConnected": "Živě připojeno",
+  "liveShareDisconnected": "Připojuji znovu…",
+  "liveShareConnecting": "Připojování…",
+  "liveShareNotPublished": "Zatím není nic zveřejněno — odkaz zůstane prázdný, dokud neodpoví některý relay.",
+  "liveShareStillActive": "Živé sdílení stále běží.",
+  "showPassword": "Zobrazit heslo",
+  "hidePassword": "Skrýt heslo",
+  "statsActive": "Aktivní",
+  "statsPaused": "Pauzy",
+  "statsElapsed": "Uplynulý čas",
+  "activityRenameTooltip": "Přejmenovat aktivitu",
+  "activityDeleteTooltip": "Smazat aktivitu",
+  "activityExportTooltip": "Exportovat GPX",
+  "activityNoTrack": "Žádná zaznamenaná trasa",
+  "importInProgress": "Importuji GPX…",
+  "btnBack": "Zpět",
+  "btnCopy": "Kopírovat",
+  "prefLoadFailed": "Tvoje předvolby se nepodařilo načíst.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "cs",
+  "appTitle": "Furtive",
+  "btnNext": "Další",
+  "btnFinish": "Dokončit",
+  "btnGrant": "Povolit",
+  "btnGrantPermission": "Udělit oprávnění",
+  "btnFollow": "Sledovat",
+  "btnPause": "Pauza",
+  "btnResume": "Pokračovat",
+  "btnStart": "Start",
+  "btnStarting": "Spouštění",
+  "btnStop": "Stop",
+  "btnContinue": "Pokračovat",
+  "btnGrantToContinue": "Pro pokračování udělte požadovaná oprávnění",
+  "btnViewStats": "Zobrazit statistiky",
+  "btnCancel": "Zrušit",
+  "btnUndo": "Zpět",
+  "btnRetry": "Zkusit znovu",
+  "btnRename": "Přejmenovat",
+  "btnDelete": "Smazat",
+  "prefSaveFailed": "Nastavení se nepodařilo uložit.",
+  "btnStarGitHub": "Hvězda na GitHubu",
+  "btnSponsor": "Podpořit",
+  "linkOpenFailed": "Nelze otevřít {url}",
+  "shareSummary": "{distance} km za {duration} s Furtive",
+  "shareFailed": "Aktivitu se nepodařilo sdílet: {error}",
+  "shareTooltip": "Sdílet aktivitu",
+  "liveShareTitle": "Sdílet živou polohu",
+  "liveShareButton": "Sdílet",
+  "liveSharePassword": "Volitelné heslo",
+  "liveSharePasswordHelp": "Heslo pošlete zvlášť. Pro přístup pouze odkazem ponechte prázdné.",
+  "navMap": "Mapa",
+  "navActivities": "Aktivity",
+  "navSettings": "Nastavení",
+  "menuPermissions": "Oprávnění",
+  "menuPreferences": "Předvolby",
+  "menuLogs": "Záznamy",
+  "onboardWelcomeTitle": "Vítej ve Furtive",
+  "onboardWelcomeSubtitle": "Sledování aktivit s důrazem na soukromí. Žádné účty, žádná telemetrie, žádné služby Google. Vyberme pár předvoleb.",
+  "onboardSettingsTitle": "Nastavení mapy",
+  "onboardSettingsSubtitle": "Vyber si předvolby — později je můžeš změnit v nastavení.",
+  "onboardPermissionsTitle": "Oprávnění",
+  "onboardPermissionsSubtitle": "Udělte přístup k poloze pro sledování běhů. Oznámení a přístup na pozadí jsou volitelné.",
+  "onboardSaveError": "Volby nelze uložit: {error}",
+  "settingsThemeLabel": "Motiv",
+  "settingsUiLanguageLabel": "Jazyk aplikace",
+  "settingsUiLanguageSystem": "Výchozí systému",
+  "preferencesTitle": "Předvolby",
+  "prefMapTheme": "Motiv mapy",
+  "prefAppLanguage": "Jazyk aplikace",
+  "permissionsTitle": "Oprávnění",
+  "permissionsInstructions": "Aplikace potřebuje pro správnou funkci následující oprávnění",
+  "permOptional": "Volitelné",
+  "permDeniedMsg": "Zamítnuto — povolte v nastavení aplikace.",
+  "permPermanentlyDenied": "Toto oprávnění musí být povoleno v nastavení aplikace.",
+  "permLocationWhileUsingName": "Poloha při používání",
+  "permLocationWhileUsingDesc": "Nutné pro sledování polohy a její zobrazení na mapě.",
+  "permLocationAlwaysName": "Poloha vždy",
+  "permLocationAlwaysDesc": "Volitelné: zachovává přesné sledování během dlouhých aktivit, i když systém aplikaci pozastaví.",
+  "permNotificationName": "Oznámení",
+  "permNotificationDesc": "Volitelné: zobrazuje trvalé oznámení „Nahrávání aktivity“, které také pomáhá Androidu nezastavovat sledování na pozadí.",
+  "mapTrackingGapMsg": "Sledování bylo {seconds}s přerušeno, když byla aplikace na pozadí — část tvé trasy chybí. Povol pro furtive „neomezenou baterii“, aby se tomu předešlo.",
+  "mapActivityStartedMsg": "Aktivita zahájena",
+  "mapStopHint": "Pro ukončení aktivity podrž Stop 3 sekundy",
+  "statsRecordingTitle": "Záznam aktivity",
+  "statSignalLost": "Ztráta signálu GPS po dobu {duration} (~{meters} m vzdušnou čarou) — tento čas není započítán do aktivních statistik.",
+  "statDistance": "Vzdálenost",
+  "statDuration": "Čas",
+  "statPace": "Tempo",
+  "statSpeed": "Rychlost",
+  "statElevation": "Převýšení",
+  "splitsTitle": "Mezičasy",
+  "splitsNotEnoughData": "Zatím nedostatek dat pro mezičasy.",
+  "metricPace": "Tempo",
+  "metricSpeed": "Rychlost",
+  "activitiesEmpty": "Žádné aktivity",
+  "activitiesImportTooltip": "Importovat soubor GPX",
+  "importStarted": "Importování…",
+  "importSuccess": "Aktivita importována",
+  "activityNameLabel": "Název aktivity",
+  "activityDeleteSuccess": "Aktivita smazána",
+  "dlgRenameTitle": "Přejmenovat",
+  "dlgDeleteTitle": "Smazat",
+  "dlgDeleteConfirm": "Opravdu chceš tuto aktivitu smazat?",
+  "gpxExportSuccess": "GPX úspěšně exportován",
+  "gpxExportFailed": "Export selhal: {error}",
+  "logsTitle": "Záznamy",
+  "logsEmpty": "Žádné záznamy",
+  "logsTooltipClear": "Vyčistit záznamy",
+  "logsTooltipFilterDate": "Filtrovat podle data",
+  "logsTooltipClearFilter": "Vymazat filtr",
+  "logsTooltipShare": "Sdílet",
+  "logsFiltered": "Filtr: {start} - {end}",
+  "logsShowingCount": "{shown} z {total}",
+  "activityDefaultName": "Trasa",
+  "logsLoadError": "Záznamy se nepodařilo načíst: {error}",
+  "logCopiedMsg": "Záznam zkopírován do schránky",
+  "logsCopiedMsg": "{count} záznamů zkopírováno do schránky",
+  "dlgDeleteLogsTitle": "Smazat záznamy",
+  "dlgDeleteLogsConfirm": "Opravdu chceš smazat všechny záznamy? Tuto akci nelze vrátit.",
+  "supportTitle": "Podpoř vývoj",
+  "supportDescription": "Tato aplikace je vytvářena a udržována v mém volném čase. Tvoje podpora pomáhá udržet ji při životě a růst.",
+  "changelogTitle": "Novinky",
+  "changelogGotIt": "Rozumím",
+  "changelogV120I18n": "Vícejazyčnost: rozhraní aplikace v 26 jazycích, štítky mapy v 41, formáty data dle vaší lokalizace. Nastavitelné v Nastavení nebo průvodci.",
+  "changelogV120Wizard": "Průvodce prvním spuštěním: vyber výchozí hodnoty (motiv, jazyk) a uděl oprávnění k poloze v jednom kroku.",
+  "changelogV120Recording": "Záznam aktivity: animovaný značkovač polohy s pulzem a kruhem přesnosti, kilometrové značky na mapě, podrž Stop 3 sekundy pro ukončení (žádná náhodná stisknutí), automatické přesměrování na statistiky.",
+  "changelogV120Stats": "Statistiky aktivity: graf kilometrových mezičasů s přepínačem tempo ⇄ rychlost, převýšení D+ (konvence Strava/Garmin).",
+  "changelogV120Share": "Sdílej aktivitu jako kartu s mapou a statistikami přes systémové menu sdílení.",
+  "changelogV120GpxImport": "Importuj GPX soubory z jiných aplikací (Garmin, Strava atd.) — podporovány body tras i tras (track + route).",
+  "changelogV120MapThemes": "Pět motivů mapy: Světlý, Tmavý, Bílý, Stupně šedi, Černý — vyber v Nastavení ten, který ti vyhovuje.",
+  "changelogV120Reproducible": "Reprodukovatelné sestavení: kdokoli může znovu sestavit ze zdrojového kódu a ověřit, že zveřejněný APK je bajt po bajtu identický — žádný skrytý kód, žádná manipulace.",
+  "changelogV120Stability": "Stabilita: ochrana před chybnými GPS údaji, spolehlivé záznamy na pozadí, které pokračují i poté, co systém aplikaci ukončí, automatická rotace záznamů, přísnější validace GPX, časové limity HTTP.",
+  "changelogV130LiveShare": "Živé sdílení: během nahrávání sdílejte end-to-end šifrovaný odkaz a nechte své blízké sledovat vaši polohu v jejich prohlížeči — bez účtů na obou stranách, klíč nikdy neopustí odkaz.",
+  "changelogV130Profiles": "Profily aktivit: chůze, běh, kolo, auto, plavání, letadlo nebo jiné — volba určuje vzorkování GPS a toleranci přesnosti a ukládá se s aktivitou.",
+  "changelogV130Map": "Nový mapový engine: zoom a posun nyní vykresluje MapLibre Native — zoom, který dříve trhal, je nyní plynulý.",
+  "changelogV130Puck": "Značka polohy je nyní kreslena samotnou aplikací: tečka v klidu, šipka ve směru jízdy, kompas pravého severu na Androidu.",
+  "changelogV130Detail": "Detail nahrávání: zvolte přesné, vyvážené nebo úsporné vzorkování GPS pro vyvážení přesnosti a baterie na aktivitu.",
+  "changelogV130Left": "Režim pro leváky: ovládací prvky mapy se mohou přesunout na levou stranu obrazovky (Nastavení).",
+  "changelogV130CarFix": "Opraveno: auto nad 126 km/h nenahrávalo vůbec nic — filtr rychlosti se nyní přizpůsobuje každé aktivitě místo zamítání každého měření.",
+  "changelogV140Offline": "Offline mapy: ulož si oblast kolem sebe, 10 až 100 km, aby mapa fungovala i tam, kde není signál (Nastavení).",
+  "changelogV140OfflineCost": "Každá uložená oblast uvádí, kolik stála dlaždic a megabajtů, a přerušená uvádí, kam se dostala — vyžádej ji znovu a dokonči ji.",
+  "changelogV140Cache": "Uchovává se i mapa, na kterou ses jen podíval, až do 1 GB, a lze ji vyhodit zvlášť, aniž by se dotkla oblastí, které sis schválně uložil.",
+  "changelogV140Drift": "Opraveno: odložený telefon už nenabírá vzdálenost z driftu GPS — nehybný záznam teď ukazuje nulu místo vymyšlených metrů.",
+  "changelogV140Elevation": "Opraveno: převýšení počítá potvrzená stoupání místo zaokrouhlování každého měření na deset metrů, takže malé kopce přestávají mizet a rovina přestává stoupat.",
+  "changelogV140LocationOff": "Když jsou služby polohy vypnuté, mapa to teď řekne a nabídne otevření nastavení, a sledování se samo rozběhne, jakmile se vrátí.",
+  "changelogV140Markers": "Značky vzdálenosti podél trasy lze nastavit na požadovaný rozestup nebo vypnout (Nastavení).",
+  "changelogV140Stop": "Při zastavení záznamu se průběh podržení kreslí nad palcem místo pod ním, takže vidíš, jak dlouho ještě držet.",
+  "changelogV140SmallScreens": "Opraveno: kroky úvodního nastavení a obrazovky nastavení zůstávají použitelné na nízkých a úzkých displejích.",
+  "prefThemeLight": "Světlý",
+  "prefThemeDark": "Tmavý",
+  "prefThemeWhite": "Bílý",
+  "prefThemeGrayscale": "Stupně šedi",
+  "prefThemeBlack": "Černý",
+  "prefMapTiles": "Dlaždice mapy",
+  "prefMapTilesSubtitle": "Načtení mapy odhalí tvou přibližnou pozici poskytovateli dlaždic. Vypni pro prázdnou, funkční mapu bez síťových požadavků.",
+  "prefShowOnLockScreen": "Zobrazit na uzamčené obrazovce",
+  "prefShowOnLockScreenSubtitle": "Udržuje mapu/pozici viditelnou nad uzamčenou obrazovkou během nahrávání (jen Android). Vypni, abys to skryl před kýmkoli, kdo se podívá na tvůj uzamčený telefon.",
+  "mapLoadingLocalizing": "Inicializace GPS…",
+  "mapLoadingMap": "Načítání mapy…",
+  "mapStartingActivity": "Spouštění aktivity…",
+  "activitiesLoadError": "Tuto aktivitu nelze otevřít",
+  "activityPickerTitle": "Co děláš?",
+  "activityWalk": "Chůze",
+  "activityRun": "Běh",
+  "activityBike": "Kolo",
+  "activityCar": "Auto",
+  "activitySwim": "Plavání",
+  "activityAircraft": "Letadlo",
+  "activityOther": "Jiné",
+  "activityUnknown": "Neznámé",
+  "prefRecordingDetail": "Podrobnost záznamu",
+  "prefRecordingDetailSubtitle": "Jak často se vyžádá poloha, vzhledem k výchozímu nastavení dané aktivity. Hustší znamená ostřejší zatáčky a větší spotřebu baterie.",
+  "prefDetailPrecise": "Přesné",
+  "prefDetailBalanced": "Vyvážené",
+  "prefDetailEndurance": "Vytrvalost",
+  "prefMapControlsOnRight": "Ovládání mapy vpravo",
+  "prefMapControlsOnRightSubtitle": "Tlačítka sledovat, start, pauza a stop jsou u pravého okraje. Vypnutím je přesunete vlevo pro leváky. Popisek mapy se přesune do protilehlého rohu.",
+  "prefMapMilestones": "Značky vzdálenosti",
+  "prefMapMilestonesOff": "Vypnuto",
+  "menuOfflineMaps": "Offline mapy",
+  "offlineTitle": "Offline mapy",
+  "offlineExplainer": "Oblasti, které uložíš, zůstávají v zařízení a nikdy se nemažou. Mapa, na kterou ses jen podíval, se také ukládá do mezipaměti, ale její místo lze uvolnit.",
+  "offlineNone": "Zatím žádné uložené oblasti",
+  "offlineAroundMe": "Uložit oblast kolem mě",
+  "offlineRadius": "Poloměr: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Stáhnout",
+  "offlineDownloading": "{done} z {total} dlaždic · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Zatím žádná poloha — počkej na GPS",
+  "offlineNoTiles": "Dlaždice jsou vypnuté, takže není co ukládat",
+  "offlineUnsupported": "Offline oblasti nejsou na tomto zařízení k dispozici",
+  "offlineDelete": "Smazat",
+  "offlineFailed": "Stahování selhalo",
+  "offlineStorageTitle": "Úložiště map",
+  "offlineStorageOnDevice": "{mb} MB v tomto zařízení",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} MB staženo pro uložené oblasti · {tiles} dlaždic",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Překrývající se oblasti sdílejí dlaždice, takže toto číslo může překročit celek. Co není v žádné oblasti, je mapa, kterou jste si prohlíželi, plus režie databáze.",
+  "offlineClearCache": "Vymazat mezipaměť",
+  "offlineRadiusTiles": "{tiles} dlaždic",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · {tiles} dlaždic",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles} dlaždic · nedokončeno",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent} % · {mb} MB · {tiles} dlaždic",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

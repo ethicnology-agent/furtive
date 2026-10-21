@@ -1,5 +1,5 @@
 *mapper.dart
-lib/l10n/app_localizations*.dart
+**/l10n/app_localizations*.dart
 
 # Miscellaneous
 *.class
@@ -34,10 +34,10 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+build/
 
-# Test coverage output (`flutter test --coverage`)
-/coverage/
+# Test coverage output. Unanchored: each member writes its own.
+coverage/
 
 # Symbolication related
 app.*.symbols
@@ -64,5 +64,11 @@ app.*.map.json
 .fvm/
 
 # Stray log file written to CWD by some dev/test environments instead of
-# the app documents directory
-/logs.tsv
+# the app documents directory. Unanchored: the working directory for a test
+# run is now the application member of the workspace, not the repository root.
+logs.tsv
+
+# Golden-comparison output. `flutter test` writes the rendered image and its
+# diffs here, beside the goldens themselves — committing them would pass a
+# failure off as a reference.
+**/test/failures/

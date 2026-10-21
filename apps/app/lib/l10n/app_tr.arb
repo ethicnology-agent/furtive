@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "GPX dosya seçici açılamadı. Tekrar dene.",
+  "mapRecordingProblem": "Kayıt sırasında bir şeyler ters gitti.",
+  "mapRecordingStateActive": "Etkinliğin hâlâ kaydediliyor.",
+  "mapRecordingStatePaused": "Etkinliğin hâlâ duraklatılmış durumda.",
+  "mapRecordingStateIdle": "Şu anda hiçbir etkinlik kaydedilmiyor.",
+  "mapFollowing": "Takip ediyor",
+  "mapWaitingForLocation": "GPS bekleniyor",
+  "mapLocationServiceOff": "Konum kapalı — sistem ayarlarından aç",
+  "mapOpenLocationSettings": "Ayarları aç",
+  "mapHoldStopProgress": "Basılı tutmaya devam et · {seconds}",
+  "liveSharePreparing": "Hazırlanıyor…",
+  "liveShareConnected": "Canlı bağlandı",
+  "liveShareDisconnected": "Yeniden bağlanıyor…",
+  "liveShareConnecting": "Bağlanıyor…",
+  "liveShareNotPublished": "Henüz hiçbir şey yayınlanmadı — bir relay yanıt verene kadar bağlantı boş kalır.",
+  "liveShareStillActive": "Canlı paylaşım hâlâ açık.",
+  "showPassword": "Parolayı göster",
+  "hidePassword": "Parolayı gizle",
+  "statsActive": "Etkin",
+  "statsPaused": "Duraklamalar",
+  "statsElapsed": "Geçen süre",
+  "activityRenameTooltip": "Etkinliği yeniden adlandır",
+  "activityDeleteTooltip": "Etkinliği sil",
+  "activityExportTooltip": "GPX dışa aktar",
+  "activityNoTrack": "Kaydedilmiş rota yok",
+  "importInProgress": "GPX içe aktarılıyor…",
+  "btnBack": "Geri",
+  "btnCopy": "Kopyala",
+  "prefLoadFailed": "Tercihlerin yüklenemedi.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "tr",
+  "appTitle": "Furtive",
+  "btnNext": "İleri",
+  "btnFinish": "Bitir",
+  "btnGrant": "İzin ver",
+  "btnGrantPermission": "İzin ver",
+  "btnFollow": "Takip et",
+  "btnPause": "Duraklat",
+  "btnResume": "Devam et",
+  "btnStart": "Başlat",
+  "btnStarting": "Başlatılıyor",
+  "btnStop": "Durdur",
+  "btnContinue": "Devam",
+  "btnGrantToContinue": "Devam etmek için gerekli izinleri ver",
+  "btnViewStats": "İstatistikleri gör",
+  "btnCancel": "İptal",
+  "btnUndo": "Geri al",
+  "btnRetry": "Tekrar dene",
+  "btnRename": "Yeniden adlandır",
+  "btnDelete": "Sil",
+  "prefSaveFailed": "Tercihleriniz kaydedilemedi.",
+  "btnStarGitHub": "GitHub'da yıldız ver",
+  "btnSponsor": "Sponsor ol",
+  "linkOpenFailed": "{url} açılamadı",
+  "shareSummary": "Furtive ile {duration} sürede {distance} km",
+  "shareFailed": "Etkinlik paylaşılamadı: {error}",
+  "shareTooltip": "Etkinliği paylaş",
+  "liveShareTitle": "Canlı konumu paylaş",
+  "liveShareButton": "Paylaş",
+  "liveSharePassword": "İsteğe bağlı parola",
+  "liveSharePasswordHelp": "Parolayı ayrı gönderin. Yalnızca bağlantıyla erişim için boş bırakın.",
+  "navMap": "Harita",
+  "navActivities": "Etkinlikler",
+  "navSettings": "Ayarlar",
+  "menuPermissions": "İzinler",
+  "menuPreferences": "Tercihler",
+  "menuLogs": "Günlükler",
+  "onboardWelcomeTitle": "Furtive'e hoş geldin",
+  "onboardWelcomeSubtitle": "Gizliliği önceleyen etkinlik takibi. Hesap yok, telemetri yok, Google hizmeti yok. Birkaç tercih seçelim.",
+  "onboardSettingsTitle": "Harita ayarları",
+  "onboardSettingsSubtitle": "Tercihlerini seç — daha sonra ayarlardan değiştirebilirsin.",
+  "onboardPermissionsTitle": "İzinler",
+  "onboardPermissionsSubtitle": "Koşularını takip etmek için konum izni ver. Bildirimler ve arka plan erişimi isteğe bağlıdır.",
+  "onboardSaveError": "Seçimlerin kaydedilemedi: {error}",
+  "settingsThemeLabel": "Tema",
+  "settingsUiLanguageLabel": "Uygulama dili",
+  "settingsUiLanguageSystem": "Sistem varsayılanı",
+  "preferencesTitle": "Tercihler",
+  "prefMapTheme": "Harita teması",
+  "prefAppLanguage": "Uygulama dili",
+  "permissionsTitle": "İzinler",
+  "permissionsInstructions": "Bu uygulamanın düzgün çalışması için aşağıdaki izinler gereklidir",
+  "permOptional": "İsteğe bağlı",
+  "permDeniedMsg": "Reddedildi — uygulama ayarlarından etkinleştir.",
+  "permPermanentlyDenied": "Bu izin uygulama ayarlarından etkinleştirilmelidir.",
+  "permLocationWhileUsingName": "Kullanırken konum",
+  "permLocationWhileUsingDesc": "Konumunu takip etmek ve haritada göstermek için gerekli.",
+  "permLocationAlwaysName": "Her zaman konum",
+  "permLocationAlwaysDesc": "İsteğe bağlı: uzun etkinlikler sırasında, sistem uygulamayı askıya alsa bile takibi doğru tutar.",
+  "permNotificationName": "Bildirimler",
+  "permNotificationDesc": "İsteğe bağlı: sürekli bir \"Etkinlik kaydediliyor\" bildirimi gösterir; bu da Android'in arka planda takibi durdurmasını önlemeye yardımcı olur.",
+  "mapTrackingGapMsg": "Uygulama arka plandayken takip {seconds}sn durdu — rotanın bir bölümü eksik. Bunu önlemek için furtive'e \"sınırsız pil kullanımı\" izni ver.",
+  "mapActivityStartedMsg": "Etkinlik başladı",
+  "mapStopHint": "Etkinliği bitirmek için Durdur'a 3 saniye basılı tut",
+  "statsRecordingTitle": "Etkinlik kaydı",
+  "statSignalLost": "GPS sinyali {duration} boyunca kayboldu (~{meters} m kuş uçuşu) — bu süre aktif istatistiklere dahil edilmez.",
+  "statDistance": "Mesafe",
+  "statDuration": "Süre",
+  "statPace": "Tempo",
+  "statSpeed": "Hız",
+  "statElevation": "Tırmanış",
+  "splitsTitle": "Bölmeler",
+  "splitsNotEnoughData": "Bölmeler için henüz yeterli veri yok.",
+  "metricPace": "Tempo",
+  "metricSpeed": "Hız",
+  "activitiesEmpty": "Etkinlik bulunamadı",
+  "activitiesImportTooltip": "GPX dosyası içe aktar",
+  "importStarted": "İçe aktarılıyor…",
+  "importSuccess": "Etkinlik içe aktarıldı",
+  "activityNameLabel": "Etkinlik adı",
+  "activityDeleteSuccess": "Etkinlik silindi",
+  "dlgRenameTitle": "Yeniden adlandır",
+  "dlgDeleteTitle": "Sil",
+  "dlgDeleteConfirm": "Bu etkinliği silmek istediğinden emin misin?",
+  "gpxExportSuccess": "GPX başarıyla dışa aktarıldı",
+  "gpxExportFailed": "Dışa aktarma başarısız: {error}",
+  "logsTitle": "Günlükler",
+  "logsEmpty": "Günlük bulunamadı",
+  "logsTooltipClear": "Günlükleri temizle",
+  "logsTooltipFilterDate": "Tarihe göre filtrele",
+  "logsTooltipClearFilter": "Filtreyi temizle",
+  "logsTooltipShare": "Paylaş",
+  "logsFiltered": "Filtre: {start} - {end}",
+  "logsShowingCount": "{total} kayıttan {shown} gösteriliyor",
+  "activityDefaultName": "Parkur",
+  "logsLoadError": "Günlükler yüklenemedi: {error}",
+  "logCopiedMsg": "Günlük panoya kopyalandı",
+  "logsCopiedMsg": "{count} günlük panoya kopyalandı",
+  "dlgDeleteLogsTitle": "Günlükleri sil",
+  "dlgDeleteLogsConfirm": "Tüm günlükleri silmek istediğinden emin misin? Bu işlem geri alınamaz.",
+  "supportTitle": "Geliştirmeyi destekle",
+  "supportDescription": "Bu uygulama boş zamanlarımda yapılıp sürdürülüyor. Desteğin onu yaşatmaya ve büyütmeye yardım ediyor.",
+  "changelogTitle": "Yenilikler",
+  "changelogGotIt": "Anladım",
+  "changelogV120I18n": "Çok dilli: uygulama arayüzü 26 dilde, harita etiketleri 41 dilde, tarih biçimleri yerel ayarına uyar. Ayarlardan veya sihirbazdan değiştirilebilir.",
+  "changelogV120Wizard": "İlk açılış sihirbazı: varsayılanları (tema, dil) seç ve konum izinlerini tek akışta ver.",
+  "changelogV120Recording": "Etkinlik kaydı: nabız ve doğruluk halkalı animasyonlu konum işaretçisi, haritada kilometre işaretleri, bitirmek için Durdur'a 3 saniye basılı tut (kazara dokunma yok), istatistiklere otomatik yönlendirme.",
+  "changelogV120Stats": "Etkinlik istatistikleri: kilometre başına bölme grafiği, tempo ⇄ hız geçişi, D+ irtifa kazancı (Strava/Garmin standardı).",
+  "changelogV120Share": "Bir etkinliği sistem paylaşım menüsü üzerinden harita ve istatistiklerle kart olarak paylaş.",
+  "changelogV120GpxImport": "Diğer uygulamalardan (Garmin, Strava vb.) GPX dosyalarını içe aktar — hem track hem route noktaları desteklenir.",
+  "changelogV120MapThemes": "Beş harita teması: Açık, Koyu, Beyaz, Gri tonlamalı, Siyah — sana uyanını ayarlardan seç.",
+  "changelogV120Reproducible": "Tekrarlanabilir derlemeler: herkes kaynak koddan yeniden derleyebilir ve yayınlanan APK'nın bayt bayt aynı olduğunu doğrulayabilir — gizli kod yok, müdahale yok.",
+  "changelogV120Stability": "Kararlılık: hatalı GPS okumalarına karşı güçlendirildi, sistem uygulamayı kapattıktan sonra devam eden güvenilir arka plan kaydı, otomatik günlük döndürme, daha katı GPX doğrulaması, HTTP zaman aşımları.",
+  "changelogV130LiveShare": "Canlı paylaşım: kayıt sırasında uçtan uca şifreli bir bağlantı paylaşın ve sevdiklerinizin konumunuzu tarayıcılarından takip etmesine izin verin — iki tarafta da hesap yok, anahtar bağlantıdan asla ayrılmaz.",
+  "changelogV130Profiles": "Aktivite profilleri: yürüyüş, koşu, bisiklet, araba, yüzme, uçak veya diğer — seçim GPS örneklemesini ve doğruluk toleransını boyutlandırır ve aktiviteyle birlikte saklanır.",
+  "changelogV130Map": "Yeni harita motoru: yakınlaştırma ve kaydırma artık MapLibre Native tarafından işleniyor — takılan yakınlaştırma artık akıcı.",
+  "changelogV130Puck": "Konum işaretçisi artık uygulamanın kendisi tarafından çiziliyor: dururken bir nokta, hareket yönünüzde bir şevron, Android'de gerçek kuzey pusulası.",
+  "changelogV130Detail": "Kayıt detayı: aktivite başına doğruluğu pil ile dengelemek için hassas, dengeli veya tasarruflu GPS örneklemesi seçin.",
+  "changelogV130Left": "Solak modu: harita kontrolleri ekranın sol tarafına taşınabilir (Ayarlar).",
+  "changelogV130CarFix": "Düzeltildi: 126 km/h üzerindeki bir araba hiçbir şey kaydetmiyordu — hız filtresi artık her düzeltmeyi reddetmek yerine her aktiviteye uyum sağlıyor.",
+  "changelogV140Offline": "Çevrimdışı haritalar: çevrendeki alanı, 10 ila 100 km, sakla; böylece harita sinyal olmayan yerde de çalışır (Ayarlar).",
+  "changelogV140OfflineCost": "Saklanan her alan kaç karo ve kaç megabayt tuttuğunu söyler, yarıda kalan ise nereye kadar geldiğini söyler — bitirmek için yeniden iste.",
+  "changelogV140Cache": "Yalnızca baktığın harita da saklanır, 1 GB'a kadar, ve saklamayı seçtiğin alanlara dokunmadan tek başına atılabilir.",
+  "changelogV140Drift": "Düzeltildi: bırakılmış bir telefon artık GPS kaymasından mesafe biriktirmiyor — hareketsiz bir kayıt metre uydurmak yerine sıfır gösteriyor.",
+  "changelogV140Elevation": "Düzeltildi: yükselti, her okumayı on metreye yuvarlamak yerine doğrulanmış tırmanışları sayıyor; böylece küçük tepeler kaybolmayı, düz zemin de yükselmeyi bırakıyor.",
+  "changelogV140LocationOff": "Konum servisleri kapalıyken harita artık bunu söylüyor ve ayarı açmayı öneriyor; servisler döndüğünde takip kendiliğinden sürüyor.",
+  "changelogV140Markers": "Bir rota boyunca mesafe işaretleri istediğin aralığa ayarlanabilir ya da kapatılabilir (Ayarlar).",
+  "changelogV140Stop": "Bir kaydı durdururken basılı tutma ilerlemesi parmağının altına değil üstüne çiziliyor, böylece ne kadar daha tutman gerektiğini görüyorsun.",
+  "changelogV140SmallScreens": "Düzeltildi: kurulum adımları ve ayar ekranları kısa ve dar ekranlarda kullanılabilir kalıyor.",
+  "prefThemeLight": "Açık",
+  "prefThemeDark": "Koyu",
+  "prefThemeWhite": "Beyaz",
+  "prefThemeGrayscale": "Gri tonlama",
+  "prefThemeBlack": "Siyah",
+  "prefMapTiles": "Harita karoları",
+  "prefMapTilesSubtitle": "Haritayı yüklemek yaklaşık konumunu karo sağlayıcısına açığa çıkarır. Ağ isteği olmayan boş ama çalışan bir harita için kapat.",
+  "prefShowOnLockScreen": "Kilit ekranında göster",
+  "prefShowOnLockScreenSubtitle": "Kayıt sırasında haritayı/konumu kilitli ekranın üzerinde görünür tutar (yalnızca Android). Kilitli telefonuna göz atan birinden gizlemek için kapat.",
+  "mapLoadingLocalizing": "GPS başlatılıyor…",
+  "mapLoadingMap": "Harita yükleniyor…",
+  "mapStartingActivity": "Etkinlik başlatılıyor…",
+  "activitiesLoadError": "Bu etkinlik açılamadı",
+  "activityPickerTitle": "Ne yapıyorsun?",
+  "activityWalk": "Yürüyüş",
+  "activityRun": "Koşu",
+  "activityBike": "Bisiklet",
+  "activityCar": "Araba",
+  "activitySwim": "Yüzme",
+  "activityAircraft": "Uçak",
+  "activityOther": "Diğer",
+  "activityUnknown": "Bilinmiyor",
+  "prefRecordingDetail": "Kayıt ayrıntısı",
+  "prefRecordingDetailSubtitle": "Etkinliğin kendi varsayılanına göre konumun ne sıklıkta istendiği. Daha sık olması virajları netleştirir ve pili daha çok tüketir.",
+  "prefDetailPrecise": "Hassas",
+  "prefDetailBalanced": "Dengeli",
+  "prefDetailEndurance": "Dayanıklılık",
+  "prefMapControlsOnRight": "Harita denetimleri sağda",
+  "prefMapControlsOnRightSubtitle": "Takip, başlat, duraklat ve durdur düğmeleri sağ kenardadır. Sol elle kullanım için sola taşımak üzere kapatın. Harita künyesi karşı köşeye geçer.",
+  "prefMapMilestones": "Mesafe işaretleri",
+  "prefMapMilestonesOff": "Kapalı",
+  "menuOfflineMaps": "Çevrimdışı haritalar",
+  "offlineTitle": "Çevrimdışı haritalar",
+  "offlineExplainer": "Sakladığın alanlar cihazda kalır ve asla silinmez. Yalnızca baktığın harita da önbelleğe alınır, ama yeri geri kazanılabilir.",
+  "offlineNone": "Henüz saklanan alan yok",
+  "offlineAroundMe": "Çevremdeki alanı sakla",
+  "offlineRadius": "Yarıçap: {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "İndir",
+  "offlineDownloading": "{total} döşemeden {done} tanesi · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Henüz konum yok — GPS'i bekle",
+  "offlineNoTiles": "Döşemeler kapalı, bu yüzden saklanacak bir şey yok",
+  "offlineUnsupported": "Çevrimdışı alanlar bu cihazda kullanılamıyor",
+  "offlineDelete": "Sil",
+  "offlineFailed": "İndirme başarısız",
+  "offlineStorageTitle": "Harita depolama",
+  "offlineStorageOnDevice": "Bu cihazda {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "Saklanan alanlar için {mb} MB indirildi · {tiles} döşeme",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Üst üste binen alanlar döşemelerini paylaşır, bu yüzden bu sayı toplamı aşabilir. Hiçbir alanda olmayan, baktığınız harita ile veritabanının ek yüküdür.",
+  "offlineClearCache": "Önbelleği temizle",
+  "offlineRadiusTiles": "{tiles} döşeme",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · {tiles} döşeme",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles} döşeme · tamamlanmadı",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "%{percent} · {mb} MB · {tiles} döşeme",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

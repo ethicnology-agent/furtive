@@ -1,0 +1,205 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:activities/testing.dart';
+import 'package:furtive/features/preferences/page.dart';
+import 'package:furtive/l10n/app_localizations.dart';
+import 'package:preferences/preferences.dart';
+import 'package:ui_kit/ui_kit.dart';
+
+import 'support/fakes.dart';
+
+/// Widget coverage for the auto-apply flow.
+///
+/// There is no Apply button: every change is persisted as soon as the
+/// control moves. The failed-save case is still the reason this file exists
+/// — with no Apply spinner to absorb a failure, the page must report it and
+/// the control must roll back to the value that is actually stored, or the
+/// UI would show a setting that never landed.
+class _FailingPreferencesRepository extends PreferencesRepository {
+  _FailingPreferencesRepository() : super.inMemory();
+
+  @override
+  Future<void> store(PreferencesEntity preferences) async {
+    throw StateError('disk full');
+  }
+}
+
+/// The page is pumped with the default (English) localisations, so labels can
+/// be looked up directly instead of hardcoding display strings in the test.
+final enLocalizations = lookupAppLocalizations(const Locale('en'));
+
+class _FailOnceReadRepository extends PreferencesRepository {
+  _FailOnceReadRepository() : super.inMemory();
+  int reads = 0;
+  @override
+  Future<PreferencesEntity> fetch() async {
+    if (reads++ == 0) throw StateError('read failed');
+    return super.fetch();
+  }
+}
+
+void main() {
+  late LocalDatabase db;
+
+  setUp(() {
+    db = inMemoryDatabase();
+  });
+
+  tearDown(() async {
+    await db.close();
+  });
+
+  Future<void> pumpPage(WidgetTester tester, PreferencesRepository repo) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: appTheme,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: PreferencesPage(repository: repo),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  /// The lock-screen switch specifically. Every other control on this page
+  /// (map theme, map tiles) makes PreferencesBloc reach into the service
+  /// locator for MapBloc to re-init the map, which would turn a preferences
+  /// test into a test that has to stand up the GPS stack. This toggle only
+  /// calls LockScreenFacade, which is a no-op off Android.
+  ///
+  /// Located by its label rather than by position: this used to be "the last
+  /// switch", which silently started pointing at a different setting the
+  /// moment one was added below it.
+  Finder lockScreenSwitch() => find.ancestor(
+    of: find.text(enLocalizations.prefShowOnLockScreen),
+    matching: find.byType(SwitchListTile),
+  );
+
+  Finder milestoneSlider() =>
+      find.byKey(const ValueKey('milestone-interval-slider'));
+
+  testWidgets('failed initial load offers retry and recovers', (tester) async {
+    final repo = _FailOnceReadRepository();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: appTheme,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: PreferencesPage(repository: repo),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    await tester.tap(find.text(enLocalizations.btnRetry));
+    await tester.pumpAndSettle();
+    expect(find.byType(SwitchListTile), findsWidgets);
+    expect(repo.reads, 2);
+  });
+
+  testWidgets('toggling a switch persists immediately, with no Apply button', (
+    tester,
+  ) async {
+    final repo = PreferencesRepository.inMemory();
+    await pumpPage(tester, repo);
+
+    expect(
+      find.text('Apply'),
+      findsNothing,
+      reason: 'changes apply on their own now',
+    );
+
+    await tester.ensureVisible(lockScreenSwitch());
+    await tester.pumpAndSettle();
+    await tester.tap(lockScreenSwitch());
+    await tester.pumpAndSettle();
+
+    expect(
+      (await repo.fetch()).showOnLockScreen,
+      isFalse,
+      reason: 'the write lands without any further interaction',
+    );
+    // The page stays open: there is nothing left to confirm.
+    expect(find.byType(PreferencesPage), findsOneWidget);
+  });
+
+  testWidgets(
+    'a failed auto-save reports the failure and rolls the control back to '
+    'the persisted value',
+    (tester) async {
+      await pumpPage(tester, _FailingPreferencesRepository());
+
+      await tester.ensureVisible(lockScreenSwitch());
+      await tester.pumpAndSettle();
+      await tester.tap(lockScreenSwitch());
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SnackBar), findsOneWidget);
+      final tile = tester.widget<SwitchListTile>(lockScreenSwitch());
+      expect(
+        tile.value,
+        isTrue,
+        reason: 'the write never landed, so the UI must not claim it did',
+      );
+    },
+  );
+
+  testWidgets('rapid successive toggles persist in order — last one wins', (
+    tester,
+  ) async {
+    // The gated repository holds the first write in flight while the second
+    // toggle is already queued: this is the race the serialised write queue
+    // exists for — the older snapshot must not land after the newer one.
+    final repo = _SlowPreferencesRepository();
+    await pumpPage(tester, repo);
+
+    await tester.ensureVisible(lockScreenSwitch());
+    await tester.pumpAndSettle();
+    await tester.tap(lockScreenSwitch()); // off; its write is gated
+    await tester.pumpAndSettle(); // optimistic UI shows off, write in flight
+    await tester.tap(lockScreenSwitch()); // on again; queued behind the first
+    await tester.pump();
+    repo.complete(); // release both writes, in dispatch order
+    await tester.pumpAndSettle();
+
+    expect((await repo.fetch()).showOnLockScreen, isTrue);
+  });
+
+  testWidgets('milestone slider only stores one of the supported intervals', (
+    tester,
+  ) async {
+    final repo = PreferencesRepository.inMemory();
+    await pumpPage(tester, repo);
+
+    await tester.ensureVisible(milestoneSlider());
+    await tester.pumpAndSettle();
+    final slider = tester.widget<Slider>(milestoneSlider());
+    expect(slider.value, 1);
+    expect(slider.divisions, 7);
+
+    slider.onChanged!(4);
+    await tester.pumpAndSettle();
+    expect((await repo.fetch()).mapMilestoneIntervalKm, 50);
+
+    tester.widget<Slider>(milestoneSlider()).onChanged!(0);
+    await tester.pumpAndSettle();
+    expect((await repo.fetch()).mapMilestoneIntervalKm, 0);
+  });
+}
+
+/// Storage whose first write only completes when the test says so, so two
+/// auto-applied writes can be forced to overlap.
+class _SlowPreferencesRepository extends PreferencesRepository {
+  _SlowPreferencesRepository() : super.inMemory();
+
+  final _gate = Completer<void>();
+
+  void complete() => _gate.complete();
+
+  @override
+  Future<void> store(PreferencesEntity preferences) async {
+    await _gate.future;
+  }
+}

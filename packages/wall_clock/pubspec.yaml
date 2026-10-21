@@ -1,0 +1,12 @@
+name: wall_clock
+description: "An injectable source of now, so time-dependent behaviour is testable."
+publish_to: none
+resolution: workspace
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.31.0

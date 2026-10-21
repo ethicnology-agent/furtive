@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "تعذّر فتح مُحدِّد ملفات GPX. حاول مرة أخرى.",
+  "mapRecordingProblem": "حدث خطأ أثناء التسجيل.",
+  "mapRecordingStateActive": "لا يزال نشاطك قيد التسجيل.",
+  "mapRecordingStatePaused": "لا يزال نشاطك متوقفاً مؤقتاً.",
+  "mapRecordingStateIdle": "لا يوجد نشاط قيد التسجيل الآن.",
+  "mapFollowing": "يتابع",
+  "mapWaitingForLocation": "بانتظار GPS",
+  "mapLocationServiceOff": "الموقع مُعطَّل — فعّله من إعدادات النظام",
+  "mapOpenLocationSettings": "فتح الإعدادات",
+  "mapHoldStopProgress": "استمر بالضغط · {seconds}",
+  "liveSharePreparing": "جارٍ التحضير…",
+  "liveShareConnected": "متصل مباشرةً",
+  "liveShareDisconnected": "إعادة الاتصال…",
+  "liveShareConnecting": "جارٍ الاتصال…",
+  "liveShareNotPublished": "لم يُنشر شيء بعد — يبقى الرابط فارغًا حتى يستجيب أحد المرحّلات.",
+  "liveShareStillActive": "المشاركة المباشرة لا تزال نشطة.",
+  "showPassword": "إظهار كلمة المرور",
+  "hidePassword": "إخفاء كلمة المرور",
+  "statsActive": "نشط",
+  "statsPaused": "فترات التوقف",
+  "statsElapsed": "الوقت المنقضي",
+  "activityRenameTooltip": "إعادة تسمية النشاط",
+  "activityDeleteTooltip": "حذف النشاط",
+  "activityExportTooltip": "تصدير GPX",
+  "activityNoTrack": "لا يوجد مسار مُسجَّل",
+  "importInProgress": "جارٍ استيراد GPX…",
+  "btnBack": "رجوع",
+  "btnCopy": "نسخ",
+  "prefLoadFailed": "تعذّر تحميل تفضيلاتك.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "ar",
+  "appTitle": "Furtive",
+  "btnNext": "التالي",
+  "btnFinish": "إنهاء",
+  "btnGrant": "السماح",
+  "btnGrantPermission": "منح الإذن",
+  "btnFollow": "متابعة",
+  "btnPause": "إيقاف مؤقت",
+  "btnResume": "استئناف",
+  "btnStart": "ابدأ",
+  "btnStarting": "جارٍ البدء",
+  "btnStop": "إيقاف",
+  "btnContinue": "متابعة",
+  "btnGrantToContinue": "امنح الأذونات المطلوبة للمتابعة",
+  "btnViewStats": "عرض الإحصاءات",
+  "btnCancel": "إلغاء",
+  "btnUndo": "تراجع",
+  "btnRetry": "إعادة المحاولة",
+  "btnRename": "إعادة تسمية",
+  "btnDelete": "حذف",
+  "prefSaveFailed": "تعذّر حفظ تفضيلاتك.",
+  "btnStarGitHub": "نجمة على GitHub",
+  "btnSponsor": "ادعم",
+  "linkOpenFailed": "تعذر فتح {url}",
+  "shareSummary": "{distance} كم خلال {duration} مع Furtive",
+  "shareFailed": "تعذرت مشاركة النشاط: {error}",
+  "shareTooltip": "مشاركة النشاط",
+  "liveShareTitle": "مشاركة الموقع المباشر",
+  "liveShareButton": "مشاركة",
+  "liveSharePassword": "كلمة مرور اختيارية",
+  "liveSharePasswordHelp": "أرسل كلمة المرور بشكل منفصل. اتركها فارغة للوصول عبر الرابط فقط.",
+  "navMap": "الخريطة",
+  "navActivities": "الأنشطة",
+  "navSettings": "الإعدادات",
+  "menuPermissions": "الأذونات",
+  "menuPreferences": "التفضيلات",
+  "menuLogs": "السجلات",
+  "onboardWelcomeTitle": "مرحبًا بك في Furtive",
+  "onboardWelcomeSubtitle": "تتبع النشاط مع الحرص على الخصوصية. بدون حسابات، بدون قياس عن بُعد، بدون خدمات Google. هيا نختار بعض الإعدادات الافتراضية.",
+  "onboardSettingsTitle": "إعدادات الخريطة",
+  "onboardSettingsSubtitle": "اختر تفضيلاتك — يمكنك تغييرها لاحقًا من الإعدادات.",
+  "onboardPermissionsTitle": "الأذونات",
+  "onboardPermissionsSubtitle": "امنح الوصول إلى الموقع لتتبع جولاتك. الإشعارات والوصول في الخلفية اختياريان.",
+  "onboardSaveError": "تعذر حفظ اختياراتك: {error}",
+  "settingsThemeLabel": "السمة",
+  "settingsUiLanguageLabel": "لغة التطبيق",
+  "settingsUiLanguageSystem": "افتراضي النظام",
+  "preferencesTitle": "التفضيلات",
+  "prefMapTheme": "سمة الخريطة",
+  "prefAppLanguage": "لغة التطبيق",
+  "permissionsTitle": "الأذونات",
+  "permissionsInstructions": "يحتاج هذا التطبيق إلى الأذونات التالية ليعمل بشكل صحيح",
+  "permOptional": "اختياري",
+  "permDeniedMsg": "مرفوض — فعّله من إعدادات التطبيق.",
+  "permPermanentlyDenied": "يجب تفعيل هذا الإذن من إعدادات التطبيق.",
+  "permLocationWhileUsingName": "الموقع أثناء الاستخدام",
+  "permLocationWhileUsingDesc": "مطلوب لتتبع موقعك وعرضه على الخريطة.",
+  "permLocationAlwaysName": "الموقع دائمًا",
+  "permLocationAlwaysDesc": "اختياري: يحافظ على دقة التتبع أثناء الأنشطة الطويلة، حتى إذا أوقف النظام التطبيق.",
+  "permNotificationName": "الإشعارات",
+  "permNotificationDesc": "اختياري: يعرض إشعارًا مستمرًا بـ \"تسجيل النشاط قيد التقدم\"، وهذا يساعد أندرويد أيضًا على تجنب إيقاف التتبع في الخلفية.",
+  "mapTrackingGapMsg": "توقف التتبع لمدة {seconds} ثانية بينما كان التطبيق في الخلفية — جزء من مسارك مفقود. فعّل \"بطارية غير مقيدة\" لتطبيق furtive لتجنب ذلك.",
+  "mapActivityStartedMsg": "بدأ النشاط",
+  "mapStopHint": "اضغط مع الاستمرار على إيقاف لمدة 3 ثوانٍ لإنهاء النشاط",
+  "statsRecordingTitle": "تسجيل النشاط",
+  "statSignalLost": "فُقدت إشارة GPS لمدة {duration} (~{meters} م في خط مستقيم) — هذا الوقت مستبعد من الإحصاءات النشطة.",
+  "statDistance": "المسافة",
+  "statDuration": "المدة",
+  "statPace": "وتيرة",
+  "statSpeed": "السرعة",
+  "statElevation": "الارتفاع",
+  "splitsTitle": "المراحل",
+  "splitsNotEnoughData": "لا توجد بيانات كافية للمراحل بعد.",
+  "metricPace": "وتيرة",
+  "metricSpeed": "السرعة",
+  "activitiesEmpty": "لا توجد أنشطة",
+  "activitiesImportTooltip": "استيراد ملف GPX",
+  "importStarted": "جارٍ الاستيراد…",
+  "importSuccess": "تم استيراد النشاط",
+  "activityNameLabel": "اسم النشاط",
+  "activityDeleteSuccess": "تم حذف النشاط",
+  "dlgRenameTitle": "إعادة تسمية",
+  "dlgDeleteTitle": "حذف",
+  "dlgDeleteConfirm": "هل أنت متأكد أنك تريد حذف هذا النشاط؟",
+  "gpxExportSuccess": "تم تصدير GPX بنجاح",
+  "gpxExportFailed": "فشل التصدير: {error}",
+  "logsTitle": "السجلات",
+  "logsEmpty": "لا توجد سجلات",
+  "logsTooltipClear": "مسح السجلات",
+  "logsTooltipFilterDate": "تصفية حسب التاريخ",
+  "logsTooltipClearFilter": "إزالة التصفية",
+  "logsTooltipShare": "مشاركة",
+  "logsFiltered": "مُصفّى: {start} - {end}",
+  "logsShowingCount": "{shown} من {total}",
+  "activityDefaultName": "مسار",
+  "logsLoadError": "تعذر تحميل السجلات: {error}",
+  "logCopiedMsg": "تم نسخ السجل إلى الحافظة",
+  "logsCopiedMsg": "تم نسخ {count} سجلات إلى الحافظة",
+  "dlgDeleteLogsTitle": "حذف السجلات",
+  "dlgDeleteLogsConfirm": "هل أنت متأكد أنك تريد حذف جميع السجلات؟ لا يمكن التراجع عن هذا الإجراء.",
+  "supportTitle": "ادعم التطوير",
+  "supportDescription": "هذا التطبيق مبني وتتم صيانته في وقتي الحر. دعمك يساعد في إبقائه حيًا ونموه.",
+  "changelogTitle": "ما الجديد",
+  "changelogGotIt": "حسنًا",
+  "changelogV120I18n": "متعدد اللغات: واجهة التطبيق بـ 26 لغة، تسميات الخريطة بـ 41، تنسيقات التاريخ تتبع منطقتك. قابل للتجاوز من الإعدادات أو المعالج.",
+  "changelogV120Wizard": "معالج التشغيل الأول: اختر إعداداتك الافتراضية (السمة، اللغة) وامنح أذونات الموقع في تدفق واحد.",
+  "changelogV120Recording": "تسجيل النشاط: علامة موقع متحركة بنبض ودائرة دقة، علامات كيلومترية على الخريطة، اضغط مع الاستمرار على إيقاف لمدة 3 ثوانٍ للإنهاء (بدون نقرات عرضية)، إعادة توجيه تلقائية إلى الإحصاءات.",
+  "changelogV120Stats": "إحصاءات النشاط: رسم بياني لمراحل كل كيلومتر مع مفتاح وتيرة ⇄ سرعة، الارتفاع D+ (وفقًا لتقليد Strava/Garmin).",
+  "changelogV120Share": "شارك نشاطًا كبطاقة مع خريطة وإحصاءات عبر قائمة المشاركة بالنظام.",
+  "changelogV120GpxImport": "استيراد ملفات GPX من تطبيقات أخرى (Garmin، Strava، إلخ.) — نقاط المسار والطريق مدعومة.",
+  "changelogV120MapThemes": "خمسة سمات للخريطة: فاتح، داكن، أبيض، تدرج رمادي، أسود — اختر ما يناسبك من الإعدادات.",
+  "changelogV120Reproducible": "بناءات قابلة للتكرار: يمكن لأي شخص إعادة البناء من الكود المصدري والتحقق من أن APK المنشور متطابق بايت ببايت — لا كود مخفي، لا تلاعب.",
+  "changelogV120Stability": "الاستقرار: مقاومة لقراءات GPS الخاطئة، تسجيل موثوق في الخلفية يستأنف بعد إيقاف النظام للتطبيق، تدوير تلقائي للسجلات، تحقق GPX أكثر صرامة، مهل HTTP.",
+  "changelogV130LiveShare": "المشاركة المباشرة: أثناء التسجيل، شارك رابطاً مشفراً من الطرف إلى الطرف ودع أحباءك يتابعون موقعك في متصفحهم — لا حسابات على أي جانب، المفتاح لا يغادر الرابط أبداً.",
+  "changelogV130Profiles": "ملفات النشاط: مشي، جري، دراجة، سيارة، سباحة، طائرة أو غيره — الاختيار يحدد أخذ عينات GPS وتحمل الدقة، ويُحفظ مع النشاط.",
+  "changelogV130Map": "محرك خريطة جديد: التكبير والتحريك يعرضهما الآن MapLibre Native — التكبير الذي كان يتقطع أصبح سلساً.",
+  "changelogV130Puck": "علامة الموقع أصبحت ترسمها التطبيق نفسه: نقطة عند التوقف، شيفرون في اتجاه حركتك، بوصلة الشمال الحقيقي على أندرويد.",
+  "changelogV130Detail": "تفاصيل التسجيل: اختر أخذ عينات GPS دقيقاً أو متوازناً أو موفراً لموازنة الدقة مقابل البطارية لكل نشاط.",
+  "changelogV130Left": "وضع الأعسر: يمكن لأدوات التحكم في الخريطة الانتقال إلى الجانب الأيسر من الشاشة (الإعدادات).",
+  "changelogV130CarFix": "تم الإصلاح: سيارة فوق 126 كم/س لم تكن تسجل شيئاً على الإطلاق — مرشح السرعة يتكيف الآن مع كل نشاط بدلاً من رفض كل قراءة.",
+  "changelogV140Offline": "خرائط بلا إنترنت: احتفظ بالمنطقة حولك، من 10 إلى 100 كم، لتعمل الخريطة حيث لا تغطية (الإعدادات).",
+  "changelogV140OfflineCost": "كل منطقة محتفظ بها تذكر ما كلّفته من مربّعات وميغابايت، والمنطقة التي انقطعت تذكر إلى أين وصلت — اطلبها ثانية لإكمالها.",
+  "changelogV140Cache": "الخريطة التي اكتفيت بالنظر إليها تُحفظ أيضاً، حتى 1 غيغابايت، ويمكن التخلص منها وحدها دون المساس بالمناطق التي اخترت الاحتفاظ بها.",
+  "changelogV140Drift": "تم الإصلاح: هاتف موضوع لا يراكم بعد الآن مسافة من انحراف GPS — التسجيل الساكن يظهر الآن صفراً بدل اختراع أمتار.",
+  "changelogV140Elevation": "تم الإصلاح: الارتفاع يحسب الصعودات المؤكدة بدل تقريب كل قراءة إلى عشرة أمتار، فتتوقف التلال الصغيرة عن الاختفاء وتتوقف الأرض المستوية عن الصعود.",
+  "changelogV140LocationOff": "عند إيقاف خدمات الموقع تقول الخريطة ذلك الآن وتعرض فتح الإعداد، ويستأنف التتبع من تلقاء نفسه فور عودتها.",
+  "changelogV140Markers": "يمكن ضبط علامات المسافة على طول المسار بالفاصل الذي تريده، أو إيقافها (الإعدادات).",
+  "changelogV140Stop": "عند إيقاف التسجيل يُرسم تقدم الضغط فوق إبهامك لا تحته، لترى كم بقي من وقت الضغط.",
+  "changelogV140SmallScreens": "تم الإصلاح: خطوات الإعداد وشاشات الإعدادات تبقى قابلة للاستخدام على الشاشات القصيرة والضيقة.",
+  "prefThemeLight": "فاتح",
+  "prefThemeDark": "داكن",
+  "prefThemeWhite": "أبيض",
+  "prefThemeGrayscale": "تدرّج رمادي",
+  "prefThemeBlack": "أسود",
+  "prefMapTiles": "بلاطات الخريطة",
+  "prefMapTilesSubtitle": "تحميل الخريطة يكشف موقعك التقريبي لمزود البلاطات. عطّل هذا للحصول على خريطة فارغة وعملية دون أي طلبات شبكة.",
+  "prefShowOnLockScreen": "الإظهار على شاشة القفل",
+  "prefShowOnLockScreenSubtitle": "يحافظ على ظهور الخريطة/الموقع فوق الشاشة المقفلة أثناء التسجيل (أندرويد فقط). عطّله لإخفائه عن أي شخص ينظر إلى هاتفك المقفل.",
+  "mapLoadingLocalizing": "جارٍ تهيئة GPS…",
+  "mapLoadingMap": "جارٍ تحميل الخريطة…",
+  "mapStartingActivity": "جارٍ بدء النشاط…",
+  "activitiesLoadError": "تعذّر فتح هذا النشاط",
+  "activityPickerTitle": "ماذا تفعل؟",
+  "activityWalk": "سير",
+  "activityRun": "جري",
+  "activityBike": "دراجة",
+  "activityCar": "سيارة",
+  "activitySwim": "سباحة",
+  "activityAircraft": "طائرة",
+  "activityOther": "أخرى",
+  "activityUnknown": "غير معروف",
+  "prefRecordingDetail": "تفصيل التسجيل",
+  "prefRecordingDetailSubtitle": "عدد مرات طلب الموقع، نسبةً إلى الإعداد الافتراضي للنشاط نفسه. الأكثر كثافة يعني منحنيات أدق واستهلاكًا أكبر للبطارية.",
+  "prefDetailPrecise": "دقيق",
+  "prefDetailBalanced": "متوازن",
+  "prefDetailEndurance": "تحمل",
+  "prefMapControlsOnRight": "عناصر تحكم الخريطة على اليمين",
+  "prefMapControlsOnRightSubtitle": "تقع أزرار التتبع والبدء والإيقاف المؤقت والإيقاف على الحافة اليمنى. أوقف الخيار لنقلها إلى اليسار لاستخدام اليد اليسرى. ينتقل حق الخريطة إلى الزاوية المقابلة.",
+  "prefMapMilestones": "علامات المسافة",
+  "prefMapMilestonesOff": "إيقاف",
+  "menuOfflineMaps": "خرائط بلا إنترنت",
+  "offlineTitle": "خرائط بلا إنترنت",
+  "offlineExplainer": "المناطق التي تحفظها تبقى على الجهاز ولا تُمحى أبداً. الخريطة التي اكتفيت بالنظر إليها تُحفظ أيضاً في الذاكرة المؤقتة، لكن يمكن استرجاع مساحتها.",
+  "offlineNone": "لا مناطق محفوظة بعد",
+  "offlineAroundMe": "احفظ المنطقة حولي",
+  "offlineRadius": "نصف القطر: {km} كم",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "تنزيل",
+  "offlineDownloading": "{done} من {total} بلاطة · {mb} ميغابايت",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "لا موقع بعد — انتظر GPS",
+  "offlineNoTiles": "البلاطات مُعطَّلة، فلا شيء لحفظه",
+  "offlineUnsupported": "المناطق بلا إنترنت غير متاحة على هذا الجهاز",
+  "offlineDelete": "حذف",
+  "offlineFailed": "فشل التنزيل",
+  "offlineStorageTitle": "تخزين الخرائط",
+  "offlineStorageOnDevice": "{mb} ميغابايت على هذا الجهاز",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} ميغابايت نُزّلت للمناطق المحفوظة · {tiles} بلاطة",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "المناطق المتداخلة تتشارك بلاطاتها، لذا قد يتجاوز هذا الرقم الإجمالي. وما ليس ضمن منطقة هو الخريطة التي اطّلعت عليها، بالإضافة إلى عبء قاعدة البيانات.",
+  "offlineClearCache": "مسح ذاكرة التخزين المؤقت",
+  "offlineRadiusTiles": "{tiles} بلاطة",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} ميغابايت · {tiles} بلاطة",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} ميغابايت · {tiles} بلاطة · غير مكتمل",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent}٪ · {mb} ميغابايت · {tiles} بلاطة",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

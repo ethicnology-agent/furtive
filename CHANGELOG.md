@@ -5,6 +5,121 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-10-21
+
+### Added
+- **Offline maps.** Keep the area around you — 10 to 100 km, in tens — so the
+  map still works where there is no signal. Settings → Offline maps. The card
+  states the exact tile count before anything is fetched, because the count is
+  geometry; bytes are reported as they arrive rather than predicted, since the
+  same tile measured 1.1 KB over open country and 11 KB over Paris.
+
+  A radius becomes the rectangle around it, which covers 1.27 times the disc —
+  the surplus is accepted rather than paid for with a request per shape.
+
+  Keeping a whole country was built and then dropped before release. A country
+  was kept as the box around its main landmass, and the arithmetic does not
+  survive contact with the list: of 174 countries, 139 exceed 84,000 tiles at
+  z10-15 and 126 exceed the 181,080 of the largest region ever downloaded to
+  completion here. Russia is 180 million tiles — 434 GB at the density measured
+  in open country. Luxembourg, the one that was tested, is the smallest of the
+  174.
+
+  The radius reaches 100 km rather than 50 because the ceiling was never about
+  the map. `maplibre_android` 0.3.5 released the JNI references from every
+  download status event into an `Arena` that had already closed, overflowing the
+  51,200-entry global reference table and aborting the process after roughly 20
+  and 28 minutes of cumulative downloading. MapLibre's 6,000-tile cap is Mapbox
+  heritage and does not apply — a single 150 km region downloaded all 181,080 of
+  its tiles and reported complete. The leak is fixed in the vendored fork (see
+  Internal), so cost is now the only limit. A 100 km radius was downloaded to
+  completion over open country at 45°N: 73,066 tiles in twenty minutes, 151.9 MB
+  fetched, 195 MB on the device. The count varies with latitude, and over a
+  dense city the same tiles cost roughly ten times the bytes.
+- **What each kept area cost.** Tiles and megabytes per area, and a running
+  total for the device. An area that was cut short says how far it got as a
+  percentage; asking for it again finishes it from the tiles already stored,
+  because the renderer has no resume and starts a second region that reuses them.
+
+  Bytes are reported as they arrive rather than predicted. The tile count is
+  exact — it is geometry — but at the same radius and nearly the same count,
+  1,331 tiles against 1,313, Paris costs eight times what rural Quebec does.
+- **An ambient cache worth 1 GB.** The map you merely looked at is kept too, and
+  can be thrown away on its own without touching the areas you chose to keep.
+- **Configurable distance markers.** The interval along a route is yours to set,
+  or to switch off (Settings → Preferences).
+- **Undo on a deleted activity.** The confirmation dialog was the only thing
+  between a mistap and losing a recording. The snackbar now offers to put it
+  back, with its own id and its points, in one transaction.
+- **The changelog can be reopened.** A row in Settings opens the whole archive.
+  It used to be shown once by the startup gate and never again, so dismissing it
+  was the only thing standing between a user and never learning what changed.
+
+### Fixed
+- **A phone left standing no longer accumulates distance.** GPS drift was being
+  integrated as movement; a stationary recording now reads zero instead of
+  inventing metres.
+- **Elevation counts confirmed climbs** instead of rounding every reading to ten
+  metres, so small hills stop vanishing and flat ground stops gaining.
+- **Location services being off is reported.** The map said nothing and waited
+  forever. It now says so, offers to open the system setting, and resumes
+  tracking by itself once they return.
+- **Four actions left the title no room.** An `AppBar` gives its title whatever
+  the actions leave, and four of them left about 110dp on a 360dp screen: a
+  renamed activity read "Sorti…". On a 411dp screen the same name fits at the
+  system font size and is cut one notch up the accessibility slider — and
+  Flutter clamps an `AppBar` title's text scale at about 1.34, so that notch was
+  already the worst case. Share stays an icon; rename, export and delete moved
+  into an overflow menu.
+- **Naming an activity cost it its date.** The name took the card's only line,
+  so two activities with the same name — a recording and the GPX it was exported
+  and re-imported as — were one indistinguishable row above another.
+- **The map credit was under the statistics button.** The map port moves its
+  attribution badge to whichever bottom corner the controls do not occupy, which
+  has nothing to offer a full-width button: it takes both. ODbL 4.3 asks for
+  credit that is visible, so the button moved to its own strip.
+- **An outage no longer throws away a cached map**, and a connection lost
+  mid-response is now an outage like any other rather than a half-read style.
+- **The tile API key is redacted** in the one error path that did not build its
+  message through the redacting helper.
+- **Half the offline screen, and all the recording and statistics copy, shipped
+  in English.** Forty keys carried the English source as their value — all of
+  them in eighteen locales, most of them in five more. Key parity passed
+  throughout, because the text had been copied in rather than left out.
+- **A live share said it was reconnecting before it had ever connected**, and
+  handed over a link without saying nothing was published yet. Zero connected
+  relays covered both a share that was live a moment ago and one nothing had
+  ever answered; the link is minted on the device, so it can be sent while no
+  relay holds it and opens on a blank viewer.
+- **Short and narrow screens.** The setup steps and the settings screens stay
+  usable when they are cramped.
+
+### Changed
+- **Stopping a recording draws its hold progress above the thumb** instead of
+  under it, where the thumb covered it.
+- **An activity's management actions moved behind an overflow menu.** See the
+  title fix above.
+
+### Internal
+- **The repository is a Dart pub workspace.** The application was one package
+  with a `core/` directory; it is now thirteen modules and two apps, with
+  declared boundaries, a dependency-graph check and every task orchestrated by
+  Melos. `core/` is gone. The web viewer moved under `apps/`.
+- **Flutter 3.47.6**, up from 3.44.9, which also lifted the analyzer-13 wall.
+- **Schema v10**, aggregating the revisions that were in flight into the single
+  next one. Settings moved to a database of their own, new at v1.
+- **`maplibre_android` is pinned to a fork** carrying the JNI fix, submitted
+  upstream as josxha/flutter-maplibre#584. A pinned git dependency rather than a
+  vendored copy: the package is 4.4 MB, 4.3 MB of which is one generated
+  bindings file of 132,126 lines. The pin is removed the day the fix reaches a
+  release.
+- **The live-share viewer origin is compiled in.** `SHARE_VIEWER_URL` had no
+  default, so a build without the define shipped with live sharing silently
+  absent — nothing failed and nothing was logged. The origin is the one part of
+  a share link that can never change, so it now sits beside the relay default.
+- Test suite: 318 in the application and 377 across the modules and the viewer.
+  Line coverage of the workspace is 79.2%, against a floor ratcheted to 78%.
+
 ## [1.3.0] - 2026-08-19
 
 ### Added
@@ -171,7 +286,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **The share card ignored the system font scale**, so a user with large
   accessibility text exported a visibly broken PNG they never saw before sharing.
   The card is pinned to `TextScaler.noScaling` and covered by golden tests.
-- **`activity_points` → `activities` foreign key now cascades** (schema v10). It
+- **`activity_points` → `activities` foreign key now cascades** (schema v9). It
   previously declared a reference with no `ON DELETE` action, so nothing at the
   SQLite level prevented orphan point rows; only the app's own transaction did.
 - Indexed `activities.stopped_at`, used by the resume-after-kill lookup on every

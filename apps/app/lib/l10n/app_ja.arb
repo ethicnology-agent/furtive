@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "GPX ファイルの選択画面を開けませんでした。もう一度お試しください。",
+  "mapRecordingProblem": "記録中に問題が発生しました。",
+  "mapRecordingStateActive": "アクティビティはまだ記録中です。",
+  "mapRecordingStatePaused": "アクティビティはまだ一時停止中です。",
+  "mapRecordingStateIdle": "現在、記録中のアクティビティはありません。",
+  "mapFollowing": "追従中",
+  "mapWaitingForLocation": "GPS を待機中",
+  "mapLocationServiceOff": "位置情報がオフです — システム設定でオンにしてください",
+  "mapOpenLocationSettings": "設定を開く",
+  "mapHoldStopProgress": "長押しを継続 · {seconds}",
+  "liveSharePreparing": "準備中…",
+  "liveShareConnected": "ライブ接続済み",
+  "liveShareDisconnected": "再接続中…",
+  "liveShareConnecting": "接続中…",
+  "liveShareNotPublished": "まだ何も公開されていません。リレーが応答するまでリンクは空のままです。",
+  "liveShareStillActive": "ライブ共有はまだ有効です。",
+  "showPassword": "パスワードを表示",
+  "hidePassword": "パスワードを隠す",
+  "statsActive": "アクティブ",
+  "statsPaused": "一時停止",
+  "statsElapsed": "経過時間",
+  "activityRenameTooltip": "アクティビティの名前を変更",
+  "activityDeleteTooltip": "アクティビティを削除",
+  "activityExportTooltip": "GPX を書き出す",
+  "activityNoTrack": "記録されたルートがありません",
+  "importInProgress": "GPX を読み込み中…",
+  "btnBack": "戻る",
+  "btnCopy": "コピー",
+  "prefLoadFailed": "設定を読み込めませんでした。",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "ja",
+  "appTitle": "Furtive",
+  "btnNext": "次へ",
+  "btnFinish": "完了",
+  "btnGrant": "許可",
+  "btnGrantPermission": "権限を許可",
+  "btnFollow": "追従",
+  "btnPause": "一時停止",
+  "btnResume": "再開",
+  "btnStart": "開始",
+  "btnStarting": "開始中",
+  "btnStop": "停止",
+  "btnContinue": "続行",
+  "btnGrantToContinue": "続行するには必要な権限を許可してください",
+  "btnViewStats": "統計を見る",
+  "btnCancel": "キャンセル",
+  "btnUndo": "元に戻す",
+  "btnRetry": "再試行",
+  "btnRename": "名前を変更",
+  "btnDelete": "削除",
+  "prefSaveFailed": "設定を保存できませんでした。",
+  "btnStarGitHub": "GitHub でスター",
+  "btnSponsor": "スポンサー",
+  "linkOpenFailed": "{url} を開けませんでした",
+  "shareSummary": "Furtive で {duration} に {distance} km",
+  "shareFailed": "アクティビティを共有できませんでした: {error}",
+  "shareTooltip": "アクティビティを共有",
+  "liveShareTitle": "現在地をリアルタイム共有",
+  "liveShareButton": "共有",
+  "liveSharePassword": "任意のパスワード",
+  "liveSharePasswordHelp": "パスワードは別に送信してください。リンクのみでアクセスする場合は空欄にします。",
+  "navMap": "マップ",
+  "navActivities": "アクティビティ",
+  "navSettings": "設定",
+  "menuPermissions": "権限",
+  "menuPreferences": "設定",
+  "menuLogs": "ログ",
+  "onboardWelcomeTitle": "Furtive へようこそ",
+  "onboardWelcomeSubtitle": "プライバシー重視のアクティビティ追跡。アカウント不要、テレメトリーなし、Google サービスなし。いくつかのデフォルトを選びましょう。",
+  "onboardSettingsTitle": "マップ設定",
+  "onboardSettingsSubtitle": "デフォルトを選んでください — 後で設定から変更できます。",
+  "onboardPermissionsTitle": "権限",
+  "onboardPermissionsSubtitle": "ランを追跡するために位置情報の権限を許可してください。通知とバックグラウンドアクセスは任意です。",
+  "onboardSaveError": "選択を保存できませんでした: {error}",
+  "settingsThemeLabel": "テーマ",
+  "settingsUiLanguageLabel": "アプリ言語",
+  "settingsUiLanguageSystem": "システムデフォルト",
+  "preferencesTitle": "設定",
+  "prefMapTheme": "マップテーマ",
+  "prefAppLanguage": "アプリ言語",
+  "permissionsTitle": "権限",
+  "permissionsInstructions": "このアプリが正常に動作するには以下の権限が必要です",
+  "permOptional": "任意",
+  "permDeniedMsg": "拒否されました — アプリ設定で有効にしてください。",
+  "permPermanentlyDenied": "この権限はアプリ設定で有効にする必要があります。",
+  "permLocationWhileUsingName": "使用中の位置情報",
+  "permLocationWhileUsingDesc": "位置を追跡してマップに表示するために必要です。",
+  "permLocationAlwaysName": "常時位置情報",
+  "permLocationAlwaysDesc": "任意: 長時間のアクティビティ中、OS がアプリを一時停止しても追跡を正確に保ちます。",
+  "permNotificationName": "通知",
+  "permNotificationDesc": "任意: 「アクティビティを記録中」という継続的な通知を表示します。これは Android がバックグラウンドで追跡を停止しないようにするのにも役立ちます。",
+  "mapTrackingGapMsg": "アプリがバックグラウンドにある間、{seconds}秒間トラッキングが中断されました — ルートの一部が欠落しています。これを防ぐには furtive に「バッテリー使用の最適化なし」を許可してください。",
+  "mapActivityStartedMsg": "アクティビティを開始しました",
+  "mapStopHint": "停止を 3 秒長押ししてアクティビティを終了",
+  "statsRecordingTitle": "アクティビティを記録中",
+  "statSignalLost": "GPS信号が{duration}の間失われました（直線距離 約{meters} m）— この時間はアクティブな統計から除外されます。",
+  "statDistance": "距離",
+  "statDuration": "時間",
+  "statPace": "ペース",
+  "statSpeed": "速度",
+  "statElevation": "標高",
+  "splitsTitle": "スプリット",
+  "splitsNotEnoughData": "スプリットのデータがまだ十分ではありません。",
+  "metricPace": "ペース",
+  "metricSpeed": "速度",
+  "activitiesEmpty": "アクティビティがありません",
+  "activitiesImportTooltip": "GPX ファイルをインポート",
+  "importStarted": "インポート中…",
+  "importSuccess": "アクティビティをインポートしました",
+  "activityNameLabel": "アクティビティ名",
+  "activityDeleteSuccess": "アクティビティを削除しました",
+  "dlgRenameTitle": "名前を変更",
+  "dlgDeleteTitle": "削除",
+  "dlgDeleteConfirm": "このアクティビティを削除してもよろしいですか？",
+  "gpxExportSuccess": "GPX を正常にエクスポートしました",
+  "gpxExportFailed": "エクスポート失敗: {error}",
+  "logsTitle": "ログ",
+  "logsEmpty": "ログがありません",
+  "logsTooltipClear": "ログをクリア",
+  "logsTooltipFilterDate": "日付でフィルタ",
+  "logsTooltipClearFilter": "フィルタをクリア",
+  "logsTooltipShare": "共有",
+  "logsFiltered": "フィルタ: {start} - {end}",
+  "logsShowingCount": "{total} 件中 {shown} 件表示",
+  "activityDefaultName": "コース",
+  "logsLoadError": "ログを読み込めませんでした: {error}",
+  "logCopiedMsg": "ログをクリップボードにコピーしました",
+  "logsCopiedMsg": "{count} 件のログをクリップボードにコピーしました",
+  "dlgDeleteLogsTitle": "ログを削除",
+  "dlgDeleteLogsConfirm": "すべてのログを削除してもよろしいですか？この操作は取り消せません。",
+  "supportTitle": "開発をサポート",
+  "supportDescription": "このアプリは私の自由時間に作られ、維持されています。あなたのサポートが、生き続け成長する助けになります。",
+  "changelogTitle": "新着情報",
+  "changelogGotIt": "了解",
+  "changelogV120I18n": "多言語対応: アプリ UI は 26 言語、マップラベルは 41 言語、日付フォーマットはあなたのロケールに従います。設定またはウィザードで上書き可能。",
+  "changelogV120Wizard": "初回起動ウィザード: デフォルト(テーマ、言語)を選び、位置情報権限を一連の流れで許可。",
+  "changelogV120Recording": "アクティビティ記録: パルスと精度サークル付きのアニメーション位置マーカー、マップ上のキロメートルマーカー、停止を 3 秒長押しで終了(誤タップなし)、統計への自動リダイレクト。",
+  "changelogV120Stats": "アクティビティ統計: キロメートル毎のスプリットチャート、ペース ⇄ 速度切り替え、D+ 標高獲得(Strava/Garmin の規約)。",
+  "changelogV120Share": "システムの共有メニューからマップと統計付きカードとしてアクティビティを共有。",
+  "changelogV120GpxImport": "他のアプリ(Garmin、Strava など)から GPX ファイルをインポート — トラックとルートの両ポイントに対応。",
+  "changelogV120MapThemes": "マップテーマ 5 種類: ライト、ダーク、ホワイト、グレースケール、ブラック — 設定でお好みを選べます。",
+  "changelogV120Reproducible": "再現可能なビルド: 誰でもソースから再ビルドして、公開された APK がバイト単位で同一であることを検証可能 — 隠しコードなし、改ざんなし。",
+  "changelogV120Stability": "安定性: GPS のジャンクデータに強化、システムがアプリを終了した後も再開する信頼性の高いバックグラウンド記録、ログの自動ローテーション、より厳格な GPX 検証、HTTP タイムアウト。",
+  "changelogV130LiveShare": "ライブ共有：記録中にエンドツーエンド暗号化リンクを共有し、大切な人がブラウザであなたの位置を追跡できるようにします — どちら側もアカウント不要、キーはリンクから離れません。",
+  "changelogV130Profiles": "アクティビティプロファイル：ウォーク、ラン、ライド、車、スイム、飛行機、その他 — 選択がGPSサンプリングと精度許容度を決定し、アクティビティと共に保存されます。",
+  "changelogV130Map": "新しいマップエンジン：ズームとパンはMapLibre Nativeがレンダリング — 以前カクついたズームが滑らかになりました。",
+  "changelogV130Puck": "位置マーカーはアプリ自体が描画：停止時はドット、移動方向にはシェブロン、Androidでは真北コンパス。",
+  "changelogV130Detail": "記録の詳細度：アクティビティごとに精度とバッテリーのバランスを取るため、精密、バランス、省電力のGPSサンプリングを選択。",
+  "changelogV130Left": "左利きモード：マップコントロールを画面の左側に移動できます（設定）。",
+  "changelogV130CarFix": "修正：126 km/hを超える車では何も記録されませんでした — 速度フィルターがすべての測位を拒否する代わりに、各アクティビティに適応するようになりました。",
+  "changelogV140Offline": "オフライン地図：周囲のエリア（10〜100 km）を保存でき、電波のない場所でも地図が使えます（設定）。",
+  "changelogV140OfflineCost": "保存した各エリアはタイル数とメガバイト数を表示し、途中で止まったエリアはどこまで進んだかを表示します — もう一度要求すれば続きから仕上がります。",
+  "changelogV140Cache": "ただ眺めただけの地図も最大1 GBまで保存され、意図して保存したエリアには触れずに単独で破棄できます。",
+  "changelogV140Drift": "修正：置いたままの端末がGPSのドリフトで距離を積み上げなくなりました — 静止した記録はメートルを捏造せずゼロを示します。",
+  "changelogV140Elevation": "修正：獲得標高は各測定値を10メートルに丸めるのではなく確認された登りを数えるようになり、小さな坂が消えず、平地が登らなくなりました。",
+  "changelogV140LocationOff": "位置情報サービスが切られていると地図がそれを伝え、設定を開く導線を示します。サービスが戻れば記録は自動的に再開します。",
+  "changelogV140Markers": "ルート上の距離マーカーは好みの間隔に設定でき、オフにもできます（設定）。",
+  "changelogV140Stop": "記録を停止する際、長押しの進捗が親指の下ではなく上に描かれ、あと何秒押せばよいかが見えます。",
+  "changelogV140SmallScreens": "修正：初期設定の各ステップと設定画面が、縦に短い・横に狭い画面でも使えるようになりました。",
+  "prefThemeLight": "ライト",
+  "prefThemeDark": "ダーク",
+  "prefThemeWhite": "ホワイト",
+  "prefThemeGrayscale": "グレースケール",
+  "prefThemeBlack": "ブラック",
+  "prefMapTiles": "地図タイル",
+  "prefMapTilesSubtitle": "地図を読み込むと、おおよその位置がタイル提供元に伝わります。ネットワーク通信のない、白紙でも機能する地図にするにはオフにしてください。",
+  "prefShowOnLockScreen": "ロック画面に表示",
+  "prefShowOnLockScreenSubtitle": "記録中、ロック画面の上に地図/位置を表示したままにします(Androidのみ)。ロックされたスマホを見た人に見えないようにするにはオフにしてください。",
+  "mapLoadingLocalizing": "GPSを初期化中…",
+  "mapLoadingMap": "地図を読み込み中…",
+  "mapStartingActivity": "アクティビティを開始中…",
+  "activitiesLoadError": "このアクティビティを開けませんでした",
+  "activityPickerTitle": "何をしていますか?",
+  "activityWalk": "ウォーキング",
+  "activityRun": "ランニング",
+  "activityBike": "サイクリング",
+  "activityCar": "車",
+  "activitySwim": "スイミング",
+  "activityAircraft": "航空機",
+  "activityOther": "その他",
+  "activityUnknown": "不明",
+  "prefRecordingDetail": "記録の細かさ",
+  "prefRecordingDetailSubtitle": "アクティビティごとの既定値に対して、位置情報をどれくらい頻繁に取得するか。細かくするとコーナーが鮮明になり、バッテリー消費も増えます。",
+  "prefDetailPrecise": "高精度",
+  "prefDetailBalanced": "バランス",
+  "prefDetailEndurance": "長時間",
+  "prefMapControlsOnRight": "地図の操作を右に",
+  "prefMapControlsOnRightSubtitle": "追従・開始・一時停止・停止のボタンは右端にあります。オフにすると左端に移動し、左手で使いやすくなります。地図のクレジットは反対の隅に移ります。",
+  "prefMapMilestones": "距離マーカー",
+  "prefMapMilestonesOff": "オフ",
+  "menuOfflineMaps": "オフライン地図",
+  "offlineTitle": "オフライン地図",
+  "offlineExplainer": "保存したエリアはデバイスに残り、削除されることはありません。ただ眺めただけの地図もキャッシュされますが、その容量は回収できます。",
+  "offlineNone": "保存したエリアはまだありません",
+  "offlineAroundMe": "周囲のエリアを保存",
+  "offlineRadius": "半径：{km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "ダウンロード",
+  "offlineDownloading": "{total} タイル中 {done} · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "位置がまだ取得できていません — GPS をお待ちください",
+  "offlineNoTiles": "タイルがオフのため、保存するものがありません",
+  "offlineUnsupported": "このデバイスではオフラインエリアを利用できません",
+  "offlineDelete": "削除",
+  "offlineFailed": "ダウンロードに失敗しました",
+  "offlineStorageTitle": "地図のストレージ",
+  "offlineStorageOnDevice": "このデバイスに {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "保存した範囲のために {mb} MB 取得 · {tiles} タイル",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "範囲が重なるとタイルを共有するため、この値は合計を上回ることがあります。どの範囲にも含まれない分は、見た地図とデータベース自体のオーバーヘッドです。",
+  "offlineClearCache": "キャッシュを削除",
+  "offlineRadiusTiles": "{tiles} タイル",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · {tiles} タイル",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles} タイル · 未完了",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · {tiles} タイル",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

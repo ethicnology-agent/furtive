@@ -1,0 +1,307 @@
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'activities_table.dart';
+import 'activity_points_table.dart';
+import 'preferences_table.dart';
+import 'dart:io';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
+part 'local_database.g.dart';
+
+@DriftDatabase(tables: [Activities, ActivityPoints, Preferences])
+class LocalDatabase extends _$LocalDatabase {
+  LocalDatabase() : super(_openConnection());
+
+  /// Inject a query executor (e.g. `NativeDatabase.memory()`) for tests.
+  LocalDatabase.forTesting(super.executor);
+
+  /// One connection per process, for the module's own default call sites.
+  ///
+  /// The composition root used to register this in the service locator and
+  /// close it on reset. It lives here now, because a capability that owns a
+  /// database owns when it is opened; the shell no longer needs to know the
+  /// type at all.
+  static LocalDatabase get shared => _shared ??= LocalDatabase();
+  static LocalDatabase? _shared;
+
+  /// Installs [database] as the process-wide instance, or clears it.
+  ///
+  /// Only reachable through `package:activities/testing.dart`, because it is
+  /// how a test makes the module's default call sites — the ones that stay
+  /// `ActivityLocalDataSource()` in production — read an in-memory database
+  /// instead of the real file. It does not close what it replaces; the test
+  /// that installed one closes it.
+  static void installSharedForTesting(LocalDatabase? database) =>
+      _shared = database;
+
+  @override
+  int get schemaVersion => 10;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (Migrator m) async => await m.createAll(),
+    onUpgrade: (Migrator m, int from, int to) async {
+      // Guard against a sideloaded older build opening a newer DB (plausible
+      // for a GitHub-releases/F-Droid audience rolling back a bad release).
+      // Without this, drift still calls onUpgrade(from: 8, to: <8); every
+      // `if (from < N)` block below no-ops, and drift then stamps the LOWER
+      // version into user_version while the schema itself stays at the
+      // higher version. The next real upgrade re-runs every step against a
+      // schema that already has the columns/indices, and `ADD COLUMN` /
+      // `CREATE INDEX` (no IF-guard) throw — bricking the database until the
+      // user clears app data. Refuse outright instead.
+      if (from > to) {
+        throw StateError(
+          'Refusing to downgrade database schema from v$from to v$to. '
+          'Reinstall the version that created this database, or clear app '
+          'data to start fresh.',
+        );
+      }
+      // Schema migrations live here. Each `if (from < N)` block runs in order
+      // for users coming from an earlier version.
+      //
+      // Wrapped in a transaction: SQLite DDL is transactional, and without
+      // this a process kill mid-upgrade (OOM, swipe-kill, battery pull) can
+      // leave some statements applied while user_version (only bumped after
+      // every step succeeds) still reads the old version. On the next launch
+      // drift replays the whole block from the same `from`, and the
+      // already-applied `ADD COLUMN` / `CREATE INDEX` statements throw
+      // (duplicate column / index already exists) — bricking the database
+      // permanently since every future launch hits the same cached
+      // migration error. Wrapping in a transaction makes the whole upgrade
+      // atomic: a crash mid-way rolls back to the pre-upgrade schema and the
+      // next launch retries cleanly from scratch.
+      await transaction(() async {
+        await _runMigrationSteps(m, from);
+      });
+    },
+    beforeOpen: (details) async {
+      // SQLite disables foreign-key enforcement per-connection by default;
+      // drift does not turn it on for us. Without this the .references()
+      // constraint on activity_points is inert metadata. Enabling it only
+      // affects new statements — existing rows are not re-validated, so
+      // this is safe to switch on for upgrading users.
+      await customStatement('PRAGMA foreign_keys = ON');
+      if (details.wasCreated) {
+        await into(
+          preferences,
+        ).insert(PreferencesCompanion.insert(mapTheme: MapThemeColumn.dark));
+      }
+    },
+  );
+
+  Future<void> _runMigrationSteps(Migrator m, int from) async {
+    // Each `if (from < N)` block runs in order for users coming from an
+    // earlier version. Pulled out of the onUpgrade closure purely so it can
+    // be wrapped in the transaction() call above without an extra level of
+    // nesting; still an instance method (not static) so it keeps access to
+    // the table getters (preferences, activities, ...) and update() that
+    // _$LocalDatabase generates on `this`.
+
+    // Columns that exist in today's `preferences` definition but in none of
+    // the historical shapes the TableMigration steps below rebuild from.
+    //
+    // Every one of those steps must declare them. A TableMigration copies the
+    // CURRENT definition's columns out of the OLD table, so a column the old
+    // table never had makes the copy fail outright with "no such column" —
+    // and because the whole upgrade runs in one transaction, that bricks the
+    // migration for every user on an older schema rather than just skipping a
+    // value. Declaring them as new lets each take its column default instead.
+    final newPreferenceColumns = <GeneratedColumn<Object>>[
+      preferences.mapControlsOnLeft,
+      preferences.lastActivityType,
+      preferences.recordingDetail,
+      preferences.mapMilestoneIntervalKm,
+    ];
+    if (from < 2) {
+      // v2: add hasCompletedOnboarding + uiLocale + lastShownChangelogVersion
+      // to preferences and index hot foreign-key columns. Existing users
+      // default to hasCompletedOnboarding=true so they don't see the wizard
+      // on upgrade; uiLocale stays null (= follow device locale);
+      // lastShownChangelogVersion stays null on the first run after this
+      // migration — main.dart writes the current version so the changelog
+      // doesn't pop for existing users on the upgrade introducing this
+      // feature.
+      await m.addColumn(preferences, preferences.hasCompletedOnboarding);
+      await m.addColumn(preferences, preferences.uiLocale);
+      await m.addColumn(preferences, preferences.lastShownChangelogVersion);
+      await (update(preferences)).write(
+        // hasCompletedOnboarding=true: existing users skip the wizard.
+        // lastShownChangelogVersion='0.0.0' sentinel: forces the changelog
+        // page on next launch so upgrading users see the current release
+        // notes (changelogReleases lists newest-first).
+        // Fresh installs take the beforeOpen path below instead — the row
+        // is inserted with both fields at their column defaults (false +
+        // null), and a null lastShownChangelogVersion suppresses the
+        // changelog until the wizard stamps the current version.
+        const PreferencesCompanion(
+          hasCompletedOnboarding: Value(true),
+          lastShownChangelogVersion: Value('0.0.0'),
+        ),
+      );
+      // Indices on hot columns: foreign keys + the startedAt column the
+      // activities list page sorts by on every fetch. Fresh installs get
+      // them via m.createAll(); v1 users need them created explicitly.
+      // (trace_points' index used to be created here too — moot since v8
+      // drops that table outright for everyone.)
+      await m.createIndex(idxActivityPointsActivityId);
+      await m.createIndex(idxActivitiesStartedAt);
+    }
+    if (from < 3) {
+      // v3 (historical): added the `check_updates` opt-out for the in-app
+      // GitHub release check. That feature is gone and v9 below drops the
+      // column, so this can no longer go through `m.addColumn` — the Dart
+      // table stops declaring it.
+      //
+      // Kept as raw SQL rather than collapsed into a no-op so the migration
+      // log stays an append-only record of what each version actually did: a
+      // user still on v2 walks through the same intermediate states a v3 user
+      // did, instead of a shape no released version ever had. ADD COLUMN is
+      // supported by every SQLite this app can meet (unlike DROP COLUMN, see
+      // v9).
+      await customStatement(
+        'ALTER TABLE preferences ADD COLUMN check_updates INTEGER NOT NULL '
+        'DEFAULT 1 CHECK ("check_updates" IN (0, 1))',
+      );
+    }
+    if (from < 4) {
+      // v4: denormalised activity aggregates. Default -1 marks existing
+      // rows as "not computed" — they're backfilled lazily the first time
+      // the activities list loads them.
+      await m.addColumn(activities, activities.distanceMeters);
+      await m.addColumn(activities, activities.activeDurationMs);
+    }
+    if (from < 5) {
+      // v5: per-fix GPS quality metadata (accuracy, verticalAccuracy).
+      // Both nullable with no default — existing points simply have
+      // "unknown" quality, which every reader already treats as "trust it
+      // fully" (GpsQualityFilter only rejects on a *present* oversized
+      // value; the elevation-gain smoothing in activity_entity.dart falls
+      // back to the pre-v5 raw-sum algorithm whenever a segment has no
+      // quality data at all). See docs/AUDIT-2026-07.md §4.
+      await m.addColumn(activityPoints, activityPoints.accuracy);
+      await m.addColumn(activityPoints, activityPoints.verticalAccuracy);
+    }
+    if (from < 6) {
+      // v6: opt-out for map tile fetches (viewport-location privacy —
+      // see preferences_table.dart doc on the column). Default true
+      // preserves existing behaviour for upgrading users.
+      await m.addColumn(preferences, preferences.mapTilesEnabled);
+    }
+    if (from < 7) {
+      // v7: runtime-toggleable lock-screen visibility (see
+      // preferences_table.dart doc on the column). Default true preserves
+      // existing behaviour for upgrading users.
+      await m.addColumn(preferences, preferences.showOnLockScreen);
+    }
+    if (from < 8) {
+      // v8: drop the trace_points/trace_metadatas tables. The feature
+      // they backed (persisting third-party OSM traces fetched while
+      // panning the map) was removed — the store path had no reader and
+      // grew unbounded, retaining third-party GPS data on disk at odds
+      // with the app's privacy stance (see GetTracesUseCase). Users who
+      // panned the map before this fix may have accumulated rows here;
+      // dropping the tables purges that residual data rather than just
+      // leaving the code path dead. Points first: it has the FK onto
+      // metadata.
+      await m.deleteTable('trace_points');
+      await m.deleteTable('trace_metadatas');
+    }
+    if (from < 9) {
+      // v9: everything 1.3.0 changes about the schema, in one step.
+      //
+      // This was six steps at its worst (v9 drop `map_language`, v10 the FK
+      // cascade and an index, v11 drop `check_updates`, v12 drop
+      // `accuracy_in_meters` plus the new recording preferences, v13 add
+      // `activity_type`, v14 rewrite the activity types a shrinking taxonomy
+      // dropped). Collapsed, because *none of them ever shipped*: the tags say
+      // 1.0.0 and 1.1.0 carried v1 and 1.2.0 carried v8, so no database in
+      // anyone's hands has ever rested above v8. Production has run exactly one
+      // upgrade path, 1 -> 8, and 1.3.0 adds a second, 8 -> 9.
+      //
+      // Four of those steps rebuilt `preferences` with the *identical* call —
+      // three times in a row on the same upgrade — and v14 rewrote values
+      // ('kayak', 'nordicSki', ...) that only a developer device could contain,
+      // since the column holding them is created here in the same run. On every
+      // real path there was nothing to rewrite. Migration code whose only user
+      // is its author is the kind that rots unnoticed.
+      //
+      // The steps below (v2..v8) are deliberately left alone. They are not
+      // resting states either, but they are the rungs the one production path
+      // actually climbs, they work, and rewriting shipped migration code is
+      // risk without a user-visible benefit.
+      //
+      // Table recreation rather than ALTER TABLE ... DROP COLUMN: that needs
+      // SQLite >= 3.35 (2021), and this app links the SYSTEM SQLite (no
+      // sqlite3_flutter_libs) with minSdk 24 — an Android 7 device can ship
+      // SQLite 3.9, where DROP COLUMN does not exist and the migration would
+      // hard-fail. Recreation works on every version we support.
+      //
+      // Safe with respect to foreign keys: drift runs onUpgrade before
+      // beforeOpen turns `PRAGMA foreign_keys` on, so enforcement is off during
+      // the rebuilds regardless.
+
+      // One rebuild of `preferences` retires four dead columns at once
+      // (`map_language`, superseded by resolveMapLabelLanguage deriving the
+      // label language from the UI locale; `check_updates`, whose in-app GitHub
+      // check is gone; `accuracy_in_meters`, the residue of a precision setting
+      // that was always written as 0 and never read) and lets the new recording
+      // preferences take their defaults. TableMigration copies the CURRENT
+      // Dart definition's columns out of the old table, so dropping a column is
+      // simply not listing it any more.
+      await m.alterTable(
+        TableMigration(preferences, newColumns: newPreferenceColumns),
+      );
+
+      // Make the activity_points -> activities foreign key actually enforce
+      // ON DELETE CASCADE. SQLite cannot alter a constraint in place at any
+      // version, so the table is rebuilt and its rows copied. This is the one
+      // operation here that touches a potentially large table — a few tens of
+      // thousands of rows for a heavy user — but it runs once, inside the
+      // transaction wrapping the whole upgrade.
+      await m.alterTable(TableMigration(activityPoints));
+      await m.createIndex(idxActivitiesStoppedAt);
+
+      // Record what the user was doing. `activities` is never rebuilt from the
+      // Dart definition by an earlier step, so addColumn is right here.
+      // Existing rows take the column default, `unknown` — deliberately not
+      // `walk`: backfilling a guess would silently restate what every past
+      // recording meant, and `unknown` already behaves as the permissive
+      // generic profile.
+      await m.addColumn(activities, activities.activityType);
+    }
+    if (from < 10) {
+      // v10 — everything this release adds, in one revision. It was written
+      // as two while the branch was in flight (pause checkpoints, then the
+      // milestone interval); v9 is the last schema any release shipped, so
+      // the next number is 10 and there is exactly one of it. Same reason
+      // the v9 step above folded four older revisions together.
+      //
+      // NULL preserves legacy recovery from point statuses until the first
+      // explicit pause/resume command creates an authoritative checkpoint.
+      await m.addColumn(activities, activities.recordingPausedAtMs);
+      await m.addColumn(activities, activities.recordingCompletedPauseMs);
+      if (from == 9) {
+        // Anything older reaches the current preferences shape through the
+        // v9 TableMigration above, which rebuilds the table from
+        // newPreferenceColumns and therefore already includes this one.
+        // Only a database sitting at exactly 9 needs the additive step.
+        await m.addColumn(preferences, preferences.mapMilestoneIntervalKm);
+      }
+    }
+  }
+}
+
+LazyDatabase _openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'app.sqlite'));
+    // Run SQLite on a background isolate so per-fix writes and — more
+    // importantly — loading every point of a multi-hour activity (24 h at one
+    // fix / 5 s ≈ 17k rows) never block the UI isolate and jank the map /
+    // activity list. createInBackground spawns a dedicated isolate and
+    // marshals statements to it; the API is otherwise identical.
+    return NativeDatabase.createInBackground(file);
+  });
+}

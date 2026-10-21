@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "Impossible d’ouvrir le sélecteur de fichier GPX. Réessaie.",
+  "mapRecordingProblem": "Un problème est survenu pendant l’enregistrement.",
+  "mapRecordingStateActive": "Ton activité continue de s’enregistrer.",
+  "mapRecordingStatePaused": "Ton activité reste en pause.",
+  "mapRecordingStateIdle": "Aucune activité n’est en cours d’enregistrement.",
+  "mapFollowing": "Suivi actif",
+  "mapWaitingForLocation": "Attente GPS",
+  "mapLocationServiceOff": "Localisation désactivée — active-la dans les réglages",
+  "mapOpenLocationSettings": "Ouvrir les réglages",
+  "mapHoldStopProgress": "Maintiens · {seconds}",
+  "liveSharePreparing": "Préparation…",
+  "liveShareConnected": "Direct connecté",
+  "liveShareDisconnected": "Reconnexion…",
+  "liveShareConnecting": "Connexion…",
+  "liveShareNotPublished": "Rien n’est encore publié — le lien reste vide tant qu’aucun relais ne répond.",
+  "liveShareStillActive": "Le partage en direct reste actif.",
+  "showPassword": "Afficher le mot de passe",
+  "hidePassword": "Masquer le mot de passe",
+  "statsActive": "Activité",
+  "statsPaused": "Pauses",
+  "statsElapsed": "Temps écoulé",
+  "activityRenameTooltip": "Renommer l’activité",
+  "activityDeleteTooltip": "Supprimer l’activité",
+  "activityExportTooltip": "Exporter en GPX",
+  "activityNoTrack": "Aucun parcours enregistré",
+  "importInProgress": "Importation du GPX…",
+  "btnBack": "Précédent",
+  "btnCopy": "Copier",
+  "prefLoadFailed": "Impossible de charger les préférences.",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "fr_CA",
+  "appTitle": "Furtive",
+  "btnNext": "Suivant",
+  "btnFinish": "Terminer",
+  "btnGrant": "Autoriser",
+  "btnGrantPermission": "Autoriser",
+  "btnFollow": "Suis-moi",
+  "btnPause": "Pause",
+  "btnResume": "Reprendre",
+  "btnStart": "Démarrer",
+  "btnStarting": "Démarrage",
+  "btnStop": "Arrêt",
+  "btnContinue": "Continuer",
+  "btnGrantToContinue": "Accorde les permissions requises pour continuer",
+  "btnViewStats": "Voir les statistiques",
+  "btnCancel": "Annuler",
+  "btnUndo": "Annuler",
+  "btnRetry": "Réessayer",
+  "btnRename": "Renommer",
+  "btnDelete": "Effacer",
+  "prefSaveFailed": "Impossible d'enregistrer vos préférences.",
+  "btnStarGitHub": "Étoile sur GitHub",
+  "btnSponsor": "Encourager",
+  "linkOpenFailed": "Impossible d'ouvrir {url}",
+  "shareSummary": "{distance} km en {duration} avec Furtive",
+  "shareFailed": "Impossible de partager la sortie : {error}",
+  "shareTooltip": "Partager la sortie",
+  "liveShareTitle": "Partager la position en direct",
+  "liveShareButton": "Partager",
+  "liveSharePassword": "Mot de passe facultatif",
+  "liveSharePasswordHelp": "Envoyez le mot de passe séparément. Laissez vide pour un accès par lien uniquement.",
+  "navMap": "Carte",
+  "navActivities": "Sorties",
+  "navSettings": "Réglages",
+  "menuPermissions": "Permissions",
+  "menuPreferences": "Préférences",
+  "menuLogs": "Journaux",
+  "onboardWelcomeTitle": "Bienvenue dans Furtive",
+  "onboardWelcomeSubtitle": "Suivi de tes sorties dans le respect de ta vie privée. Aucun compte, aucune télémétrie, aucun service Google. On va choisir ensemble quelques préférences.",
+  "onboardSettingsTitle": "Réglages de la carte",
+  "onboardSettingsSubtitle": "Choisis tes préférences — tu pourras les changer plus tard dans les réglages.",
+  "onboardPermissionsTitle": "Permissions",
+  "onboardPermissionsSubtitle": "Accorde l'accès à la localisation pour suivre tes sorties. Les notifications et l'accès en arrière-plan sont optionnels.",
+  "onboardSaveError": "Impossible d'enregistrer tes choix : {error}",
+  "settingsThemeLabel": "Thème",
+  "settingsUiLanguageLabel": "Langue de l'application",
+  "settingsUiLanguageSystem": "Système",
+  "preferencesTitle": "Préférences",
+  "prefMapTheme": "Thème de la carte",
+  "prefAppLanguage": "Langue de l'application",
+  "permissionsTitle": "Permissions",
+  "permissionsInstructions": "Cette application a besoin des permissions suivantes pour bien fonctionner",
+  "permOptional": "Optionnel",
+  "permDeniedMsg": "Refusé — active-le dans les réglages de l'application.",
+  "permPermanentlyDenied": "Cette permission doit être activée dans les réglages de l'application.",
+  "permLocationWhileUsingName": "Localisation à l'utilisation",
+  "permLocationWhileUsingDesc": "Requise pour suivre ta position et l'afficher sur la carte.",
+  "permLocationAlwaysName": "Localisation en tout temps",
+  "permLocationAlwaysDesc": "Optionnel : garde le suivi précis pendant les longues sorties, même quand le système met l'application en veille.",
+  "permNotificationName": "Notifications",
+  "permNotificationDesc": "Optionnel : affiche une notification permanente « Enregistrement en cours », qui aide aussi Android à ne pas arrêter le suivi en arrière-plan.",
+  "mapActivityStartedMsg": "C'est parti, bonne sortie!",
+  "mapStopHint": "Tiens Arrêt enfoncé 3 secondes pour terminer la sortie",
+  "mapTrackingGapMsg": "Suivi interrompu pendant {seconds}s pendant que l'app était en arrière-plan — un bout de ton parcours manque. Autorise la « batterie sans restriction » pour Furtive pour éviter ça.",
+  "statsRecordingTitle": "Enregistrement",
+  "statSignalLost": "Signal GPS perdu pendant {duration} (~{meters} m à vol d'oiseau) — ce temps est exclu des statistiques actives.",
+  "statDistance": "Distance",
+  "statDuration": "Durée",
+  "statPace": "Allure",
+  "statSpeed": "Vitesse",
+  "statElevation": "Dénivelé",
+  "splitsTitle": "Intervalles",
+  "splitsNotEnoughData": "Pas encore assez de données pour les intervalles.",
+  "metricPace": "Allure",
+  "metricSpeed": "Vitesse",
+  "activitiesEmpty": "Aucune sortie",
+  "activitiesImportTooltip": "Importer un fichier GPX",
+  "importStarted": "Importation en cours…",
+  "importSuccess": "Sortie importée",
+  "activityNameLabel": "Nom de la sortie",
+  "activityDeleteSuccess": "Sortie effacée",
+  "dlgRenameTitle": "Renommer",
+  "dlgDeleteTitle": "Effacer",
+  "dlgDeleteConfirm": "Veux-tu vraiment effacer cette sortie?",
+  "gpxExportSuccess": "GPX exporté avec succès",
+  "gpxExportFailed": "Échec de l'exportation : {error}",
+  "logsTitle": "Journaux",
+  "logsEmpty": "Aucun journal",
+  "logsTooltipClear": "Effacer les journaux",
+  "logsTooltipFilterDate": "Filtrer par date",
+  "logsTooltipClearFilter": "Effacer le filtre",
+  "logsTooltipShare": "Partager",
+  "logsFiltered": "Filtré : {start} - {end}",
+  "logsShowingCount": "{shown} sur {total}",
+  "activityDefaultName": "Sortie",
+  "logsLoadError": "Impossible de charger les journaux : {error}",
+  "logCopiedMsg": "Journal copié dans le presse-papiers",
+  "logsCopiedMsg": "{count} journaux copiés dans le presse-papiers",
+  "dlgDeleteLogsTitle": "Effacer les journaux",
+  "dlgDeleteLogsConfirm": "Veux-tu vraiment effacer tous les journaux? Cette action est irréversible.",
+  "supportTitle": "Encourager le développement",
+  "supportDescription": "Cette application est bâtie et entretenue sur mon temps libre. Ton soutien aide à la garder en vie.",
+  "changelogTitle": "Quoi de neuf",
+  "changelogGotIt": "Correct",
+  "changelogV120I18n": "Multilingue : interface en 26 langues, libellés de carte en 41, formats de date selon ta langue. Modifiable dans les réglages ou l'assistant.",
+  "changelogV120Wizard": "Assistant de première utilisation : choisis tes valeurs par défaut (thème, langue) et accorde les permissions de localisation d'un seul coup.",
+  "changelogV120Recording": "Enregistrement de sortie : marqueur de position animé avec pulsation et cercle de précision, marqueurs kilométriques sur la carte, tiens Arrêt enfoncé 3 secondes pour finir (finis les arrêts par accident), redirection automatique vers les statistiques.",
+  "changelogV120Stats": "Statistiques de sortie : graphique des intervalles par kilomètre avec bascule allure ⇄ vitesse, dénivelé positif D+ (convention Strava/Garmin).",
+  "changelogV120Share": "Partage une sortie sous forme de fiche avec carte et statistiques via le menu de partage du système.",
+  "changelogV120GpxImport": "Importe des fichiers GPX d'autres applications (Garmin, Strava, etc.) — points de trace et de route pris en charge.",
+  "changelogV120MapThemes": "Cinq thèmes de carte : Pâle, Sombre, Blanc, Niveaux de gris, Noir — choisis celui qui te plaît dans les réglages.",
+  "changelogV120Reproducible": "Builds reproductibles : tout le monde peut reconstruire à partir du code source et vérifier que l'APK publié est identique octet par octet — aucun code caché, aucune altération.",
+  "changelogV120Stability": "Stabilité : protection contre les valeurs GPS aberrantes, enregistrement en arrière-plan fiable qui reprend après que le système a fermé l'application, rotation automatique des journaux, validation GPX plus stricte, délais d'attente HTTP.",
+  "changelogV130LiveShare": "Partage en direct : pendant l'enregistrement, partage un lien chiffré de bout en bout et laisse tes proches suivre ta position dans leur navigateur — aucun compte d'aucun côté, la clé ne quitte jamais le lien.",
+  "changelogV130Profiles": "Profils d'activité : marche, course, vélo, voiture, natation, avion ou autre — le choix dimensionne l'échantillonnage GPS et la tolérance de précision, et est enregistré avec l'activité.",
+  "changelogV130Map": "Nouveau moteur de carte : zoom et déplacement rendus par MapLibre Native — le zoom qui saccadait est désormais fluide.",
+  "changelogV130Puck": "Le marqueur de position est désormais dessiné par l'app : un point à l'arrêt, un chevron dans ta direction de déplacement, boussole nord vrai sur Android.",
+  "changelogV130Detail": "Détail d'enregistrement : choisis un échantillonnage GPS précis, équilibré ou endurance pour arbitrer entre précision et batterie selon l'activité.",
+  "changelogV130Left": "Mode gaucher : les contrôles de la carte peuvent passer à gauche de l'écran (Réglages).",
+  "changelogV130CarFix": "Corrigé : une voiture au-delà de 126 km/h n'enregistrait plus rien du tout — le filtre de vitesse s'adapte désormais à chaque activité au lieu de rejeter chaque relevé.",
+  "changelogV140Offline": "Cartes hors ligne : garde la zone autour de toi, de 10 à 100 km, pour que la carte fonctionne encore là où il n'y a pas de réseau (Réglages).",
+  "changelogV140OfflineCost": "Chaque zone gardée indique ce qu'elle a coûté en tuiles et en mégaoctets, et une zone interrompue indique où elle s'est arrêtée — redemande-la pour la terminer.",
+  "changelogV140Cache": "La carte que tu as simplement consultée est gardée aussi, jusqu'à 1 Go, et peut être vidée seule sans toucher aux zones que tu as choisi de garder.",
+  "changelogV140Drift": "Corrigé : un téléphone posé n'accumule plus de distance à cause de la dérive GPS — un enregistrement immobile affiche désormais zéro au lieu d'inventer des mètres.",
+  "changelogV140Elevation": "Corrigé : le dénivelé compte les montées confirmées au lieu d'arrondir chaque relevé à dix mètres, donc les petites côtes cessent de disparaître et le plat cesse de grimper.",
+  "changelogV140LocationOff": "Quand la localisation est désactivée, la carte le dit maintenant et propose d'ouvrir le réglage, et le suivi reprend tout seul dès qu'elle revient.",
+  "changelogV140Markers": "Les repères de distance le long d'un parcours peuvent être réglés à l'intervalle voulu, ou désactivés (Réglages).",
+  "changelogV140Stop": "L'arrêt d'un enregistrement dessine sa progression d'appui au-dessus de ton pouce plutôt qu'en dessous, pour que tu voies combien de temps il reste à maintenir.",
+  "changelogV140SmallScreens": "Corrigé : les étapes de configuration et les écrans de réglages restent utilisables sur les écrans courts et étroits.",
+  "prefThemeLight": "Clair",
+  "prefThemeDark": "Sombre",
+  "prefThemeWhite": "Blanc",
+  "prefThemeGrayscale": "Niveaux de gris",
+  "prefThemeBlack": "Noir",
+  "prefMapTiles": "Tuiles de carte",
+  "prefMapTilesSubtitle": "Charger la carte révèle ta position approximative au fournisseur de tuiles. Désactive pour une carte vide et fonctionnelle, sans requête réseau.",
+  "prefShowOnLockScreen": "Afficher sur l'écran verrouillé",
+  "prefShowOnLockScreenSubtitle": "Garde la carte/position visible par-dessus l'écran verrouillé pendant l'enregistrement (Android seulement). Désactive pour la cacher aux regards sur ton téléphone verrouillé.",
+  "mapLoadingLocalizing": "Initialisation du GPS…",
+  "mapLoadingMap": "Chargement de la carte…",
+  "mapStartingActivity": "Démarrage de l'activité…",
+  "activitiesLoadError": "Impossible d'ouvrir cette activité",
+  "activityPickerTitle": "Tu fais quoi ?",
+  "activityWalk": "Marche",
+  "activityRun": "Course",
+  "activityBike": "Vélo",
+  "activityCar": "Auto",
+  "activitySwim": "Nage",
+  "activityAircraft": "Avion",
+  "activityOther": "Autre",
+  "activityUnknown": "Inconnu",
+  "prefRecordingDetail": "Détail d'enregistrement",
+  "prefRecordingDetailSubtitle": "Fréquence à laquelle une position est demandée, par rapport au réglage propre à l'activité. Plus dense = virages plus nets et plus de batterie.",
+  "prefDetailPrecise": "Précis",
+  "prefDetailBalanced": "Équilibré",
+  "prefDetailEndurance": "Endurance",
+  "prefMapControlsOnRight": "Commandes de la carte à droite",
+  "prefMapControlsOnRightSubtitle": "Les boutons suivre, démarrer, pause et arrêt sont sur le bord droit. Désactive pour les déplacer à gauche, pour les gauchers. Le crédit de la carte passe dans le coin opposé.",
+  "prefMapMilestones": "Repères de distance",
+  "prefMapMilestonesOff": "Désactivés",
+  "menuOfflineMaps": "Cartes hors ligne",
+  "offlineTitle": "Cartes hors ligne",
+  "offlineExplainer": "Les zones que tu gardes restent sur l'appareil et ne sont jamais supprimées. Ce que tu as seulement regardé est aussi en cache, mais peut être récupéré.",
+  "offlineNone": "Aucune zone gardée",
+  "offlineAroundMe": "Garder la zone autour de moi",
+  "offlineRadius": "Rayon : {km} km",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "Télécharger",
+  "offlineDownloading": "{done} sur {total} tuiles · {mb} Mo",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "Pas encore de position — attends le GPS",
+  "offlineNoTiles": "Les tuiles sont désactivées, il n'y a rien à garder",
+  "offlineUnsupported": "Les zones hors ligne ne sont pas disponibles sur cet appareil",
+  "offlineDelete": "Supprimer",
+  "offlineFailed": "Échec du téléchargement",
+  "offlineStorageTitle": "Stockage des cartes",
+  "offlineStorageOnDevice": "{mb} Mo sur cet appareil",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "{mb} Mo téléchargés pour les zones conservées · {tiles} tuiles",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "Des zones qui se chevauchent partagent leurs tuiles, donc ce chiffre peut dépasser le total. Ce qui n'est dans aucune zone est la carte que vous avez consultée, plus la surcharge propre à la base de données.",
+  "offlineClearCache": "Vider le cache",
+  "offlineRadiusTiles": "{tiles} tuiles",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} Mo · {tiles} tuiles",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} Mo · {tiles} tuiles · inachevé",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent} % · {mb} Mo · {tiles} tuiles",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}

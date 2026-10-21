@@ -1,0 +1,235 @@
+import 'dart:async';
+
+import 'package:activity_profile/activity_profile.dart';
+import 'package:wall_clock/wall_clock.dart';
+import 'package:diagnostics/diagnostics.dart';
+
+import 'location_repository.dart';
+
+import 'package:geo/geo.dart';
+import 'package:geolocator/geolocator.dart';
+
+/// Owns the lifetime of the GPS position stream.
+///
+/// Extracted from MapBloc, which used to interleave four unrelated concerns.
+/// This is the stream-lifecycle one: opening exactly once, recognising a stream
+/// the OS silently suspended, and reopening it. Deliberately a plain class, not
+/// a bloc — it has no UI state, and being plain makes it directly unit-testable
+/// with a fake [LocationRepository] and a [FixedClock].
+///
+/// Two hazards it exists to contain:
+///
+///  * **Double-open.** [ensureOpen] memoises the in-flight open. A naive
+///    `if (_subscription == null) await open()` is a check-then-act with an
+///    await in the middle: two concurrent callers (MapPage.initState and the
+///    onboarding finish both dispatch InitMap, and the default bloc transformer
+///    runs differently-typed events concurrently) both see null, both call
+///    `listen()`, and the app leaks a subscription while double-writing every
+///    fix to the database.
+///
+///  * **Silent suspension.** geolocator can stop delivering fixes in deep Doze
+///    without an error or `onDone` (Baseflow/flutter-geolocator#1023), so
+///    liveness cannot be inferred from the subscription object. [isStale]
+///    instead compares the last *raw* fix against [staleThreshold].
+class PositionStreamController {
+  PositionStreamController({LocationRepository? location, Clock? clock})
+    : _location = location ?? LocationRepository(),
+      _clock = clock ?? const SystemClock();
+
+  final LocationRepository _location;
+  final Clock _clock;
+
+  /// Floor for [staleThreshold]. Kept at the historical value so the map's own
+  /// stream, and every profile sampling faster than 5 s, behaves exactly as
+  /// before.
+  static const minimumStaleThreshold = Duration(seconds: 20);
+
+  /// How many missed fixes count as a stall.
+  static const _staleIntervalMultiple = 4;
+
+  /// If a recording is running and no fix has arrived for longer than this,
+  /// assume the stream stalled and reopen.
+  ///
+  /// Derived from the active profile's interval rather than fixed, because the
+  /// interval is no longer fixed: a hard 20 s meant "4 missed fixes" at the
+  /// old hardcoded 5 s cadence, but would be barely one missed fix for an
+  /// airborne profile at endurance detail (15 s) — turning normal spacing into
+  /// a permanent teardown-and-reopen loop of a perfectly healthy service.
+  Duration get staleThreshold {
+    final interval = (_profile ?? MovementProfileEntity.generic).tuning
+        .intervalFor(_detail);
+    final scaled = interval * _staleIntervalMultiple;
+    return scaled > minimumStaleThreshold ? scaled : minimumStaleThreshold;
+  }
+
+  StreamSubscription<PositionEntity>? _subscription;
+  StreamSubscription<bool>? _serviceSubscription;
+  bool? _serviceEnabled;
+  int _serviceGeneration = 0;
+  bool _disposed = false;
+  Future<void>? _reopening;
+  Future<void>? _opening;
+  DateTime? _lastFixAt;
+  MovementProfileEntity? _profile;
+  RecordingDetailEntity _detail = RecordingDetailEntity.balanced;
+
+  /// Fires for every accepted fix.
+  void Function(PositionEntity position)? onPosition;
+
+  /// Fires when the underlying stream closes, which means the foreground
+  /// service actually died — never a user gesture (the notification is ongoing
+  /// and the service holds a wake lock). The owner should re-init; the activity
+  /// row stays open and keeps recording.
+  void Function()? onStreamClosed;
+
+  /// Fires when the device's location service is switched on or off.
+  ///
+  /// Reported rather than only acted on. This controller already recovers
+  /// when the service comes back, but a service that is *off* is not a
+  /// transient the caller should wait through: no fix will ever arrive until
+  /// a human changes a system setting. Only the owner can say that on screen,
+  /// so only the owner can be told.
+  void Function(bool enabled)? onServiceEnabledChanged;
+
+  /// Whether the device's location service is on, or null while unknown.
+  bool? get serviceEnabled => _serviceEnabled;
+
+  bool get isOpen => _subscription != null;
+
+  /// Wall-clock of the last fix received from the platform, or null if none has
+  /// arrived since this controller was created.
+  DateTime? get lastFixAt => _lastFixAt;
+
+  /// Time since the last fix, or null when none has ever arrived.
+  Duration? get sinceLastFix {
+    final last = _lastFixAt;
+    return last == null ? null : _clock.nowUtc().difference(last);
+  }
+
+  /// True when no fix has arrived for longer than [staleThreshold] — or when
+  /// none ever arrived at all.
+  bool get isStale {
+    final gap = sinceLastFix;
+    return gap == null || gap > staleThreshold;
+  }
+
+  /// Opens the stream if it is not already open, memoising the in-flight open so
+  /// concurrent callers await the same one. Always use this rather than [_open].
+  Future<void> ensureOpen() => _reopening ?? _ensureOpen();
+
+  Future<void> _ensureOpen() {
+    if (_disposed) return Future.value();
+    _serviceSubscription ??= _location.getServiceEnabledStream().listen(
+      _onServiceChanged,
+      onError: (Object error, StackTrace stack) =>
+          logs.severe('location service status', error: error, trace: stack),
+    );
+    if (_serviceEnabled == false) return Future.value();
+    if (_subscription != null) return Future.value();
+    return _opening ??= _open().whenComplete(() => _opening = null);
+  }
+
+  /// Cancels and reopens. Used when [isStale] indicates the OS suspended the
+  /// stream in the background.
+  Future<void> reopen() =>
+      _reopening ??= _reopen().whenComplete(() => _reopening = null);
+
+  Future<void> _reopen() async {
+    final previous = _subscription;
+    _subscription = null;
+    await previous?.cancel();
+    await _ensureOpen();
+  }
+
+  void _onServiceChanged(bool enabled) {
+    if (_serviceEnabled == enabled) return;
+    _serviceEnabled = enabled;
+    onServiceEnabledChanged?.call(enabled);
+    final generation = ++_serviceGeneration;
+    if (enabled && !_disposed) {
+      unawaited(_recoverService(generation));
+    }
+  }
+
+  Future<void> _recoverService(int generation) async {
+    try {
+      // Android's LocationManager removes updates when disabled but leaves the
+      // Dart stream open. Enabling the provider does not register them again.
+      // Observe that transition even when the app never leaves the foreground.
+      final permitted = await _location.checkLocationPermission();
+      if (!permitted || _disposed || generation != _serviceGeneration) return;
+      await reopen();
+    } catch (error, stack) {
+      // One attempt per enabled transition; permission or platform failures
+      // must not start a retry loop while the service is unavailable.
+      logs.severe('location service recovery', error: error, trace: stack);
+    }
+  }
+
+  /// Points the stream at a different activity profile, reopening it if it is
+  /// already running.
+  ///
+  /// A reopen is unavoidable: the sampling interval and the iOS activity type
+  /// are properties of the platform request itself, so they cannot be changed
+  /// on a live subscription. Without this, picking "car" would change the
+  /// label on the activity and nothing else — the stream would keep running at
+  /// whatever cadence the map opened it with.
+  ///
+  /// A null [profile] means "no activity is being recorded": back to the
+  /// permissive generic profile the map uses.
+  Future<void> applyProfile({
+    MovementProfileEntity? profile,
+    RecordingDetailEntity detail = RecordingDetailEntity.balanced,
+  }) async {
+    if (_profile == profile && _detail == detail) return;
+    _profile = profile;
+    _detail = detail;
+    logs.info(
+      'Position stream profile -> ${profile?.name ?? 'generic (idle)'} '
+      'at ${detail.name} detail (interval '
+      '${(profile ?? MovementProfileEntity.generic).tuning.intervalFor(detail).inMilliseconds}ms).',
+    );
+    if (_subscription != null) await reopen();
+  }
+
+  Future<void> _open() async {
+    final stream = _location.getPositionStream(
+      tuning: (_profile ?? MovementProfileEntity.generic).tuning,
+      detail: _detail,
+      // Stamped for every raw platform fix, NOT only fixes that survive
+      // GpsQualityFilter. Otherwise "every recent fix failed the quality gate"
+      // (normal under tree cover / urban canyon / indoors) is indistinguishable
+      // from "the foreground service died", and the watchdog tears down a
+      // healthy service while showing a false tracking-gap banner.
+      onRawFix: () => _lastFixAt = _clock.nowUtc(),
+    );
+    _subscription = stream
+        .handleError((Object error, StackTrace stack) {
+          if (error is LocationServiceDisabledException) {
+            _onServiceChanged(false);
+          }
+          logs.severe('position stream', error: error, trace: stack);
+        })
+        .listen(
+          (position) => onPosition?.call(position),
+          onDone: () {
+            logs.warning('Position stream closed; reopening.');
+            _subscription = null;
+            if (!_disposed && _serviceEnabled != false) {
+              onStreamClosed?.call();
+            }
+          },
+        );
+  }
+
+  Future<void> dispose() async {
+    _disposed = true;
+    onServiceEnabledChanged = null;
+    await _serviceSubscription?.cancel();
+    _serviceSubscription = null;
+    await _subscription?.cancel();
+    _subscription = null;
+    onPosition = null;
+    onStreamClosed = null;
+  }
+}

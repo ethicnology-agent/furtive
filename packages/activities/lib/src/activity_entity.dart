@@ -1,0 +1,638 @@
+import 'package:activity_profile/activity_profile.dart';
+import 'package:collection/collection.dart' show mergeSort;
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:geo/geo.dart';
+
+part 'activity_entity.mapper.dart';
+
+@MappableClass()
+class ActivityEntity with ActivityEntityMappable {
+  final String id;
+  final String name;
+  final String description;
+  final DateTime createdAt;
+  final DateTime startedAt;
+  final DateTime? stoppedAt;
+  final List<ActivityPointEntity> points;
+
+  /// What the user selected before recording. Fixed for the life of the
+  /// activity: it is what sized the sampling interval and the quality gate
+  /// that produced these points, so changing the current preference must not
+  /// retroactively restate an old recording. Defaults to
+  /// [ActivityTypeEntity.unknown] for rows predating the column and for GPX
+  /// imports with no usable type.
+  final ActivityTypeEntity activityType;
+
+  ActivityEntity({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.createdAt,
+    required this.startedAt,
+    required this.stoppedAt,
+    this.points = const [],
+    this.activityType = ActivityTypeEntity.unknown,
+  });
+}
+
+/// Point status. `active`/`paused` follow the user's recording state.
+/// `signalLost` marks a *detected GPS outage*: when a fix arrives after a
+/// time gap far exceeding the recent fix cadence (see SignalGapDetector),
+/// two boundary points bracketing the gap are stored with this status —
+/// duplicates of the last point before and the first point after the gap.
+/// The resulting signalLost segment carries the outage duration and the
+/// straight-line distance across it, keeping both out of the active stats
+/// (the 23-minutes-inside-a-store problem: without this, the gap inflates
+/// activeDuration and the polyline draws a straight line through the
+/// building). Mirrors GPX `<trkseg>` semantics: "To represent a single GPS
+/// track where GPS reception was lost ... start a new Track Segment".
+enum ActivityPointStatusEntity { active, paused, signalLost }
+
+/// Format a pace in minutes-per-km as `m:ss`. Carries 60 rounded seconds into
+/// the minute so a value like 5.999 min/km renders `6:00`, never `5:60`.
+String formatPace(double paceMinutes) {
+  var minutes = paceMinutes.floor();
+  var seconds = ((paceMinutes - minutes) * 60).round();
+  if (seconds >= 60) {
+    minutes += 1;
+    seconds = 0;
+  }
+  return '$minutes:${seconds.toString().padLeft(2, '0')}';
+}
+
+/// Sentinel stored in `ActivityEntity.name` when the user hasn't picked a
+/// custom name yet. Compared by reference in the activities list to decide
+/// whether to fall back to the start timestamp. Localised display copy
+/// lives under `AppLocalizations.activityDefaultName`.
+const String kDefaultActivityName = 'Track';
+
+@MappableClass()
+class ActivityPointEntity with ActivityPointEntityMappable {
+  final PositionEntity position;
+  final DateTime time;
+  final ActivityPointStatusEntity status;
+
+  ActivityPointEntity({
+    required this.position,
+    required this.time,
+    required this.status,
+  });
+}
+
+class ActivitySegment {
+  final List<ActivityPointEntity> points;
+  final ActivityPointStatusEntity status;
+
+  ActivitySegment({required this.points, required this.status});
+
+  bool get isActive => status == ActivityPointStatusEntity.active;
+  bool get isPaused => status == ActivityPointStatusEntity.paused;
+  bool get isSignalLost => status == ActivityPointStatusEntity.signalLost;
+}
+
+// Per-instance cache of the segmented points. ActivityStatsWidget reads ~9
+// stat getters per build (each derived from `segments`), and the map rebuilds
+// it on every GPS fix and every 1s tick during a recording — without this,
+// each build re-sorts and re-segments the entire points list ~9×, which grows
+// to thousands of points on a long activity. Keyed on the entity instance:
+// copyWith makes a new instance per fix, so the cache is naturally invalidated
+// and the old entry is collected with its entity.
+final Expando<List<ActivitySegment>> _segmentsCache = Expando('segments');
+
+/// Every segment-derived scalar stat, computed together and cached as one
+/// unit per entity instance — see [ActivityStatisticsExtension._stats].
+class _StatsBundle {
+  final Duration activeDuration;
+  final Duration pausedDuration;
+  final Duration signalLostDuration;
+  final double activeDistanceMeters;
+  final double pausedDistanceMeters;
+  final double signalLostDistanceMeters;
+  final double activeElevationGain;
+  final double pausedElevationGain;
+
+  _StatsBundle({
+    required this.activeDuration,
+    required this.pausedDuration,
+    required this.signalLostDuration,
+    required this.activeDistanceMeters,
+    required this.pausedDistanceMeters,
+    required this.signalLostDistanceMeters,
+    required this.activeElevationGain,
+    required this.pausedElevationGain,
+  });
+}
+
+final Expando<_StatsBundle> _statsCache = Expando('stats');
+
+/// Minimum displacement from the last distance anchor that counts as real
+/// movement. GPS fixes commonly wander several metres around a stationary
+/// phone; summing every raw leg turns that noise into distance and speed.
+const double _minimumMovementMeters = 10.0;
+
+typedef _MovementLeg = ({
+  ActivityPointEntity from,
+  ActivityPointEntity to,
+  double meters,
+});
+
+Iterable<_MovementLeg> _confirmedMovementLegs(
+  List<ActivityPointEntity> points, {
+  double minimumMeters = _minimumMovementMeters,
+}) sync* {
+  if (points.length < 2) return;
+
+  var anchor = points.first;
+  for (final candidate in points.skip(1)) {
+    final meters = distanceBetween(
+      anchor.position.latitude,
+      anchor.position.longitude,
+      candidate.position.latitude,
+      candidate.position.longitude,
+    );
+    if (!meters.isFinite || meters < minimumMeters) continue;
+
+    yield (from: anchor, to: candidate, meters: meters);
+    anchor = candidate;
+  }
+}
+
+extension ActivityStatisticsExtension on ActivityEntity {
+  double get activeDistanceInKm => activeDistanceMeters / 1000;
+
+  double get pausedDistanceInKm => pausedDistanceMeters / 1000;
+
+  double get activeSpeedMps => activeDuration.inSeconds > 0
+      ? (activeDistanceMeters / activeDuration.inSeconds)
+      : 0.0;
+
+  double get pausedSpeedMps => pausedDuration.inSeconds > 0
+      ? (pausedDistanceMeters / pausedDuration.inSeconds)
+      : 0.0;
+
+  double get activeSpeedKmh => activeSpeedMps * 3.6;
+
+  double get pausedSpeedKmh => pausedSpeedMps * 3.6;
+
+  String get activePaceMinPerKm =>
+      activeSpeedKmh == 0 ? '--:--' : formatPace(60 / activeSpeedKmh);
+
+  String get pausedPaceMinPerKm =>
+      pausedSpeedKmh == 0 ? '--:--' : formatPace(60 / pausedSpeedKmh);
+
+  List<ActivitySegment> get segments =>
+      _segmentsCache[this] ??= _segmentPoints(points);
+
+  List<ActivitySegment> get activeSegments =>
+      segments.where((s) => s.isActive).toList();
+  List<ActivitySegment> get pausedSegments =>
+      segments.where((s) => s.isPaused).toList();
+  List<ActivitySegment> get signalLostSegments =>
+      segments.where((s) => s.isSignalLost).toList();
+
+  /// Cached bundle of every segment-derived stat (see [_StatsBundle]).
+  /// ActivityStatsWidget reads ~8 of these getters per build, and the map
+  /// rebuilds on every GPS fix during a recording — without this, each
+  /// build re-walks every point of every segment ~8× over, which grows to
+  /// thousands of points on a long activity. Same per-instance Expando
+  /// pattern as [segments] above, computed once per entity instance.
+  _StatsBundle get _stats => _statsCache[this] ??= _StatsBundle(
+    activeDuration: _calculateSegmentsDuration(activeSegments),
+    pausedDuration: _calculateSegmentsDuration(pausedSegments),
+    signalLostDuration: _calculateSegmentsDuration(signalLostSegments),
+    activeDistanceMeters: _calculateSegmentsDistance(activeSegments),
+    pausedDistanceMeters: _calculateSegmentsDistance(pausedSegments),
+    // A signal-loss span is already explicitly marked as uncertain and shown
+    // for information only. Preserve its complete straight-line distance
+    // instead of applying the stationary-jitter dead-band.
+    signalLostDistanceMeters: _calculateSegmentsDistance(
+      signalLostSegments,
+      minimumMeters: 0,
+    ),
+    activeElevationGain: _calculateSegmentsElevationGain(activeSegments),
+    pausedElevationGain: _calculateSegmentsElevationGain(pausedSegments),
+  );
+
+  Duration get activeDuration => _stats.activeDuration;
+  Duration get pausedDuration => _stats.pausedDuration;
+
+  /// Total time spent in detected GPS outages (see
+  /// [ActivityPointStatusEntity.signalLost]). Deliberately excluded from
+  /// [activeDuration]/[pausedDuration] — shown separately so elapsed time
+  /// stays the immutable truth and the active pace isn't tanked by time the
+  /// user demonstrably wasn't being tracked.
+  Duration get signalLostDuration => _stats.signalLostDuration;
+
+  double get activeDistanceMeters => _stats.activeDistanceMeters;
+  double get pausedDistanceMeters => _stats.pausedDistanceMeters;
+
+  /// Straight-line distance across detected GPS outages. Informative only —
+  /// the real path through the gap is unknown, so this is never added to
+  /// [activeDistanceMeters].
+  double get signalLostDistanceMeters => _stats.signalLostDistanceMeters;
+
+  // D+ only — sum of positive elevation deltas (matches Strava/Garmin
+  // "Elevation Gain"). For a loop this is roughly half of total altitude
+  // variation; for a one-way ascent it equals total climb.
+  double get activeElevationGain => _stats.activeElevationGain;
+  double get pausedElevationGain => _stats.pausedElevationGain;
+
+  List<ActivitySegment> _segmentPoints(List<ActivityPointEntity> points) {
+    if (points.isEmpty) return [];
+
+    // Filter out any GPS fix with non-finite coordinates. flutter_map's
+    // LatLng constructor crashes on NaN, and a single NaN point poisons
+    // every downstream distance / interpolation calc.
+    final valid = points
+        .where(
+          (p) => p.position.latitude.isFinite && p.position.longitude.isFinite,
+        )
+        .toList();
+    if (valid.isEmpty) return [];
+
+    // Copy + sort to avoid mutating the entity's points list. MUST be a
+    // STABLE sort: SQLite truncates DateTime to whole seconds (no
+    // build.yaml configuring otherwise), so the ±1µs boundary pairs that
+    // bracket a signalLost gap (ScoreActivityUseCase.gapFrom / GPX import's
+    // <trkseg> handling) become exact ties once reloaded from the DB.
+    // List.sort is a dual-pivot quicksort and NOT guaranteed stable beyond
+    // ~32 elements — on a multi-thousand-point activity it can reorder a
+    // tied pair, splitting the signalLost segment into two single-point
+    // segments (losing its duration/distance and its dashed-line render).
+    // mergeSort preserves the input list's order for ties; the callers of
+    // ActivityEntity (fetchSingle/cease/fetchSummaries backfill, all
+    // ordered `id ASC`) already guarantee that order matches insertion
+    // order, which is chronological.
+    final sorted = List<ActivityPointEntity>.from(valid);
+    mergeSort(sorted, compare: (a, b) => a.time.compareTo(b.time));
+
+    final segments = <ActivitySegment>[];
+    var currentSegmentPoints = <ActivityPointEntity>[sorted.first];
+    var currentStatus = sorted.first.status;
+
+    for (final point in sorted.skip(1)) {
+      if (point.status == currentStatus) {
+        currentSegmentPoints.add(point);
+      } else {
+        segments.add(
+          ActivitySegment(
+            points: List.unmodifiable(currentSegmentPoints),
+            status: currentStatus,
+          ),
+        );
+        currentSegmentPoints = [point];
+        currentStatus = point.status;
+      }
+    }
+
+    segments.add(
+      ActivitySegment(
+        points: List.unmodifiable(currentSegmentPoints),
+        status: currentStatus,
+      ),
+    );
+
+    return segments;
+  }
+
+  Duration _calculateSegmentsDuration(List<ActivitySegment> segments) {
+    if (segments.isEmpty) return Duration.zero;
+
+    var totalDuration = Duration.zero;
+    for (final segment in segments) {
+      if (segment.points.isEmpty) continue;
+
+      final firstPoint = segment.points.first;
+      final lastPoint = segment.points.last;
+      final duration = lastPoint.time.difference(firstPoint.time);
+      totalDuration += duration;
+    }
+    return totalDuration;
+  }
+
+  double _calculateSegmentsDistance(
+    List<ActivitySegment> segments, {
+    double minimumMeters = _minimumMovementMeters,
+  }) {
+    double totalDistance = 0.0;
+    for (final segment in segments) {
+      for (final leg in _confirmedMovementLegs(
+        segment.points,
+        minimumMeters: minimumMeters,
+      )) {
+        totalDistance += leg.meters;
+      }
+    }
+    return totalDistance;
+  }
+
+  // Reject an altitude sample for gain purposes when its reported vertical
+  // accuracy is worse than this. GPS vertical noise is typically 1.5-2x the
+  // horizontal figure, so this is looser than GpsQualityFilter's 25 m
+  // horizontal threshold. See docs/AUDIT-2026-07.md §4.4.
+  static const _maxElevationVerticalAccuracyMeters = 20.0;
+
+  // Window (in samples) for the trailing moving-average smoothing applied
+  // before the hysteresis gain calculation — roughly 25-35 s of trace at the
+  // ~5 s fix interval this app records at.
+  static const _elevationSmoothingWindow = 5;
+
+  // A smoothed ascent or descent must reach this threshold to confirm a
+  // direction change. GPS-only altitude (no
+  // barometer) is noisy enough that summing every raw delta wildly
+  // overstates D+ on a perfectly flat route; this dead-band is the standard
+  // fix (see e.g. Strava's own description of smoothing + a gain threshold
+  // in "Elevation on Strava").
+  static const _elevationHysteresisMeters = 10.0;
+
+  double _calculateSegmentsElevationGain(List<ActivitySegment> segments) {
+    // Only every point in every prior recording (and every point in tests
+    // that don't set it) has verticalAccuracy == null — "no quality signal
+    // at all for this data". Rather than invent a smoothing/hysteresis
+    // behaviour those recordings were never measured against, fall back to
+    // the original raw-sum-of-positive-deltas algorithm. A modern recording
+    // — which will have verticalAccuracy on essentially every point — takes
+    // the smoothed path below.
+    final hasQualityData = segments.any(
+      (s) => s.points.any((p) => p.position.verticalAccuracy != null),
+    );
+    return hasQualityData
+        ? _smoothedElevationGain(segments)
+        : _rawElevationGain(segments);
+  }
+
+  double _rawElevationGain(List<ActivitySegment> segments) {
+    double totalGain = 0.0;
+    for (final segment in segments) {
+      final points = segment.points;
+      for (int i = 0; i < points.length - 1; i++) {
+        final delta =
+            points[i + 1].position.elevation - points[i].position.elevation;
+        if (delta > 0) totalGain += delta;
+      }
+    }
+    return totalGain;
+  }
+
+  double _smoothedElevationGain(List<ActivitySegment> segments) {
+    double totalGain = 0.0;
+    for (final segment in segments) {
+      // Drop samples whose reported vertical accuracy is too poor to trust,
+      // keeping the rest in original order — a dropped sample is skipped
+      // entirely (not zeroed), so the next trusted sample is compared
+      // against the last trusted one, not against a synthetic gap.
+      final trusted = segment.points
+          .where(
+            (p) =>
+                p.position.verticalAccuracy == null ||
+                p.position.verticalAccuracy! <=
+                    _maxElevationVerticalAccuracyMeters,
+          )
+          .map((p) => p.position.elevation)
+          .where((e) => e.isFinite)
+          .toList();
+      if (trusted.length < 2) continue;
+
+      totalGain += _hysteresisGain(
+        _movingAverage(trusted, _elevationSmoothingWindow),
+        _elevationHysteresisMeters,
+      );
+    }
+    return totalGain;
+  }
+
+  /// Trailing (causal) moving average with a window clamped to the samples
+  /// available so far — usable on a live/in-progress trace, not just a
+  /// finished one.
+  List<double> _movingAverage(List<double> values, int window) {
+    final out = List<double>.filled(values.length, 0);
+    double sum = 0;
+    for (int i = 0; i < values.length; i++) {
+      sum += values[i];
+      final start = i - window + 1;
+      if (start > 0) sum -= values[start - 1];
+      final count = i - (start < 0 ? 0 : start) + 1;
+      out[i] = sum / count;
+    }
+    return out;
+  }
+
+  /// Confirm climbs from a running valley, then count every new peak.
+  /// A descent of at least [threshold] ends the climb; smaller dips do not
+  /// count again on recovery. The threshold confirms direction changes,
+  /// rather than discarding the remainder of every ten-meter gain block.
+  double _hysteresisGain(List<double> smoothed, double threshold) {
+    if (smoothed.isEmpty) return 0;
+    double gain = 0;
+    double valley = smoothed.first;
+    double peak = smoothed.first;
+    bool climbing = false;
+    for (final value in smoothed.skip(1)) {
+      if (climbing) {
+        if (value > peak) {
+          gain += value - peak;
+          peak = value;
+        } else if (peak - value >= threshold) {
+          climbing = false;
+          valley = value;
+        }
+      } else {
+        if (value < valley) valley = value;
+        if (value - valley >= threshold) {
+          gain += value - valley;
+          peak = value;
+          climbing = true;
+        }
+      }
+    }
+    return gain;
+  }
+}
+
+/// One milestone marker per kilometre crossed during the active part of an
+/// activity. Position is interpolated linearly on the segment that crossed
+/// the threshold so the marker lands on the exact km, not on the next GPS
+/// fix that happened to be past it.
+///
+/// Deliberately carries no timestamp: the crossing time used to be
+/// interpolated here too, but nothing ever read it, and it was built with
+/// `DateTime.fromMillisecondsSinceEpoch(ms)` — i.e. flagged LOCAL while every
+/// other timestamp in this app is UTC. A latent trap for whoever wired up the
+/// first consumer. Per-kilometre timing lives in [KmSplit], which is what the
+/// splits chart actually uses.
+class KmMilestone {
+  final int km;
+  final PositionEntity position;
+  const KmMilestone({required this.km, required this.position});
+}
+
+/// One per-kilometre split for the active portion. The last split may be
+/// partial (e.g. 5.3 km final) — in that case `isPartial == true` and `km`
+/// is fractional via `distanceMeters`.
+class KmSplit {
+  final int index;
+  final double distanceMeters;
+  final Duration duration;
+  final bool isPartial;
+  const KmSplit({
+    required this.index,
+    required this.distanceMeters,
+    required this.duration,
+    required this.isPartial,
+  });
+
+  double get speedKmh => duration.inMicroseconds > 0
+      ? (distanceMeters / 1000) /
+            (duration.inMicroseconds / Duration.microsecondsPerHour)
+      : 0;
+
+  /// Minutes per kilometre (pace). Higher = slower.
+  double get paceMinPerKm {
+    if (distanceMeters <= 0 || duration.inMicroseconds <= 0) return 0;
+    return (duration.inMicroseconds / Duration.microsecondsPerMinute) /
+        (distanceMeters / 1000);
+  }
+}
+
+final Expando<Map<int, List<KmMilestone>>> _kmMilestonesCache = Expando(
+  'kmMilestones',
+);
+final Expando<List<KmSplit>> _kmSplitsCache = Expando('kmSplits');
+
+extension ActivityKmExtension on ActivityEntity {
+  /// Per-kilometre milestone markers, interpolated to the exact threshold.
+  /// Cached per entity instance — KmMilestonesLayer recomputes this on every
+  /// build, which the map triggers on every GPS fix; without caching this
+  /// re-walks every point of every active segment each time.
+  List<KmMilestone> get kmMilestones => kmMilestonesForInterval(1);
+
+  /// Numbered route markers at the requested kilometre interval. Zero (and
+  /// defensive negative values from malformed storage) disables the layer.
+  List<KmMilestone> kmMilestonesForInterval(int intervalKm) {
+    if (intervalKm <= 0) return const [];
+    final cache = _kmMilestonesCache[this] ??= <int, List<KmMilestone>>{};
+    return cache[intervalKm] ??= _computeKmMilestones(intervalKm);
+  }
+
+  List<KmMilestone> _computeKmMilestones(int intervalKm) {
+    final milestones = <KmMilestone>[];
+    int nextKm = intervalKm;
+    double cumulativeMeters = 0;
+
+    for (final segment in activeSegments) {
+      for (final leg in _confirmedMovementLegs(segment.points)) {
+        final a = leg.from;
+        final b = leg.to;
+        final segMeters = leg.meters;
+
+        // Walk through every km threshold this segment crosses (handles
+        // gaps where one segment covers >1 km, e.g. after a brief loss
+        // of signal).
+        while (cumulativeMeters + segMeters >= nextKm * 1000) {
+          final overshoot = nextKm * 1000 - cumulativeMeters;
+          final t = overshoot / segMeters;
+          final lat =
+              a.position.latitude +
+              (b.position.latitude - a.position.latitude) * t;
+          final lon =
+              a.position.longitude +
+              (b.position.longitude - a.position.longitude) * t;
+          final elev =
+              a.position.elevation +
+              (b.position.elevation - a.position.elevation) * t;
+          // Skip the milestone if any computed value is non-finite. The
+          // segment filter already drops NaN inputs, but if a future code
+          // path introduces another NaN source this prevents propagation
+          // into PositionEntity → toLatLng → flutter_map crash.
+          if (lat.isFinite && lon.isFinite) {
+            milestones.add(
+              KmMilestone(
+                km: nextKm,
+                position: PositionEntity(
+                  latitude: lat,
+                  longitude: lon,
+                  elevation: elev.isFinite ? elev : 0,
+                ),
+              ),
+            );
+          }
+          nextKm += intervalKm;
+        }
+        cumulativeMeters += segMeters;
+      }
+    }
+    return milestones;
+  }
+
+  /// Per-kilometre splits over the active distance. Each split's duration
+  /// counts only active time — gaps between paused/active segments are
+  /// excluded so a 5 min coffee break between km 1 and km 2 doesn't tank
+  /// the km 2 pace. The last entry may be a partial trailing fragment
+  /// (isPartial: true). Cached per entity instance — see [kmMilestones].
+  List<KmSplit> get kmSplits => _kmSplitsCache[this] ??= _computeKmSplits();
+
+  List<KmSplit> _computeKmSplits() {
+    final splits = <KmSplit>[];
+    int nextKm = 1;
+    double cumulativeMeters = 0;
+    Duration cumulativeActive = Duration.zero;
+    Duration prevSplitActive = Duration.zero;
+
+    for (final segment in activeSegments) {
+      final pts = segment.points;
+      if (pts.isEmpty) continue;
+      final segmentStart = pts.first.time;
+      for (final leg in _confirmedMovementLegs(pts)) {
+        final a = leg.from;
+        final b = leg.to;
+        final segMeters = leg.meters;
+        final segActiveMs =
+            b.time.millisecondsSinceEpoch - a.time.millisecondsSinceEpoch;
+        // Guard against GPS clock skew / out-of-order points — a negative
+        // delta would produce negative split durations and a negative bar.
+        if (segActiveMs < 0) continue;
+
+        final activeBeforeLeg =
+            cumulativeActive + a.time.difference(segmentStart);
+        while (cumulativeMeters + segMeters >= nextKm * 1000) {
+          final overshoot = nextKm * 1000 - cumulativeMeters;
+          final t = overshoot / segMeters;
+          final activeAtCrossing =
+              activeBeforeLeg +
+              Duration(milliseconds: (segActiveMs * t).round());
+          splits.add(
+            KmSplit(
+              index: nextKm,
+              distanceMeters: 1000,
+              duration: activeAtCrossing - prevSplitActive,
+              isPartial: false,
+            ),
+          );
+          prevSplitActive = activeAtCrossing;
+          nextKm++;
+        }
+        cumulativeMeters += segMeters;
+      }
+      final segmentDuration = pts.last.time.difference(segmentStart);
+      if (!segmentDuration.isNegative) {
+        // Time spent stationary or below the movement threshold still belongs
+        // to the split pace even though it contributes no distance.
+        cumulativeActive += segmentDuration;
+      }
+    }
+
+    // Trailing partial kilometre.
+    final partialMeters = cumulativeMeters - (nextKm - 1) * 1000;
+    if (partialMeters > 50) {
+      splits.add(
+        KmSplit(
+          index: nextKm,
+          distanceMeters: partialMeters,
+          duration: cumulativeActive - prevSplitActive,
+          isPartial: true,
+        ),
+      );
+    }
+    return splits;
+  }
+}

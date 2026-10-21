@@ -1,0 +1,297 @@
+{
+  "importPickerFailed": "GPX ফাইল নির্বাচক খোলা যায়নি। আবার চেষ্টা করুন।",
+  "mapRecordingProblem": "রেকর্ডিংয়ের সময় কিছু একটা গড়বড় হয়েছে।",
+  "mapRecordingStateActive": "আপনার কার্যকলাপ এখনও রেকর্ড হচ্ছে।",
+  "mapRecordingStatePaused": "আপনার কার্যকলাপ এখনও থামানো আছে।",
+  "mapRecordingStateIdle": "এই মুহূর্তে কোনো কার্যকলাপ রেকর্ড হচ্ছে না।",
+  "mapFollowing": "অনুসরণ",
+  "mapWaitingForLocation": "GPS-এর অপেক্ষায়",
+  "mapLocationServiceOff": "অবস্থান বন্ধ — সিস্টেম সেটিংসে এটি চালু করুন",
+  "mapOpenLocationSettings": "সেটিংস খুলুন",
+  "mapHoldStopProgress": "ধরে রাখুন · {seconds}",
+  "liveSharePreparing": "প্রস্তুত হচ্ছে…",
+  "liveShareConnected": "সরাসরি যুক্ত",
+  "liveShareDisconnected": "আবার যুক্ত হচ্ছে…",
+  "liveShareConnecting": "সংযোগ করা হচ্ছে…",
+  "liveShareNotPublished": "এখনও কিছু প্রকাশিত হয়নি — কোনও রিলে সাড়া না দেওয়া পর্যন্ত লিঙ্কটি ফাঁকা থাকবে।",
+  "liveShareStillActive": "সরাসরি ভাগ করা এখনও চালু আছে।",
+  "showPassword": "পাসওয়ার্ড দেখান",
+  "hidePassword": "পাসওয়ার্ড লুকান",
+  "statsActive": "সক্রিয়",
+  "statsPaused": "বিরতি",
+  "statsElapsed": "অতিবাহিত সময়",
+  "activityRenameTooltip": "কার্যকলাপের নাম বদলান",
+  "activityDeleteTooltip": "কার্যকলাপ মুছুন",
+  "activityExportTooltip": "GPX রপ্তানি করুন",
+  "activityNoTrack": "কোনো রেকর্ড করা পথ নেই",
+  "importInProgress": "GPX আমদানি হচ্ছে…",
+  "btnBack": "পিছনে",
+  "btnCopy": "কপি করুন",
+  "prefLoadFailed": "আপনার পছন্দ লোড করা যায়নি।",
+  "@mapHoldStopProgress": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@@locale": "bn",
+  "appTitle": "Furtive",
+  "btnNext": "পরবর্তী",
+  "btnFinish": "শেষ",
+  "btnGrant": "অনুমতি দিন",
+  "btnGrantPermission": "অনুমতি দিন",
+  "btnFollow": "অনুসরণ",
+  "btnPause": "বিরতি",
+  "btnResume": "চালিয়ে যান",
+  "btnStart": "শুরু",
+  "btnStarting": "শুরু হচ্ছে",
+  "btnStop": "থামান",
+  "btnContinue": "চালিয়ে যান",
+  "btnGrantToContinue": "চালিয়ে যেতে প্রয়োজনীয় অনুমতি দিন",
+  "btnViewStats": "পরিসংখ্যান দেখুন",
+  "btnCancel": "বাতিল",
+  "btnUndo": "পূর্বাবস্থায় ফেরান",
+  "btnRetry": "আবার চেষ্টা করুন",
+  "btnRename": "পুনর্নামকরণ",
+  "btnDelete": "মুছুন",
+  "prefSaveFailed": "আপনার পছন্দ সংরক্ষণ করা যায়নি।",
+  "btnStarGitHub": "GitHub-এ স্টার দিন",
+  "btnSponsor": "সহায়তা করুন",
+  "linkOpenFailed": "{url} খোলা যায়নি",
+  "shareSummary": "Furtive-এর সাথে {duration}-এ {distance} কিমি",
+  "shareFailed": "কার্যক্রম শেয়ার করা যায়নি: {error}",
+  "shareTooltip": "কার্যক্রম শেয়ার করুন",
+  "liveShareTitle": "লাইভ অবস্থান শেয়ার করুন",
+  "liveShareButton": "শেয়ার করুন",
+  "liveSharePassword": "ঐচ্ছিক পাসওয়ার্ড",
+  "liveSharePasswordHelp": "পাসওয়ার্ডটি আলাদাভাবে পাঠান। শুধু লিংক দিয়ে প্রবেশের জন্য খালি রাখুন।",
+  "navMap": "মানচিত্র",
+  "navActivities": "কার্যক্রম",
+  "navSettings": "সেটিংস",
+  "menuPermissions": "অনুমতি",
+  "menuPreferences": "পছন্দসমূহ",
+  "menuLogs": "লগ",
+  "onboardWelcomeTitle": "Furtive-এ স্বাগতম",
+  "onboardWelcomeSubtitle": "গোপনীয়তা-প্রথম কার্যক্রম ট্র্যাকিং। কোনো অ্যাকাউন্ট নেই, কোনো টেলিমেট্রি নেই, কোনো Google পরিষেবা নেই। আসুন কিছু ডিফল্ট বেছে নিই।",
+  "onboardSettingsTitle": "মানচিত্র সেটিংস",
+  "onboardSettingsSubtitle": "আপনার পছন্দসমূহ বেছে নিন — আপনি পরে সেটিংসে এগুলি পরিবর্তন করতে পারবেন।",
+  "onboardPermissionsTitle": "অনুমতি",
+  "onboardPermissionsSubtitle": "আপনার দৌড় ট্র্যাক করতে অবস্থানে অ্যাক্সেস দিন। নোটিফিকেশন এবং ব্যাকগ্রাউন্ড অ্যাক্সেস ঐচ্ছিক।",
+  "onboardSaveError": "আপনার পছন্দ সংরক্ষণ করা যায়নি: {error}",
+  "settingsThemeLabel": "থিম",
+  "settingsUiLanguageLabel": "অ্যাপের ভাষা",
+  "settingsUiLanguageSystem": "সিস্টেম ডিফল্ট",
+  "preferencesTitle": "পছন্দসমূহ",
+  "prefMapTheme": "মানচিত্র থিম",
+  "prefAppLanguage": "অ্যাপের ভাষা",
+  "permissionsTitle": "অনুমতি",
+  "permissionsInstructions": "এই অ্যাপটি সঠিকভাবে কাজ করতে নিম্নলিখিত অনুমতিগুলি প্রয়োজন",
+  "permOptional": "ঐচ্ছিক",
+  "permDeniedMsg": "প্রত্যাখ্যাত — অ্যাপ সেটিংসে এটি সক্রিয় করুন।",
+  "permPermanentlyDenied": "এই অনুমতি অ্যাপ সেটিংসে সক্রিয় করতে হবে।",
+  "permLocationWhileUsingName": "ব্যবহারের সময় অবস্থান",
+  "permLocationWhileUsingDesc": "আপনার অবস্থান ট্র্যাক করতে এবং মানচিত্রে প্রদর্শন করতে প্রয়োজনীয়।",
+  "permLocationAlwaysName": "সর্বদা অবস্থান",
+  "permLocationAlwaysDesc": "ঐচ্ছিক: দীর্ঘ কার্যক্রমের সময় ট্র্যাকিং নির্ভুল রাখে, এমনকি যদি OS অ্যাপটি স্থগিত করে।",
+  "permNotificationName": "নোটিফিকেশন",
+  "permNotificationDesc": "ঐচ্ছিক: একটি চলমান \"রেকর্ডিং সক্রিয়\" নোটিফিকেশন দেখায়, যা অ্যান্ড্রয়েডকে ব্যাকগ্রাউন্ডে ট্র্যাকিং বন্ধ করা এড়াতে সাহায্য করে।",
+  "mapTrackingGapMsg": "অ্যাপটি ব্যাকগ্রাউন্ডে থাকার সময় {seconds} সেকেন্ডের জন্য ট্র্যাকিং থেমে গিয়েছিল — আপনার রুটের একটি অংশ অনুপস্থিত। এটি এড়াতে furtive-এর জন্য \"সীমাহীন ব্যাটারি\" অনুমতি দিন।",
+  "mapActivityStartedMsg": "কার্যক্রম শুরু হয়েছে",
+  "mapStopHint": "কার্যক্রম শেষ করতে থামান বোতাম 3 সেকেন্ড ধরে রাখুন",
+  "statsRecordingTitle": "কার্যক্রম রেকর্ড হচ্ছে",
+  "statSignalLost": "GPS সংকেত {duration} ধরে হারিয়ে গেছে (~{meters} মি সরলরেখায়) — এই সময় সক্রিয় পরিসংখ্যান থেকে বাদ দেওয়া হয়েছে।",
+  "statDistance": "দূরত্ব",
+  "statDuration": "সময়কাল",
+  "statPace": "গতি",
+  "statSpeed": "বেগ",
+  "statElevation": "উচ্চতা",
+  "splitsTitle": "স্প্লিট",
+  "splitsNotEnoughData": "স্প্লিটের জন্য এখনও যথেষ্ট ডেটা নেই।",
+  "metricPace": "গতি",
+  "metricSpeed": "বেগ",
+  "activitiesEmpty": "কোনো কার্যক্রম পাওয়া যায়নি",
+  "activitiesImportTooltip": "GPX ফাইল আমদানি করুন",
+  "importStarted": "আমদানি হচ্ছে…",
+  "importSuccess": "কার্যক্রম আমদানি করা হয়েছে",
+  "activityNameLabel": "কার্যক্রমের নাম",
+  "activityDeleteSuccess": "কার্যক্রম মুছে ফেলা হয়েছে",
+  "dlgRenameTitle": "পুনর্নামকরণ",
+  "dlgDeleteTitle": "মুছুন",
+  "dlgDeleteConfirm": "আপনি কি নিশ্চিত এই কার্যক্রমটি মুছে ফেলতে চান?",
+  "gpxExportSuccess": "GPX সফলভাবে রপ্তানি করা হয়েছে",
+  "gpxExportFailed": "রপ্তানি ব্যর্থ: {error}",
+  "logsTitle": "লগ",
+  "logsEmpty": "কোনো লগ পাওয়া যায়নি",
+  "logsTooltipClear": "লগ পরিষ্কার করুন",
+  "logsTooltipFilterDate": "তারিখ অনুসারে ফিল্টার",
+  "logsTooltipClearFilter": "ফিল্টার পরিষ্কার করুন",
+  "logsTooltipShare": "শেয়ার",
+  "logsFiltered": "ফিল্টার: {start} - {end}",
+  "logsShowingCount": "{total}-এর মধ্যে {shown} দেখানো হচ্ছে",
+  "activityDefaultName": "পথ",
+  "logsLoadError": "লগ লোড করা যায়নি: {error}",
+  "logCopiedMsg": "লগ ক্লিপবোর্ডে কপি করা হয়েছে",
+  "logsCopiedMsg": "{count}টি লগ ক্লিপবোর্ডে কপি করা হয়েছে",
+  "dlgDeleteLogsTitle": "লগ মুছুন",
+  "dlgDeleteLogsConfirm": "আপনি কি নিশ্চিত সব লগ মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না।",
+  "supportTitle": "উন্নয়নে সহায়তা করুন",
+  "supportDescription": "এই অ্যাপটি আমার অবসর সময়ে তৈরি এবং রক্ষণাবেক্ষণ করা হয়। আপনার সমর্থন এটিকে জীবিত এবং বৃদ্ধি পেতে সাহায্য করে।",
+  "changelogTitle": "নতুন কী",
+  "changelogGotIt": "বুঝেছি",
+  "changelogV120I18n": "বহুভাষী: অ্যাপ ইন্টারফেস ২৬টি ভাষায়, মানচিত্র লেবেল ৪১টিতে, তারিখ ফরম্যাট আপনার লোকেল অনুসরণ করে। সেটিংস বা উইজার্ডে পরিবর্তন করুন।",
+  "changelogV120Wizard": "প্রথমবার চালু উইজার্ড: আপনার ডিফল্টগুলি বেছে নিন (থিম, ভাষা) এবং একটি প্রবাহে অবস্থান অনুমতি দিন।",
+  "changelogV120Recording": "কার্যক্রম রেকর্ডিং: পালস এবং নির্ভুলতা বৃত্ত সহ অ্যানিমেটেড অবস্থান মার্কার, মানচিত্রে কিলোমিটার মার্কার, শেষ করতে থামান 3 সেকেন্ড ধরে রাখুন (কোনো দুর্ঘটনাজনিত ট্যাপ নেই), পরিসংখ্যানে স্বয়ংক্রিয় রিডাইরেক্ট।",
+  "changelogV120Stats": "কার্যক্রম পরিসংখ্যান: গতি ⇄ বেগ টগল সহ প্রতি-কিলোমিটার স্প্লিট চার্ট, D+ উচ্চতা লাভ (Strava/Garmin কনভেনশন)।",
+  "changelogV120Share": "সিস্টেম শেয়ার শীটের মাধ্যমে মানচিত্র এবং পরিসংখ্যান সহ একটি কার্ড হিসাবে একটি কার্যক্রম শেয়ার করুন।",
+  "changelogV120GpxImport": "অন্যান্য অ্যাপ (Garmin, Strava, ইত্যাদি) থেকে GPX ফাইল আমদানি করুন — ট্র্যাক এবং রুট উভয় পয়েন্ট সমর্থিত।",
+  "changelogV120MapThemes": "পাঁচটি মানচিত্র থিম: হালকা, গাঢ়, সাদা, গ্রেস্কেল, কালো — সেটিংসে আপনার পছন্দ বেছে নিন।",
+  "changelogV120Reproducible": "পুনরুৎপাদনযোগ্য বিল্ড: যে কেউ সোর্স কোড থেকে পুনর্নির্মাণ করতে পারে এবং যাচাই করতে পারে যে প্রকাশিত APK বাইট-বাই-বাইট একই — কোনো লুকানো কোড নেই, কোনো হস্তক্ষেপ নেই।",
+  "changelogV120Stability": "স্থিতিশীলতা: খারাপ GPS রিডিং থেকে সুরক্ষিত, নির্ভরযোগ্য ব্যাকগ্রাউন্ড রেকর্ডিং যা সিস্টেম অ্যাপ বন্ধ করার পরে পুনরায় শুরু হয়, স্বয়ংক্রিয় লগ রোটেশন, কঠোর GPX যাচাইকরণ, HTTP টাইমআউট।",
+  "changelogV130LiveShare": "লাইভ শেয়ারিং: রেকর্ডিং চলাকালীন এন্ড-টু-এন্ড এনক্রিপ্টেড লিংক শেয়ার করুন এবং প্রিয়জনদের তাদের ব্রাউজারে আপনার অবস্থান দেখতে দিন — কোনো পক্ষেই অ্যাকাউন্ট নেই, কী কখনো লিংক ছাড়ে না।",
+  "changelogV130Profiles": "অ্যাক্টিভিটি প্রোফাইল: হাঁটা, দৌড়, সাইকেল, গাড়ি, সাঁতার, বিমান বা অন্যান্য — পছন্দ GPS স্যাম্পলিং এবং নির্ভুলতা সহনশীলতা নির্ধারণ করে, এবং অ্যাক্টিভিটির সাথে সংরক্ষিত হয়।",
+  "changelogV130Map": "নতুন ম্যাপ ইঞ্জিন: জুম এবং প্যান এখন MapLibre Native দ্বারা রেন্ডার করা হয় — যে জুম আটকাত তা এখন মসৃণ।",
+  "changelogV130Puck": "অবস্থান চিহ্ন এখন অ্যাপ নিজেই আঁকে: স্থির অবস্থায় একটি বিন্দু, আপনার গতির দিকে একটি শেভরন, Android-এ সত্য উত্তর কম্পাস।",
+  "changelogV130Detail": "রেকর্ডিং বিবরণ: প্রতি অ্যাক্টিভিটিতে নির্ভুলতা বনাম ব্যাটারি ভারসাম্যের জন্য নির্ভুল, ভারসাম্যপূর্ণ বা সাশ্রয়ী GPS স্যাম্পলিং বেছে নিন।",
+  "changelogV130Left": "বাম-হাতের মোড: ম্যাপ নিয়ন্ত্রণ স্ক্রিনের বাম দিকে যেতে পারে (সেটিংস)।",
+  "changelogV130CarFix": "ঠিক করা হয়েছে: 126 কিমি/ঘণ্টার উপরের গাড়ি কিছুই রেকর্ড করছিল না — গতি ফিল্টার এখন প্রতিটি ফিক্স প্রত্যাখ্যানের বদলে প্রতিটি অ্যাক্টিভিটির সাথে খাপ খায়।",
+  "changelogV140Offline": "অফলাইন মানচিত্র: আপনার চারপাশের এলাকা — ১০ থেকে ১০০ কিমি — রেখে দিন, যাতে সিগন্যাল না থাকলেও মানচিত্র কাজ করে (সেটিংস)।",
+  "changelogV140OfflineCost": "রাখা প্রতিটি এলাকা জানায় তাতে কত টাইল ও মেগাবাইট লেগেছে, আর থেমে যাওয়া এলাকা জানায় সে কতদূর পৌঁছেছিল — শেষ করতে আবার চেয়ে নিন।",
+  "changelogV140Cache": "যে মানচিত্র আপনি শুধু দেখেছেন সেটিও রাখা হয়, ১ জিবি পর্যন্ত, এবং আপনি যে এলাকাগুলি রাখতে বেছেছেন সেগুলিতে হাত না দিয়েই আলাদাভাবে মুছে ফেলা যায়।",
+  "changelogV140Drift": "ঠিক করা হয়েছে: রেখে দেওয়া ফোন আর GPS সরণ থেকে দূরত্ব জমায় না — স্থির রেকর্ডিং এখন মিটার বানানোর বদলে শূন্য দেখায়।",
+  "changelogV140Elevation": "ঠিক করা হয়েছে: উচ্চতা প্রতিটি পাঠকে দশ মিটারে গোল করার বদলে নিশ্চিত চড়াই গোনে, তাই ছোট টিলা আর হারিয়ে যায় না এবং সমতল ভূমি আর ওঠে না।",
+  "changelogV140LocationOff": "অবস্থান পরিষেবা বন্ধ থাকলে মানচিত্র এখন তা বলে এবং সেটিংটি খোলার প্রস্তাব দেয়, আর পরিষেবা ফিরলেই ট্র্যাকিং নিজে থেকেই আবার চলে।",
+  "changelogV140Markers": "পথ বরাবর দূরত্বের চিহ্ন আপনার পছন্দের ব্যবধানে বসানো যায়, বা বন্ধ করা যায় (সেটিংস)।",
+  "changelogV140Stop": "রেকর্ডিং থামানোর সময় চেপে ধরার অগ্রগতি বুড়ো আঙুলের নিচে নয়, উপরে আঁকা হয়, যাতে আর কতক্ষণ ধরতে হবে তা দেখা যায়।",
+  "changelogV140SmallScreens": "ঠিক করা হয়েছে: সেটআপের ধাপ ও সেটিংসের পর্দাগুলি ছোট ও সরু পর্দাতেও ব্যবহারযোগ্য থাকে।",
+  "prefThemeLight": "হালকা",
+  "prefThemeDark": "গাঢ়",
+  "prefThemeWhite": "সাদা",
+  "prefThemeGrayscale": "গ্রেস্কেল",
+  "prefThemeBlack": "কালো",
+  "prefMapTiles": "মানচিত্র টাইল",
+  "prefMapTilesSubtitle": "মানচিত্র লোড করলে আপনার আনুমানিক অবস্থান টাইল প্রদানকারীর কাছে প্রকাশ হয়। কোনো নেটওয়ার্ক অনুরোধ ছাড়া একটি খালি, কার্যকরী মানচিত্রের জন্য এটি বন্ধ করুন।",
+  "prefShowOnLockScreen": "লক স্ক্রিনে দেখান",
+  "prefShowOnLockScreenSubtitle": "রেকর্ডিংয়ের সময় লক স্ক্রিনের উপরে মানচিত্র/অবস্থান দৃশ্যমান রাখে (শুধু অ্যান্ড্রয়েড)। আপনার লক করা ফোনের দিকে তাকানো কারো কাছ থেকে এটি আড়াল করতে বন্ধ করুন।",
+  "mapLoadingLocalizing": "GPS শুরু হচ্ছে…",
+  "mapLoadingMap": "মানচিত্র লোড হচ্ছে…",
+  "mapStartingActivity": "কার্যকলাপ শুরু হচ্ছে…",
+  "activitiesLoadError": "এই কার্যকলাপ খোলা যায়নি",
+  "activityPickerTitle": "তুমি কী করছ?",
+  "activityWalk": "হাঁটা",
+  "activityRun": "দৌড়",
+  "activityBike": "সাইকেল",
+  "activityCar": "গাড়ি",
+  "activitySwim": "সাঁতার",
+  "activityAircraft": "বিমান",
+  "activityOther": "অন্য",
+  "activityUnknown": "অজানা",
+  "prefRecordingDetail": "রেকর্ডিং বিস্তার",
+  "prefRecordingDetailSubtitle": "কার্যকলাপের নিজস্ব ডিফল্টের তুলনায় কত ঘন ঘন অবস্থান চাওয়া হয়। ঘন হলে বাঁক আরও নিখুঁত হয়, ব্যাটারিও বেশি খরচ হয়।",
+  "prefDetailPrecise": "নিখুঁত",
+  "prefDetailBalanced": "সুষম",
+  "prefDetailEndurance": "সহনশীলতা",
+  "prefMapControlsOnRight": "ডান দিকে ম্যাপ নিয়ন্ত্রণ",
+  "prefMapControlsOnRightSubtitle": "অনুসরণ, শুরু, বিরতি ও থামার বোতাম ডান প্রান্তে থাকে। বাঁ হাতে ব্যবহারের জন্য বাম দিকে সরাতে বন্ধ করুন। ম্যাপের কৃতিত্ব বিপরীত কোণে চলে যায়।",
+  "prefMapMilestones": "দূরত্ব চিহ্ন",
+  "prefMapMilestonesOff": "বন্ধ",
+  "menuOfflineMaps": "অফলাইন মানচিত্র",
+  "offlineTitle": "অফলাইন মানচিত্র",
+  "offlineExplainer": "আপনি যে এলাকাগুলি রাখেন সেগুলি ডিভাইসে থেকে যায় এবং কখনও মুছে যায় না। যে মানচিত্র আপনি শুধু দেখেছেন সেটিও ক্যাশে থাকে, তবে তার জায়গা ফিরিয়ে নেওয়া যায়।",
+  "offlineNone": "এখনও কোনো এলাকা রাখা হয়নি",
+  "offlineAroundMe": "আমার চারপাশের এলাকা রাখুন",
+  "offlineRadius": "ব্যাসার্ধ: {km} কিমি",
+  "@offlineRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineDownload": "ডাউনলোড",
+  "offlineDownloading": "{total}টির মধ্যে {done}টি টাইল · {mb} MB",
+  "@offlineDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineNoPosition": "এখনও অবস্থান নেই — GPS-এর জন্য অপেক্ষা করুন",
+  "offlineNoTiles": "টাইল বন্ধ, তাই রাখার কিছু নেই",
+  "offlineUnsupported": "এই ডিভাইসে অফলাইন এলাকা উপলব্ধ নয়",
+  "offlineDelete": "মুছুন",
+  "offlineFailed": "ডাউনলোড ব্যর্থ",
+  "offlineStorageTitle": "মানচিত্র সঞ্চয়",
+  "offlineStorageOnDevice": "এই ডিভাইসে {mb} MB",
+  "@offlineStorageOnDevice": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageKept": "সংরক্ষিত এলাকার জন্য {mb} MB নামানো · {tiles}টি টাইল",
+  "@offlineStorageKept": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineStorageCached": "পরস্পর ছেদ করা এলাকা টাইল ভাগ করে, তাই এই সংখ্যা মোটের চেয়ে বেশি হতে পারে। কোনো এলাকায় নেই এমনটা আপনার দেখা মানচিত্র, সঙ্গে ডেটাবেসের ওভারহেড।",
+  "offlineClearCache": "ক্যাশ মুছুন",
+  "offlineRadiusTiles": "{tiles}টি টাইল",
+  "@offlineRadiusTiles": {
+    "placeholders": {
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCost": "{mb} MB · {tiles}টি টাইল",
+  "@offlineAreaCost": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostPartial": "{mb} MB · {tiles}টি টাইল · অসম্পূর্ণ",
+  "@offlineAreaCostPartial": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  },
+  "offlineAreaCostProgress": "{percent}% · {mb} MB · {tiles}টি টাইল",
+  "@offlineAreaCostProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "String"
+      },
+      "tiles": {
+        "type": "String"
+      }
+    }
+  }
+}
