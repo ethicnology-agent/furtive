@@ -32,7 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and 28 minutes of cumulative downloading. MapLibre's 6,000-tile cap is Mapbox
   heritage and does not apply — a single 150 km region downloaded all 181,080 of
   its tiles and reported complete. The leak is fixed in the vendored fork (see
-  Internal), so cost is now the only limit, and 100 km is 81,050 tiles.
+  Internal), so cost is now the only limit. A 100 km radius was downloaded to
+  completion over open country at 45°N: 73,066 tiles in twenty minutes, 151.9 MB
+  fetched, 195 MB on the device. The count varies with latitude, and over a
+  dense city the same tiles cost roughly ten times the bytes.
 - **What each kept area cost.** Tiles and megabytes per area, and a running
   total for the device. An area that was cut short says how far it got as a
   percentage; asking for it again finishes it from the tiles already stored,
@@ -83,6 +86,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in English.** Forty keys carried the English source as their value — all of
   them in eighteen locales, most of them in five more. Key parity passed
   throughout, because the text had been copied in rather than left out.
+- **A live share said it was reconnecting before it had ever connected**, and
+  handed over a link without saying nothing was published yet. Zero connected
+  relays covered both a share that was live a moment ago and one nothing had
+  ever answered; the link is minted on the device, so it can be sent while no
+  relay holds it and opens on a blank viewer.
 - **Short and narrow screens.** The setup steps and the settings screens stay
   usable when they are cramped.
 
